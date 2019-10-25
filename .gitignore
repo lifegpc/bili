@@ -1,0 +1,8 @@
+#temp file
+*.pyc
+*.log
+#download file or config file
+*.xml
+*.json
+#execute library
+*.exe
