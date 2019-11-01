@@ -186,28 +186,42 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
         except :
             print('保存内容至文件失败'+filen2)
             return -3
-        d2=biliDanmuXmlParser.loadXML(filen2)
+        d3=biliDanmuXmlParser.loadXML(filen2)
         remove(filen2)
-        ma=int(d2['maxlimit'])
-        print('抓取到%s条弹幕，最新弹幕将在最后处理' % (len(d2['list'])))
+        ma=int(d3['maxlimit'])
+        allok=False
+        if len(d3['list'])<ma-10 :
+            bs=True
+            while bs :
+                sts=input('抓取到了%s条弹幕，距离限制（%s条）较远，是否继续抓取？(y/n)' % (len(d3['list']),ma))
+                if len(sts)>0 :
+                    if sts[0].lower()=='y' :
+                        bs=False
+                    elif sts[0].lower()=='n' :
+                        allok=True
+                        bs=False
+        if not allok :
+            d2=d3
+            print('抓取到%s条弹幕，最新弹幕将在最后处理' % (len(d2['list'])))
         try :
             f2=open(filen,mode='w',encoding='utf8')
         except :
             print('打开文件失败'+filen)
             return -3
-        try :
-            f2.write('<?xml version="1.0" encoding="UTF-8"?>')
-            f2.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d2['chatserver'],d2['chatid'],d2['mission'],d2['maxlimit'],d2['state'],d2['real_name'],d2['source']))
-        except :
-            print('保存文件失败'+filen)
-            return -3
+        if not allok :
+            try :
+                f2.write('<?xml version="1.0" encoding="UTF-8"?>')
+                f2.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d2['chatserver'],d2['chatid'],d2['mission'],d2['maxlimit'],d2['state'],d2['real_name'],d2['source']))
+            except :
+                print('保存文件失败'+filen)
+                return -3
         mri=0
         mri2=0
         t1=0
         t2=0
         tem={}
         fir=True
-        while biliTime.equal(biliTime.getDate(da),biliTime.getNowDate())<0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da+now*24*3600),biliTime.getNowDate())<0)) :
+        while not allok and biliTime.equal(biliTime.getDate(da),biliTime.getNowDate())<0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da+now*24*3600),biliTime.getNowDate())<0)) :
             t1=time.time()
             if (not at2) or fir :
                 print('正在抓取%s的弹幕......' % (biliTime.tostr(biliTime.getDate(da))))
@@ -344,19 +358,59 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
                 da=da+now*3600*24
                 now=now2
             mri=mri2
-        print('开始处理当前弹幕文件......')
-        l=0
-        g=0
-        for i in d2['list'] :
-            if int(mri)<int(i['ri']) :
-                l=l+1
-                if xml==2 :
-                    try :
-                        f2.write(biliDanmuCreate.objtoxml(i))
-                    except :
-                        print('保存内容至文件失败'+filen)
-                        return -3
-                elif xml==1 :
+        if not allok:
+            print('开始处理当前弹幕文件......')
+            l=0
+            g=0
+            for i in d2['list'] :
+                if int(mri)<int(i['ri']) :
+                    l=l+1
+                    if xml==2 :
+                        try :
+                            f2.write(biliDanmuCreate.objtoxml(i))
+                        except :
+                            print('保存内容至文件失败'+filen)
+                            return -3
+                    elif xml==1 :
+                        read=biliDanmuXmlFilter.Filter(i,xmlc)
+                        if read :
+                            g=g+1
+                        else :
+                            try :
+                                f2.write(biliDanmuCreate.objtoxml(i))
+                            except :
+                                print('保存内容至文件失败'+filen)
+                                return -3
+            try :
+                f2.write('</i>')
+                f2.close()
+            except :
+                print('保存内容至文件失败'+filen2)
+                return -3
+            m=l-g
+            zl=zl+l
+            zg=zg+g
+            zm=zm+m
+            print('在当前弹幕中获取有效弹幕%s条' % (l))
+            if xml==1 :
+                print('过滤了%s条弹幕' % (g))
+                print('实际输出了%s条弹幕' % (m))
+            print('总共获取了%s条弹幕' % (zl))
+            if xml==1 :
+                print('这个过滤了%s条弹幕' % (zg))
+                print('实际输出了%s条弹幕' % (zm))
+        else :
+            if xml==2 :
+                try :
+                    f2.write(d2)
+                    f2.close()
+                except :
+                    print('保存内容至文件失败'+filen)
+                    return -3
+            if xml==1 :
+                z=len(d3['list'])
+                g=0
+                for i in d3['list'] :
                     read=biliDanmuXmlFilter.Filter(i,xmlc)
                     if read :
                         g=g+1
@@ -366,22 +420,13 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
                         except :
                             print('保存内容至文件失败'+filen)
                             return -3
-        try :
-            f2.write('</i>')
-            f2.close()
-        except :
-            print('保存内容至文件失败'+filen2)
-            return -3
-        m=l-g
-        zl=zl+l
-        zg=zg+g
-        zm=zm+m
-        print('在当前弹幕中获取有效弹幕%s条' % (l))
-        if xml==1 :
-            print('过滤了%s条弹幕' % (g))
-            print('实际输出了%s条弹幕' % (m))
-        print('总共获取了%s条弹幕' % (zl))
-        if xml==1 :
-            print('这个过滤了%s条弹幕' % (zg))
-            print('实际输出了%s条弹幕' % (zm))
+                try :
+                    f2.close()
+                except :
+                    print('保存内容至文件失败'+filen)
+                    return -3
+                m=z-g
+                print('获取了%s条弹幕' % (z))
+                print('过滤了%s条弹幕' % (g))
+                print('实际输出了%s条弹幕' % (m))
         return 0
