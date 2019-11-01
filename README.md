@@ -26,8 +26,8 @@
 
 ## 已知BUG
 
-### 一直出现保存内容至文件失败
-全弹幕下载一直出现**保存内容至文件失败**   
+### 一直出现保存内容至文件失败或显示cgi库escape出错
+全弹幕下载一直出现**保存内容至文件失败**或显示**cgi库escape出错**   
 原因：  
 **BiliDanmuCreate.py**下cgi没有正确引用**escape()**   
 低版本python可以使用cgi.escape()而高版本可以使用cgi.html.escape()
