@@ -71,3 +71,10 @@ def reload(d,mri) :
             li.append(i)
     d['d']['list']=li
     return {'z':d['z'],'l':l,'m':d['m'],'d':d['d']}
+def getnownumber(d,mri) :
+    l=0
+    m=len(d['list'])
+    for i in d['list'] :
+        if int(mri)<int(i['ri']) :
+            l=l+1
+    return {'l':l,'m':m}
