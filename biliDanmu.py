@@ -339,6 +339,18 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
                             except :
                                 print('保存内容至文件失败'+filen2)
                                 return -3
+                bs2=True
+                while bs2 and biliTime.equal(biliTime.getDate(da+(now2+now)*24*3600),biliTime.getNowDate())>=0 :
+                    if allok :
+                        read=biliDanmuAuto.getnownumber(d3,mri2)
+                    else :
+                        read=biliDanmuAuto.getnownumber(d2,mri2)
+                    if read['l']==read['m'] :
+                        now2=now2/2
+                        if now2<1 :
+                            now2=1
+                    else :
+                        bs2=False
             m=l-g
             zl=zl+l
             zm=zm+m
