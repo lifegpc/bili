@@ -1,6 +1,7 @@
 from file.info import getinfox,printinfo
 from os.path import exists
 from os import listdir
+from file.str import width
 def getinfod(filelist) :
     "从listd获得的列表得到信息"
     j=1
@@ -13,9 +14,18 @@ def getinfod(filelist) :
     return ar
 def printinfod(filelist) :
     "打印整个filelist"
-    print('序号\t文件名\t上次访问时间\t\t创建时间\t\t上次修改时间\t\t文件大小')
+    m=maxwidth(filelist)
+    print(m)
+    j=1
+    print('序号\t文件名\t',end='')
+    while m > 8 :
+        print('\t',end='')
+        m=m-8
+        j=j+1
+    print('上次访问时间\t\t创建时间\t\t上次修改时间\t\t文件大小')
+    print(j)
     for i in filelist :
-        printinfo(i)
+        printinfo(i,j*8)
 def listd(l='.'):
     '获取列表'
     d=listdir(l)
@@ -26,3 +36,10 @@ def listd(l='.'):
         else :
             r.append({'a':i,'f':i})
     return r
+def maxwidth(l) :
+    m=0
+    for i in l:
+        n=width(i['f'])
+        if n>m :
+            m=n
+    return m
