@@ -1,7 +1,8 @@
-from file.info import getinfox
+from file.info import getinfox,printinfo
 from os.path import exists
+from os import listdir
 def getinfod(filelist) :
-    "从listdir获得的列表得到信息"
+    "从listd获得的列表得到信息"
     j=1
     ar=[]
     for i in filelist :
@@ -10,3 +11,18 @@ def getinfod(filelist) :
             j=j+1
             ar.append(r)
     return ar
+def printinfod(filelist) :
+    "打印整个filelist"
+    print('序号\t文件名\t上次访问时间\t\t创建时间\t\t上次修改时间\t\t文件大小')
+    for i in filelist :
+        printinfo(i)
+def listd(l='.'):
+    '获取列表'
+    d=listdir(l)
+    r=[]
+    for i in d :
+        if l!='.' :
+            r.append({'a':'%s/%s' % (l,i),'f':i})
+        else :
+            r.append({'a':i,'f':i})
+    return r

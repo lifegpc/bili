@@ -1,2 +1,2 @@
-from file.info import getinfo,getinfox
-from file.dir import getinfod
+from file.info import getinfo,getinfox,printinfo
+from file.dir import getinfod,printinfod,listd
