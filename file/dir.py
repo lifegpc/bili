@@ -15,7 +15,6 @@ def getinfod(filelist) :
 def printinfod(filelist) :
     "打印整个filelist"
     m=maxwidth(filelist)
-    print(m)
     j=1
     print('序号\t文件名\t',end='')
     while m > 8 :
@@ -23,7 +22,6 @@ def printinfod(filelist) :
         m=m-8
         j=j+1
     print('上次访问时间\t\t创建时间\t\t上次修改时间\t\t文件大小')
-    print(j)
     for i in filelist :
         printinfo(i,j*8)
 def listd(l='.'):
