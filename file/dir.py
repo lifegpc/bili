@@ -21,7 +21,7 @@ def printinfod(filelist) :
         print('\t',end='')
         m=m-8
         j=j+1
-    print('上次访问时间\t\t创建时间\t\t上次修改时间\t\t文件大小')
+    print('类型\t上次访问时间\t\t创建时间\t\t上次修改时间\t\t文件大小')
     for i in filelist :
         printinfo(i,j*8)
 def listd(l='.'):

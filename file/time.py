@@ -4,6 +4,6 @@ def ttos(tm) :
     if tm=='N/A':
         return 'N/A'
     elif tm>=0:
-        return strftime('%Y-%m-%d %H-%M-%S',localtime(tm))
+        return strftime('%Y-%m-%d %H:%M:%S',localtime(tm))
     else :
         return str(tm)

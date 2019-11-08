@@ -1,6 +1,6 @@
 from os.path import getatime,getmtime,getctime,getsize,exists,isfile,isdir
 from file.time import ttos
-from file.str import width,size
+from file.str import width,size,ftts
 def getinfo(fn) :
     "获取文件信息"
     if not exists(fn['a']) :
@@ -53,7 +53,7 @@ def printinfo(o,m) :
     print('%s\t' %(o['f']),end='')
     t=width(o['f'])
     t=t-t%8+8
-    if t<m :
+    while t<m :
         print('\t',end='')
         t=t+8
-    print('%s\t%s\t%s\t%s' %(ttos(o['a']),ttos(o['c']),ttos(o['m']),size(o['s'])))
+    print('%s\t%s\t%s\t%s\t%s' %(ftts(o['i']),ttos(o['a']),ttos(o['c']),ttos(o['m']),size(o['s'])))
