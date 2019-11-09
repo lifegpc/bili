@@ -1,5 +1,5 @@
 from file.info import getinfox,printinfo
-from os.path import exists
+from os.path import exists,abspath
 from os import listdir
 from file.str import width
 def getinfod(filelist) :
@@ -30,9 +30,9 @@ def listd(l='.'):
     r=[]
     for i in d :
         if l!='.' :
-            r.append({'a':'%s/%s' % (l,i),'f':i})
+            r.append({'a':abspath('%s/%s' % (l,i)),'f':i})
         else :
-            r.append({'a':i,'f':i})
+            r.append({'a':abspath(i),'f':i})
     return r
 def maxwidth(l) :
     m=0
@@ -41,3 +41,14 @@ def maxwidth(l) :
         if n>m :
             m=n
     return m
+def listc(l,s=0,e='True') :
+    "截取listinfo中的一部分"
+    if e=='True' :
+        e=len(l)
+    r=[]
+    j=1
+    for i in l[s:e] :
+        i['x']=j
+        r.append(i)
+        j=j+1
+    return r
