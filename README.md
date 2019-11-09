@@ -5,6 +5,7 @@
 ## 依赖库
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)   
+自己写的file库   
 ### 其他
 程序目录下需要有相应系统版本的ChromeDriver。   
 没有ChromeDriver将无法进行登录操作（同理，由于手机平台没有ChromeDriver，也无法进行登录，但可以用[其他方法](#a)绕过）
