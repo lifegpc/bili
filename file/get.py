@@ -1,7 +1,7 @@
 from file.dir import listd,getinfod,printinfod,listc
 from file.filter import listf
 from os.path import abspath,exists,isdir,isfile
-def getfilen(l='Download',lx=['xml'],yl=15,g=1) :
+def getfilen(l='Download',lx=['xml'],yl=15,g=1,save=False) :
     """获取需要的文件名
     -1 文件夹不存在
     -2 参数错误"""
@@ -45,7 +45,10 @@ def getfilen(l='Download',lx=['xml'],yl=15,g=1) :
             print('e.显示所有文件\t',end='')
         else :
             print('e.显示过滤后文件\t',end='')
-        print('f.手动输入其他文件夹')
+        if save :
+            print('f.手动输入其他文件夹\tg.手动输入文件名')
+        else :
+            print('f.手动输入其他文件夹')
         bs2=True
         while bs2:
             inp=input('请输入文件名之前的序号选中文件，或输入文件夹名之前的序号进入文件夹，或输入操作之前的字母进行该操作')
@@ -110,6 +113,29 @@ def getfilen(l='Download',lx=['xml'],yl=15,g=1) :
                         bs2=False
                     else :
                         print('该文件不存在')
+                elif inp[0]=='g' and save :
+                    inp2=input('请输入文件名称：')
+                    tmp={'a':abspath('%s/%s'%(nml,inp2)),'f':inp2}
+                    if ci>0 and checkcf(c,tmp) :
+                        print('文件与已选择文件重复')
+                    else :
+                        if exists(tmp['a']) :
+                            if isfile(tmp['a']) :
+                                bs3=True
+                                while bs3 :
+                                    inp3=input('已有该文件，是否保存到这?(y/n)')
+                                    if len(inp3)>0 :
+                                        if inp3[0].lower()=='y' :
+                                            c.append(tmp)
+                                            ci=ci+1
+                                            bs3=False
+                                            bs2=False
+                                        elif inp3[0].lower()=='n':
+                                            bs3=False
+                        else :
+                            c.append(tmp)
+                            ci=ci+1
+                            bs2=False
                 elif inp.isnumeric() :
                     if int(inp)>0 and int(inp)<=sl :
                         tmp=nlf[(ys-1)*yl+int(inp)-1]

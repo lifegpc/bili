@@ -1,6 +1,7 @@
 import file
 import biliPlayerXmlParser
 from os.path import exists
+import biliDanmuXmlParser
 if __name__!="__main__" :
     print('请直接运行filter.py')
 else :
@@ -18,4 +19,9 @@ else :
     fl=file.getfilen(g=g)
     for i in fl :
         if exists(i['a']) :
-            pass
+            try :
+                read=biliDanmuXmlParser.loadXML(i['a'])
+            except :
+                print('此文件不是弹幕文件。')
+        else :
+            print('\"%s\"文件不存在' %(i['f']))
