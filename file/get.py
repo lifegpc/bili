@@ -3,6 +3,7 @@ from file.filter import listf
 from os.path import abspath,exists,isdir,isfile
 def getfilen(l='Download',lx=['xml'],yl=15,g=1,save=False) :
     """获取需要的文件名
+    l 初始目录 lx 过滤类型 yl 每页个数 g 获取文件的数量 save 是否为保存文件
     -1 文件夹不存在
     -2 参数错误"""
     nml=abspath(l)
