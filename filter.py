@@ -29,6 +29,7 @@ else :
                 print('此文件不是弹幕文件。')
                 continue
             r=read
+            input('按Enter开始选择保存文件名')
             read=file.getfilen(save=True)
             if read==-1 :
                 read=file.getfilen('.',save=True)
