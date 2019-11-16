@@ -1,7 +1,7 @@
 from time import localtime,strftime
 def printInfo(data) :
 	"输出普通AV号获取的信息"
-	print("视频av号："+data['aid'])
+	print("视频av号："+str(data['aid']))
 	print("bvid："+data['bvid'])
 	print("分P数："+str(data['videos']))
 	print("标题："+data['title'])

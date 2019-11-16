@@ -5,6 +5,7 @@
 ## 依赖库
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)   
+自己写的file库   
 ### 其他
 程序目录下需要有相应系统版本的ChromeDriver。   
 没有ChromeDriver将无法进行登录操作（同理，由于手机平台没有ChromeDriver，也无法进行登录，但可以用[其他方法](#a)绕过）
@@ -20,6 +21,11 @@
 
 ## 开始使用
 直接运行start.py即可
+
+### 过滤弹幕
+运行filter.py即可
+注意：必须要有**tv.bilibili.player.xml**文件才能进行弹幕过滤。
+
 ## 其他
 暂时只支持**普通视频**的弹幕下载   
 **全弹幕下载建议使用自动模式，不建议自己输入间隔天数**

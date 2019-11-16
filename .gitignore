@@ -1,8 +1,11 @@
 #temp file
 *.pyc
 *.log
+.vs/
 #download file or config file
 *.xml
 *.json
+#other file
+.project
 #execute library
 *.exe
