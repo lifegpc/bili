@@ -9,6 +9,7 @@ import time
 import json
 import biliLogin
 import biliDanmuAuto
+import file
 def downloadh(filen,r,pos,da) :
     d=biliDanmuDown.downloadh(pos,r,biliTime.tostr(biliTime.getDate(da)))
     if d==-1 :
@@ -46,9 +47,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc) :
     if t=='av' :
         d=biliDanmuDown.downloadn(data['page'][c-1]['cid'],r)
         if data['videos'] ==1 :
-            filen='Download/'+data['title']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml"
+            filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         else :
-            filen='Download/'+data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml"
+            filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         if d==-1 :
             print("网络错误")
             exit()
@@ -121,6 +122,88 @@ def DanmuGetn(c,data,r,t,xml,xmlc) :
                 print('保存文件失败'+filen)
                 return -2
             return 0
+    elif t=='ss' :
+        d=biliDanmuDown.downloadn(c['cid'],r)
+        pat='Download/'+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
+        try :
+            if not exists(pat) :
+                mkdir(pat)
+        except :
+            print('创建%s失败！'%(pat))
+            return -3
+        filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,ID%s,%s).xml' %(c['i'],c['longTitle'],c['titleFormat'],c['aid'],c['id'],c['cid'])))
+        if d==-1 :
+            print('网络错误！')
+            exit()
+        if exists(filen) :
+            bs=True
+            while bs :
+                inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
+                if inp[0].lower()=='y' :
+                    bs=False
+                    try :
+                        remove(filen)
+                    except :
+                        print('删除原有文件失败，跳过下载')
+                        return -1
+                elif inp[0].lower()=='n' :
+                    bs=False
+                    return -1
+        if xml==2 :
+            try :
+                f=open(filen,mode='w',encoding='utf8')
+                f.write(d)
+                f.close()
+            except :
+                print('保存内容至文件失败'+filen)
+                return -2
+            return 0
+        else :
+            filen2="Temp/n_"+str(c['cid'])+".xml"
+            if exists(filen2) :
+                remove(filen2)
+            try :
+                f=open(filen2,mode='w',encoding='utf8')
+                f.write(d)
+                f.close()
+            except :
+                print('保存内容至文件失败'+filen2)
+                return -2
+            d=biliDanmuXmlParser.loadXML(filen2)
+            remove(filen2)
+            try :
+                f=open(filen,mode='w',encoding='utf8')
+            except:
+                print('打开文件失败'+filen)
+                return -2
+            try :
+                f.write('<?xml version="1.0" encoding="UTF-8"?>')
+                f.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d['chatserver'],d['chatid'],d['mission'],d['maxlimit'],d['state'],d['real_name'],d['source']))
+            except :
+                print('保存文件失败'+filen)
+                return -2
+            print('总计：%s' % (len(d['list'])))
+            print('正在过滤......')
+            l=0
+            for i in d['list'] :
+                read=biliDanmuXmlFilter.Filter(i,xmlc)
+                if read :
+                    l=l+1
+                else :
+                    try :
+                        f.write(biliDanmuCreate.objtoxml(i))
+                    except :
+                        print('保存文件失败'+filen)
+                        return -2
+            print('共计过滤%s条' % (l))
+            print('实际输出%s条' % (len(d['list'])-l))
+            try :
+                f.write('</i>')
+                f.close()
+            except :
+                print('保存文件失败'+filen)
+                return -2
+            return 0
 def DanmuGeta(c,data,r,t,xml,xmlc) :
     "全弹幕处理"
     try :
@@ -148,9 +231,9 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
             bs=False
     if t=='av' :
         if data['videos'] ==1 :
-            filen='Download/'+data['title']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml"
+            filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         else :
-            filen='Download/'+data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml"
+            filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         if exists(filen) :
             bs=True
             while bs :

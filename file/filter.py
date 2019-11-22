@@ -36,3 +36,15 @@ def listff(filelist) :
         if isfile(i['f']) :
             r.append(i)
     return r
+def filtern(filen:str) :
+    "对文件名进行去除不应该字符"
+    filen=filen.replace('/','_')
+    filen=filen.replace('\\','_')
+    filen=filen.replace(':','_')
+    filen=filen.replace('*','_')
+    filen=filen.replace('?','_')
+    filen=filen.replace('"','_')
+    filen=filen.replace('<','_')
+    filen=filen.replace('>','_')
+    filen=filen.replace('|','_')
+    return filen

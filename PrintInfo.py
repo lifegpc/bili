@@ -53,3 +53,8 @@ def printInfo2(data) :
 				print('CID:'+str(j['cid']))
 				print('ID:'+str(j['id']))
 	return ii-1
+def printcho(cho) :
+	print('你选中了',end='')
+	for i in cho :
+		print('%s,' %(i['titleFormat']),end='')
+	print()

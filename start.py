@@ -160,6 +160,25 @@ if __name__=='__main__':
                         if bb:
                             bs=False
                 cho=chon.getcho(cho,data)
-                print(cho)
+                PrintInfo.printcho(cho)
+        cho2=0
+        bs=True
+        while bs :
+            inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载')
+            if inp[0] =='1' :
+                cho2=1
+                bs=False
+            elif inp[0] =='2' :
+                cho2=2
+                bs=False
+        if cho2==1 :
+            for i in cho:
+                read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc)
+                if read==-1 or read==-4 :
+                    pass
+                elif read==0 :
+                    print('%s下载完成' % (i['titleFormat']))
+                else :
+                    exit()
 else :
     print("请运行根目录下的start.py")
