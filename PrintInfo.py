@@ -31,3 +31,25 @@ def printInfo2(data) :
 			print("别名："+t['alias'])
 		print("简介："+t['evaluate'])
 		print("类型："+t['type'])
+		print('发布时间：'+t['time'])
+	ii=1
+	if 'epList' in data:
+		print('内容：')
+		for i in data['epList'] :
+			print(str(ii)+"、"+i['titleFormat'])
+			ii=ii+1
+			print('名字：'+i['longTitle'])
+			print('AV号：'+str(i['aid']))
+			print('CID:'+str(i['cid']))
+			print('ID:'+str(i['id']))
+	if 'sections' in data:
+		for i in data['sections'] :
+			print(i['title']+":")
+			for j in i['epList'] :
+				print(str(ii)+"、"+j['titleFormat'])
+				ii=ii+1
+				print('名字：'+j['longTitle'])
+				print('AV号：'+str(j['aid']))
+				print('CID:'+str(j['cid']))
+				print('ID:'+str(j['id']))
+	return ii-1

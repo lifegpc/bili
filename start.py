@@ -10,11 +10,10 @@ if __name__=='__main__':
     inp=input("请输入av号（暂不支持SS号）：")
     av=False
     ss=False
-    #if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
-        #s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
-        #ss=True
-    #elif inp[0:2].lower()=='av' and inp[2:].isnumeric() :
-    if inp[0:2].lower()=='av' and inp[2:].isnumeric() :
+    if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
+        s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
+        ss=True
+    elif inp[0:2].lower()=='av' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/video/av"+inp[2:]
         av=True
     elif inp.isnumeric() :
@@ -134,6 +133,20 @@ if __name__=='__main__':
     if ss :
         data=JSONParser.Myparser2(parser.videodata)
         print(data)
-        PrintInfo.printInfo2(data)
+        len=PrintInfo.printInfo2(data)
+        cho=[]
+        if len==1:
+            cho.append(1)
+        else :
+            bs=True
+            while bs :
+                inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                cho=[]
+                if len(inp)>0:
+                    if inp[0]=='a' :
+                        print('你全选了所有视频')
+                        for j in range(1,len+1) :
+                            cho.append(j)
+                        bs=False
 else :
     print("请运行根目录下的start.py")
