@@ -6,6 +6,7 @@ import biliLogin
 import biliPlayerXmlParser
 import biliDanmu
 import biliTime
+import chon
 if __name__=='__main__':
     inp=input("请输入av号（暂不支持SS号）：")
     av=False
@@ -90,7 +91,7 @@ if __name__=='__main__':
                     inp=inp.split(',')
                     bb=True
                     for i in inp :
-                        if i.isnumeric() and int(i)<=data['videos'] and (not (int(i) in cho)) :
+                        if i.isnumeric() and int(i)>0 and int(i)<=data['videos'] and (not (int(i) in cho)) :
                             cho.append(int(i))
                         else :
                             bb=False
@@ -133,9 +134,9 @@ if __name__=='__main__':
     if ss :
         data=JSONParser.Myparser2(parser.videodata)
         print(data)
-        len=PrintInfo.printInfo2(data)
+        le=PrintInfo.printInfo2(data)
         cho=[]
-        if len==1:
+        if le==1:
             cho.append(1)
         else :
             bs=True
@@ -145,8 +146,20 @@ if __name__=='__main__':
                 if len(inp)>0:
                     if inp[0]=='a' :
                         print('你全选了所有视频')
-                        for j in range(1,len+1) :
+                        for j in range(1,le+1) :
                             cho.append(j)
                         bs=False
+                    else :
+                        inp=inp.split(',')
+                        bb=True
+                        for i in inp :
+                            if i.isnumeric() and int(i)<=le and int(i)>0 and (not (int(i) in cho)) :
+                                cho.append(int(i))
+                            else :
+                                bb=False
+                        if bb:
+                            bs=False
+                cho=chon.getcho(cho,data)
+                print(cho)
 else :
     print("请运行根目录下的start.py")
