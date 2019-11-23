@@ -218,18 +218,18 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
     except:
         print("创建Temp文件夹失败")
         return -1
-    bs=True
-    at2=False
-    while bs :
-        at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻）')
-        if at.isnumeric() and int(at)<=365 and int(at)>=1 :
-            at=int(at)
-            bs=False
-        elif len(at)>0 and at[0].lower()=='a' :
-            at2=True
-            at=1
-            bs=False
     if t=='av' :
+        bs=True
+        at2=False
+        while bs :
+            at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻）')
+            if at.isnumeric() and int(at)<=365 and int(at)>=1 :
+                at=int(at)
+                bs=False
+            elif len(at)>0 and at[0].lower()=='a' :
+                at2=True
+                at=1
+                bs=False
         if data['videos'] ==1 :
             filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         else :
@@ -525,3 +525,31 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
                 print('过滤了%s条弹幕' % (g))
                 print('实际输出了%s条弹幕' % (m))
         return 0
+    elif t=='ss' :
+        bs=True
+        at2=False
+        pubt=data['mediaInfo']['time'][0:10]
+        while bs :
+            at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻），输入b手动输入日期')
+            if at.isnumeric() and int(at)<=365 and int(at)>=1 :
+                at=int(at)
+                bs=False
+            elif len(at)>0 and at[0].lower()=='a' :
+                at2=True
+                at=1
+                bs=False
+            elif len(at)>0 and at[0].lower()=='b' :
+                at3=input('请按1989-02-25这样的格式输入开始日期：')
+                if len(at3)>0 :
+                    if biliTime.checktime(at3) :
+                        pubt=at3[0:10]
+                    else :
+                        print('输入格式有误或者该日期不存在')
+        pat='Download/'+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
+        try :
+            if not exists(pat) :
+                mkdir(pat)
+        except :
+            print('创建%s失败！'%(pat))
+            return -1
+        filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,ID%s,%s).xml' %(c['i'],c['longTitle'],c['titleFormat'],c['aid'],c['id'],c['cid'])))

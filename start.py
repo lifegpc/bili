@@ -181,5 +181,8 @@ if __name__=='__main__':
                     print('%s下载完成' % (i['titleFormat']))
                 else :
                     exit()
+        elif cho2==2 :
+            for i in cho :
+                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
 else :
     print("请运行根目录下的start.py")
