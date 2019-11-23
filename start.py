@@ -8,7 +8,7 @@ import biliDanmu
 import biliTime
 import chon
 if __name__=='__main__':
-    inp=input("请输入av号（暂不支持SS号）：")
+    inp=input("请输入av号（支持SS号）：")
     av=False
     ss=False
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
@@ -138,6 +138,7 @@ if __name__=='__main__':
         cho=[]
         if le==1:
             cho.append(1)
+            cho=chon.getcho(cho,data)
         else :
             bs=True
             while bs :
