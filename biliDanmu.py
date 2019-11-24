@@ -542,9 +542,10 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
                 at3=input('请按1989-02-25这样的格式输入开始日期：')
                 if len(at3)>0 :
                     if biliTime.checktime(at3) :
-                        pubt=at3[0:10]
+                        pubt=time.strftime('%Y-%m-%d',time.strptime(at3,'%Y-%m-%d'))
                     else :
                         print('输入格式有误或者该日期不存在')
+        pubt=biliTime.mkt(time.strptime(pubt,'%Y-%m-%d'))
         pat='Download/'+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
         try :
             if not exists(pat) :
