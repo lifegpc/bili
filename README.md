@@ -39,3 +39,7 @@
 原因：  
 **BiliDanmuCreate.py**下cgi没有正确引用**escape()**   
 低版本python可以使用cgi.escape()而高版本可以使用cgi.html.escape()
+
+### 登录时浏览器闪了一下关闭
+这是由于第三方库[selenium](https://pypi.org/project/selenium/)支持的ChromeDriver版本与自带的版本不一致导致的。   
+**可以到这里[下载](https://chromedriver.chromium.org/downloads)其他版本**
