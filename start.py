@@ -6,15 +6,15 @@ import biliLogin
 import biliPlayerXmlParser
 import biliDanmu
 import biliTime
+import chon
 if __name__=='__main__':
-    inp=input("请输入av号（暂不支持SS号）：")
+    inp=input("请输入av号（支持SS号）：")
     av=False
     ss=False
-    #if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
-        #s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
-        #ss=True
-    #elif inp[0:2].lower()=='av' and inp[2:].isnumeric() :
-    if inp[0:2].lower()=='av' and inp[2:].isnumeric() :
+    if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
+        s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
+        ss=True
+    elif inp[0:2].lower()=='av' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/video/av"+inp[2:]
         av=True
     elif inp.isnumeric() :
@@ -91,7 +91,7 @@ if __name__=='__main__':
                     inp=inp.split(',')
                     bb=True
                     for i in inp :
-                        if i.isnumeric() and int(i)<=data['videos'] and (not (int(i) in cho)) :
+                        if i.isnumeric() and int(i)>0 and int(i)<=data['videos'] and (not (int(i) in cho)) :
                             cho.append(int(i))
                         else :
                             bb=False
@@ -134,6 +134,55 @@ if __name__=='__main__':
     if ss :
         data=JSONParser.Myparser2(parser.videodata)
         print(data)
-        PrintInfo.printInfo2(data)
+        le=PrintInfo.printInfo2(data)
+        cho=[]
+        if le==1:
+            cho.append(1)
+            cho=chon.getcho(cho,data)
+        else :
+            bs=True
+            while bs :
+                inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                cho=[]
+                if len(inp)>0:
+                    if inp[0]=='a' :
+                        print('你全选了所有视频')
+                        for j in range(1,le+1) :
+                            cho.append(j)
+                        bs=False
+                    else :
+                        inp=inp.split(',')
+                        bb=True
+                        for i in inp :
+                            if i.isnumeric() and int(i)<=le and int(i)>0 and (not (int(i) in cho)) :
+                                cho.append(int(i))
+                            else :
+                                bb=False
+                        if bb:
+                            bs=False
+                cho=chon.getcho(cho,data)
+                PrintInfo.printcho(cho)
+        cho2=0
+        bs=True
+        while bs :
+            inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载')
+            if inp[0] =='1' :
+                cho2=1
+                bs=False
+            elif inp[0] =='2' :
+                cho2=2
+                bs=False
+        if cho2==1 :
+            for i in cho:
+                read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc)
+                if read==-1 or read==-4 :
+                    pass
+                elif read==0 :
+                    print('%s下载完成' % (i['titleFormat']))
+                else :
+                    exit()
+        elif cho2==2 :
+            for i in cho :
+                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
 else :
     print("请运行根目录下的start.py")

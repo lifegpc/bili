@@ -7,7 +7,7 @@ def Myparser(s) :
     data['bvid']=obj['videoData']['bvid']
     data['videos']=obj['videoData']['videos']
     data['title']=obj['videoData']['title']
-    data['pubdate''']=obj['videoData']['pubdate']
+    data['pubdate']=obj['videoData']['pubdate']
     data['ctime']=obj['videoData']['ctime']
     data['desc']=obj['videoData']['desc']
     data['uid']=obj['videoData']['owner']['mid']
@@ -35,6 +35,7 @@ def Myparser2(s) :
         mediaInfo['alias']=obj['mediaInfo']['alias']
         mediaInfo['evaluate']=obj['mediaInfo']['evaluate']
         mediaInfo['type']=obj['mediaInfo']['ssTypeFormat']['name']
+        mediaInfo['time']=obj['mediaInfo']['pub']['time']
         data['mediaInfo']=mediaInfo
     if 'epList' in obj :
         epList=[]
