@@ -26,7 +26,7 @@ def login(r):
         print('网络错误')
         return 1
     else :
-        print("登录失败："+rr['code']+","+rr['message'])
+        print("登录失败："+str(rr['code'])+","+str(rr['message']))
         return 2
 def tryok(r) :
     '验证是否登录成功'
