@@ -11,9 +11,13 @@ if __name__=='__main__':
     inp=input("请输入av号（支持SS号）：")
     av=False
     ss=False
+    ep=False
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
+    elif inp[0:2].lower()=='ep' and inp[2:].isnumeric() :
+        s="https://www.bilibili.com/bangumi/play/ep"+inp[2:]
+        ep=True
     elif inp[0:2].lower()=='av' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/video/av"+inp[2:]
         av=True
@@ -133,7 +137,6 @@ if __name__=='__main__':
                     exit()
     if ss :
         data=JSONParser.Myparser2(parser.videodata)
-        print(data)
         le=PrintInfo.printInfo2(data)
         cho=[]
         if le==1:
@@ -184,5 +187,7 @@ if __name__=='__main__':
         elif cho2==2 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
+    if ep :
+        print(parser.videodata)
 else :
     print("请运行根目录下的start.py")
