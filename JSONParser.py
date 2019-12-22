@@ -47,6 +47,7 @@ def Myparser2(s) :
             t['titleFormat']=i['titleFormat']
             t['longTitle']=i['longTitle']
             t['i']=i['i']
+            t['loaded']=i['loaded']
             epList.append(t)
         data['epList']=epList
     if 'sections' in obj :
@@ -65,6 +66,7 @@ def Myparser2(s) :
                     t2['titleFormat']=j['titleFormat']
                     t2['longTitle']=j['longTitle']
                     t2['i']=j['i']
+                    t2['loaded']=j['loaded']
                     epList.append(t2)
                 t['epList']=epList
             sections.append(t)

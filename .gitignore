@@ -5,6 +5,7 @@
 #download file or config file
 *.xml
 *.json
+*.flv
 #other file
 .project
 #execute library
