@@ -1,4 +1,3 @@
-#pylint:disable=E0001
 import requests
 import HTMLParser
 import JSONParser
@@ -135,8 +134,18 @@ if __name__=='__main__':
                 else :
                     exit()
         elif cho2>2:
-        	for i in cho :
-        		read=videodownload.avvideodownload(i,s,data,section)
+            bs=True
+            cho3=False
+            while bs :
+                inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
+                if len(inp) > 0:
+                    if inp[0].lower()=='y' :
+                        cho3=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            for i in cho :
+                read=videodownload.avvideodownload(i,s,data,section,cho3)
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'
