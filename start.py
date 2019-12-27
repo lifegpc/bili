@@ -1,3 +1,4 @@
+#pylint:disable=E0001
 import requests
 import HTMLParser
 import JSONParser
@@ -7,6 +8,7 @@ import biliPlayerXmlParser
 import biliDanmu
 import biliTime
 import chon
+import videodownload
 if __name__=='__main__':
     inp=input("请输入av号（支持SS号）：")
     av=False
@@ -106,14 +108,11 @@ if __name__=='__main__':
         cho2=0
         bs=True
         while bs :
-            inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载')
-            if inp[0] =='1' :
-                cho2=1
-                bs=False
-            elif inp[0] =='2' :
-                cho2=2
-                bs=False
-        if cho2==1 :
+            inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载')
+            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6 :
+            	cho2=int(inp[0])
+            	bs=False
+        if cho2==1 and cho2==4 :
             for i in cho :
                 read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc)
                 if read==-1 or read==-4 :
@@ -122,7 +121,7 @@ if __name__=='__main__':
                     print('第'+str(i)+"P下载完成")
                 else :
                     exit()
-        elif cho2==2 :
+        elif cho2==2 and cho2==5 :
             read=biliTime.equal(biliTime.getDate(data['pubdate']),biliTime.getNowDate())
             if read==0 or read==1 :
                 print('不能下载该视频全弹幕！')
@@ -135,6 +134,9 @@ if __name__=='__main__':
                     print("第"+str(i)+"P下载完成")
                 else :
                     exit()
+        elif cho2>2:
+        	for i in cho :
+        		read=videodownload.avvideodownload(i,s,data,section)
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'
@@ -192,14 +194,11 @@ if __name__=='__main__':
         cho2=0
         bs=True
         while bs :
-            inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载')
-            if inp[0] =='1' :
-                cho2=1
-                bs=False
-            elif inp[0] =='2' :
-                cho2=2
-                bs=False
-        if cho2==1 :
+            inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载')
+            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6:
+            	cho2=int(inp[0])
+            	bs=False
+        if cho2==1 and cho2==4 :
             for i in cho:
                 read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc)
                 if read==-1 or read==-4 :
@@ -208,7 +207,7 @@ if __name__=='__main__':
                     print('%s下载完成' % (i['titleFormat']))
                 else :
                     exit()
-        elif cho2==2 :
+        elif cho2==2 and cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
 else :
