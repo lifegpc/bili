@@ -67,6 +67,7 @@ def Myparser2(s) :
                     t2['longTitle']=j['longTitle']
                     t2['i']=j['i']
                     t2['loaded']=j['loaded']
+                    t2['title']=i['title']
                     epList.append(t2)
                 t['epList']=epList
             sections.append(t)

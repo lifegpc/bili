@@ -135,7 +135,11 @@ if __name__=='__main__':
                     print("第"+str(i)+"P下载完成")
                 else :
                     exit()
-    if ss :
+    if ss or ep :
+        if ep :
+            epl='，仅下载输入的ep号可输入b'
+        else :
+            epl=''
         data=JSONParser.Myparser2(parser.videodata)
         le=PrintInfo.printInfo2(data)
         cho=[]
@@ -145,7 +149,7 @@ if __name__=='__main__':
         else :
             bs=True
             while bs :
-                inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a%s'%(epl))
                 cho=[]
                 if len(inp)>0:
                     if inp[0]=='a' :
@@ -153,6 +157,26 @@ if __name__=='__main__':
                         for j in range(1,le+1) :
                             cho.append(j)
                         bs=False
+                    elif ep and inp[0]=='b':
+                        iii=1
+                        co=True
+                        if 'epList' in data:
+                            for i in data['epList'] :
+                                if i['loaded']:
+                                    co=False
+                                    break
+                                iii=iii+1
+                        if co and 'sections' in data :
+                            for i in data['sections'] :
+                                for j in i['epList'] :
+                                    if j['loaded']:
+                                        co=False
+                                        break
+                                    iii=iii+1
+                        print(iii)
+                        if not co:
+                            cho.append(iii)
+                            bs=False
                     else :
                         inp=inp.split(',')
                         bb=True
@@ -187,7 +211,5 @@ if __name__=='__main__':
         elif cho2==2 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
-    if ep :
-        print(parser.videodata)
 else :
     print("请运行根目录下的start.py")
