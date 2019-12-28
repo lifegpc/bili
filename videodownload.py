@@ -238,7 +238,33 @@ def avvideodownload(i,url,data,r,c,c2) :
                 for i in[0,1]:
                     os.remove(getfn(i,data,vqs,hzm))
 def epvideodownload(i,url,data,r,c,c2):
-    pass
+    """下载番剧等视频"""
+    if not os.path.exists('Download/') :
+        os.mkdir('Download/')
+    fdir='Download/%s'%(file.filtern('%s(SS%s)'%(data['mediaInfo']['title'],data['mediaInfo']['ssId'])))
+    if not os.path.exists(fdir):
+        os.mkdir(fdir)
+    r2=requests.Session()
+    r2.headers=r.headers
+    read=JSONParser.loadcookie(r2)
+    if read!=0 :
+        print("读取cookies.json出现错误")
+        return -1
+    r2.headers.update({'referer':url})
+    uri="https://api.bilibili.com/pgc/player/web/playurl?avid=%s&cid=%s&bvid=&qn=120&type=&otype=json&ep_id=%s&fourk=1&fnver=0&fnval=32"%(i['aid'],i['cid'],i['id'])
+    re=r2.get(uri)
+    re.encoding='utf8'
+    re=re.json()
+    print(re)
+    if re["code"]!=0 :
+        print({"code":re["code"],"message":re["message"]})
+        return -2
+    if 'result' in re and 'dash' in re['result']:
+        vq=re["result"]["quality"]
+        vqd=re["result"]["accept_description"]
+        avq=re["result"]["accept_quality"]
+        for j in re['result']['dash']['video']:
+            print(j['id'])
 def downloadstream(re,fn,size,i=1,n=1,d=False) :
     if d :
         print('正在开始下载第%s个文件，共%s个文件'%(i,n))

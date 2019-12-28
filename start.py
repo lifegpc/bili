@@ -229,5 +229,28 @@ if __name__=='__main__':
         elif cho2==2 and cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
+        elif cho2>2 :
+            bs=True
+            cho3=False
+            while bs :
+                inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
+                if len(inp) > 0:
+                    if inp[0].lower()=='y' :
+                        cho3=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            cho4=False
+            bs=True
+            while bs :
+                inp=input('在合并完成后是否自动删除文件？(y/n)')
+                if len(inp) > 0:
+                    if inp[0].lower()=='y' :
+                        cho4=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            for i in cho:
+                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho4)
 else :
     print("请运行根目录下的start.py")
