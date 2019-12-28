@@ -2,6 +2,7 @@ from file.info import getinfo,getinfox,printinfo
 from file.dir import getinfod,printinfod,listd
 from file.filter import listf,listfd,listff,filtern
 from file.get import getfilen
+from file.info import geturlfe
 #对后缀名过滤
 LX_FILTER=0
 #对文件名进行正则过滤

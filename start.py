@@ -144,8 +144,17 @@ if __name__=='__main__':
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
+            cho4=False
+            while bs :
+                inp=input('在合并完成后是否自动删除文件？(y/n)')
+                if len(inp) > 0:
+                    if inp[0].lower()=='y' :
+                        cho4=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
             for i in cho :
-                read=videodownload.avvideodownload(i,s,data,section,cho3)
+                read=videodownload.avvideodownload(i,s,data,section,cho3,cho4)
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'

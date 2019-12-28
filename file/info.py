@@ -57,3 +57,10 @@ def printinfo(o,m) :
         print('\t',end='')
         t=t+8
     print('%s\t%s\t%s\t%s\t%s' %(ftts(o['i']),ttos(o['a']),ttos(o['c']),ttos(o['m']),size(o['s'])))
+def geturlfe(uri):
+    "获取网址中的文件扩展名"
+    r=str(uri).split('?')
+    r=r[0]
+    r=r.split('.')
+    r=r[len(r)-1]
+    return r
