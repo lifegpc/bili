@@ -145,6 +145,7 @@ if __name__=='__main__':
                     elif inp[0].lower()=='n' :
                         bs=False
             cho4=False
+            bs=True
             while bs :
                 inp=input('在合并完成后是否自动删除文件？(y/n)')
                 if len(inp) > 0:
