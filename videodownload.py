@@ -251,7 +251,7 @@ def epvideodownload(i,url,data,r,c,c2):
         print("读取cookies.json出现错误")
         return -1
     r2.headers.update({'referer':url})
-    uri="https://api.bilibili.com/pgc/player/web/playurl?avid=%s&cid=%s&bvid=&qn=120&type=&otype=json&ep_id=%s&fourk=1&fnver=0&fnval=32"%(i['aid'],i['cid'],i['id'])
+    uri="https://api.bilibili.com/pgc/player/web/playurl?avid=%s&cid=%s&bvid=&qn=120&type=&otype=json&ep_id=%s&fourk=1&fnver=0&fnval=16"%(i['aid'],i['cid'],i['id'])
     re=r2.get(uri)
     re.encoding='utf8'
     re=re.json()
@@ -271,7 +271,7 @@ def downloadstream(re,fn,size,i=1,n=1,d=False) :
     else :
         print('正在开始下载')
     if os.path.exists(fn) :
-        fsize=file.getinfo(fn)['s']
+        fsize=file.getinfo({'a':fn,'f':''})['s']
         if fsize!=size :
             s="(文件大小不一致，建议覆盖)"
         else :
