@@ -111,7 +111,7 @@ if __name__=='__main__':
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6 :
             	cho2=int(inp[0])
             	bs=False
-        if cho2==1 and cho2==4 :
+        if cho2==1 or cho2==4 :
             for i in cho :
                 read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc)
                 if read==-1 or read==-4 :
@@ -120,7 +120,7 @@ if __name__=='__main__':
                     print('第'+str(i)+"P下载完成")
                 else :
                     exit()
-        elif cho2==2 and cho2==5 :
+        elif cho2==2 or cho2==5 :
             read=biliTime.equal(biliTime.getDate(data['pubdate']),biliTime.getNowDate())
             if read==0 or read==1 :
                 print('不能下载该视频全弹幕！')
@@ -217,7 +217,7 @@ if __name__=='__main__':
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6:
             	cho2=int(inp[0])
             	bs=False
-        if cho2==1 and cho2==4 :
+        if cho2==1 or cho2==4 :
             for i in cho:
                 read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc)
                 if read==-1 or read==-4 :
@@ -226,7 +226,7 @@ if __name__=='__main__':
                     print('%s下载完成' % (i['titleFormat']))
                 else :
                     exit()
-        elif cho2==2 and cho2==5 :
+        elif cho2==2 or cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
         elif cho2>2 :
