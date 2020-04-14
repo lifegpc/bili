@@ -8,8 +8,9 @@ import biliDanmu
 import biliTime
 import chon
 import videodownload
-if __name__=='__main__':
-    inp=input("请输入av号（支持SS号）：")
+import biliBv
+def main():
+    inp=input("请输入av号（支持SS号，BV号请以BV开头）：")
     av=False
     ss=False
     ep=False
@@ -21,6 +22,10 @@ if __name__=='__main__':
         ep=True
     elif inp[0:2].lower()=='av' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/video/av"+inp[2:]
+        av=True
+    elif inp[0:2].lower()=='bv' :
+        inp=str(biliBv.debv(inp))
+        s="https://www.bilibili.com/video/av"+inp
         av=True
     elif inp.isnumeric() :
         s="https://www.bilibili.com/video/av"+inp
@@ -252,5 +257,7 @@ if __name__=='__main__':
                         bs=False
             for i in cho:
                 read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho4)
+if __name__=="__main__" :
+    main()
 else :
     print("请运行根目录下的start.py")
