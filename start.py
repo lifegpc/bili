@@ -11,6 +11,9 @@ import videodownload
 import biliBv
 from re import search,I
 def main():
+    se=JSONParser.loadset()
+    if not isinstance(se,dict) :
+        se=None
     inp=input("请输入av号（支持SS号，BV号请以BV开头，现在已支持链接）：")
     av=False
     ss=False
@@ -95,6 +98,12 @@ def main():
         xmlc=read
     if xml==1 :
         bs=True
+        read=JSONParser.getset(se,'dmgl')
+        if read==True :
+            bs=False
+        elif read==False :
+            bs=False
+            xml=2
         while bs:
             yn=input("是否启用弹幕过滤(y/n)？")
             if yn[0].lower() =='y' :
@@ -165,6 +174,12 @@ def main():
         if cho2>2:
             bs=True
             cho3=False
+            read=JSONParser.getset(se,'dmgl')
+            if read==True :
+                bs=False
+                cho3=True
+            elif read==False :
+                bs=False
             while bs :
                 inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
                 if len(inp) > 0:
@@ -175,6 +190,12 @@ def main():
                         bs=False
             cho4=False
             bs=True
+            read=JSONParser.getset(se,'ad')
+            if read==True :
+                bs=False
+                cho4=True
+            elif read==False:
+                bs=False
             while bs :
                 inp=input('在合并完成后是否自动删除文件？(y/n)')
                 if len(inp) > 0:
@@ -185,6 +206,12 @@ def main():
                         bs=False
             cho5=False
             bs=True
+            read=JSONParser.getset(se,'cd')
+            if read==True :
+                bs=False
+                cho5=True
+            elif read==False:
+                bs=False
             while bs:
                 inp=input('是否开启继续下载功能？(y/n)')
                 if len(inp)>0 :
@@ -194,7 +221,7 @@ def main():
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho :
-                read=videodownload.avvideodownload(i,s,data,section,cho3,cho4,cho5)
+                read=videodownload.avvideodownload(i,s,data,section,cho3,cho4,cho5,se)
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'
@@ -271,6 +298,12 @@ def main():
         if cho2>2 :
             bs=True
             cho3=False
+            read=JSONParser.getset(se,'dmgl')
+            if read==True :
+                bs=False
+                cho3=True
+            elif read==False :
+                bs=False
             while bs :
                 inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
                 if len(inp) > 0:
@@ -281,6 +314,12 @@ def main():
                         bs=False
             cho4=False
             bs=True
+            read=JSONParser.getset(se,'ad')
+            if read==True :
+                bs=False
+                cho4=True
+            elif read==False:
+                bs=False
             while bs :
                 inp=input('在合并完成后是否自动删除文件？(y/n)')
                 if len(inp) > 0:
@@ -291,6 +330,12 @@ def main():
                         bs=False
             cho5=False
             bs=True
+            read=JSONParser.getset(se,'cd')
+            if read==True :
+                bs=False
+                cho5=True
+            elif read==False:
+                bs=False
             while bs:
                 inp=input('是否开启继续下载功能？(y/n)')
                 if len(inp)>0 :
@@ -300,7 +345,7 @@ def main():
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho:
-                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho4,cho5)
+                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho4,cho5,se)
 if __name__=="__main__" :
     main()
 else :

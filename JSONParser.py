@@ -1,4 +1,6 @@
 from json import loads,dumps
+from os.path import exists
+from os import remove
 def Myparser(s) :
     "解析普通AV视频信息"
     obj=loads(s)
@@ -96,3 +98,38 @@ def loadcookie(r) :
     for i in o :
         r.cookies.set(i['name'],i['value'],domain=i['domain'],path=i['path'])
     return 0
+def loadset():
+    "加载settings.json设置"
+    try :
+        obj=open('settings.json',mode='r')
+    except :
+        return -1
+    try :
+        obj.seek(0,2)
+        si=obj.tell()
+        obj.seek(0,0)
+        s=obj.read(si)
+        o=loads(s)
+    except :
+        return -2
+    return o
+def saveset(d):
+    "保存settings.json设置"
+    try :
+        if exists('settings.json') :
+            remove('settings.json')
+        obj=open('settings.json',mode='w')
+    except :
+        return -1
+    try :
+        obj.write(dumps(d))
+        obj.close()
+    except :
+        return -2
+    return 0
+def getset(d:dict,key:str) :
+    '获取当前key的设置，如不存在返回None'
+    if key in d :
+        return d[key]
+    else :
+        return None
