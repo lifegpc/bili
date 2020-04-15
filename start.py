@@ -125,7 +125,7 @@ def main():
                     print('第'+str(i)+"P下载完成")
                 else :
                     exit()
-        elif cho2==2 or cho2==5 :
+        if cho2==2 or cho2==5 :
             read=biliTime.equal(biliTime.getDate(data['pubdate']),biliTime.getNowDate())
             if read==0 or read==1 :
                 print('不能下载该视频全弹幕！')
@@ -138,7 +138,7 @@ def main():
                     print("第"+str(i)+"P下载完成")
                 else :
                     exit()
-        elif cho2>2:
+        if cho2>2:
             bs=True
             cho3=False
             while bs :
@@ -159,8 +159,18 @@ def main():
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
+            cho5=False
+            bs=True
+            while bs:
+                inp=input('是否开启继续下载功能？(y/n)')
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        cho5=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
             for i in cho :
-                read=videodownload.avvideodownload(i,s,data,section,cho3,cho4)
+                read=videodownload.avvideodownload(i,s,data,section,cho3,cho4,cho5)
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'
@@ -231,10 +241,10 @@ def main():
                     print('%s下载完成' % (i['titleFormat']))
                 else :
                     exit()
-        elif cho2==2 or cho2==5 :
+        if cho2==2 or cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
-        elif cho2>2 :
+        if cho2>2 :
             bs=True
             cho3=False
             while bs :
@@ -255,8 +265,18 @@ def main():
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
+            cho5=False
+            bs=True
+            while bs:
+                inp=input('是否开启继续下载功能？(y/n)')
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        cho5=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
             for i in cho:
-                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho4)
+                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho4,cho5)
 if __name__=="__main__" :
     main()
 else :

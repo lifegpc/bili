@@ -47,9 +47,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc) :
     if t=='av' :
         d=biliDanmuDown.downloadn(data['page'][c-1]['cid'],r)
         if data['videos'] ==1 :
-            filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         else :
-            filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         if d==-1 :
             print("网络错误")
             exit()
@@ -234,9 +234,9 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
                 at=1
                 bs=False
         if data['videos'] ==1 :
-            filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         else :
-            filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         if exists(filen) :
             bs=True
             while bs :

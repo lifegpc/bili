@@ -6,8 +6,8 @@ s=[11,10,3,8,4,6]
 xor=177451812
 add=8728348608
 def debv(x):
-    if len(x)==9 :
-        x="1"+x
+    if len(x)==11 :
+        x="BV1"+x[2:]
     r=0
     for i in range(6):
         r+=tr[x[s[i]]]*58**i
