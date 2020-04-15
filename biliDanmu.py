@@ -132,9 +132,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc) :
             print('创建%s失败！'%(pat))
             return -3
         if c['s']=='e' :
-            filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['id'],c['cid'])))
+            filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
         else :
-            filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['id'],c['cid'])))
+            filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
         if d==-1 :
             print('网络错误！')
             exit()
@@ -558,9 +558,9 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
             print('创建%s失败！'%(pat))
             return -1
         if c['s']=='e' :
-            filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['id'],c['cid'])))
+            filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
         else :
-            filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['id'],c['cid'])))
+            filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
         if exists(filen) :
             bs=True
             while bs :

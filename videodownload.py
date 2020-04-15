@@ -5,10 +5,26 @@ import file
 import time
 import os
 from dictcopy import copydict,copylist
+from re import search
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
 #第二个需要带referer，可以解析4K
+def sea(s:str,avq:list) :
+    t=search('^[0-9]+',s)
+    if t :
+        t=int(t.group())
+        k=0
+        for i in avq :
+            if i==t :
+                break
+            k=k+1
+        return k
+def sev(s:str) :
+    t=search('^[0-9]+(.+)',s)
+    if t:
+        return t.groups()[0]
+    return ""
 def avvideodownload(i,url,data,r,c,c2,c3,se) :
     """下载av号视频
     -1 cookies.json读取错误
@@ -144,13 +160,14 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
     elif "data" in re and "dash" in re['data'] :
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
-        avq=re["data"]["accept_quality"]
+        avq2=re['data']["accept_quality"]
+        avq=[]
         aaq=[]
         dash={'video':{},'audio':{}}
         vqs=[]
         for j in re['data']['dash']['video'] :
-            if (not j['id'] in dash['video']) or (j['id'] in dash['video'] and dash['video'][j['id']]['bandwidth']<j['bandwidth']) :
-                dash['video'][j['id']]=j
+            dash['video'][str(j['id'])+j['codecs']]=j
+            avq.append(str(j['id'])+j['codecs'])
         for j in re['data']['dash']['audio']:
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
@@ -171,7 +188,7 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
             print('视频轨：')
             k=0
             for j in avq:
-                print('%s.图质：%s(%sx%s)'%(k+1,vqd[k],dash['video'][j]['width'],dash['video'][j]['height']))
+                print('%s.图质：%s(%sx%s,%s)'%(k+1,vqd[sea(j,avq2)],dash['video'][j]['width'],dash['video'][j]['height'],sev(j)))
                 dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
                 print('大小：%s(%sB)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size']))
                 k=k+1
@@ -183,8 +200,8 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
                         if int(inp)>0 and int(inp)<len(avq)+1 :
                             bs=False
                             dash['video']=dash['video'][avq[int(inp)-1]]
-                            print('已选择%s画质'%(vqd[int(inp)-1]))
-                            vqs.append(vqd[int(inp)-1])
+                            print('已选择%s(%s)画质'%(vqd[sea(avq[int(inp)-1],avq2)],sev(avq[int(inp)-1])))
+                            vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
             else :
                 dash['video']=dash['video'][avq[0]]
                 vqs.append(vqd[0])
@@ -269,7 +286,6 @@ def epvideodownload(i,url,data,r,c,c2,c3,se):
     re=r2.get(uri)
     re.encoding='utf8'
     re=re.json()
-    print(re)
     if re["code"]!=0 :
         print({"code":re["code"],"message":re["message"]})
         return -2

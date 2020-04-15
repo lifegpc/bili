@@ -40,6 +40,7 @@ def printInfo2(data) :
 			ii=ii+1
 			print('名字：'+i['longTitle'])
 			print('AV号：'+str(i['aid']))
+			print('BV号：'+str(i['bvid']))
 			print('CID:'+str(i['cid']))
 			print('ID:'+str(i['id']))
 	if 'sections' in data:
@@ -50,6 +51,7 @@ def printInfo2(data) :
 				ii=ii+1
 				print('名字：'+j['longTitle'])
 				print('AV号：'+str(j['aid']))
+				print('BV号：'+str(j['bvid']))
 				print('CID:'+str(j['cid']))
 				print('ID:'+str(j['id']))
 	return ii-1

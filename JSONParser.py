@@ -45,6 +45,7 @@ def Myparser2(s) :
             t={}
             t['id']=i['id']
             t['aid']=i['aid']
+            t['bvid']=i['bvid']
             t['cid']=i['cid']
             t['titleFormat']=i['titleFormat']
             t['longTitle']=i['longTitle']
@@ -64,6 +65,7 @@ def Myparser2(s) :
                     t2={}
                     t2['id']=j['id']
                     t2['aid']=j['aid']
+                    t2['bvid']=j['bvid']
                     t2['cid']=j['cid']
                     t2['titleFormat']=j['titleFormat']
                     t2['longTitle']=j['longTitle']
