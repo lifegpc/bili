@@ -9,8 +9,9 @@ import biliTime
 import chon
 import videodownload
 import biliBv
+from re import search,I
 def main():
-    inp=input("请输入av号（支持SS号，BV号请以BV开头）：")
+    inp=input("请输入av号（支持SS号，BV号请以BV开头，现在已支持链接）：")
     av=False
     ss=False
     ep=False
@@ -31,8 +32,31 @@ def main():
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        print('输入有误')
-        exit()
+        re=search('([^:]+://)?(www\.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?',inp,I)
+        if re==None :
+            print('输入有误')
+            exit()
+        else :
+            re=re.groups()
+            if re[3] :
+                inp=re[3]
+                s="https://www.bilibili.com/video/av"+inp
+                av=True
+            elif re[5] :
+                inp=str(biliBv.debv(re[5]))
+                s="https://www.bilibili.com/video/av"+inp
+                av=True
+            elif re[7] :
+                inp=re[7]
+                s="https://www.bilibili.com/bangumi/play/"+inp
+                ss=True
+            elif re[9] :
+                inp=re[9]
+                s="https://www.bilibili.com/bangumi/play/"+inp
+                ep=True
+            else :
+                print('输入有误')
+                exit()
     section=requests.session()
     section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36","Connection": "keep-alive","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","Accept-Language": "zh-CN,zh;q=0.8"})
     read=JSONParser.loadcookie(section)
