@@ -37,8 +37,31 @@ def main():
     else :
         re=search('([^:]+://)?(www.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?',inp,I)
         if re==None :
-            print('输入有误')
-            exit()
+            re=search('([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
+            if re==None :
+                print('输入有误')
+                exit()
+            else :
+                re=re.groups()
+                if re[3] :
+                    inp=re[3]
+                    s="https://www.bilibili.com/video/av"+inp
+                    av=True
+                elif re[4] :
+                    inp=str(biliBv.debv(re[4]))
+                    s="https://www.bilibili.com/video/av"+inp
+                    av=True
+                elif re[5] :
+                    inp=re[5]
+                    s="https://www.bilibili.com/bangumi/play/"+inp
+                    ss=True
+                elif re[6] :
+                    inp=re[6]
+                    s="https://www.bilibili.com/bangumi/play/"+inp
+                    ep=True
+                else :
+                    print('输入有误')
+                    exit()
         else :
             re=re.groups()
             if re[3] :
