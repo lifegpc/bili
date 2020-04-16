@@ -26,3 +26,7 @@ def ftts(i) :
         return '目录'
     elif i=='f' :
         return '文件'
+def cml(s,t):
+    '计算码率,s 大小B,t 时间ms'
+    s=s*8/t
+    return "%.2fkbps"%(s)

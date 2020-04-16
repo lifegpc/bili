@@ -1,4 +1,4 @@
-# BiliBili 弹幕下载软件
+# BiliBili 弹幕/视频下载软件
 ## 简介
 程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver。   
 软件只有控制台界面，萌新不会可以看[这里](easyuse.md)
@@ -6,6 +6,7 @@
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)   
 自己写的file库   
+如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。
 ### 其他
 程序目录下需要有相应系统版本的ChromeDriver。   
 没有ChromeDriver将无法进行登录操作（同理，由于手机平台没有ChromeDriver，也无法进行登录，但可以用[其他方法](#a)绕过）
@@ -13,6 +14,9 @@
 ### cookies.json
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用）   
 <a name='a'></a>**当某些平台无法登录时，可以在其他平台先登录，再将cookies.json复制到程序目录下。**
+
+### settings.json
+该文件保存了一些默认操作的设置，可以运行**setsettings.py**来设置。
 
 ### tv.bilibili.player.xml
 该文件不一定需要   

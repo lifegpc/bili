@@ -75,7 +75,7 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
                 for k in durl[l] :
                     size=size+k['size']
                 durz[l]=size
-                print("大小：%s(%sB)"%(file.info.size(size),size))
+                print("大小：%s(%sB,%s)"%(file.info.size(size),size,file.cml(size,re['data']['timelength'])))
             bs=True
             while bs :
                 inp=input('请选择画质：')
@@ -97,7 +97,7 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
             durz=0
             for k in durl[vq] :
                 durz=durz+k['size']
-            print('大小：%s(%sB)'%(file.info.size(durz),durz))
+            print('大小：%s(%sBm,%s)'%(file.info.size(durz),durz,file.cml(durz,re['data']['timelength'])))
             durl=durl[vq]
         if data['videos']==1 :
             filen='Download/%s'%(file.filtern('%s(AV%s,%s,P%s,%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs)))
@@ -183,11 +183,11 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
             print('视频轨：')
             print("图质：%s(%sx%s)"%(vqd[0],dash['video']['width'],dash['video']['height']))
             dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
-            print('大小：%s(%sB)'%(file.info.size(dash['video']['size']),dash['video']['size']))
+            print('大小：%s(%sB,%s)'%(file.info.size(dash['video']['size']),dash['video']['size'],file.cml(dash['video']['size'],re['data']['timelength'])))
             print('音频轨：')
             print('ID：%s'%(dash['audio']['id']))
             dash['audio']['size']=streamgetlength(r2,dash['audio']['base_url'])
-            print('大小：%s(%sB)'%(file.info.size(dash['audio']['size']),dash['audio']['size']))
+            print('大小：%s(%sB,%s)'%(file.info.size(dash['audio']['size']),dash['audio']['size'],file.cml(dash['audio']['size'],re['data']['timelength'])))
             vqs=[vqd[0]+","+dash['video']['codecs'],aaq[0]]
         else :
             print('视频轨：')
@@ -195,7 +195,7 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
             for j in avq:
                 print('%s.图质：%s(%sx%s,%s)'%(k+1,vqd[sea(j,avq2)],dash['video'][j]['width'],dash['video'][j]['height'],sev(j)))
                 dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
-                print('大小：%s(%sB)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size']))
+                print('大小：%s(%sB,%s)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size'],file.cml(dash['video'][j]['size'],re['data']['timelength'])))
                 k=k+1
             if len(avq)>1 :
                 bs=True
@@ -209,13 +209,13 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
                             vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
             else :
                 dash['video']=dash['video'][avq[0]]
-                vqs.append(vqd[0])
+                vqs.append(vqd[0]+","+sev(avq[0]))
             print('音频轨：')
             k=0
             for j in aaq:
                 print("%s.ID：%s"%(k+1,j))
                 dash['audio'][j]['size']=streamgetlength(r2,dash['audio'][j]['base_url'])
-                print('大小：%s(%sB)'%(file.info.size(dash['audio'][j]['size']),dash['audio'][j]['size']))
+                print('大小：%s(%sB,%s)'%(file.info.size(dash['audio'][j]['size']),dash['audio'][j]['size'],file.cml(dash['audio'][j]['size'],re['data']['timelength'])))
                 k=k+1
             if len(aaq)>1:
                 bs=True
@@ -320,11 +320,11 @@ def epvideodownload(i,url,data,r,c,c2,c3,se):
             print('视频轨：')
             print("图质：%s(%sx%s)"%(vqd[0],dash['video']['width'],dash['video']['height']))
             dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
-            print('大小：%s(%sB)'%(file.info.size(dash['video']['size']),dash['video']['size']))
+            print('大小：%s(%sB,%s)'%(file.info.size(dash['video']['size']),dash['video']['size'],file.cml(dash['video']['size'],re['data']['timelength'])))
             print('音频轨：')
             print('ID：%s'%(dash['audio']['id']))
             dash['audio']['size']=streamgetlength(r2,dash['audio']['base_url'])
-            print('大小：%s(%sB)'%(file.info.size(dash['audio']['size']),dash['audio']['size']))
+            print('大小：%s(%sB,%s)'%(file.info.size(dash['audio']['size']),dash['audio']['size'],file.cml(dash['audio']['size'],re['data']['timelength'])))
             vqs=[vqd[0]+","+dash['video']['codecs'],aaq[0]]
         else :
             print('视频轨：')
@@ -332,7 +332,7 @@ def epvideodownload(i,url,data,r,c,c2,c3,se):
             for j in avq:
                 print('%s.图质：%s(%sx%s,%s)'%(k+1,vqd[sea(j,avq2)],dash['video'][j]['width'],dash['video'][j]['height'],sev(j)))
                 dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
-                print('大小：%s(%sB)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size']))
+                print('大小：%s(%sB,%s)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size'],file.cml(dash['video'][j]['size'],re['data']['timelength'])))
                 k=k+1
             if len(avq)>1 :
                 bs=True
@@ -346,13 +346,13 @@ def epvideodownload(i,url,data,r,c,c2,c3,se):
                             vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
             else :
                 dash['video']=dash['video'][avq[0]]
-                vqs.append(vqd[0])
+                vqs.append(vqd[0]+","+sev(avq[0]))
             print('音频轨：')
             k=0
             for j in aaq:
                 print("%s.ID：%s"%(k+1,j))
                 dash['audio'][j]['size']=streamgetlength(r2,dash['audio'][j]['base_url'])
-                print('大小：%s(%sB)'%(file.info.size(dash['audio'][j]['size']),dash['audio'][j]['size']))
+                print('大小：%s(%sB,%s)'%(file.info.size(dash['audio'][j]['size']),dash['audio'][j]['size'],file.cml(dash['audio'][j]['size'],re['data']['timelength'])))
                 k=k+1
             if len(aaq)>1:
                 bs=True
