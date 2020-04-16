@@ -4,7 +4,8 @@
 软件只有控制台界面，萌新不会可以看[这里](easyuse.md)
 ## 依赖库
 [requests](https://pypi.org/project/requests/)   
-[selenium](https://pypi.org/project/selenium/)   
+[selenium](https://pypi.org/project/selenium/)  
+[goto-statement](https://github.com/snoack/python-goto)    
 自己写的file库   
 如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。
 ### 其他
