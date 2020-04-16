@@ -31,14 +31,14 @@ def login(r):
 def tryok(r) :
     '验证是否登录成功'
     try :
-        re=r.get('https://api.bilibili.com/x/v2/dm/history?type=1&date=2016-03-06&oid=6507904')
+        re=r.get('https://api.bilibili.com/x/web-interface/nav')
     except :
         return False
     re.encoding='utf8'
     try :
         obj=re.json()
-        if obj['code']==-509 and obj['code']!='账户未登录' :
+        if obj['code']==0:
             return True
-        return obj
+        return False
     except :
-        return True
+        return re.text

@@ -35,7 +35,7 @@ def main():
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search('([^:]+://)?(www\.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?',inp,I)
+        re=search('([^:]+://)?(www.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?',inp,I)
         if re==None :
             print('输入有误')
             exit()
@@ -174,7 +174,7 @@ def main():
         if cho2>2:
             bs=True
             cho3=False
-            read=JSONParser.getset(se,'dmgl')
+            read=JSONParser.getset(se,'mp')
             if read==True :
                 bs=False
                 cho3=True
@@ -298,7 +298,7 @@ def main():
         if cho2>2 :
             bs=True
             cho3=False
-            read=JSONParser.getset(se,'dmgl')
+            read=JSONParser.getset(se,'mp')
             if read==True :
                 bs=False
                 cho3=True
