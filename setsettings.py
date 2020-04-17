@@ -68,4 +68,8 @@ if __name__=='__main__' :
     r=gk(se,'cd')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'cd',se)
+    print('是否开启下载失败后自动重新下载？')
+    r=gk(se,'rd')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'rd',se)
     saveset(ne)
