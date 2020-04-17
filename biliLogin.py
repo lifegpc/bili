@@ -37,8 +37,8 @@ def tryok(r) :
     re.encoding='utf8'
     try :
         obj=re.json()
-        if obj['code']==0:
+        if obj['code']==0 and 'data' in obj and obj['data']['isLogin']:
             return True
-        return False
+        return obj
     except :
         return re.text

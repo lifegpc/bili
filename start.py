@@ -10,6 +10,7 @@ import chon
 import videodownload
 import biliBv
 from re import search,I
+import os 
 def main():
     se=JSONParser.loadset()
     if not isinstance(se,dict) :
@@ -104,6 +105,8 @@ def main():
         print("文件读取错误！")
         login=2
     if login==2 :
+        if os.path.exists('cookies.json') :
+            os.remove('cookies.json')
         read=biliLogin.login(section)
         if read==0 :
             login=1
