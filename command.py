@@ -5,10 +5,14 @@ def ph() :
     start.py [-i <输入>] [-d <下载方式>] [-p <p数>]
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
-    -p <p数>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号'''
+    -p <p数>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号
+    -m <boolean>    是否默认下载最高画质
+    --ac <boolean>  是否开启继续下载功能
+    --dm <boolean>  是否启用弹幕过滤
+    注：命令行参数的优先级高于settings.json里的设置'''
     print(h)
 def gopt(args) :
-    re=getopt(args,'h?i:d:p:',['help'])
+    re=getopt(args,'h?i:d:p:m:',['help','ac=','dm='])
     print(re)
     rr=re[0]
     r={}
@@ -22,6 +26,21 @@ def gopt(args) :
             r['d']=int(i[1])
         if i[0]=='-p' and not 'p' in r :
             r['p']=i[1]
+        if i[0]=='-m' and not 'm' in r :
+            if i[1].lower()=='true' :
+                r['m']=True
+            elif i[1].lower()=='false' :
+                r['m']=False
+        if i[0]=='--ac' and not 'ac' in r:
+            if i[1].lower()=='true' :
+                r['ac']=True
+            elif i[1].lower()=='false' :
+                r['ac']=False
+        if i[0]=='--dm' and not 'dm' in r:
+            if i[1].lower()=='true' :
+                r['dm']=True
+            elif i[1].lower()=='false' :
+                r['dm']=False
     return r
 if __name__ == "__main__":
     import sys

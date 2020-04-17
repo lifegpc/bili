@@ -135,6 +135,13 @@ def main(ip={}):
         elif read==False :
             bs=False
             xml=2
+        if 'dm' in ip :
+            if ip['dm']:
+                bs=False
+                xml=1
+            else :
+                bs=False
+                xml=2
         while bs:
             yn=input("是否启用弹幕过滤(y/n)？")
             if yn[0].lower() =='y' :
@@ -219,6 +226,13 @@ def main(ip={}):
                 cho3=True
             elif read==False :
                 bs=False
+            if 'm' in ip :
+                if ip['m'] :
+                    bs=False
+                    cho3=True
+                else :
+                    bs=False
+                    cho3=False
             while bs :
                 inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
                 if len(inp) > 0:
@@ -235,6 +249,13 @@ def main(ip={}):
                 cho5=True
             elif read==False:
                 bs=False
+            if 'ac' in ip :
+                if ip['ac'] :
+                    bs=False
+                    cho5=True
+                else :
+                    bs=False
+                    cho5=False
             while bs:
                 inp=input('是否开启继续下载功能？(y/n)')
                 if len(inp)>0 :
@@ -335,6 +356,13 @@ def main(ip={}):
                 cho3=True
             elif read==False :
                 bs=False
+            if 'm' in ip :
+                if ip['m'] :
+                    bs=False
+                    cho3=True
+                else :
+                    bs=False
+                    cho3=False
             while bs :
                 inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
                 if len(inp) > 0:
@@ -351,6 +379,13 @@ def main(ip={}):
                 cho5=True
             elif read==False:
                 bs=False
+            if 'ac' in ip :
+                if ip['ac'] :
+                    bs=False
+                    cho5=True
+                else :
+                    bs=False
+                    cho5=False
             while bs:
                 inp=input('是否开启继续下载功能？(y/n)')
                 if len(inp)>0 :
