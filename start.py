@@ -11,11 +11,16 @@ import videodownload
 import biliBv
 from re import search,I
 import os 
-def main():
+import sys
+from command import gopt
+def main(ip={}):
     se=JSONParser.loadset()
     if not isinstance(se,dict) :
         se=None
-    inp=input("请输入av号（支持SS号，BV号请以BV开头，现在已支持链接）：")
+    if 'i' in ip :
+        inp=ip['i']
+    else :
+        inp=input("请输入av号（支持SS号，BV号请以BV开头，现在已支持链接）：")
     av=False
     ss=False
     ep=False
@@ -148,8 +153,13 @@ def main():
             cho.append(1)
         else :
             bs=True
+            f=True
             while bs :
-                inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                if f and 'p' in ip :
+                    f=False
+                    inp=ip['p']
+                else :
+                    inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a')
                 cho=[]
                 if inp[0]=='a' :
                     print('您全选了所有视频')
@@ -170,6 +180,9 @@ def main():
                             print("您选中了第"+str(i)+"P："+data['page'][i-1]['part'])
         cho2=0
         bs=True
+        if 'd' in ip :
+            bs=False
+            cho2=ip['d']
         while bs :
             inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载')
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6 :
@@ -261,8 +274,13 @@ def main():
             cho=chon.getcho(cho,data)
         else :
             bs=True
+            f=True
             while bs :
-                inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a%s'%(epl))
+                if f and 'p' in ip :
+                    inp=ip['p']
+                    f=False
+                else :
+                    inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a%s'%(epl))
                 cho=[]
                 if len(inp)>0:
                     if inp[0]=='a' :
@@ -304,6 +322,9 @@ def main():
                 PrintInfo.printcho(cho)
         cho2=0
         bs=True
+        if 'd' in ip :
+            bs=False
+            cho2=ip['d']
         while bs :
             inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载')
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6:
@@ -373,6 +394,9 @@ def main():
             for i in cho:
                 read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho4,cho5,se)
 if __name__=="__main__" :
-    main()
+    if len(sys.argv)==1 :
+        main()
+    else :
+        main(gopt(sys.argv[1:]))
 else :
     print("请运行根目录下的start.py")

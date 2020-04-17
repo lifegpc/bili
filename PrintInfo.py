@@ -56,6 +56,8 @@ def printInfo2(data) :
 				print('ID:'+str(j['id']))
 	return ii-1
 def printcho(cho) :
+	if len(cho)==0 :
+		return
 	print('你选中了',end='')
 	for i in cho :
 		print('%s,' %(i['titleFormat']),end='')
