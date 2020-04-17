@@ -60,7 +60,7 @@ if __name__=='__main__' :
     r=gk(se,'mp')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'mp',se)
-    print('在合并完成后是否默认删除文件（设置该项后将不会询问是否自动删除）？')
+    print('在合并完成后是否删除文件？')
     r=gk(se,'ad')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'ad',se)

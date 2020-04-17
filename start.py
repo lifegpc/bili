@@ -227,22 +227,6 @@ def main(ip={}):
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
-            cho4=False
-            bs=True
-            read=JSONParser.getset(se,'ad')
-            if read==True :
-                bs=False
-                cho4=True
-            elif read==False:
-                bs=False
-            while bs :
-                inp=input('在合并完成后是否自动删除文件？(y/n)')
-                if len(inp) > 0:
-                    if inp[0].lower()=='y' :
-                        cho4=True
-                        bs=False
-                    elif inp[0].lower()=='n' :
-                        bs=False
             cho5=False
             bs=True
             read=JSONParser.getset(se,'cd')
@@ -260,7 +244,7 @@ def main(ip={}):
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho :
-                read=videodownload.avvideodownload(i,s,data,section,cho3,cho4,cho5,se)
+                read=videodownload.avvideodownload(i,s,data,section,cho3,cho5,se)
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'
@@ -359,22 +343,6 @@ def main(ip={}):
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
-            cho4=False
-            bs=True
-            read=JSONParser.getset(se,'ad')
-            if read==True :
-                bs=False
-                cho4=True
-            elif read==False:
-                bs=False
-            while bs :
-                inp=input('在合并完成后是否自动删除文件？(y/n)')
-                if len(inp) > 0:
-                    if inp[0].lower()=='y' :
-                        cho4=True
-                        bs=False
-                    elif inp[0].lower()=='n' :
-                        bs=False
             cho5=False
             bs=True
             read=JSONParser.getset(se,'cd')
@@ -392,7 +360,7 @@ def main(ip={}):
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho:
-                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho4,cho5,se)
+                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se)
 if __name__=="__main__" :
     if len(sys.argv)==1 :
         main()

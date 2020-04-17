@@ -31,7 +31,7 @@ def sev(s:str) :
         return t.groups()[0]
     return ""
 @with_goto
-def avvideodownload(i,url,data,r,c,c2,c3,se) :
+def avvideodownload(i,url,data,r,c,c3,se) :
     """下载av号视频
     -1 cookies.json读取错误
     -2 API Error
@@ -194,9 +194,12 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
             if re==0:
                 print('合并完成！')
             de=False
-            if re==0 and not c2 :
+            if re==0:
                 bs=True
-                if JSONParser.getset(se,'ad')==False :
+                if JSONParser.getset(se,'ad')==True :
+                    de=True
+                    bs=False
+                elif JSONParser.getset(se,'ad')==False:
                     bs=False
                 while bs :
                     inp=input('是否删除中间文件？(y/n)')
@@ -206,7 +209,7 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
                             de=True
                         elif inp[0].lower()=='n' :
                             bs=False
-            if re==0 and (de or c2) :
+            if re==0 and de:
                 j=1
                 for k in durl:
                     os.remove("%s_%s.%s"%(filen,j,hzm))
@@ -356,9 +359,12 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
             de=False
             if re==0 :
                 print('合并完成！')
-            if re==0 and not c2 :
+            if re==0:
                 bs=True
-                if JSONParser.getset(se,'ad')==False :
+                if JSONParser.getset(se,'ad')==True :
+                    de=True
+                    bs=False
+                elif JSONParser.getset(se,'ad')==False:
                     bs=False
                 while bs :
                     inp=input('是否删除中间文件？(y/n)')
@@ -368,11 +374,11 @@ def avvideodownload(i,url,data,r,c,c2,c3,se) :
                             de=True
                         elif inp[0].lower()=='n' :
                             bs=False
-            if re==0 and (de or c2) :
+            if re==0 and de:
                 for j in[0,1]:
                     os.remove(getfn(j,i,data,vqs,hzm))
 @with_goto
-def epvideodownload(i,url,data,r,c,c2,c3,se):
+def epvideodownload(i,url,data,r,c,c3,se):
     """下载番剧等视频"""
     if not os.path.exists('Download/') :
         os.mkdir('Download/')
@@ -542,9 +548,12 @@ def epvideodownload(i,url,data,r,c,c2,c3,se):
             de=False
             if re==0 :
                 print('合并完成！')
-            if re==0 and not c2 :
+            if re==0:
                 bs=True
-                if JSONParser.getset(se,'ad')==False :
+                if JSONParser.getset(se,'ad')==True :
+                    de=True
+                    bs=False
+                elif JSONParser.getset(se,'ad')==False:
                     bs=False
                 while bs :
                     inp=input('是否删除中间文件？(y/n)')
@@ -554,7 +563,7 @@ def epvideodownload(i,url,data,r,c,c2,c3,se):
                             de=True
                         elif inp[0].lower()=='n' :
                             bs=False
-            if re==0 and (de or c2) :
+            if re==0 and de:
                 for j in[0,1]:
                     os.remove(getfn2(i,j,fdir,vqs,hzm))
 def downloadstream(uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
