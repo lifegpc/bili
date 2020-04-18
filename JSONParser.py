@@ -131,6 +131,8 @@ def saveset(d):
     return 0
 def getset(d:dict,key:str) :
     '获取当前key的设置，如不存在返回None'
+    if d==None :
+        return None
     if key in d :
         return d[key]
     else :

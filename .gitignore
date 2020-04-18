@@ -13,3 +13,7 @@
 .project
 #execute library
 *.exe
+*.spec
+dist/
+build/
+*.bat
