@@ -275,8 +275,32 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
             aaq.append(j['id'])
         aaq.sort(reverse=True)
         if c:
-            dash['video']=dash['video'][avq[0]]
-            dash['audio']=dash['audio'][aaq[0]]
+            p=0 #0 第一个 1 avc 2 hev
+            read=JSONParser.getset(se,'mpc')
+            if read==True :
+                p=1
+            elif read==False :
+                p=2
+            if 'mc' in ip:
+                if ip['mc']:
+                    p=1
+                else :
+                    p=2
+            p=[0,'avc','hev'][p]
+            i2=0
+            if p!=0:
+                if len(avq)>1 :
+                    if sea(avq[0],avq2)==sea(avq[1],avq2):
+                        for t in range(2) :
+                            if sev(avq[t])[0:3]==p :
+                                i2=t
+                                break
+                    else :
+                        i2=0
+                else :
+                    i2=0
+            dash['video']=dash['video'][avq[i2]]
+            dash['audio']=dash['audio'][aaq[i2]]
             print('视频轨：')
             print("图质：%s(%sx%s)"%(vqd[0],dash['video']['width'],dash['video']['height']))
             dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
@@ -508,8 +532,32 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
             aaq.append(j['id'])
         aaq.sort(reverse=True)
         if c:
-            dash['video']=dash['video'][avq[0]]
-            dash['audio']=dash['audio'][aaq[0]]
+            p=0 #0 第一个 1 avc 2 hev
+            read=JSONParser.getset(se,'mpc')
+            if read==True :
+                p=1
+            elif read==False :
+                p=2
+            if 'mc' in ip:
+                if ip['mc']:
+                    p=1
+                else :
+                    p=2
+            p=[0,'avc','hev'][p]
+            i2=0
+            if p!=0:
+                if len(avq)>1 :
+                    if sea(avq[0],avq2)==sea(avq[1],avq2):
+                        for t in range(2) :
+                            if sev(avq[t])[0:3]==p :
+                                i2=t
+                                break
+                    else :
+                        i2=0
+                else :
+                    i2=0
+            dash['video']=dash['video'][avq[i2]]
+            dash['audio']=dash['audio'][aaq[i2]]
             print('视频轨：')
             print("图质：%s(%sx%s)"%(vqd[0],dash['video']['width'],dash['video']['height']))
             dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])

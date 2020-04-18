@@ -1,7 +1,8 @@
 # BiliBili 弹幕/视频下载软件
 ## 简介
 程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver。   
-软件只有控制台界面，萌新不会可以看[这里](easyuse.md)
+软件只有控制台界面，萌新不会可以看[这里](easyuse.md)   
+现在已支持命令行
 ## 依赖库
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)  

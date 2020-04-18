@@ -49,7 +49,7 @@ if __name__=='__main__' :
     if not isinstance(se,dict) :
         se=None
     r=[]
-    print('选项前的x说明了当前选中的设置，直接回车会保持当前设置')
+    print('选项前的x说明了当前选中的设置，直接回车(exe版本请不要这么做，会闪退)会保持当前设置')
     if se :
         print('删除当前文件夹下的setting.json可以重置设置')
     print('是否默认启用弹幕过滤？')
@@ -76,4 +76,8 @@ if __name__=='__main__' :
     r=gk(se,'nf')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'nf',se)
+    print('默认下载最高画质偏好编码器：')
+    r=gk(se,'mpc')
+    print2('%s1.avc(h.264)\t%s2.hevc(h.265)\t%s3.不设置（默认）',r)
+    sk(ne,'mpc',se)
     saveset(ne)

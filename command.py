@@ -2,7 +2,7 @@ from getopt import getopt
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf]
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev]
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
     -p <p数>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号
@@ -15,11 +15,12 @@ def ph() :
     -n  不覆盖重复文件
     --yf    使用ffmpeg
     --nf    不使用ffmpeg
+    --mc avc/hev    默认下载最高画质偏好编码器
     注1：如出现相同的选项，只有第一个会生效
     注2：命令行参数的优先级高于settings.json里的设置'''
     print(h)
 def gopt(args) :
-    re=getopt(args,'h?i:d:p:m:r:yn',['help','ac=','dm=','ad=','yf','nf'])
+    re=getopt(args,'h?i:d:p:m:r:yn',['help','ac=','dm=','ad=','yf','nf','mc='])
     rr=re[0]
     r={}
     for i in rr:
@@ -65,6 +66,11 @@ def gopt(args) :
             r['yf']=True
         if i[0]=='--nf' and not 'yf' in r:
             r['yf']=False
+        if i[0]=='--mc' and not 'mc' in r:
+            if i[1]=='avc' :
+                r['mc']=True
+            elif i[1]=='hev' :
+                r['mc']=False
     return r
 if __name__ == "__main__":
     import sys
