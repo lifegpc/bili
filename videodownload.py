@@ -31,7 +31,7 @@ def sev(s:str) :
         return t.groups()[0]
     return ""
 @with_goto
-def avvideodownload(i,url,data,r,c,c3,se) :
+def avvideodownload(i,url,data,r,c,c3,se,ip) :
     """下载av号视频
     -1 cookies.json读取错误
     -2 API Error
@@ -114,7 +114,7 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                 fn='%s.%s' % (filen,hzm)
                 label .a # pylint: disable=undefined-variable
                 re=r2.get(k['url'],stream=True)
-                read=downloadstream(k['url'],r2,re,fn,k['size'],c3)
+                read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
                 if read==-1 :
                     return -1
                 elif read==-2 :
@@ -126,6 +126,13 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                         rc=True
                     elif read==False :
                         bs=False
+                    if 'r' in ip:
+                        if ip['r']:
+                            rc=True
+                            bs=False
+                        else:
+                            rc=False
+                            bs=False
                     while bs :
                         inp=input('文件下载失败，是否重新下载？(y/n)')
                         if len(inp)>0 :
@@ -143,7 +150,7 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                 fn='%s_%s.%s' %(filen,j,hzm)
                 label .b # pylint: disable=undefined-variable
                 re=r2.get(k['url'],stream=True)
-                read=downloadstream(k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
                 if read==-1 :
                     return -1
                 elif read==-2 :
@@ -155,6 +162,13 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                         rc=True
                     elif read==False :
                         bs=False
+                    if 'r' in ip:
+                        if ip['r']:
+                            rc=True
+                            bs=False
+                        else:
+                            rc=False
+                            bs=False
                     while bs :
                         inp=input('文件下载失败，是否重新下载？(y/n)')
                         if len(inp)>0 :
@@ -174,15 +188,30 @@ def avvideodownload(i,url,data,r,c,c3,se) :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
             if os.path.exists('%s.mp4'%(filen)) :
+                fg=False
                 bs=True
+                if 'y' in ip :
+                    if ip['y'] :
+                        fg=True
+                        bs=False
+                    else :
+                        bs=False
                 while bs:
                     inp=input('"%s.mp4"文件已存在，是否覆盖？(y/n)'%(filen))
                     if len(inp)>0 :
                         if inp[0].lower()=='y' :
-                            os.remove('%s.mp4'%(filen))
+                            fg=True
                             bs=False
                         elif inp[0].lower()=='n' :
-                            return 0
+                            bs=False
+                if fg:
+                    try :
+                        os.remove('%s.mp4'%(filen))
+                    except :
+                        print('删除原有文件失败，跳过下载')
+                        return 0
+                else:
+                    return 0
             te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt),'wt',encoding='utf8')
             j=1
             for k in durl :
@@ -201,6 +230,13 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                     bs=False
                 elif JSONParser.getset(se,'ad')==False:
                     bs=False
+                if 'ad' in ip :
+                    if ip['ad'] :
+                        de=True
+                        bs=False
+                    else :
+                        de=False
+                        bs=False
                 while bs :
                     inp=input('是否删除中间文件？(y/n)')
                     if len(inp)>0 :
@@ -291,7 +327,7 @@ def avvideodownload(i,url,data,r,c,c3,se) :
         durz=dash['video']['size']+dash['audio']['size']
         label .c # pylint: disable=undefined-variable
         re=r2.get(dash['video']['base_url'],stream=True)
-        read=downloadstream(dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
+        read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
         if read==-1 :
             return -1
         elif read==-2 :
@@ -303,6 +339,13 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                 rc=True
             elif read==False :
                 bs=False
+            if 'r' in ip:
+                if ip['r']:
+                    rc=True
+                    bs=False
+                else:
+                    rc=False
+                    bs=False
             while bs :
                 inp=input('文件下载失败，是否重新下载？(y/n)')
                 if len(inp)>0 :
@@ -318,7 +361,7 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                 return -3
         label .d # pylint: disable=undefined-variable
         re=r2.get(dash['audio']['base_url'],stream=True)
-        read=downloadstream(dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+        read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
         if read==-1:
             return -1
         elif read==-2 :
@@ -330,6 +373,13 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                 rc=True
             elif read==False :
                 bs=False
+            if 'r' in ip:
+                if ip['r']:
+                    rc=True
+                    bs=False
+                else:
+                    rc=False
+                    bs=False
             while bs :
                 inp=input('文件下载失败，是否重新下载？(y/n)')
                 if len(inp)>0 :
@@ -346,15 +396,30 @@ def avvideodownload(i,url,data,r,c,c3,se) :
         if os.system('ffmpeg -h 2>&0 1>&0')==0 :
             print('将用ffmpeg自动合成')
             if os.path.exists(filen) :
+                fg=False
                 bs=True
+                if 'y' in ip :
+                    if ip['y'] :
+                        fg=True
+                        bs=False
+                    else :
+                        bs=False
                 while bs:
                     inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(filen))
                     if len(inp)>0 :
                         if inp[0].lower()=='y' :
-                            os.remove('%s'%(filen))
+                            fg=True
                             bs=False
                         elif inp[0].lower()=='n' :
-                            return 0
+                            bs=False
+                if fg :
+                    try :
+                        os.remove('%s'%(filen))
+                    except :
+                        print('删除原有文件失败，跳过下载')
+                        return 0
+                else:
+                    return 0
             re=os.system('ffmpeg -i "%s" -i "%s" -c copy "%s"'%(getfn(0,i,data,vqs,hzm),getfn(1,i,data,vqs,hzm),filen))
             de=False
             if re==0 :
@@ -366,6 +431,13 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                     bs=False
                 elif JSONParser.getset(se,'ad')==False:
                     bs=False
+                if 'ad' in ip :
+                    if ip['ad'] :
+                        de=True
+                        bs=False
+                    else :
+                        de=False
+                        bs=False
                 while bs :
                     inp=input('是否删除中间文件？(y/n)')
                     if len(inp)>0 :
@@ -378,7 +450,7 @@ def avvideodownload(i,url,data,r,c,c3,se) :
                 for j in[0,1]:
                     os.remove(getfn(j,i,data,vqs,hzm))
 @with_goto
-def epvideodownload(i,url,data,r,c,c3,se):
+def epvideodownload(i,url,data,r,c,c3,se,ip):
     """下载番剧等视频"""
     if not os.path.exists('Download/') :
         os.mkdir('Download/')
@@ -480,7 +552,7 @@ def epvideodownload(i,url,data,r,c,c3,se):
         durz=dash['video']['size']+dash['audio']['size']
         label .e # pylint: disable=undefined-variable
         re=r2.get(dash['video']['base_url'],stream=True)
-        read=downloadstream(dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
+        read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
         if read==-1 :
             return -1
         elif read==-2 :
@@ -492,6 +564,13 @@ def epvideodownload(i,url,data,r,c,c3,se):
                 rc=True
             elif read==False :
                 bs=False
+            if 'r' in ip:
+                if ip['r']:
+                    rc=True
+                    bs=False
+                else:
+                    rc=False
+                    bs=False
             while bs :
                 inp=input('文件下载失败，是否重新下载？(y/n)')
                 if len(inp)>0 :
@@ -507,7 +586,7 @@ def epvideodownload(i,url,data,r,c,c3,se):
                 return -3
         label .f # pylint: disable=undefined-variable
         re=r2.get(dash['audio']['base_url'],stream=True)
-        read=downloadstream(dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+        read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
         if read==-1 :
             return -1
         elif read==-2 :
@@ -519,6 +598,13 @@ def epvideodownload(i,url,data,r,c,c3,se):
                 rc=True
             elif read==False :
                 bs=False
+            if 'r' in ip:
+                if ip['r']:
+                    rc=True
+                    bs=False
+                else:
+                    rc=False
+                    bs=False
             while bs :
                 inp=input('文件下载失败，是否重新下载？(y/n)')
                 if len(inp)>0 :
@@ -535,15 +621,30 @@ def epvideodownload(i,url,data,r,c,c3,se):
         if os.system('ffmpeg -h 2>&0 1>&0')==0 :
             print('将用ffmpeg自动合成')
             if os.path.exists(filen) :
+                fg=False
                 bs=True
+                if 'y' in ip :
+                    if ip['y'] :
+                        fg=True
+                        bs=False
+                    else :
+                        bs=False
                 while bs:
                     inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(filen))
                     if len(inp)>0 :
                         if inp[0].lower()=='y' :
-                            os.remove('%s'%(filen))
+                            fg=True
                             bs=False
                         elif inp[0].lower()=='n' :
-                            return 0
+                            bs=False
+                if fg :
+                    try :
+                        os.remove('%s'%(filen))
+                    except :
+                        print('删除原有文件失败，跳过下载')
+                        return 0
+                else:
+                    return 0
             re=os.system('ffmpeg -i "%s" -i "%s" -c copy "%s"'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),filen))
             de=False
             if re==0 :
@@ -555,6 +656,13 @@ def epvideodownload(i,url,data,r,c,c3,se):
                     bs=False
                 elif JSONParser.getset(se,'ad')==False:
                     bs=False
+                if 'ad' in ip:
+                    if ip['ad']:
+                        de=True
+                        bs=False
+                    else :
+                        de=True
+                        bs=False
                 while bs :
                     inp=input('是否删除中间文件？(y/n)')
                     if len(inp)>0 :
@@ -566,7 +674,7 @@ def epvideodownload(i,url,data,r,c,c3,se):
             if re==0 and de:
                 for j in[0,1]:
                     os.remove(getfn2(i,j,fdir,vqs,hzm))
-def downloadstream(uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
+def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
     s=0
     if d :
         print('正在开始下载第%s个文件，共%s个文件'%(i,n))
@@ -579,6 +687,7 @@ def downloadstream(uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
         else :
             s=""
         bs=True
+        fg=False
         if d2 and fsize==size :
             print('文件大小一致，跳过下载')
             return 0
@@ -593,15 +702,30 @@ def downloadstream(uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                 return -1
             re=r2.get(uri,stream=True)
             s=fsize
+        if not d2 and 'y' in ip :
+            if ip['y'] :
+                fg=True
+                bs=False
+            else :
+                bs=False
         while bs and not d2 :
             inp=input('"%s"文件已存在，是否覆盖？%s(y/n)'%(fn,s))
             if len(inp)>0 :
                 if inp[0].lower()=='y':
-                    os.remove(fn)
+                    fg=True
                     bs=False
                 elif inp[0].lower()=='n' :
-                    re.close()
-                    return 0
+                    bs=False
+        if not d2 and fg :
+            try :
+                os.remove(fn)
+            except :
+                print('删除原有文件失败，跳过下载')
+                re.close()
+                return 0
+        elif not d2 :
+            re.close()
+            return 0
     t1=time.time()
     t2=time.time()
     with open(fn,'ab') as f :

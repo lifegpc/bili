@@ -30,7 +30,7 @@ def downloadh(filen,r,pos,da) :
         return d
     except :
         return {'status':-2,'d':d}
-def DanmuGetn(c,data,r,t,xml,xmlc) :
+def DanmuGetn(c,data,r,t,xml,xmlc,ip) :
     "处理现在的弹幕"
     try :
         if not exists('Download') :
@@ -54,19 +54,29 @@ def DanmuGetn(c,data,r,t,xml,xmlc) :
             print("网络错误")
             exit()
         if exists(filen) :
+            fg=False
             bs=True
+            if 'y' in ip:
+                if ip['y']:
+                    fg=True
+                    bs=False
+                else :
+                    bs=False
             while bs :
                 inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
                 if inp[0].lower()=='y' :
                     bs=False
-                    try :
-                        remove(filen)
-                    except :
-                        print('删除原有文件失败，跳过下载')
-                        return -1
+                    fg=True
                 elif inp[0].lower()=='n' :
                     bs=False
+            if fg :
+                try :
+                    remove(filen)
+                except :
+                    print('删除原有文件失败，跳过下载')
                     return -1
+            else :
+                return -1
         if xml==2 :
             try :
                 f=open(filen,mode='w',encoding='utf8')
@@ -139,19 +149,29 @@ def DanmuGetn(c,data,r,t,xml,xmlc) :
             print('网络错误！')
             exit()
         if exists(filen) :
+            fg=False
             bs=True
+            if 'y' in ip:
+                if ip['y']:
+                    fg=True
+                    bs=False
+                else :
+                    bs=False
             while bs :
                 inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
                 if inp[0].lower()=='y' :
                     bs=False
-                    try :
-                        remove(filen)
-                    except :
-                        print('删除原有文件失败，跳过下载')
-                        return -1
+                    fg=True
                 elif inp[0].lower()=='n' :
                     bs=False
+            if fg :
+                try :
+                    remove(filen)
+                except :
+                    print('删除原有文件失败，跳过下载')
                     return -1
+            else :
+                return -1
         if xml==2 :
             try :
                 f=open(filen,mode='w',encoding='utf8')
@@ -207,7 +227,7 @@ def DanmuGetn(c,data,r,t,xml,xmlc) :
                 print('保存文件失败'+filen)
                 return -2
             return 0
-def DanmuGeta(c,data,r,t,xml,xmlc) :
+def DanmuGeta(c,data,r,t,xml,xmlc,ip) :
     "全弹幕处理"
     try :
         if not exists('Download') :
@@ -238,19 +258,29 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
         else :
             filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         if exists(filen) :
+            fg=False
             bs=True
+            if 'y' in ip:
+                if ip['y']:
+                    fg=True
+                    bs=False
+                else :
+                    bs=False
             while bs :
                 inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
                 if inp[0].lower()=='y' :
                     bs=False
-                    try :
-                        remove(filen)
-                    except :
-                        print('删除原有文件失败，跳过下载')
-                        return -2
+                    fg=True
                 elif inp[0].lower()=='n' :
                     bs=False
+            if fg :
+                try :
+                    remove(filen)
+                except :
+                    print('删除原有文件失败，跳过下载')
                     return -2
+            else :
+                return -2
         da=int(data['pubdate'])
         zl=0
         zg=0
@@ -562,19 +592,29 @@ def DanmuGeta(c,data,r,t,xml,xmlc) :
         else :
             filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
         if exists(filen) :
+            fg=False
             bs=True
+            if 'y' in ip:
+                if ip['y']:
+                    fg=True
+                    bs=False
+                else :
+                    bs=False
             while bs :
                 inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
                 if inp[0].lower()=='y' :
                     bs=False
-                    try :
-                        remove(filen)
-                    except :
-                        print('删除原有文件失败，跳过下载')
-                        return -2
+                    fg=True
                 elif inp[0].lower()=='n' :
                     bs=False
+            if fg :
+                try :
+                    remove(filen)
+                except :
+                    print('删除原有文件失败，跳过下载')
                     return -2
+            else :
+                return -2
         zl=0
         zg=0
         zm=0

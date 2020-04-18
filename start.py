@@ -197,7 +197,7 @@ def main(ip={}):
             	bs=False
         if cho2==1 or cho2==4 :
             for i in cho :
-                read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc)
+                read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc,ip)
                 if read==-1 or read==-4 :
                     pass
                 elif read==0 :
@@ -210,7 +210,7 @@ def main(ip={}):
                 print('不能下载该视频全弹幕！')
                 exit()
             for i in cho :
-                read=biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc)
+                read=biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc,ip)
                 if read==-2 :
                     pass
                 elif read==0 :
@@ -265,7 +265,7 @@ def main(ip={}):
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho :
-                read=videodownload.avvideodownload(i,s,data,section,cho3,cho5,se)
+                read=videodownload.avvideodownload(i,s,data,section,cho3,cho5,se,ip)
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'
@@ -337,7 +337,7 @@ def main(ip={}):
             	bs=False
         if cho2==1 or cho2==4 :
             for i in cho:
-                read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc)
+                read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc,ip)
                 if read==-1 or read==-4 :
                     pass
                 elif read==0 :
@@ -346,7 +346,7 @@ def main(ip={}):
                     exit()
         if cho2==2 or cho2==5 :
             for i in cho :
-                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc)
+                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip)
         if cho2>2 :
             bs=True
             cho3=False
@@ -395,7 +395,7 @@ def main(ip={}):
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho:
-                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se)
+                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip)
 if __name__=="__main__" :
     if len(sys.argv)==1 :
         main()
