@@ -2,7 +2,7 @@ from time import localtime,strftime
 def printInfo(data) :
 	"输出普通AV号获取的信息"
 	print("视频av号："+str(data['aid']))
-	print("bvid："+data['bvid'])
+	print("视频bv号："+data['bvid'])
 	print("分P数："+str(data['videos']))
 	print("标题："+data['title'])
 	print("发布时间："+strftime("%Y-%m-%d %H:%M:%S",localtime(data['pubdate'])))
@@ -40,6 +40,7 @@ def printInfo2(data) :
 			ii=ii+1
 			print('名字：'+i['longTitle'])
 			print('AV号：'+str(i['aid']))
+			print('BV号：'+str(i['bvid']))
 			print('CID:'+str(i['cid']))
 			print('ID:'+str(i['id']))
 	if 'sections' in data:
@@ -50,10 +51,13 @@ def printInfo2(data) :
 				ii=ii+1
 				print('名字：'+j['longTitle'])
 				print('AV号：'+str(j['aid']))
+				print('BV号：'+str(j['bvid']))
 				print('CID:'+str(j['cid']))
 				print('ID:'+str(j['id']))
 	return ii-1
 def printcho(cho) :
+	if len(cho)==0 :
+		return
 	print('你选中了',end='')
 	for i in cho :
 		print('%s,' %(i['titleFormat']),end='')

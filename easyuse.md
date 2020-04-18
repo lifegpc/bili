@@ -2,6 +2,9 @@
 这篇文章用来教萌新如何使用该软件   
 对于大佬，可以看[README](README.md)
 
+## 现已提供适用于windows10 64位系统的exe
+去[RELEASE](../../releases)那下载bili_x.x.x_windows10_x64.7z的文件解压运行start.exe即可
+
 ## 安装Python3
 [下载](https://www.python.org/downloads/)Python安装包   
 **安装时选中最下面的ADD Python X.X(版本号) to PATH**   
@@ -11,7 +14,7 @@
 打开命令提示符   
 输入
 ``` bash
-pip3 install --upgrade requests selenium
+pip3 install --upgrade requests selenium goto-statement
 ```
 等待依赖库安装完毕
 

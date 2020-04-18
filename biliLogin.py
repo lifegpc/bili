@@ -26,19 +26,19 @@ def login(r):
         print('网络错误')
         return 1
     else :
-        print("登录失败："+rr['code']+","+rr['message'])
+        print("登录失败："+str(rr['code'])+","+str(rr['message']))
         return 2
 def tryok(r) :
     '验证是否登录成功'
     try :
-        re=r.get('https://api.bilibili.com/x/v2/dm/history?type=1&date=2016-03-06&oid=6507904')
+        re=r.get('https://api.bilibili.com/x/web-interface/nav')
     except :
         return False
     re.encoding='utf8'
     try :
         obj=re.json()
-        if obj['code']==-509 and obj['code']!='账户未登录' :
+        if obj['code']==0 and 'data' in obj and obj['data']['isLogin']:
             return True
         return obj
     except :
-        return True
+        return re.text

@@ -2,10 +2,18 @@
 *.pyc
 *.log
 .vs/
+*.txt
 #download file or config file
 *.xml
 *.json
+*.flv
+*.mp4
+*.m4s
 #other file
 .project
 #execute library
 *.exe
+*.spec
+dist/
+build/
+*.bat
