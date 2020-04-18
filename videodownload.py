@@ -184,7 +184,15 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                         return -3
                 com=com+k['size']
             j=j+1
-        if len(durl)>1 and os.system('ffmpeg -h 2>&0 1>&0')==0 :
+        ff=True
+        if JSONParser.getset(se,'nf')==True :
+            ff=False
+        if 'yf' in ip :
+            if ip['yf']:
+                ff=True
+            else :
+                ff=False
+        if len(durl)>1 and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
             if os.path.exists('%s.mp4'%(filen)) :
@@ -393,7 +401,15 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                 goto .d # pylint: disable=undefined-variable
             else :
                 return -3
-        if os.system('ffmpeg -h 2>&0 1>&0')==0 :
+        ff=True
+        if JSONParser.getset(se,'nf')==True :
+            ff=False
+        if 'yf' in ip :
+            if ip['yf']:
+                ff=True
+            else :
+                ff=False
+        if os.system('ffmpeg -h 2>&0 1>&0')==0 and ff:
             print('将用ffmpeg自动合成')
             if os.path.exists(filen) :
                 fg=False
@@ -618,7 +634,15 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                 goto .f # pylint: disable=undefined-variable
             else :
                 return -3
-        if os.system('ffmpeg -h 2>&0 1>&0')==0 :
+        ff=True
+        if JSONParser.getset(se,'nf')==True :
+            ff=False
+        if 'yf' in ip :
+            if ip['yf']:
+                ff=True
+            else :
+                ff=False
+        if os.system('ffmpeg -h 2>&0 1>&0')==0 and ff:
             print('将用ffmpeg自动合成')
             if os.path.exists(filen) :
                 fg=False

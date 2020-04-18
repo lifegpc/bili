@@ -72,4 +72,8 @@ if __name__=='__main__' :
     r=gk(se,'rd')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'rd',se)
+    print('是否不使用ffmpeg合并（不设置相当于否）？')
+    r=gk(se,'nf')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'nf',se)
     saveset(ne)
