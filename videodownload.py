@@ -758,10 +758,16 @@ def getfn2(i,i2,f,vqs,hzm) :
         return '%s/%s'%(f,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
     else :
         return '%s/%s'%(f,file.filtern('%s.%s(%s%s,AV%s,%s,ID%s,%s,%s).%s'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
+@with_goto
 def streamgetlength(r:requests.Session,uri):
-    re=r.get(uri,stream=True)
-    a=int(re.headers.get('Content-Length'))
-    re.close()
-    return a
+    label .g # pylint: disable=undefined-variable
+    try :
+        re=r.get(uri,stream=True)
+        a=int(re.headers.get('Content-Length'))
+        re.close()
+        return a
+    except :
+        print('获取文件大小失败。尝试重新获取……')
+        goto .g # pylint: disable=undefined-variable
 if __name__=="__main__" :
     print("请使用start.py")
