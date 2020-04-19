@@ -137,3 +137,27 @@ def getset(d:dict,key:str) :
         return d[key]
     else :
         return None
+def getcookie() :
+    '读取cookies并获得cookies字符串'
+    try :
+        obj=open('cookies.json',mode='r')
+    except :
+        return -1
+    try :
+        obj.seek(0,2)
+        si=obj.tell()
+        obj.seek(0,0)
+        s=obj.read(si)
+        o=loads(s)
+    except :
+        return -2
+    s='cookie: '
+    k=0
+    for i in o :
+        if i['domain']=='.bilibili.com' :
+            if k==0 :
+                s=s+i['name']+'='+i['value']
+            else :
+                s=s+'; '+i['name']+'='+i['value']
+            k=k+1
+    return s

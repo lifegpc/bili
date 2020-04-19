@@ -8,7 +8,8 @@
 [selenium](https://pypi.org/project/selenium/)  
 [goto-statement](https://github.com/snoack/python-goto)    
 自己写的file库   
-如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。
+如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
+如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。
 ### 其他
 程序目录下需要有相应系统版本的ChromeDriver。   
 没有ChromeDriver将无法进行登录操作（同理，由于手机平台没有ChromeDriver，也无法进行登录，但可以用[其他方法](#a)绕过）

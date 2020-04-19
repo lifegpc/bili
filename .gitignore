@@ -9,6 +9,7 @@
 *.flv
 *.mp4
 *.m4s
+Download/
 #other file
 .project
 #execute library

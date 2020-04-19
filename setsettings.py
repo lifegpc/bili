@@ -1,5 +1,6 @@
 from JSONParser import loadset,saveset,getset
 from re import search
+from goto import with_goto
 l1=['x','','']
 l2=['','x','']
 l3=['','','x']
@@ -80,4 +81,42 @@ if __name__=='__main__' :
     r=gk(se,'mpc')
     print2('%s1.avc(h.264)\t%s2.hevc(h.265)\t%s3.不设置（默认）',r)
     sk(ne,'mpc',se)
+    print('是否使用aria2c下载？')
+    r=gk(se,'a')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'a',se)
+    n=3
+    if 'ax' in se :
+        n=se['ax']
+    print('aria2c单个服务器最大连接数即-x的参数(1-16，默认3，目前为%s)：'%(n))
+    inp=input('请输入1-16中的数字：')
+    if len(inp)>0 :
+        if inp.isnumeric() :
+            i=int(inp)
+            if i>=1 and i<=16 and i!=3:
+                ne['ax']=i
+    n=5
+    if 'as' in se :
+        n=se['as']
+    print('aria2c单个文件最大连接数即-s的参数(1-*，默认5，目前为%s)：'%(n))
+    inp=input('请输入大于等于1的数字：')
+    if len(inp)>0 :
+        if inp.isnumeric() :
+            i=int(inp)
+            if i>=1 and i!=5:
+                ne['as']=i
+    n=5
+    if 'ak' in se :
+        n=se['ak']
+    print('aria2c文件分片大小即-k的参数(单位M，1-1024，默认5，目前为%s)：'%(n))
+    inp=input('请输入1-1024的数字：')
+    if len(inp)>0 :
+        if inp.isnumeric() :
+            i=int(inp)
+            if i>=1 and i<=1024 and i!=5:
+                ne['ak']=i
+    print('在使用aria2c下载时是否使用备用网址？（不设置情况下为是）')
+    r=gk(se,'ab')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'ab',se)
     saveset(ne)
