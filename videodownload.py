@@ -8,6 +8,8 @@ from dictcopy import copydict,copylist
 from re import search
 from goto import with_goto
 from requests.structures import CaseInsensitiveDict
+from biliTime import tostr2
+import bstr
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -36,30 +38,34 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
         ars=read
     if 'as' in ip:
         ars=ip['as']
-    arfa='none'
+    arfa='prealloc'
+    if 'fa' in se:
+        arfa=se['fa']
+    if 'fa' in ip:
+        arfa=ip['fa']
     ark=5
     read=JSONParser.getset(se,'ak')
     if read!=None:
         ark=read
     if 'ak' in ip:
         ark=ip['ak']
-    print('单文件最大%s个连接，单个服务器最大%s个连接，文件分片大小%sM'%(ars,arc,ark))
+    print('单文件最大%s个连接，单个服务器最大%s个连接，文件分片大小%sM，预分配方式为%s'%(ars,arc,ark,arfa))
     cm=cm+' -x '+str(arc)
     cm=cm+' -s '+str(ars)
     cm=cm+' --file-allocation='+arfa
     cm=cm+' -k %sM'%(ark)
     if os.path.exists(fn) :
-        fsize=file.getinfo({'a':fn,'f':''})['s']
-        if fsize!=size :
-            s="(文件大小不一致，建议覆盖)"
+        oa=os.path.exists('%s.aria2'%(fn))
+        if oa :
+            s="(发现aria2文件，建议覆盖)"
         else :
             s=""
         bs=True
         fg=False
-        if d2 and fsize==size :
-            print('文件大小一致，跳过下载')
+        if d2 and not oa :
+            print('未找到aria2文件，跳过下载')
             return 0
-        if d2 and fsize!=size :
+        if d2 and oa :
             cm=cm+' -c'
         if not d2 and 'y' in ip :
             if ip['y'] :
@@ -345,7 +351,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
         if len(durl)>1 and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
-            if os.path.exists('%s.mp4'%(filen)) :
+            if os.path.exists('%s.mkv'%(filen)) :
                 fg=False
                 bs=True
                 if 'y' in ip :
@@ -355,7 +361,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                     else :
                         bs=False
                 while bs:
-                    inp=input('"%s.mp4"文件已存在，是否覆盖？(y/n)'%(filen))
+                    inp=input('"%s.mkv"文件已存在，是否覆盖？(y/n)'%(filen))
                     if len(inp)>0 :
                         if inp[0].lower()=='y' :
                             fg=True
@@ -364,7 +370,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                             bs=False
                 if fg:
                     try :
-                        os.remove('%s.mp4'%(filen))
+                        os.remove('%s.mkv'%(filen))
                     except :
                         print('删除原有文件失败，跳过下载')
                         return 0
@@ -376,7 +382,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                 te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
                 j=j+1
             te.close()
-            ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -c copy "%s.mp4"' %(file.filtern('%s'%(data['aid'])),tt,filen)
+            ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s" -c copy "%s.mkv"' %(file.filtern('%s'%(data['aid'])),tt,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],data['title'],data['page'][i-1]['part'],tostr2(data['pubdate']),data['uid'],data['name'],data['page'][i-1]['cid'],data['title'],data['page'][i-1]['part'],vqs,filen)
             re=os.system(ml)
             if re==0:
                 print('合并完成！')
@@ -502,9 +508,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                 dash['audio']=dash['audio'][aaq[0]]
                 vqs.append(aaq[0])
         if data['videos']==1 :
-            filen='Download/%s'%(file.filtern('%s(AV%s,%s,P%s,%s,%s,%s).mp4'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs[0],vqs[1])))
+            filen='Download/%s'%(file.filtern('%s(AV%s,%s,P%s,%s,%s,%s).mkv'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs[0],vqs[1])))
         else :
-            filen='Download/%s'%(file.filtern('%s-%s(AV%s,%s,P%s,%s,%s,%s).mp4'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs[0],vqs[1])))
+            filen='Download/%s'%(file.filtern('%s-%s(AV%s,%s,P%s,%s,%s,%s).mkv'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs[0],vqs[1])))
         hzm=[file.geturlfe(dash['video']['base_url']),file.geturlfe(dash['audio']['base_url'])]
         durz=dash['video']['size']+dash['audio']['size']
         label .c # pylint: disable=undefined-variable
@@ -809,9 +815,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                 dash['audio']=dash['audio'][aaq[0]]
                 vqs.append(aaq[0])
         if i['s']=='e' :
-            filen='%s/%s'%(fdir,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s,%s).mp4'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[0],vqs[1])))
+            filen='%s/%s'%(fdir,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s,%s).mkv'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[0],vqs[1])))
         else :
-            filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s,%s,%s).mp4'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[0],vqs[1])))
+            filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s,%s,%s).mkv'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[0],vqs[1])))
         hzm=[file.geturlfe(dash['video']['base_url']),file.geturlfe(dash['audio']['base_url'])]
         durz=dash['video']['size']+dash['audio']['size']
         label .e # pylint: disable=undefined-variable

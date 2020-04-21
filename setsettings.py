@@ -119,4 +119,15 @@ if __name__=='__main__' :
     r=gk(se,'ab')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'ab',se)
+    n='prealloc'
+    if 'fa' in se:
+        n=se['fa']
+    print('在使用arai2c下载时预分配方式即--file-allocation的参数(默认为prealloc，目前为%s)'%(n))
+    print('1.none\t2.prealloc\t3.trunc\t4.falloc')
+    inp=input('请输入选项中的数字以选择')
+    if len(inp)>0 and inp.isnumeric() :
+        i=int(inp)
+        x=['none','prealloc','trunc','falloc']
+        if i>0 and i<5 and i!=2 :
+            ne['fa']=x[i-1]
     saveset(ne)

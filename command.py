@@ -2,7 +2,7 @@ from getopt import getopt
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab]
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc]
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
     -p <p数>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号
@@ -23,12 +23,13 @@ def ph() :
     --ak <number>   aria2c文件分片大小即-k的参数，范围为1-1024，单位为M
     --ab    在使用aria2c下载时使用备用网址
     --nab   在使用aria2c下载时不使用备用网址
+    --fa none/prealloc/trunc/falloc 在使用arai2c下载时预分配方式即--file-allocation的参数
     注1：如出现相同的选项，只有第一个会生效
     注2：命令行参数的优先级高于settings.json里的设置
     注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中'''
     print(h)
 def gopt(args) :
-    re=getopt(args,'h?i:d:p:m:r:yn',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab'])
+    re=getopt(args,'h?i:d:p:m:r:yn',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa='])
     rr=re[0]
     r={}
     for i in rr:
@@ -102,6 +103,9 @@ def gopt(args) :
             r['ab']=True
         if i[0]=='--nab' and not 'ab' in r:
             r['ab']=False
+        if i[0]=='--fa' and not 'fa' in r:
+            if i[1]=='none' or i[1]=='prealloc' or i[1]=='trunc' or i[1]=='falloc':
+                r['fa']=i[1]
     return r
 if __name__ == "__main__":
     import sys
