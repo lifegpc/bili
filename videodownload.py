@@ -416,6 +416,17 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                     j=j+1
             os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
     elif "data" in re and "dash" in re['data'] :
+        r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+        r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+        r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
+        r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+        re=r2.get(url)
+        re.encoding='utf8'
+        rs=search('__playinfo__=([^<]+)',re.text)
+        if rs!=None :
+            re=json.loads(rs.groups()[0])
+        else :
+            return -2
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
         avq2=re['data']["accept_quality"]
