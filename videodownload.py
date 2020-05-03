@@ -677,7 +677,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                         return 0
                 else:
                     return 0
-            re=os.system('ffmpeg -i "%s" -i "%s" -c copy "%s"'%(getfn(0,i,data,vqs,hzm),getfn(1,i,data,vqs,hzm),filen))
+            re=os.system('ffmpeg -i "%s" -i "%s" -metadata title="%s-%s" -metadata description="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata atitle="%s" -metadata pubdate="%s" -metadata ctime="%s" -metadata uid="%s" -metadata author="%s" -metadata p="%sP/%sP" -metadata part="%s" -metadata vq="%s" -metadata aq="%s" -c copy "%s"'%(getfn(0,i,data,vqs,hzm),getfn(1,i,data,vqs,hzm),data['title'],data['page'][i-1]['part'],bstr.f(data['desc']),data['aid'],data['bvid'],data['page'][i-1]['cid'],data['title'],tostr2(data['pubdate']),tostr2(data['ctime']),data['uid'],data['name'],i,data['videos'],data['page'][i-1]['part'],vqs[0],vqs[1],filen))
             de=False
             if re==0 :
                 print('合并完成！')
@@ -984,7 +984,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                         return 0
                 else:
                     return 0
-            re=os.system('ffmpeg -i "%s" -i "%s" -c copy "%s"'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),filen))
+            re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen))
             de=False
             if re==0 :
                 print('合并完成！')
@@ -1000,7 +1000,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                         de=True
                         bs=False
                     else :
-                        de=True
+                        de=False
                         bs=False
                 while bs :
                     inp=input('是否删除中间文件？(y/n)')
