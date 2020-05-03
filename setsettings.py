@@ -134,4 +134,8 @@ if __name__=='__main__' :
     r=gk(se,'sv')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'sv',se)
+    print('是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）？（不设置情况下为否）')
+    r=gk(se,'ma')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'ma',se)
     saveset(ne)

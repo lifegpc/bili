@@ -359,7 +359,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                 ff=True
             else :
                 ff=False
-        if len(durl)>1 and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
+        ma=False
+        if JSONParser.getset(se,"ma")==True :
+            ma=True
+        if 'ma' in ip:
+            ma=ip['ma']
+        if (len(durl)>1 or ma) and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
             if os.path.exists('%s.mkv'%(filen)) :
@@ -387,13 +392,16 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                         return 0
                 else:
                     return 0
-            te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt),'wt',encoding='utf8')
-            j=1
-            for k in durl :
-                te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
-                j=j+1
-            te.close()
-            ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s" -c copy "%s.mkv"' %(file.filtern('%s'%(data['aid'])),tt,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],data['title'],data['page'][i-1]['part'],tostr2(data['pubdate']),data['uid'],data['name'],data['page'][i-1]['cid'],data['title'],data['page'][i-1]['part'],vqs,filen)
+            if len(durl) > 1:
+                te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt),'wt',encoding='utf8')
+                j=1
+                for k in durl :
+                    te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
+                    j=j+1
+                te.close()
+                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s" -c copy "%s.mkv"' %(file.filtern('%s'%(data['aid'])),tt,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],data['title'],data['page'][i-1]['part'],tostr2(data['pubdate']),data['uid'],data['name'],data['page'][i-1]['cid'],data['title'],data['page'][i-1]['part'],vqs,filen)
+            else :
+                ml='ffmpeg -i "%s.%s" -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s" -c copy "%s.mkv"'%(filen,hzm,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],data['title'],data['page'][i-1]['part'],tostr2(data['pubdate']),data['uid'],data['name'],data['page'][i-1]['cid'],data['title'],data['page'][i-1]['part'],vqs,filen)
             re=os.system(ml)
             if re==0:
                 print('合并完成！')
@@ -421,11 +429,15 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                         elif inp[0].lower()=='n' :
                             bs=False
             if re==0 and de:
-                j=1
-                for k in durl:
-                    os.remove("%s_%s.%s"%(filen,j,hzm))
-                    j=j+1
-            os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
+                if len(durl)>1 :
+                    j=1
+                    for k in durl:
+                        os.remove("%s_%s.%s"%(filen,j,hzm))
+                        j=j+1
+                else :
+                    os.remove('%s.%s'%(filen,hzm))
+            if len(durl)>1:
+                os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
     elif "data" in re and "dash" in re['data'] :
         r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
         r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
@@ -1249,7 +1261,12 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                 ff=True
             else :
                 ff=False
-        if len(durl)>1 and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
+        ma=False
+        if JSONParser.getset(se,"ma")==True :
+            ma=True
+        if 'ma' in ip:
+            ma=ip['ma']
+        if (len(durl)>1 or ma) and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
             if os.path.exists('%s.mkv'%(filen)) :
@@ -1277,13 +1294,16 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                         return 0
                 else:
                     return 0
-            te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt),'wt',encoding='utf8')
-            j=1
-            for k in durl :
-                te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
-                j=j+1
-            te.close()
-            ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"' %(file.filtern('%s'%(i['id'])),tt,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen)
+            if len(durl)>1 :
+                te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt),'wt',encoding='utf8')
+                j=1
+                for k in durl :
+                    te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
+                    j=j+1
+                te.close()
+                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"' %(file.filtern('%s'%(i['id'])),tt,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen)
+            else :
+                ml='ffmpeg -i "%s.%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"' %(filen,hzm,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen)
             re=os.system(ml)
             if re==0:
                 print('合并完成！')
@@ -1311,11 +1331,15 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                         elif inp[0].lower()=='n' :
                             bs=False
             if re==0 and de:
-                j=1
-                for k in durl:
-                    os.remove("%s_%s.%s"%(filen,j,hzm))
-                    j=j+1
-            os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt))
+                if len(durl)>1 :
+                    j=1
+                    for k in durl:
+                        os.remove("%s_%s.%s"%(filen,j,hzm))
+                        j=j+1
+                else :
+                    os.remove('%s.%s'%(filen,hzm))
+            if len(durl)>1:
+                os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt))
 def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
     s=0
     if d :
