@@ -150,13 +150,29 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
     if read!=0 :
         print("读取cookies.json出现错误")
         return -1
+    if i>1:
+        url="%s?p=%s"%(url,i)
     r2.headers.update({'referer':url})
-    uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=120&otype=json&avid=%s&fnver=0&fnval=16"%(data["page"][i-1]["cid"],data["aid"])
-    re=r2.get(uri)
-    re.encoding="utf8"
-    re=re.json()
-    if re["code"]!=0 :
-        print({"code":re["code"],"message":re["message"]})
+    r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+    r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
+    r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+    re=r2.get(url)
+    re.encoding='utf8'
+    rs=search('__playinfo__=([^<]+)',re.text)
+    napi=True #新api
+    if rs!=None :
+        re=json.loads(rs.groups()[0])
+    elif data['videos']>1 :
+        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16"%(data['page'][i-1]['cid'],116,data['bvid'])
+        re=r2.get(uri)
+        re.encoding="utf8"
+        re=re.json()
+        if re["code"]!=0 :
+            print({"code":re["code"],"message":re["message"]})
+            return -2
+        napi=False
+    else :
         return -2
     if "data" in re and "durl" in re['data']:
         vq=re["data"]["quality"]
@@ -169,13 +185,23 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
             j=0
             for l in avq :
                 if not l in durl :
-                    uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&avid=%s&fnver=0&fnval=16" % (data["page"][i-1]["cid"],l,data["aid"])
-                    re=r2.get(uri)
-                    re.encoding='utf8'
-                    re=re.json()
-                    if re["code"]!=0 :
-                        print({"code":re["code"],"message":re["message"]})
-                        return -2
+                    if napi:
+                        r2.cookies.set('CURRENT_QUALITY',str(l),domain='.bilibili.com',path='/')
+                        re=r2.get(url)
+                        re.encoding='utf8'
+                        rs=search('__playinfo__=([^<]+)',re.text)
+                        if rs!=None :
+                            re=json.loads(rs.groups()[0])
+                        else :
+                            return -2
+                    else :
+                        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16"%(data['page'][i-1]['cid'],l,data['bvid'])
+                        re=r2.get(uri)
+                        re.encoding='utf8'
+                        re=re.json()
+                        if re["code"]!=0 :
+                            print({"code":re["code"],"message":re["message"]})
+                            return -2
                     durl[re["data"]['quality']]=re['data']['durl']
                 print('%s.图质：%s'%(j+1,vqd[j]))
                 j=j+1
@@ -184,6 +210,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                     size=size+k['size']
                 durz[l]=size
                 print("大小：%s(%sB,%s)"%(file.info.size(size),size,file.cml(size,re['data']['timelength'])))
+            r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
             bs=True
             while bs :
                 inp=input('请选择画质：')
@@ -439,17 +466,6 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
     elif "data" in re and "dash" in re['data'] :
-        r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
-        r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
-        r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
-        r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
-        re=r2.get(url)
-        re.encoding='utf8'
-        rs=search('__playinfo__=([^<]+)',re.text)
-        if rs!=None :
-            re=json.loads(rs.groups()[0])
-        else :
-            return -2
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
         avq2=re['data']["accept_quality"]
