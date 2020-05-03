@@ -130,4 +130,8 @@ if __name__=='__main__' :
         x=['none','prealloc','trunc','falloc']
         if i>0 and i<5 and i!=2 :
             ne['fa']=x[i-1]
+    print('文件名中是否输出视频画质信息？（不设置情况下为是）')
+    r=gk(se,'sv')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'sv',se)
     saveset(ne)
