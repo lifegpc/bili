@@ -1013,6 +1013,265 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
             if re==0 and de:
                 for j in[0,1]:
                     os.remove(getfn2(i,j,fdir,vqs,hzm))
+    elif 'data' in re and 'durl' in re['data'] :
+        vq=re["data"]["quality"]
+        vqd=re["data"]["accept_description"]
+        avq=re["data"]["accept_quality"]
+        durl={vq:re["data"]['durl']}
+        durz={}
+        vqs=""
+        if not c :
+            j=0
+            for l in avq :
+                if not l in durl :
+                    r2.cookies.set('CURRENT_QUALITY',str(l),domain='.bilibili.com',path='/')
+                    re=r2.get(url2)
+                    re.encoding='utf8'
+                    rs=search('__playinfo__=([^<]+)',re.text)
+                    if rs!=None:
+                        re=json.loads(rs.groups()[0])
+                    else :
+                        return -2
+                    durl[re["data"]['quality']]=re['data']['durl']
+                print('%s.图质：%s'%(j+1,vqd[j]))
+                j=j+1
+                size=0
+                for k in durl[l] :
+                    size=size+k['size']
+                durz[l]=size
+                print("大小：%s(%sB,%s)"%(file.info.size(size),size,file.cml(size,re['data']['timelength'])))
+            r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+            bs=True
+            while bs :
+                inp=input('请选择画质：')
+                if len(inp) > 0 and inp.isnumeric() and int(inp)>0 and int(inp)<len(avq)+1 :
+                    durl=durl[avq[int(inp)-1]]
+                    durz=durz[avq[int(inp)-1]]
+                    vq=avq[int(inp)-1]
+                    bs=False
+                print('已选择%s画质'%(vqd[int(inp)-1]))
+                vqs=vqd[int(inp)-1]
+        else :
+            j=0
+            for l in avq :
+                if l==vq :
+                    print('图质：%s'%(vqd[j]))
+                    vqs=vqd[j]
+                    break
+                j=j+1
+            durz=0
+            for k in durl[vq] :
+                durz=durz+k['size']
+            print('大小：%s(%sBm,%s)'%(file.info.size(durz),durz,file.cml(durz,re['data']['timelength'])))
+            durl=durl[vq]
+        if i['s']=='e' :
+            filen='%s/%s'%(fdir,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s)'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs)))
+        else :
+            filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s,%s)'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs)))
+        print('共有%s个文件'%(len(durl)))
+        j=1
+        hzm=file.geturlfe(durl[0]['url'])
+        com=0
+        for k in durl :
+            if len(durl)==1 :
+                fn='%s.%s' % (filen,hzm)
+                label .a # pylint: disable=undefined-variable
+                ar=False
+                if JSONParser.getset(se,'a')==True :
+                    ar=True
+                if 'ar' in ip :
+                    if ip['ar']:
+                        ar=True
+                    else :
+                        ar=False
+                if os.system('aria2c -h 1>&0')==0 and ar :
+                    ab=True
+                    if JSONParser.getset(se,'ab')==False :
+                        ab=False
+                    if 'ab' in ip:
+                        if ip['ab']:
+                            ab=True
+                        else :
+                            ab=False
+                    if ab :
+                        read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se)
+                    else :
+                        read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se)
+                    if read==-3 :
+                        print('aria2c 参数错误')
+                        return -4
+                else :
+                    re=r2.get(k['url'],stream=True)
+                    read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
+                if read==-1 :
+                    return -1
+                elif read==-2 :
+                    bs=True
+                    rc=False
+                    read=JSONParser.getset(se,'rd')
+                    if read==True :
+                        bs=False
+                        rc=True
+                    elif read==False :
+                        bs=False
+                    if 'r' in ip:
+                        if ip['r']:
+                            rc=True
+                            bs=False
+                        else:
+                            rc=False
+                            bs=False
+                    while bs :
+                        inp=input('文件下载失败，是否重新下载？(y/n)')
+                        if len(inp)>0 :
+                            if inp[0].lower()=='y' :
+                                bs=False
+                                rc=True
+                            elif inp[0].lower()=='n' :
+                                bs=False
+                    if rc :
+                        os.remove(fn)
+                        goto .a # pylint: disable=undefined-variable
+                    else :
+                        return -3
+            else :
+                fn='%s_%s.%s' %(filen,j,hzm)
+                label .b # pylint: disable=undefined-variable
+                ar=False
+                if JSONParser.getset(se,'a')==True :
+                    ar=True
+                if 'ar' in ip :
+                    if ip['ar']:
+                        ar=True
+                    else :
+                        ar=False
+                if os.system('aria2c -h 1>&0')==0 and ar :
+                    ab=True
+                    if JSONParser.getset(se,'ab')==False :
+                        ab=False
+                    if 'ab' in ip:
+                        if ip['ab']:
+                            ab=True
+                        else :
+                            ab=False
+                    if ab:
+                        read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se,j,len(durl),True)
+                    else :
+                        read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se,j,len(durl),True)
+                    if read==-3 :
+                        print('aria2c 参数错误')
+                        return -4
+                else :
+                    re=r2.get(k['url'],stream=True)
+                    read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                if read==-1 :
+                    return -1
+                elif read==-2 :
+                    bs=True
+                    rc=False
+                    read=JSONParser.getset(se,'rd')
+                    if read==True :
+                        bs=False
+                        rc=True
+                    elif read==False :
+                        bs=False
+                    if 'r' in ip:
+                        if ip['r']:
+                            rc=True
+                            bs=False
+                        else:
+                            rc=False
+                            bs=False
+                    while bs :
+                        inp=input('文件下载失败，是否重新下载？(y/n)')
+                        if len(inp)>0 :
+                            if inp[0].lower()=='y' :
+                                bs=False
+                                rc=True
+                            elif inp[0].lower()=='n' :
+                                bs=False
+                    if rc :
+                        os.remove(fn)
+                        goto .b # pylint: disable=undefined-variable
+                    else :
+                        return -3
+                com=com+k['size']
+            j=j+1
+        ff=True
+        if JSONParser.getset(se,'nf')==True :
+            ff=False
+        if 'yf' in ip :
+            if ip['yf']:
+                ff=True
+            else :
+                ff=False
+        if len(durl)>1 and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
+            print('将用ffmpeg自动合成')
+            tt=int(time.time())
+            if os.path.exists('%s.mkv'%(filen)) :
+                fg=False
+                bs=True
+                if 'y' in ip :
+                    if ip['y'] :
+                        fg=True
+                        bs=False
+                    else :
+                        bs=False
+                while bs:
+                    inp=input('"%s.mkv"文件已存在，是否覆盖？(y/n)'%(filen))
+                    if len(inp)>0 :
+                        if inp[0].lower()=='y' :
+                            fg=True
+                            bs=False
+                        elif inp[0].lower()=='n' :
+                            bs=False
+                if fg:
+                    try :
+                        os.remove('%s.mkv'%(filen))
+                    except :
+                        print('删除原有文件失败，跳过下载')
+                        return 0
+                else:
+                    return 0
+            te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt),'wt',encoding='utf8')
+            j=1
+            for k in durl :
+                te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
+                j=j+1
+            te.close()
+            ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"' %(file.filtern('%s'%(i['id'])),tt,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen)
+            re=os.system(ml)
+            if re==0:
+                print('合并完成！')
+            de=False
+            if re==0:
+                bs=True
+                if JSONParser.getset(se,'ad')==True :
+                    de=True
+                    bs=False
+                elif JSONParser.getset(se,'ad')==False:
+                    bs=False
+                if 'ad' in ip :
+                    if ip['ad'] :
+                        de=True
+                        bs=False
+                    else :
+                        de=False
+                        bs=False
+                while bs :
+                    inp=input('是否删除中间文件？(y/n)')
+                    if len(inp)>0 :
+                        if inp[0].lower()=='y' :
+                            bs=False
+                            de=True
+                        elif inp[0].lower()=='n' :
+                            bs=False
+            if re==0 and de:
+                j=1
+                for k in durl:
+                    os.remove("%s_%s.%s"%(filen,j,hzm))
+                    j=j+1
+            os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt))
 def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
     s=0
     if d :
