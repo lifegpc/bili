@@ -49,11 +49,21 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
         ark=read
     if 'ak' in ip:
         ark=ip['ak']
-    print('单文件最大%s个连接，单个服务器最大%s个连接，文件分片大小%sM，预分配方式为%s'%(ars,arc,ark,arfa))
+    ms="0"
+    read=JSONParser.getset(se,'ms')
+    if read!=None :
+        ms=read
+    if 'ms' in ip:
+        ms=ip['ms']
+    xs=""
+    if ms!="0" :
+        xs="，限速为%s"%(ms)
+    print('单文件最大%s个连接，单个服务器最大%s个连接，文件分片大小%sM，预分配方式为%s%s'%(ars,arc,ark,arfa,xs))
     cm=cm+' -x '+str(arc)
     cm=cm+' -s '+str(ars)
     cm=cm+' --file-allocation='+arfa
     cm=cm+' -k %sM'%(ark)
+    cm=cm+' --max-overall-download-limit='+ms
     if os.path.exists(fn) :
         oa=os.path.exists('%s.aria2'%(fn))
         if oa :
