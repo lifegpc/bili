@@ -25,3 +25,16 @@ def copylist(x) :
         else :
             r.append(i)
     return r
+def copyip(x:dict):
+    "复制时不保留i,p"
+    r={}
+    for i in x.keys() :
+        if i!='i' and i!='p' :
+            t=x[i]
+            if isinstance(t,(dict,CaseInsensitiveDict)) :
+                r[i]=copydict(t)
+            elif isinstance(t,list) :
+                r[i]=copylist(t)
+            else :
+                r[i]=t
+    return r

@@ -15,6 +15,7 @@ import sys
 from command import gopt
 import json
 from math import ceil
+from dictcopy import copyip
 def main(ip={}):
     se=JSONParser.loadset()
     if not isinstance(se,dict) :
@@ -22,7 +23,7 @@ def main(ip={}):
     if 'i' in ip :
         inp=ip['i']
     else :
-        inp=input("请输入av号（支持SS号，BV号请以BV开头，现在已支持链接）：")
+        inp=input("请输入av号（支持SS、EP号，BV号请以BV开头，现在已支持链接，支持收藏夹链接）：")
     av=False
     ss=False
     ep=False
@@ -159,7 +160,52 @@ def main(ip={}):
             if re==-1 :
                 return -1
             JSONParser.getpliv(plv,re)
+        if len(plv)!=pli['count'] :
+            print('视频数量不符，貌似BUG了？')
+            return -1
         PrintInfo.printInfo4(plv)
+        bs=True
+        f=True
+        while bs:
+            if f and 'p' in ip:
+                f=False
+                inp=ip['p']
+            else :
+                inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+            cho=[]
+            if inp[0]=='a' :
+                print('您全选了所有视频')
+                for i in range(1,pli['count']+1) :
+                    cho.append(i)
+                bs=False
+            else :
+                inp=inp.split(',')
+                bb=True
+                for i in inp :
+                    if i.isnumeric() and int(i)>0 and int(i)<=pli['count'] and (not (int(i) in cho)) :
+                        cho.append(int(i))
+                    else :
+                        bb=False
+                if bb :
+                    bs=False
+                    for i in cho :
+                        print("您选中了第"+str(i)+"个视频："+plv[i-1]['title'])
+        bs=True
+        c1=False
+        while bs :
+            inp=input("是否自动下载每一个视频的所有分P？(y/n)")
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    c1=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        for i in cho:
+            ip2=copyip(ip)
+            ip2['i']=str(plv[i-1]['id'])
+            if c1:
+                ip2['p']='a'
+            main(ip2)
         return 0
     xml=0
     xmlc=[]
@@ -195,7 +241,7 @@ def main(ip={}):
     parser=HTMLParser.Myparser()
     parser.feed(re.text)
     vd=json.loads(parser.videodata)
-    if 'error' in vd :
+    if 'error' in vd and 'code' in vd['error'] and 'message' in vd['error'] :
         print('%s %s'%(vd['error']['code'],vd['error']['message']))
         return -1
     if av :
