@@ -137,3 +137,47 @@ def getset(d:dict,key:str) :
         return d[key]
     else :
         return None
+def getplinfo(d:dict) :
+    t=d['data']['info']
+    r={}
+    r['id']=t['id']
+    r['fid']=t['fid']
+    r['uid']=t['mid']
+    r['title']=t['title']
+    r['author']=t['upper']['name']
+    r['ctime']=t['ctime']
+    r['mtime']=t['mtime']
+    r['count']=t['media_count']
+    return r
+def getpli(r,f,i):
+    uri='https://api.bilibili.com/x/v3/fav/resource/list?media_id=%s&pn=%s&ps=20&keyword=&order=mtime&type=0&tid=0&jsonp=jsonp'%(f,i)
+    bs=True
+    while bs :
+        try :
+            re=r.get(uri)
+            bs=False
+        except :
+            print('获取收藏夹第%s页失败，正在重试……'%(i))
+    re.encoding='utf8'
+    re=re.json()
+    if re['code']!=0 :
+        print('%s %s'%(re['code'],re['message']))
+        return -1
+    return re
+def getpliv(i:list,d:dict):
+    for t in d['data']['medias']:
+        r={}
+        r['id']=t['id']
+        r['title']=t['title']
+        r['page']=t['page']
+        r['duration']=t['duration']
+        r['uid']=t['upper']['mid']
+        r['author']=t['upper']['name']
+        r['collect']=t['cnt_info']['collect']
+        r['danmuku']=t['cnt_info']['danmaku']
+        r['play']=t['cnt_info']['play']
+        r['bvid']=t['bvid']
+        r['ctime']=t['ctime']
+        r['pubtime']=t['pubtime']
+        r['ftime']=t['fav_time']
+        i.append(r)

@@ -1,4 +1,5 @@
 from time import localtime,strftime
+from biliTime import tostr2
 def printInfo(data) :
 	"输出普通AV号获取的信息"
 	print("视频av号："+str(data['aid']))
@@ -55,6 +56,24 @@ def printInfo2(data) :
 				print('CID:'+str(j['cid']))
 				print('ID:'+str(j['id']))
 	return ii-1
+def printInfo3(d:dict) :
+	print('收藏夹id：%s'%(d['id']))
+	print('收藏夹名字：%s'%(d['title']))
+	print('UP主名字：%s'%(d['author']))
+	print('UID：%s'%(d['uid']))
+	print('创建时间：%s'%(tostr2(d['ctime'])))
+	print('修改时间：%s'%(tostr2(d['mtime'])))
+	print('视频数量：%s'%(d['count']))
+def printInfo4(l:list) :
+	ii=1
+	for i in l:
+		print('视频%s：'%(ii))
+		print('AV号：%s'%(i['id']))
+		print('BV号：%s'%(i['bvid']))
+		print('视频标题：%s'%(i['title']))
+		print('UP主名称：%s'%(i['author']))
+		print('收藏时间：%s'%(tostr2(i['ftime'])))
+		ii=ii+1
 def printcho(cho) :
 	if len(cho)==0 :
 		return

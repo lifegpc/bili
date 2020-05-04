@@ -1,4 +1,4 @@
-from time import gmtime,strftime,time,strptime,timezone,mktime
+from time import gmtime,strftime,time,strptime,timezone,mktime,struct_time
 def getDate(s) :
     "获取时间戳对应日期 UTF+8"
     i=float(s)
@@ -39,5 +39,10 @@ def checktime(s:str) :
 def mkt(t) :
     "将UTC+8 时间返回为UTC时间戳（忽略本地）"
     return mktime(t)-timezone-8*3600
+def tostr2(s):
+    if isinstance(s,struct_time) :
+        return strftime('%Y-%m-%d %H:%M:%S',s)
+    else :
+        return strftime('%Y-%m-%d %H:%M:%S',getDate(s))
 if __name__=='__main__' :
     print(getNowDate())

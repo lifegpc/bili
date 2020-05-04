@@ -1,5 +1,6 @@
 from JSONParser import loadset,saveset,getset
 from re import search
+from goto import with_goto
 l1=['x','','']
 l2=['','x','']
 l3=['','','x']
@@ -80,4 +81,75 @@ if __name__=='__main__' :
     r=gk(se,'mpc')
     print2('%s1.avc(h.264)\t%s2.hevc(h.265)\t%s3.不设置（默认）',r)
     sk(ne,'mpc',se)
+    print('是否使用aria2c下载？')
+    r=gk(se,'a')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'a',se)
+    n=3
+    if 'ax' in se :
+        n=se['ax']
+    print('aria2c单个服务器最大连接数即-x的参数(1-16，默认3，目前为%s)：'%(n))
+    inp=input('请输入1-16中的数字：')
+    if len(inp)>0 :
+        if inp.isnumeric() :
+            i=int(inp)
+            if i>=1 and i<=16 and i!=3:
+                ne['ax']=i
+    n=5
+    if 'as' in se :
+        n=se['as']
+    print('aria2c单个文件最大连接数即-s的参数(1-*，默认5，目前为%s)：'%(n))
+    inp=input('请输入大于等于1的数字：')
+    if len(inp)>0 :
+        if inp.isnumeric() :
+            i=int(inp)
+            if i>=1 and i!=5:
+                ne['as']=i
+    n=5
+    if 'ak' in se :
+        n=se['ak']
+    print('aria2c文件分片大小即-k的参数(单位M，1-1024，默认5，目前为%s)：'%(n))
+    inp=input('请输入1-1024的数字：')
+    if len(inp)>0 :
+        if inp.isnumeric() :
+            i=int(inp)
+            if i>=1 and i<=1024 and i!=5:
+                ne['ak']=i
+    print('在使用aria2c下载时是否使用备用网址？（不设置情况下为是）')
+    r=gk(se,'ab')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'ab',se)
+    n='prealloc'
+    if 'fa' in se:
+        n=se['fa']
+    print('在使用arai2c下载时预分配方式即--file-allocation的参数(默认为prealloc，目前为%s)'%(n))
+    print('1.none\t2.prealloc\t3.trunc\t4.falloc')
+    inp=input('请输入选项中的数字以选择')
+    if len(inp)>0 and inp.isnumeric() :
+        i=int(inp)
+        x=['none','prealloc','trunc','falloc']
+        if i>0 and i<5 and i!=2 :
+            ne['fa']=x[i-1]
+    print('文件名中是否输出视频画质信息？（不设置情况下为是）')
+    r=gk(se,'sv')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'sv',se)
+    print('是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）？（不设置情况下为否）')
+    r=gk(se,'ma')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'ma',se)
+    n="0"
+    if 'ms' :
+        n=se['ms']
+    print('在使用aria2c下载时最大总体速度，即--max-overall-download-limit的参数，默认单位为B，可以使用K和M为单位（默认为0，即不限制，目前为%s）：'%(n))
+    inp=input('请输入大小（100B可以输入100，100KiB输入100K，100MiB输入100M）：')
+    if len(inp)>0 :
+        t=search("^[0-9]+[MK]?$",inp)
+        if t!=None :
+            if inp!="0" :
+                ne['ms']=inp
+    print('收藏夹是否自动下载每一个视频的所有分P？')
+    r=gk(se,'da')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'da',se)
     saveset(ne)

@@ -1,8 +1,9 @@
 from getopt import getopt
+from re import search
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev]
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>]
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
     -p <p数>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号
@@ -16,11 +17,25 @@ def ph() :
     --yf    使用ffmpeg
     --nf    不使用ffmpeg
     --mc avc/hev    默认下载最高画质偏好编码器
+    --ar    使用aria2c下载
+    --nar   不使用aria2c下载
+    --ax <number>   aria2c单个服务器最大连接数即-x的参数，范围为1-16
+    --as <number>   aria2c单个文件最大连接数即-s的参数，范围为1-*
+    --ak <number>   aria2c文件分片大小即-k的参数，范围为1-1024，单位为M
+    --ab    在使用aria2c下载时使用备用网址
+    --nab   在使用aria2c下载时不使用备用网址
+    --fa none/prealloc/trunc/falloc 在使用arai2c下载时预分配方式即--file-allocation的参数
+    --sv <boolean>  文件名中是否输出视频画质信息
+    --ma <boolean>  是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）
+    --ms <speed>    在使用aria2c下载时最大总体速度，即--max-overall-download-limit的参数，默认单位为B，可以使用K和M为单位
+    --da <boolean>  收藏夹是否自动下载每一个视频的所有分P
     注1：如出现相同的选项，只有第一个会生效
-    注2：命令行参数的优先级高于settings.json里的设置'''
+    注2：命令行参数的优先级高于settings.json里的设置
+    注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
+    注4：当下载收藏夹，除了-i和-p参数外，其他参数将被沿用至收藏夹视频的下载设置，-i和-p参数只对收藏夹起作用'''
     print(h)
 def gopt(args) :
-    re=getopt(args,'h?i:d:p:m:r:yn',['help','ac=','dm=','ad=','yf','nf','mc='])
+    re=getopt(args,'h?i:d:p:m:r:yn',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da='])
     rr=re[0]
     r={}
     for i in rr:
@@ -71,6 +86,51 @@ def gopt(args) :
                 r['mc']=True
             elif i[1]=='hev' :
                 r['mc']=False
+        if i[0]=='--ar' and not 'ar' in r:
+            r['ar']=True
+        if i[0]=='--nar' and not 'ar' in r:
+            r['ar']=False
+        if i[0]=='--ax' and not 'ax' in r:
+            if i[1].isnumeric() :
+                i2=int(i[1])
+                if i2<17 and i2>0 :
+                    r['ax']=i2
+        if i[0]=='--as' and not 'as' in r:
+            if i[1].isnumeric() :
+                i2=int(i[1])
+                if i2>0 :
+                    r['as']=i2
+        if i[0]=='--ak' and not 'ak' in r:
+            if i[1].isnumeric() :
+                i2=int(i[1])
+                if i2>0 and i2<1025 :
+                    r['ak']=i2
+        if i[0]=='--ab' and not 'ab' in r:
+            r['ab']=True
+        if i[0]=='--nab' and not 'ab' in r:
+            r['ab']=False
+        if i[0]=='--fa' and not 'fa' in r:
+            if i[1]=='none' or i[1]=='prealloc' or i[1]=='trunc' or i[1]=='falloc':
+                r['fa']=i[1]
+        if i[0]=='--sv' and not 'sv' in r:
+            if i[1].lower()=='true' :
+                r['sv']=True
+            elif i[1].lower()=='false' :
+                r['sv']=False
+        if i[0]=='--ma' and not 'ma' in r:
+            if i[1].lower()=='true' :
+                r['ma']=True
+            elif i[1].lower()=='false' :
+                r['ma']=False
+        if i[0]=='--ms' and not 'ms' in r:
+            t=search("^[0-9]+[MK]?$",i[1])
+            if t!=None :
+                r['ms']=i[1]
+        if i[0]=='--da' and not 'da' in r:
+            if i[1].lower()=='true' :
+                r['da']=True
+            elif i[1].lower()=='false' :
+                r['da']=False
     return r
 if __name__ == "__main__":
     import sys
