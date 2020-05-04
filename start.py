@@ -13,6 +13,8 @@ from re import search,I
 import os 
 import sys
 from command import gopt
+import json
+from math import ceil
 def main(ip={}):
     se=JSONParser.loadset()
     if not isinstance(se,dict) :
@@ -24,6 +26,9 @@ def main(ip={}):
     av=False
     ss=False
     ep=False
+    pl=False #收藏夹
+    uid=-1 #收藏夹主人id
+    fid=-1 #收藏夹id
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -41,9 +46,9 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search('([^:]+://)?(www.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?fid=([0-9]+))?)?',inp,I)
         if re==None :
-            re=search('([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
+            re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
                 print('输入有误')
                 exit()
@@ -70,22 +75,28 @@ def main(ip={}):
                     exit()
         else :
             re=re.groups()
-            if re[3] :
-                inp=re[3]
+            if re[4] :
+                inp=re[4]
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
-            elif re[5] :
-                inp=str(biliBv.debv(re[5]))
+            elif re[6] :
+                inp=str(biliBv.debv(re[6]))
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
-            elif re[7] :
-                inp=re[7]
+            elif re[8] :
+                inp=re[8]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ss=True
-            elif re[9] :
-                inp=re[9]
+            elif re[10] :
+                inp=re[10]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ep=True
+            elif re[12] :
+                pl=True
+                uid=int(re[12])
+                if re[14] :
+                    fid=int(re[14])
+                print()
             else :
                 print('输入有误')
                 exit()
@@ -119,6 +130,37 @@ def main(ip={}):
             exit()
         else :
             exit()
+    if pl :
+        if fid==-1 :
+            re=section.get('https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid=%s&jsonp=jsonp'%(uid))
+            re.encoding='utf8'
+            re=re.json()
+            if re['code']!=0 :
+                print('%s %s'%(re['code'],re['message']))
+                return -1
+            else :
+                if 'data' in re and 'list' in re['data'] and re['data']['count']>0:
+                    fid=re['data']['list'][0]['fid']
+                else :
+                    print('获取收藏夹列表失败')
+                    return -1
+        i=1
+        re=JSONParser.getpli(section,fid,i)
+        if re==-1 :
+            return -1
+        pli=JSONParser.getplinfo(re)
+        PrintInfo.printInfo3(pli)
+        n=ceil(pli['count']/20)
+        plv=[]
+        JSONParser.getpliv(plv,re)
+        while i<n :
+            i=i+1
+            re=JSONParser.getpli(section,fid,i)
+            if re==-1 :
+                return -1
+            JSONParser.getpliv(plv,re)
+        PrintInfo.printInfo4(plv)
+        return 0
     xml=0
     xmlc=[]
     read=biliPlayerXmlParser.loadXML()
@@ -152,6 +194,10 @@ def main(ip={}):
     re=section.get(s)
     parser=HTMLParser.Myparser()
     parser.feed(re.text)
+    vd=json.loads(parser.videodata)
+    if 'error' in vd :
+        print('%s %s'%(vd['error']['code'],vd['error']['message']))
+        return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
         PrintInfo.printInfo(data)
