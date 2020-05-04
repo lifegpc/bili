@@ -192,6 +192,13 @@ def main(ip={}):
                         print("您选中了第"+str(i)+"个视频："+plv[i-1]['title'])
         bs=True
         c1=False
+        read=JSONParser.getset(se,'da')
+        if read!=None :
+            c1=read
+            bs=False
+        if 'da' in ip :
+            c1=ip['da']
+            bs=False
         while bs :
             inp=input("是否自动下载每一个视频的所有分P？(y/n)")
             if len(inp)>0 :

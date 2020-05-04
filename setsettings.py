@@ -148,4 +148,8 @@ if __name__=='__main__' :
         if t!=None :
             if inp!="0" :
                 ne['ms']=inp
+    print('收藏夹是否自动下载每一个视频的所有分P？')
+    r=gk(se,'da')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'da',se)
     saveset(ne)
