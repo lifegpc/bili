@@ -1,4 +1,5 @@
 from time import gmtime,strftime,time,strptime,timezone,mktime,struct_time
+from math import floor
 def getDate(s) :
     "获取时间戳对应日期 UTF+8"
     i=float(s)
@@ -44,5 +45,8 @@ def tostr2(s):
         return strftime('%Y-%m-%d %H:%M:%S',s)
     else :
         return strftime('%Y-%m-%d %H:%M:%S',getDate(s))
+def tostr3(i:int):
+    "转换为适合srt的时间"
+    return "%02d:%02d:%02d,%03d"%(floor(i/3600),floor(i%3600/60),floor(i%60),floor(i*1000%1000))
 if __name__=='__main__' :
     print(getNowDate())

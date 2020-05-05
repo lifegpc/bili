@@ -14,6 +14,17 @@ def Myparser(s) :
     data['desc']=obj['videoData']['desc']
     data['uid']=obj['videoData']['owner']['mid']
     data['name']=obj['videoData']['owner']['name']
+    if 'subtitle' in obj['videoData'] :
+        t=obj['videoData']['subtitle']['list']
+        if len(t)>0 :
+            r=[]
+            for i in t:
+                e={}
+                e['lan']=i['lan']
+                e['land']=i['lan_doc']
+                e['url']=i['subtitle_url']
+                r.append(e)
+            data['sub']=r
     page=[]
     for i in obj['videoData']['pages'] :
     	t={}

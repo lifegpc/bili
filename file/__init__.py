@@ -1,4 +1,4 @@
-from file.info import getinfo,getinfox,printinfo
+from file.info import getinfo,getinfox,printinfo,spfn
 from file.dir import getinfod,printinfod,listd
 from file.filter import listf,listfd,listff,filtern
 from file.get import getfilen
