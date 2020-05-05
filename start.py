@@ -15,7 +15,8 @@ import sys
 from command import gopt
 import json
 from math import ceil
-from dictcopy import copyip
+from dictcopy import copyip,copydict
+from biliHdVideo import getninfo
 def main(ip={}):
     se=JSONParser.loadset()
     if not isinstance(se,dict) :
@@ -28,6 +29,7 @@ def main(ip={}):
     ss=False
     ep=False
     pl=False #收藏夹
+    hd=False #互动视频
     uid=-1 #收藏夹主人id
     fid=-1 #收藏夹id
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
@@ -253,6 +255,31 @@ def main(ip={}):
         return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
+        if data['videos']!=len(data['page']) :
+            r=requests.Session()
+            r.headers=copydict(section.headers)
+            read=JSONParser.loadcookie(r)
+            if read!=0 :
+                print("读取cookies.json出现错误")
+                return -1
+            r.headers.update({'referer':"https://www.bilibili.com/video/%s"%(data['bvid'])})
+            r.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+            r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+            r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
+            r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+            re=r.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][0]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
+            re.encoding='utf8'
+            rs=search(r"<interaction>(.+)</interaction>",re.text,I)
+            if rs!=None :
+                rs=rs.groups()[0]
+                if rs!="" :
+                    rs=json.loads(rs)
+                    data['gv']=rs['graph_version']
+                    hd=True
+        if hd:
+            read=getninfo(r,data)
+            if read==-1 :
+                return -1
         PrintInfo.printInfo(data)
         cho=[]
         if data['videos']==1 :
