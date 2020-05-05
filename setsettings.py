@@ -139,7 +139,7 @@ if __name__=='__main__' :
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'ma',se)
     n="0"
-    if 'ms' :
+    if 'ms' in se :
         n=se['ms']
     print('在使用aria2c下载时最大总体速度，即--max-overall-download-limit的参数，默认单位为B，可以使用K和M为单位（默认为0，即不限制，目前为%s）：'%(n))
     inp=input('请输入大小（100B可以输入100，100KiB输入100K，100MiB输入100M）：')
