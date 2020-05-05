@@ -259,6 +259,44 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                 filen='Download/%s'%(file.filtern('%s-%s(AV%s,%s,P%s,%s,%s)'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs)))
             else :
                 filen='Download/%s'%(file.filtern('%s-%s(AV%s,%s,P%s,%s)'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
+        ff=True
+        if JSONParser.getset(se,'nf')==True :
+            ff=False
+        if 'yf' in ip :
+            if ip['yf']:
+                ff=True
+            else :
+                ff=False
+        ma=False
+        if JSONParser.getset(se,"ma")==True :
+            ma=True
+        if 'ma' in ip:
+            ma=ip['ma']
+        if ff and (len(durl)>1 or ma) and os.path.exists('%s.mkv'%(filen)) and os.system('ffmpeg -h 2>&0 1>&0')==0 :
+            fg=False
+            bs=True
+            if 'y' in ip :
+                if ip['y'] :
+                    fg=True
+                    bs=False
+                else :
+                    bs=False
+            while bs:
+                inp=input('"%s.mkv"文件已存在，是否覆盖？(y/n)'%(filen))
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        fg=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            if fg:
+                try :
+                    os.remove('%s.mkv'%(filen))
+                except :
+                    print('删除原有文件失败，跳过下载')
+                    return 0
+            else:
+                return 0
         print('共有%s个文件'%(len(durl)))
         j=1
         hzm=file.geturlfe(durl[0]['url'])
@@ -388,47 +426,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                         return -3
                 com=com+k['size']
             j=j+1
-        ff=True
-        if JSONParser.getset(se,'nf')==True :
-            ff=False
-        if 'yf' in ip :
-            if ip['yf']:
-                ff=True
-            else :
-                ff=False
-        ma=False
-        if JSONParser.getset(se,"ma")==True :
-            ma=True
-        if 'ma' in ip:
-            ma=ip['ma']
         if (len(durl)>1 or ma) and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
-            if os.path.exists('%s.mkv'%(filen)) :
-                fg=False
-                bs=True
-                if 'y' in ip :
-                    if ip['y'] :
-                        fg=True
-                        bs=False
-                    else :
-                        bs=False
-                while bs:
-                    inp=input('"%s.mkv"文件已存在，是否覆盖？(y/n)'%(filen))
-                    if len(inp)>0 :
-                        if inp[0].lower()=='y' :
-                            fg=True
-                            bs=False
-                        elif inp[0].lower()=='n' :
-                            bs=False
-                if fg:
-                    try :
-                        os.remove('%s.mkv'%(filen))
-                    except :
-                        print('删除原有文件失败，跳过下载')
-                        return 0
-                else:
-                    return 0
             if len(durl) > 1:
                 te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt),'wt',encoding='utf8')
                 j=1
@@ -583,6 +583,39 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
             else :
                 filen='Download/%s'%(file.filtern('%s-%s(AV%s,%s,P%s,%s).mkv'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
         hzm=[file.geturlfe(dash['video']['base_url']),file.geturlfe(dash['audio']['base_url'])]
+        ff=True
+        if JSONParser.getset(se,'nf')==True :
+            ff=False
+        if 'yf' in ip :
+            if ip['yf']:
+                ff=True
+            else :
+                ff=False
+        if ff and os.path.exists(filen) and os.system('ffmpeg -h 2>&0 1>&0')==0:
+            fg=False
+            bs=True
+            if 'y' in ip :
+                if ip['y'] :
+                    fg=True
+                    bs=False
+                else :
+                    bs=False
+            while bs:
+                inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(filen))
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        fg=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            if fg :
+                try :
+                    os.remove('%s'%(filen))
+                except :
+                    print('删除原有文件失败，跳过下载')
+                    return 0
+            else:
+                return 0
         durz=dash['video']['size']+dash['audio']['size']
         label .c # pylint: disable=undefined-variable
         ar=False
@@ -702,41 +735,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                 goto .d # pylint: disable=undefined-variable
             else :
                 return -3
-        ff=True
-        if JSONParser.getset(se,'nf')==True :
-            ff=False
-        if 'yf' in ip :
-            if ip['yf']:
-                ff=True
-            else :
-                ff=False
         if os.system('ffmpeg -h 2>&0 1>&0')==0 and ff:
             print('将用ffmpeg自动合成')
-            if os.path.exists(filen) :
-                fg=False
-                bs=True
-                if 'y' in ip :
-                    if ip['y'] :
-                        fg=True
-                        bs=False
-                    else :
-                        bs=False
-                while bs:
-                    inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(filen))
-                    if len(inp)>0 :
-                        if inp[0].lower()=='y' :
-                            fg=True
-                            bs=False
-                        elif inp[0].lower()=='n' :
-                            bs=False
-                if fg :
-                    try :
-                        os.remove('%s'%(filen))
-                    except :
-                        print('删除原有文件失败，跳过下载')
-                        return 0
-                else:
-                    return 0
             re=os.system('ffmpeg -i "%s" -i "%s" -metadata title="%s-%s" -metadata description="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata atitle="%s" -metadata pubdate="%s" -metadata ctime="%s" -metadata uid="%s" -metadata author="%s" -metadata p="%sP/%sP" -metadata part="%s" -metadata vq="%s" -metadata aq="%s" -c copy "%s"'%(getfn(0,i,data,vqs,hzm),getfn(1,i,data,vqs,hzm),data['title'],data['page'][i-1]['part'],bstr.f(data['desc']),data['aid'],data['bvid'],data['page'][i-1]['cid'],data['title'],tostr2(data['pubdate']),tostr2(data['ctime']),data['uid'],data['name'],i,data['videos'],data['page'][i-1]['part'],vqs[0],vqs[1],filen))
             de=False
             if re==0 :
@@ -901,6 +901,39 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
             else :
                 filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).mkv'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'])))
         hzm=[file.geturlfe(dash['video']['base_url']),file.geturlfe(dash['audio']['base_url'])]
+        ff=True
+        if JSONParser.getset(se,'nf')==True :
+            ff=False
+        if 'yf' in ip :
+            if ip['yf']:
+                ff=True
+            else :
+                ff=False
+        if ff and os.path.exists(filen) and os.system('ffmpeg -h 2>&0 1>&0')==0 :
+            fg=False
+            bs=True
+            if 'y' in ip :
+                if ip['y'] :
+                    fg=True
+                    bs=False
+                else :
+                    bs=False
+            while bs:
+                inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(filen))
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        fg=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            if fg :
+                try :
+                    os.remove('%s'%(filen))
+                except :
+                    print('删除原有文件失败，跳过下载')
+                    return 0
+            else:
+                return 0
         durz=dash['video']['size']+dash['audio']['size']
         label .e # pylint: disable=undefined-variable
         ar=False
@@ -1020,41 +1053,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                 goto .f # pylint: disable=undefined-variable
             else :
                 return -3
-        ff=True
-        if JSONParser.getset(se,'nf')==True :
-            ff=False
-        if 'yf' in ip :
-            if ip['yf']:
-                ff=True
-            else :
-                ff=False
         if os.system('ffmpeg -h 2>&0 1>&0')==0 and ff:
             print('将用ffmpeg自动合成')
-            if os.path.exists(filen) :
-                fg=False
-                bs=True
-                if 'y' in ip :
-                    if ip['y'] :
-                        fg=True
-                        bs=False
-                    else :
-                        bs=False
-                while bs:
-                    inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(filen))
-                    if len(inp)>0 :
-                        if inp[0].lower()=='y' :
-                            fg=True
-                            bs=False
-                        elif inp[0].lower()=='n' :
-                            bs=False
-                if fg :
-                    try :
-                        os.remove('%s'%(filen))
-                    except :
-                        print('删除原有文件失败，跳过下载')
-                        return 0
-                else:
-                    return 0
             re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen))
             de=False
             if re==0 :
@@ -1150,6 +1150,44 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                 filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s,%s)'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs)))
             else :
                 filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s)'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'])))
+        ff=True
+        if JSONParser.getset(se,'nf')==True :
+            ff=False
+        if 'yf' in ip :
+            if ip['yf']:
+                ff=True
+            else :
+                ff=False
+        ma=False
+        if JSONParser.getset(se,"ma")==True :
+            ma=True
+        if 'ma' in ip:
+            ma=ip['ma']
+        if ff and (len(durl)>1 or ma) and os.path.exists('%s.mkv'%(filen)) and os.system('ffmpeg -h 2>&0 1>&0')==0 :
+            fg=False
+            bs=True
+            if 'y' in ip :
+                if ip['y'] :
+                    fg=True
+                    bs=False
+                else :
+                    bs=False
+            while bs:
+                inp=input('"%s.mkv"文件已存在，是否覆盖？(y/n)'%(filen))
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        fg=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            if fg:
+                try :
+                    os.remove('%s.mkv'%(filen))
+                except :
+                    print('删除原有文件失败，跳过下载')
+                    return 0
+            else:
+                return 0
         print('共有%s个文件'%(len(durl)))
         j=1
         hzm=file.geturlfe(durl[0]['url'])
@@ -1279,47 +1317,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
                         return -3
                 com=com+k['size']
             j=j+1
-        ff=True
-        if JSONParser.getset(se,'nf')==True :
-            ff=False
-        if 'yf' in ip :
-            if ip['yf']:
-                ff=True
-            else :
-                ff=False
-        ma=False
-        if JSONParser.getset(se,"ma")==True :
-            ma=True
-        if 'ma' in ip:
-            ma=ip['ma']
         if (len(durl)>1 or ma) and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
-            if os.path.exists('%s.mkv'%(filen)) :
-                fg=False
-                bs=True
-                if 'y' in ip :
-                    if ip['y'] :
-                        fg=True
-                        bs=False
-                    else :
-                        bs=False
-                while bs:
-                    inp=input('"%s.mkv"文件已存在，是否覆盖？(y/n)'%(filen))
-                    if len(inp)>0 :
-                        if inp[0].lower()=='y' :
-                            fg=True
-                            bs=False
-                        elif inp[0].lower()=='n' :
-                            bs=False
-                if fg:
-                    try :
-                        os.remove('%s.mkv'%(filen))
-                    except :
-                        print('删除原有文件失败，跳过下载')
-                        return 0
-                else:
-                    return 0
             if len(durl)>1 :
                 te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt),'wt',encoding='utf8')
                 j=1
