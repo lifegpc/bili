@@ -680,6 +680,7 @@ def main(ip={}):
                         bs=False
             for i in cho:
                 read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip)
+    return 0
 if __name__=="__main__" :
     if len(sys.argv)==1 :
         main()
