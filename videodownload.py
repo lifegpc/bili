@@ -185,6 +185,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
         napi=False
     else :
         return -2
+    rr=r2.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][i-1]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
+    rr.encoding='utf8'
+    rs2=search(r'<subtitle>(.+)</subtitle>',rr.text)
+    if rs2!=None :
+        rs2=json.loads(rs2.groups()[0])
+        JSONParser.getsub(rs2,data)
     if "data" in re and "durl" in re['data']:
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
@@ -490,6 +496,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
         avq2=re['data']["accept_quality"]
+        avq3={}
         avq=[]
         aaq=[]
         dash={'video':{},'audio':{}}
@@ -497,6 +504,32 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
         for j in re['data']['dash']['video'] :
             dash['video'][str(j['id'])+j['codecs']]=j
             avq.append(str(j['id'])+j['codecs'])
+            if j['id'] not in avq3 :
+                avq3[j['id']]=0
+        bs=True
+        while bs:
+            bs=False
+            for j in avq2 :
+                if j not in avq3 :
+                    bs=True
+                    r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
+                    re=r2.get(url)
+                    re.encoding='utf8'
+                    rs=search('__playinfo__=([^<]+)',re.text)
+                    if rs!=None :
+                        re=json.loads(rs.groups()[0])
+                    else :
+                        return -2
+                    if "data" in re and "dash" in re['data'] :
+                        for j in re['data']['dash']['video'] :
+                            if (str(j['id'])+j['codecs']) not in dash['video'] :
+                                dash['video'][str(j['id'])+j['codecs']]=j
+                                avq.append(str(j['id'])+j['codecs'])
+                                avq3[j['id']]=0
+                        break
+                    else :
+                        return -2
+        r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
         for j in re['data']['dash']['audio']:
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
@@ -819,12 +852,40 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
         vqd=re["data"]["accept_description"]
         avq=[]
         avq2=re["data"]["accept_quality"]
+        avq3={}
         aaq=[]
         vqs=[]
         for j in re['data']['dash']['video']:
             t=str(j['id'])+j['codecs']
             dash['video'][t]=j
             avq.append(t)
+            if j['id'] not in avq3 :
+                avq3[j['id']]=0
+        bs=True
+        while bs:
+            bs=False
+            for j in avq2 :
+                if j not in avq3 :
+                    bs=True
+                    r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
+                    re=r2.get(url)
+                    re.encoding='utf8'
+                    rs=search('__playinfo__=([^<]+)',re.text)
+                    if rs!=None :
+                        re=json.loads(rs.groups()[0])
+                    else :
+                        return -2
+                    if "data" in re and "dash" in re['data'] :
+                        for j in re['data']['dash']['video'] :
+                            if (str(j['id'])+j['codecs']) not in dash['video'] :
+                                t=str(j['id'])+j['codecs']
+                                dash['video'][t]=j
+                                avq.append(t)
+                                avq3[j['id']]=0
+                        break
+                    else :
+                        return -2
+        r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
         for j in re['data']['dash']['audio']:
             dash['audio'][j['id']]=j
             aaq.append(j['id'])

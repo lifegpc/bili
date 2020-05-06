@@ -15,17 +15,6 @@ def Myparser(s) :
     data['desc']=obj['videoData']['desc']
     data['uid']=obj['videoData']['owner']['mid']
     data['name']=obj['videoData']['owner']['name']
-    if 'subtitle' in obj['videoData'] :
-        t=obj['videoData']['subtitle']['list']
-        if len(t)>0 :
-            r=[]
-            for i in t:
-                e={}
-                e['lan']=i['lan']
-                e['land']=i['lan_doc']
-                e['url']=i['subtitle_url']
-                r.append(e)
-            data['sub']=r
     page=[]
     for i in obj['videoData']['pages'] :
     	t={}
@@ -240,3 +229,14 @@ def getchs(l:list,d:dict):
         r['cid']=t['cid']
         r['bvid']=t['bvid']
         l.append(r)
+def getsub(d:dict,z:dict):
+    t=d['subtitles']
+    if len(t)>0 :
+        r=[]
+        for i in t:
+            e={}
+            e['lan']=i['lan']
+            e['land']=i['lan_doc']
+            e['url']="https:%s"%(i['subtitle_url'])
+            r.append(e)
+        z['sub']=r
