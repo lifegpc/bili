@@ -17,6 +17,7 @@ import json
 from math import ceil
 from dictcopy import copyip,copydict
 from biliHdVideo import getninfo
+import traceback
 def main(ip={}):
     se=JSONParser.loadset()
     if not isinstance(se,dict) :
@@ -24,14 +25,16 @@ def main(ip={}):
     if 'i' in ip :
         inp=ip['i']
     else :
-        inp=input("请输入av号（支持SS、EP号，BV号请以BV开头，现在已支持链接，支持收藏夹链接）：")
+        inp=input("请输入av号（支持SS、EP号，BV号请以BV开头，现在已支持链接，支持收藏夹、频道链接）：")
     av=False
     ss=False
     ep=False
     pl=False #收藏夹
     hd=False #互动视频
-    uid=-1 #收藏夹主人id
+    ch=False #频道
+    uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
+    cid=-1 #频道id
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -49,7 +52,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?fid=([0-9]+))?)?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?fid=([0-9]+))?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -99,7 +102,11 @@ def main(ip={}):
                 uid=int(re[12])
                 if re[14] :
                     fid=int(re[14])
-                print()
+            elif re[15]:
+                ch=True
+                uid=int(re[16])
+                if re[19] :
+                    cid=int(re[19])
             else :
                 print('输入有误')
                 exit()
@@ -214,7 +221,134 @@ def main(ip={}):
             ip2['i']=str(plv[i-1]['id'])
             if c1:
                 ip2['p']='a'
-            main(ip2)
+            read=main(ip2)
+            if read!=0 :
+                return read
+        return 0
+    if ch :
+        r=requests.Session()
+        r.headers=copydict(section.headers)
+        read=JSONParser.loadcookie(r)
+        if read!=0 :
+            print("读取cookies.json出现错误")
+            return -1
+        r.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+        r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
+        r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+        if cid ==-1 :
+            r.headers.update({'referer':'https://space.bilibili.com/%s/channel/index'%(uid)})
+            re=r.get("https://api.bilibili.com/x/space/channel/list?mid=%s&guest=false&jsonp=jsonp"%(uid))
+            re.encoding='utf8'
+            re=re.json()
+            if re['code']!=0 :
+                print('%s %s'%(re['code'],re['message']))
+                return -1
+            chl=JSONParser.getchl(re)
+            PrintInfo.printInfo5(chl)
+            bs=True
+            f=True
+            while bs:
+                if f and 'p' in ip:
+                    f=False
+                    inp=ip['p']
+                else :
+                    inp=input('请输入你想下载的频道，每两个编号间用,隔开，全部下载可输入a')
+                cho=[]
+                if inp[0]=='a' :
+                    print('您全选了所有频道')
+                    for i in range(1,len(chl)+1) :
+                        cho.append(i)
+                    bs=False
+                else :
+                    inp=inp.split(',')
+                    bb=True
+                    for i in inp :
+                        if i.isnumeric() and int(i)>0 and int(i)<=len(chl) and (not (int(i) in cho)) :
+                            cho.append(int(i))
+                        else :
+                            bb=False
+                    if bb :
+                        bs=False
+                        for i in cho :
+                            print("您选中了第"+str(i)+"个频道："+chl[i-1]['name'])
+                for i in cho :
+                    ip2=copyip(ip)
+                    ip2['i']='https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,chl[i-1]['cid'])
+                    read=main(ip2)
+                    if read!=0 :
+                        return read
+            return 0
+        r.headers.update({'referer':'https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,cid)})
+        re=JSONParser.getchi(r,uid,cid,1)
+        if re == -1:
+            return -1
+        chi=JSONParser.getchn(re)
+        n=ceil(chi['count']/30)
+        i=1
+        chv=[]
+        JSONParser.getchs(chv,re)
+        while i<n :
+            i=i+1
+            re=JSONParser.getchi(r,uid,cid,i)
+            if re==-1 :
+                return -1
+            JSONParser.getchs(chv,re)
+        if chi['count'] != len(chv) :
+            print('视频数量不符，貌似BUG了？')
+            return -1
+        PrintInfo.printInfo6(chv,chi)
+        bs=True
+        f=True
+        while bs:
+            if f and 'p' in ip:
+                f=False
+                inp=ip['p']
+            else :
+                inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+            cho=[]
+            if inp[0]=='a' :
+                print('您全选了所有视频')
+                for i in range(1,chi['count']+1) :
+                    cho.append(i)
+                bs=False
+            else :
+                inp=inp.split(',')
+                bb=True
+                for i in inp :
+                    if i.isnumeric() and int(i)>0 and int(i)<=chi['count'] and (not (int(i) in cho)) :
+                        cho.append(int(i))
+                    else :
+                        bb=False
+                if bb :
+                    bs=False
+                    for i in cho :
+                        print("您选中了第"+str(i)+"个视频："+chv[i-1]['title'])
+        bs=True
+        c1=False
+        read=JSONParser.getset(se,'da')
+        if read!=None :
+            c1=read
+            bs=False
+        if 'da' in ip :
+            c1=ip['da']
+            bs=False
+        while bs :
+            inp=input("是否自动下载每一个视频的所有分P？(y/n)")
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    c1=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        for i in cho:
+            ip2=copyip(ip)
+            ip2['i']=str(chv[i-1]['aid'])
+            if c1:
+                ip2['p']='a'
+            read=main(ip2)
+            if read!=0 :
+                return read
         return 0
     xml=0
     xmlc=[]
@@ -249,7 +383,31 @@ def main(ip={}):
     re=section.get(s)
     parser=HTMLParser.Myparser()
     parser.feed(re.text)
-    vd=json.loads(parser.videodata)
+    try :
+        vd=json.loads(parser.videodata)
+    except Exception:
+        if av:
+            re=search(r"av([0-9]+)",s,I).groups()[0]
+            re=section.get("https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid=%s&jsonp=jsonp"%(re))
+            re.encoding='utf8'
+            re=re.json()
+            if re['code']!=0 :
+                print('%s %s'%(re['code'],re['message']))
+                return -1
+            if 'data' in re and 'View' in re['data'] and 'redirect_url' in re['data']['View'] :
+                ip2=copyip(ip)
+                ip2['i']=re['data']['View']['redirect_url']
+                if 'p' in ip :
+                    ip2['p']=ip['p']
+                read=main(ip2)
+                if read!= 0 :
+                    return read
+                return 0
+            print(traceback.format_exc())
+            return -1
+        else :
+            print(traceback.format_exc())
+            return -1
     if 'error' in vd and 'code' in vd['error'] and 'message' in vd['error'] :
         print('%s %s'%(vd['error']['code'],vd['error']['message']))
         return -1

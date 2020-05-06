@@ -1,6 +1,7 @@
 from json import loads,dumps
 from os.path import exists
 from os import remove
+from requests import Session
 def Myparser(s) :
     "解析普通AV视频信息"
     obj=loads(s)
@@ -192,3 +193,50 @@ def getpliv(i:list,d:dict):
         r['pubtime']=t['pubtime']
         r['ftime']=t['fav_time']
         i.append(r)
+def getchl(d:dict)->list:
+    r=[]
+    for i in d['data']['list'] :
+        t={}
+        t['cid']=i['cid']
+        t['name']=i['name']
+        t['intro']=i['intro']
+        t['mtime']=i['mtime']
+        t['count']=i['count']
+        r.append(t)
+    return r
+def getchi(r:Session,u:int,c:int,n:int):
+    uri="https://api.bilibili.com/x/space/channel/video?mid=%s&cid=%s&pn=%s&ps=30&order=0&jsonp=jsonp"%(u,c,n)
+    bs=True
+    while bs :
+        try :
+            re=r.get(uri)
+            bs=False
+        except :
+            print('获取频道第%s页失败，正在重试……'%(n))
+    re.encoding='utf8'
+    re=re.json()
+    if re['code']!=0 :
+        print('%s %s'%(re['code'],re['message']))
+        return -1
+    return re
+def getchn(d:dict)->dict:
+    i=d['data']['list']
+    r={}
+    r['cid']=i['cid']
+    r['name']=i['name']
+    r['intro']=i['intro']
+    r['mtime']=i['mtime']
+    r['count']=i['count']
+    return r
+def getchs(l:list,d:dict):
+    for t in d['data']['list']['archives'] :
+        r={}
+        r['aid']=t['aid']
+        r['videos']=t['videos']
+        r['title']=t['title']
+        r['pubdate']=t['pubdate']
+        r['ctime']=t['ctime']
+        r['desc']=t['desc']
+        r['cid']=t['cid']
+        r['bvid']=t['bvid']
+        l.append(r)

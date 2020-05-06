@@ -74,6 +74,28 @@ def printInfo4(l:list) :
 		print('UP主名称：%s'%(i['author']))
 		print('收藏时间：%s'%(tostr2(i['ftime'])))
 		ii=ii+1
+def printInfo5(l:list) :
+	e=1
+	for i in l:
+		print('%s、频道ID：%s'%(e,i['cid']))
+		print('名字：%s'%(i['name']))
+		print('介绍：%s'%(i['intro']))
+		print('上次修改时间：%s'%(tostr2(i['mtime'])))
+		print('视频数量：%s'%(i['count']))
+		e=e+1
+def printInfo6(l:list,d:dict) :
+	print('频道ID：%s'%(d['cid']))
+	print('名字：%s'%(d['name']))
+	print('介绍：%s'%(d['intro']))
+	print('上次修改时间：%s'%(tostr2(d['mtime'])))
+	print('视频数量：%s'%(d['count']))
+	e=1
+	for i in l :
+		print('视频%s：'%(e))
+		print('AV号：%s'%(i['aid']))
+		print('BV号：%s'%(i['bvid']))
+		print('视频标题：%s'%(i['title']))
+		e=e+1
 def printcho(cho) :
 	if len(cho)==0 :
 		return
