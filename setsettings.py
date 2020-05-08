@@ -42,7 +42,7 @@ def sk(se:dict,key:str,re:dict) :
                 b=False
         else :
             b=False
-            if key in re:
+            if re and key in re:
                 se[key]=re[key]
 if __name__=='__main__' :
     ne={}
@@ -50,7 +50,7 @@ if __name__=='__main__' :
     if not isinstance(se,dict) :
         se=None
     r=[]
-    print('选项前的x说明了当前选中的设置，直接回车(exe版本请不要这么做，会闪退)会保持当前设置')
+    print('选项前的x说明了当前选中的设置，直接回车会保持当前设置')
     if se :
         print('删除当前文件夹下的setting.json可以重置设置')
     print('是否默认启用弹幕过滤？')
@@ -86,7 +86,7 @@ if __name__=='__main__' :
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'a',se)
     n=3
-    if 'ax' in se :
+    if se and 'ax' in se :
         n=se['ax']
     print('aria2c单个服务器最大连接数即-x的参数(1-16，默认3，目前为%s)：'%(n))
     inp=input('请输入1-16中的数字：')
@@ -96,7 +96,7 @@ if __name__=='__main__' :
             if i>=1 and i<=16 and i!=3:
                 ne['ax']=i
     n=5
-    if 'as' in se :
+    if se and 'as' in se :
         n=se['as']
     print('aria2c单个文件最大连接数即-s的参数(1-*，默认5，目前为%s)：'%(n))
     inp=input('请输入大于等于1的数字：')
@@ -106,7 +106,7 @@ if __name__=='__main__' :
             if i>=1 and i!=5:
                 ne['as']=i
     n=5
-    if 'ak' in se :
+    if se and 'ak' in se :
         n=se['ak']
     print('aria2c文件分片大小即-k的参数(单位M，1-1024，默认5，目前为%s)：'%(n))
     inp=input('请输入1-1024的数字：')
@@ -120,7 +120,7 @@ if __name__=='__main__' :
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'ab',se)
     n='prealloc'
-    if 'fa' in se:
+    if se and 'fa' in se:
         n=se['fa']
     print('在使用arai2c下载时预分配方式即--file-allocation的参数(默认为prealloc，目前为%s)'%(n))
     print('1.none\t2.prealloc\t3.trunc\t4.falloc')
@@ -139,7 +139,7 @@ if __name__=='__main__' :
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'ma',se)
     n="0"
-    if 'ms' in se :
+    if se and 'ms' in se :
         n=se['ms']
     print('在使用aria2c下载时最大总体速度，即--max-overall-download-limit的参数，默认单位为B，可以使用K和M为单位（默认为0，即不限制，目前为%s）：'%(n))
     inp=input('请输入大小（100B可以输入100，100KiB输入100K，100MiB输入100M）：')
