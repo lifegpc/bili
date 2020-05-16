@@ -157,6 +157,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
         os.mkdir('Download/')
     r2=requests.Session()
     r2.headers=copydict(r.headers)
+    r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
         print("读取cookies.json出现错误")
@@ -832,7 +833,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
     if not os.path.exists(fdir):
         os.mkdir(fdir)
     r2=requests.Session()
-    r2.headers=r.headers
+    r2.headers=copydict(r.headers)
+    r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
         print("读取cookies.json出现错误")
@@ -1473,6 +1475,7 @@ def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             re.close()
             r2=requests.session()
             r2.headers=copydict(r.headers)
+            r2.proxies=r.proxies
             r2.headers.update({'Range':'bytes=%s-%s'%(fsize,size-1)})
             read=JSONParser.loadcookie(r2)
             if read!=0 :

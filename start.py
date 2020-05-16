@@ -112,6 +112,13 @@ def main(ip={}):
                 exit()
     section=requests.session()
     section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36","Connection": "keep-alive","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","Accept-Language": "zh-CN,zh;q=0.8"})
+    if 'httpproxy' in ip or 'httpsproxy' in ip:
+        pr={}
+        if 'httpproxy' in ip:
+            pr['http']=ip['httpproxy']
+        if 'httpsproxy' in ip:
+            pr['https']=ip['httpsproxy']
+        section.proxies=pr
     read=JSONParser.loadcookie(section)
     login=0
     if read==0 :
