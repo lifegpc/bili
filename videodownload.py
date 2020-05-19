@@ -512,7 +512,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
             bs=False
             for j in avq2 :
                 if j not in avq3 :
-                    if j<=80:
+                    if j<=80 and j!=74:
                         bs=True #防止非大会员进入无限死循环
                     r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
                     re=r2.get(url)
@@ -870,7 +870,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
             bs=False
             for j in avq2 :
                 if j not in avq3 :
-                    if j<=80:
+                    if j<=80 and j!=74:
                         bs=True #防止非大会员进入无限死循环
                     r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
                     re=r2.get(url)
