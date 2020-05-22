@@ -514,6 +514,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if j not in avq3 :
                     if ud['vip']<1 and j<=80 and j!=74:
                         bs=True #防止非大会员进入无限死循环
+                    elif ud['vip']>0 :
+                        bs=True #大会员一旦强制获取所有
                     r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
                     re=r2.get(url)
                     re.encoding='utf8'
@@ -872,6 +874,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 if j not in avq3 :
                     if ud['vip']<1 and j<=80 and j!=74:
                         bs=True #防止非大会员进入无限死循环
+                    elif ud['vip']>0 :
+                        bs=True #大会员一旦强制获取所有
                     r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
                     re=r2.get(url)
                     re.encoding='utf8'
