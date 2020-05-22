@@ -1,6 +1,7 @@
 from json import loads,dumps
 from os.path import exists
 from os import remove
+from requests import Session
 def Myparser(s) :
     "解析普通AV视频信息"
     obj=loads(s)
@@ -181,3 +182,107 @@ def getpliv(i:list,d:dict):
         r['pubtime']=t['pubtime']
         r['ftime']=t['fav_time']
         i.append(r)
+def getchl(d:dict)->list:
+    r=[]
+    for i in d['data']['list'] :
+        t={}
+        t['cid']=i['cid']
+        t['name']=i['name']
+        t['intro']=i['intro']
+        t['mtime']=i['mtime']
+        t['count']=i['count']
+        r.append(t)
+    return r
+def getchi(r:Session,u:int,c:int,n:int):
+    uri="https://api.bilibili.com/x/space/channel/video?mid=%s&cid=%s&pn=%s&ps=30&order=0&jsonp=jsonp"%(u,c,n)
+    bs=True
+    while bs :
+        try :
+            re=r.get(uri)
+            bs=False
+        except :
+            print('获取频道第%s页失败，正在重试……'%(n))
+    re.encoding='utf8'
+    re=re.json()
+    if re['code']!=0 :
+        print('%s %s'%(re['code'],re['message']))
+        return -1
+    return re
+def getchn(d:dict)->dict:
+    i=d['data']['list']
+    r={}
+    r['cid']=i['cid']
+    r['name']=i['name']
+    r['intro']=i['intro']
+    r['mtime']=i['mtime']
+    r['count']=i['count']
+    return r
+def getchs(l:list,d:dict):
+    for t in d['data']['list']['archives'] :
+        r={}
+        r['aid']=t['aid']
+        r['videos']=t['videos']
+        r['title']=t['title']
+        r['pubdate']=t['pubdate']
+        r['ctime']=t['ctime']
+        r['desc']=t['desc']
+        r['cid']=t['cid']
+        r['bvid']=t['bvid']
+        l.append(r)
+def getsub(d:dict,z:dict):
+    t=d['subtitles']
+    if len(t)>0 :
+        r=[]
+        for i in t:
+            e={}
+            e['lan']=i['lan']
+            e['land']=i['lan_doc']
+            e['url']="https:%s"%(i['subtitle_url'])
+            r.append(e)
+        z['sub']=r
+def getuvi(u:int,n:int,d:dict,r:Session):
+    uri="https://api.bilibili.com/x/space/arc/search?mid=%s&ps=30&tid=%s&pn=%s&keyword=%s&order=%s&jsonp=jsonp"%(u,d['t'],n,d['k'],d['o'])
+    bs=True
+    while bs:
+        try :
+            re=r.get(uri)
+            bs=False
+        except :
+            print('获取第%s页失败，正在重试……'%(n))
+    re=re.json()
+    if re['code']!=0 :
+        print('%s %s'%(re['code'],re['message']))
+        return -1
+    return re
+def getuvl(d:dict,l:list):
+    for t in d['data']['list']['vlist']:
+        r={}
+        r['aid']=t['aid']
+        r['bvid']=t['bvid']
+        r['title']=t['title']
+        r['description']=t['description']
+        r['ctime']=t['created']
+        l.append(r)
+def getup(u:int,r:Session) :
+    uri="https://api.bilibili.com/x/space/acc/info?mid=%s&jsonp=jsonp"%(u)
+    bs=True
+    while bs:
+        try :
+            re=r.get(uri)
+            bs=False
+        except :
+            print('获取uid为%s的UP主信息失败，正在重试……'%(u))
+    re=re.json()
+    if re['code']!=0 :
+        print('%s %s'%(re['code'],re['message']))
+        return -1
+    return re
+def getupi(d:dict)->dict :
+    r={}
+    q=d['data']
+    r['n']=q['name']
+    r['s']=q['sex']
+    r['l']=q['level']
+    r['sign']=q['sign']
+    r['b']=q['birthday']
+    return r

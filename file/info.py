@@ -64,3 +64,14 @@ def geturlfe(uri):
     r=r.split('.')
     r=r[len(r)-1]
     return r
+def spfn(fn:str) -> (str,str):
+    "分离文件名"
+    r=fn.split('.')
+    h=r[-1]
+    s=""
+    for i in r[:-1]:
+        if s=="" :
+            s=i
+        else :
+            s=s+"."+i
+    return s,h
