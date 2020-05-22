@@ -25,16 +25,18 @@ def main(ip={}):
     if 'i' in ip :
         inp=ip['i']
     else :
-        inp=input("请输入av号（支持SS、EP号，BV号请以BV开头，现在已支持链接，支持收藏夹、频道链接）：")
+        inp=input("请输入av号（支持SS、EP号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿链接）：")
     av=False
     ss=False
     ep=False
     pl=False #收藏夹
     hd=False #互动视频
     ch=False #频道
+    uv=False #投稿
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
+    uvd={} #投稿查询信息
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -52,7 +54,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?fid=([0-9]+))?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?fid=([0-9]+))?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -107,6 +109,24 @@ def main(ip={}):
                 uid=int(re[16])
                 if re[19] :
                     cid=int(re[19])
+            elif re[20]:
+                uv=True
+                uid=int(re[21])
+                uvd['t']=0
+                uvd['k']=''
+                uvd['o']='pubdate'
+                if re[23]:
+                    sl=re[23].split('&')
+                    for us in sl:
+                        rep=search(r'^(tid=([0-9]+))?(keyword=(.+)?)?(order=(.+)?)?',us,I)
+                        if rep!=None :
+                            rep=rep.groups()
+                            if rep[0]:
+                                uvd['t']=int(rep[1])
+                            elif rep[3]:
+                                uvd['k']=rep[3]
+                            elif rep[5]:
+                                uvd['o']=rep[5]
             else :
                 print('输入有误')
                 exit()
@@ -355,6 +375,81 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(chv[i-1]['aid'])
+            if c1:
+                ip2['p']='a'
+            read=main(ip2)
+            if read!=0 :
+                return read
+        return 0
+    if uv:
+        re=JSONParser.getup(uid,section)
+        if re==-1 :
+            return -1
+        up=JSONParser.getupi(re)
+        re=JSONParser.getuvi(uid,1,uvd,section)
+        if re==-1:
+            return -1
+        vn=re['data']['page']['count']
+        n=ceil(vn/30)
+        i=1
+        vl=[]
+        JSONParser.getuvl(re,vl)
+        while i<n :
+            i=i+1
+            re=JSONParser.getuvi(uid,i,uvd,section)
+            if re==-1 :
+                return -1
+            JSONParser.getuvl(re,vl)
+        if len(vl) !=vn :
+            print('视频数量不符，貌似BUG了？')
+            return -1
+        PrintInfo.printInfo7(up,vl)
+        bs=True
+        f=True
+        while bs:
+            if f and 'p' in ip:
+                f=False
+                inp=ip['p']
+            else :
+                inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+            cho=[]
+            if inp[0]=='a' :
+                print('您全选了所有视频')
+                for i in range(1,vn+1) :
+                    cho.append(i)
+                bs=False
+            else :
+                inp=inp.split(',')
+                bb=True
+                for i in inp :
+                    if i.isnumeric() and int(i)>0 and int(i)<=vn and (not (int(i) in cho)) :
+                        cho.append(int(i))
+                    else :
+                        bb=False
+                if bb :
+                    bs=False
+                    for i in cho :
+                        print("您选中了第"+str(i)+"个视频："+vl[i-1]['title'])
+        bs=True
+        c1=False
+        read=JSONParser.getset(se,'da')
+        if read!=None :
+            c1=read
+            bs=False
+        if 'da' in ip :
+            c1=ip['da']
+            bs=False
+        while bs :
+            inp=input("是否自动下载每一个视频的所有分P？(y/n)")
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    c1=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        for i in cho:
+            ip2=copyip(ip)
+            ip2['i']=str(vl[i-1]['aid'])
             if c1:
                 ip2['p']='a'
             read=main(ip2)

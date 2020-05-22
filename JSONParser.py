@@ -240,3 +240,49 @@ def getsub(d:dict,z:dict):
             e['url']="https:%s"%(i['subtitle_url'])
             r.append(e)
         z['sub']=r
+def getuvi(u:int,n:int,d:dict,r:Session):
+    uri="https://api.bilibili.com/x/space/arc/search?mid=%s&ps=30&tid=%s&pn=%s&keyword=%s&order=%s&jsonp=jsonp"%(u,d['t'],n,d['k'],d['o'])
+    bs=True
+    while bs:
+        try :
+            re=r.get(uri)
+            bs=False
+        except :
+            print('获取第%s页失败，正在重试……'%(n))
+    re=re.json()
+    if re['code']!=0 :
+        print('%s %s'%(re['code'],re['message']))
+        return -1
+    return re
+def getuvl(d:dict,l:list):
+    for t in d['data']['list']['vlist']:
+        r={}
+        r['aid']=t['aid']
+        r['bvid']=t['bvid']
+        r['title']=t['title']
+        r['description']=t['description']
+        r['ctime']=t['created']
+        l.append(r)
+def getup(u:int,r:Session) :
+    uri="https://api.bilibili.com/x/space/acc/info?mid=%s&jsonp=jsonp"%(u)
+    bs=True
+    while bs:
+        try :
+            re=r.get(uri)
+            bs=False
+        except :
+            print('获取uid为%s的UP主信息失败，正在重试……'%(u))
+    re=re.json()
+    if re['code']!=0 :
+        print('%s %s'%(re['code'],re['message']))
+        return -1
+    return re
+def getupi(d:dict)->dict :
+    r={}
+    q=d['data']
+    r['n']=q['name']
+    r['s']=q['sex']
+    r['l']=q['level']
+    r['sign']=q['sign']
+    r['b']=q['birthday']
+    return r
