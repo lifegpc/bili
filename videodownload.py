@@ -147,7 +147,7 @@ def sev(s:str) :
         return t.groups()[0]
     return ""
 @with_goto
-def avvideodownload(i,url,data,r,c,c3,se,ip) :
+def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     """下载av号视频
     -1 cookies.json读取错误
     -2 API Error
@@ -512,7 +512,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
             bs=False
             for j in avq2 :
                 if j not in avq3 :
-                    if j<=80 and j!=74:
+                    if ud['vip']<1 and j<=80 and j!=74:
                         bs=True #防止非大会员进入无限死循环
                     r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
                     re=r2.get(url)
@@ -824,7 +824,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip) :
                     for j in data['sub'] :
                         os.remove(j['fn'])
 @with_goto
-def epvideodownload(i,url,data,r,c,c3,se,ip):
+def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     """下载番剧等视频"""
     if not os.path.exists('Download/') :
         os.mkdir('Download/')
@@ -870,7 +870,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip):
             bs=False
             for j in avq2 :
                 if j not in avq3 :
-                    if j<=80 and j!=74:
+                    if ud['vip']<1 and j<=80 and j!=74:
                         bs=True #防止非大会员进入无限死循环
                     r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
                     re=r2.get(url)

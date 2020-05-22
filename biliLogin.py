@@ -2,7 +2,7 @@ from selenium import webdriver
 import requests
 import JSONParser
 import time
-def login(r):
+def login(r,ud:dict):
     '登录至B站'
     driver=webdriver.Chrome()
     driver.get('https://passport.bilibili.com/ajax/miniLogin/minilogin')
@@ -17,7 +17,7 @@ def login(r):
         t={'name':i['name'],'value':i['value'],'domain':i['domain'],'path':i['path']}
         sa.append(t)
     driver.close()
-    rr=tryok(r)
+    rr=tryok(r,ud)
     if rr==True :
         print('登录成功')
         JSONParser.savecookie(sa)
@@ -28,7 +28,7 @@ def login(r):
     else :
         print("登录失败："+str(rr['code'])+","+str(rr['message']))
         return 2
-def tryok(r) :
+def tryok(r,ud:dict) :
     '验证是否登录成功'
     try :
         re=r.get('https://api.bilibili.com/x/web-interface/nav')
@@ -38,6 +38,7 @@ def tryok(r) :
     try :
         obj=re.json()
         if obj['code']==0 and 'data' in obj and obj['data']['isLogin']:
+            ud['d']=obj['data']
             return True
         return obj
     except :

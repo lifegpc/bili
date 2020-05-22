@@ -120,9 +120,10 @@ def main(ip={}):
             pr['https']=ip['httpsproxy']
         section.proxies=pr
     read=JSONParser.loadcookie(section)
+    ud={}
     login=0
     if read==0 :
-        read=biliLogin.tryok(section)
+        read=biliLogin.tryok(section,ud)
         if read==True :
             print("登录校验成功！")
             login=1
@@ -140,13 +141,16 @@ def main(ip={}):
     if login==2 :
         if os.path.exists('cookies.json') :
             os.remove('cookies.json')
-        read=biliLogin.login(section)
+        read=biliLogin.login(section,ud)
         if read==0 :
             login=1
         elif read==1 :
             exit()
         else :
             exit()
+    if not 'd' in ud:
+        return -1
+    ud['vip']=ud['d']['vipStatus']
     if pl :
         if fid==-1 :
             re=section.get('https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid=%s&jsonp=jsonp'%(uid))
@@ -556,7 +560,7 @@ def main(ip={}):
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho :
-                read=videodownload.avvideodownload(i,s,data,section,cho3,cho5,se,ip)
+                read=videodownload.avvideodownload(i,s,data,section,cho3,cho5,se,ip,ud)
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'
@@ -686,7 +690,7 @@ def main(ip={}):
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho:
-                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip)
+                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip,ud)
     return 0
 if __name__=="__main__" :
     if len(sys.argv)==1 :

@@ -33,7 +33,8 @@ def getMembers(filen,r,da,pos,mri) :
             obj=json.loads(read['d'])
             if obj['code']==-101 :
                 if obj['message']=='账户未登录' :
-                    read=biliLogin.login(r)
+                    ud={}
+                    read=biliLogin.login(r,ud)
                     if read>1 :
                         exit()
                 else :
