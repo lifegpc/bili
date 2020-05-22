@@ -1,3 +1,7 @@
+# (C) 2019-2020 lifegpc
+# This file is part of bili.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from os.path import getatime,getmtime,getctime,getsize,exists,isfile,isdir
 from file.time import ttos
 from file.str import width,size,ftts

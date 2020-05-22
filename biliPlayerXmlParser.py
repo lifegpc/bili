@@ -1,3 +1,7 @@
+# (C) 2019-2020 lifegpc
+# This file is part of bili.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import xml.sax
 def loadXML() :
     "加载BiliBili弹幕过滤文件"

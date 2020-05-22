@@ -1,3 +1,7 @@
+# (C) 2019-2020 lifegpc
+# This file is part of bili.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from requests import Session
 def getninfo(r:Session,d:dict):
     re=r.get("https://api.bilibili.com/x/stein/edgeinfo_v2?bvid=%s&graph_version=%s&platform=pc&portal=0&screen=0&buvid=%s"%(d['bvid'],d['gv'],r.cookies.get('buvid3')))
