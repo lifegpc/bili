@@ -42,5 +42,13 @@ def addninfo(d:dict,l:list):
     for k in d['story_list'] :
         if k['edge_id']==i :
             e['cid']=k['cid']
+            if infoqc(e['cid'],l) : #发现重复，跳过
+                return
             l.append(e)
             break
+def infoqc(c:int,l:list):
+    "对互动视频列表进行去重"
+    for i in l:
+        if i['cid']==c :
+            return True
+    return False
