@@ -803,6 +803,7 @@ def main(ip={}):
                 read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip,ud)
     return 0
 if __name__=="__main__" :
+    PrintInfo.pr()
     if len(sys.argv)==1 :
         main()
     else :

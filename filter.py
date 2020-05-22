@@ -20,9 +20,11 @@ import biliDanmuXmlParser
 from os import remove
 import biliDanmuXmlFilter
 import biliDanmuCreate
+from PrintInfo import pr
 if __name__!="__main__" :
     print('请直接运行filter.py')
 else :
+    pr()
     read=biliPlayerXmlParser.loadXML()
     xml=read#弹幕过滤列表
     if read==-1 :

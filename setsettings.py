@@ -16,6 +16,7 @@
 from JSONParser import loadset,saveset,getset
 from re import search
 from goto import with_goto
+from PrintInfo import pr
 l1=['x','','']
 l2=['','x','']
 l3=['','','x']
@@ -60,6 +61,7 @@ def sk(se:dict,key:str,re:dict) :
             if re and key in re:
                 se[key]=re[key]
 if __name__=='__main__' :
+    pr()
     ne={}
     se=loadset()
     if not isinstance(se,dict) :

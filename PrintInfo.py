@@ -133,3 +133,22 @@ def printcho(cho) :
 	for i in cho :
 		print('%s,' %(i['titleFormat']),end='')
 	print()
+def pr() :
+	print("""    bili  版权所有 (C) 2019-2020  lifegpc
+    This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+    本程序不负任何担保责任，欲知详情请键入'show w'。
+    This is free software, and you are welcome to redistribute it
+    under certain conditions; type `show c' for details.
+    这是一个自由软件，欢迎您在特定条件下再发布本程序；欲知详情请键入'show c'。
+""")
+def prc() :
+	try :
+		f=open("LICENSE","r",encoding="utf8")
+		t=f.readline()
+		while t :
+			print(t)
+			t=f.readline()
+		f.close()
+	except :
+		print("Can't find GNU GPL3 LICENSE file, please see <http://www.gnu.org/licenses/>.")
+		print("找不到GNU GPL3 LICENSE文件，请看<http://www.gnu.org/licenses/>。")
