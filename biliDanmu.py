@@ -25,6 +25,7 @@ import json
 import biliLogin
 import biliDanmuAuto
 import file
+from JSONParser import getset
 def downloadh(filen,r,pos,da) :
     d=biliDanmuDown.downloadh(pos,r,biliTime.tostr(biliTime.getDate(da)))
     if d==-1 :
@@ -242,7 +243,7 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip) :
                 print('保存文件失败'+filen)
                 return -2
             return 0
-def DanmuGeta(c,data,r,t,xml,xmlc,ip) :
+def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     "全弹幕处理"
     try :
         if not exists('Download') :
@@ -259,8 +260,18 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip) :
     if t=='av' :
         bs=True
         at2=False
+        fi=True
+        jt=False
+        if getset(se,'jt')==True :
+            jt=True
         while bs :
-            at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻）')
+            if fi and 'jt' in ip:
+                fi=False
+                at=ip['jt']
+            elif jt :
+                at='a'
+            else:
+                at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻）')
             if at.isnumeric() and int(at)<=365 and int(at)>=1 :
                 at=int(at)
                 bs=False

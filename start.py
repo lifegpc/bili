@@ -628,7 +628,7 @@ def main(ip={}):
                 print('不能下载该视频全弹幕！')
                 exit()
             for i in cho :
-                read=biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc,ip)
+                read=biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc,ip,se)
                 if read==-2 :
                     pass
                 elif read==0 :
@@ -764,7 +764,7 @@ def main(ip={}):
                     exit()
         if cho2==2 or cho2==5 :
             for i in cho :
-                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip)
+                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se)
         if cho2>2 :
             bs=True
             cho3=False

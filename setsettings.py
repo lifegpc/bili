@@ -168,4 +168,8 @@ if __name__=='__main__' :
     r=gk(se,'da')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'da',se)
+    print('下载全弹幕时两次抓取之间的天数默认设置为自动？（不设置情况下为否）')
+    r=gk(se,'jt')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'jt',se)
     saveset(ne)
