@@ -589,8 +589,20 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         bs=True
         at2=False
         pubt=data['mediaInfo']['time'][0:10]
+        fi=True
+        jt=False
+        if getset(se,'jt')==True :
+            jt=True
+        if 'jts' in ip :
+            pubt=ip['jts']
         while bs :
-            at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻），输入b手动输入日期(当前日期：%s)' % (pubt))
+            if fi and 'jt' in ip:
+                fi=False
+                at=ip['jt']
+            elif jt :
+                at='a'
+            else:
+                at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻），输入b手动输入日期(当前日期：%s)' % (pubt))
             if at.isnumeric() and int(at)<=365 and int(at)>=1 :
                 at=int(at)
                 bs=False
