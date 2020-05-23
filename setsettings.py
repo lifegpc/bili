@@ -1,6 +1,21 @@
+# (C) 2019-2020 lifegpc
+# This file is part of bili.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from JSONParser import loadset,saveset,getset
 from re import search
-from goto import with_goto
+from PrintInfo import pr
 l1=['x','','']
 l2=['','x','']
 l3=['','','x']
@@ -45,6 +60,7 @@ def sk(se:dict,key:str,re:dict) :
             if re and key in re:
                 se[key]=re[key]
 if __name__=='__main__' :
+    pr()
     ne={}
     se=loadset()
     if not isinstance(se,dict) :
@@ -152,4 +168,8 @@ if __name__=='__main__' :
     r=gk(se,'da')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'da',se)
+    print('下载全弹幕时两次抓取之间的天数默认设置为自动？（不设置情况下为否）')
+    r=gk(se,'jt')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'jt',se)
     saveset(ne)

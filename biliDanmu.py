@@ -1,3 +1,18 @@
+# (C) 2019-2020 lifegpc
+# This file is part of bili.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import biliDanmuDown
 from os.path import exists
 from os import mkdir,remove
@@ -10,6 +25,7 @@ import json
 import biliLogin
 import biliDanmuAuto
 import file
+from JSONParser import getset
 def downloadh(filen,r,pos,da) :
     d=biliDanmuDown.downloadh(pos,r,biliTime.tostr(biliTime.getDate(da)))
     if d==-1 :
@@ -227,7 +243,7 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip) :
                 print('保存文件失败'+filen)
                 return -2
             return 0
-def DanmuGeta(c,data,r,t,xml,xmlc,ip) :
+def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     "全弹幕处理"
     try :
         if not exists('Download') :
@@ -244,8 +260,18 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip) :
     if t=='av' :
         bs=True
         at2=False
+        fi=True
+        jt=False
+        if getset(se,'jt')==True :
+            jt=True
         while bs :
-            at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻）')
+            if fi and 'jt' in ip:
+                fi=False
+                at=ip['jt']
+            elif jt :
+                at='a'
+            else:
+                at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻）')
             if at.isnumeric() and int(at)<=365 and int(at)>=1 :
                 at=int(at)
                 bs=False
@@ -563,8 +589,20 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip) :
         bs=True
         at2=False
         pubt=data['mediaInfo']['time'][0:10]
+        fi=True
+        jt=False
+        if getset(se,'jt')==True :
+            jt=True
+        if 'jts' in ip :
+            pubt=ip['jts']
         while bs :
-            at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻），输入b手动输入日期(当前日期：%s)' % (pubt))
+            if fi and 'jt' in ip:
+                fi=False
+                at=ip['jt']
+            elif jt :
+                at='a'
+            else:
+                at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻），输入b手动输入日期(当前日期：%s)' % (pubt))
             if at.isnumeric() and int(at)<=365 and int(at)>=1 :
                 at=int(at)
                 bs=False

@@ -1,9 +1,27 @@
+# (C) 2019-2020 lifegpc
+# This file is part of bili.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from getopt import getopt
 from re import search
+from PrintInfo import pr,prc
+from biliTime import checktime
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] --httpproxy <URI> --httpsproxy <URI>
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>]
+    start.py show c/w   显示许可证
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
     -p <p数>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号
@@ -31,13 +49,18 @@ def ph() :
     --da <boolean>  收藏夹是否自动下载每一个视频的所有分P
     --httpproxy <URI>   使用HTTP代理
     --httpsproxy <URI>  使用HTTPS代理 
+    --jt <number>|a|b 下载全弹幕时两次抓取之间的天数，范围为1-365，a会启用自动模式（推荐自动模式），番剧模式下b修改抓取起始日期
+    --jts <date>    下载全弹幕时且视频为番剧时抓取起始日期的默认值（原始值为番剧上传时间），格式例如1989-02-25，即年-月-日
+    -F  视频下载时仅显示所有可选画质但不下载
+    -v <id>     视频下载时选择相应的画质，id为画质前序号
+    -a <id>     视频下载时选择相应的音质，id为音质前序号
     注1：如出现相同的选项，只有第一个会生效
     注2：命令行参数的优先级高于settings.json里的设置
     注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
     注4：当下载收藏夹/频道，除了-i和-p参数外，其他参数将被沿用至收藏夹/频道视频的下载设置，-i和-p参数只对收藏夹/频道起作用'''
     print(h)
 def gopt(args) :
-    re=getopt(args,'h?i:d:p:m:r:yn',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy='])
+    re=getopt(args,'h?i:d:p:m:r:ynFv:a:',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts='])
     rr=re[0]
     r={}
     for i in rr:
@@ -84,9 +107,9 @@ def gopt(args) :
         if i[0]=='--nf' and not 'yf' in r:
             r['yf']=False
         if i[0]=='--mc' and not 'mc' in r:
-            if i[1]=='avc' :
+            if i[1].lower()=='avc' :
                 r['mc']=True
-            elif i[1]=='hev' :
+            elif i[1].lower()=='hev' :
                 r['mc']=False
         if i[0]=='--ar' and not 'ar' in r:
             r['ar']=True
@@ -112,8 +135,8 @@ def gopt(args) :
         if i[0]=='--nab' and not 'ab' in r:
             r['ab']=False
         if i[0]=='--fa' and not 'fa' in r:
-            if i[1]=='none' or i[1]=='prealloc' or i[1]=='trunc' or i[1]=='falloc':
-                r['fa']=i[1]
+            if i[1].lower()=='none' or i[1].lower()=='prealloc' or i[1].lower()=='trunc' or i[1].lower()=='falloc':
+                r['fa']=i[1].lower()
         if i[0]=='--sv' and not 'sv' in r:
             if i[1].lower()=='true' :
                 r['sv']=True
@@ -137,8 +160,29 @@ def gopt(args) :
             r['httpproxy']=i[1]
         if i[0]=='--httpsproxy' and not 'httpsproxy' in r:
             r['httpsproxy']=i[1]
+        if i[0]=="--jt" and not 'jt' in r:
+            if i[1].lower()=='a' or i[1].lower()=='b' or i[1].isnumeric():
+                r['jt']=i[1].lower()
+        if i[0]=='--jts' and not 'jts' in r:
+            if checktime(i[1]) :
+                r['jts']=i[1]
+        if i[0]=='-F' and not 'F' in r:
+            r['F']=True
+        if i[0]=='-v' and not 'v' in r:
+            if i[1].isnumeric() :
+                if int(i[1])>0 :
+                    r['v']=i[1]
+        if i[0]=='-a' and not 'a' in r:
+            if i[1].isnumeric():
+                if int(i[1])>0:
+                    r['a']=i[1]
+    for i in re[1] :
+        if i.lower()=="show":
+            prc()
+            exit()
     return r
 if __name__ == "__main__":
+    pr()
     import sys
     print(sys.argv)
     if len(sys.argv)==1 :

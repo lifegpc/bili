@@ -1,3 +1,18 @@
+# (C) 2019-2020 lifegpc
+# This file is part of bili.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from time import localtime,strftime
 from biliTime import tostr2
 def printInfo(data) :
@@ -118,3 +133,24 @@ def printcho(cho) :
 	for i in cho :
 		print('%s,' %(i['titleFormat']),end='')
 	print()
+def pr() :
+	print("""    bili  版权所有 (C) 2019-2020  lifegpc
+    This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
+    本程序不负任何担保责任，欲知详情请键入'show w'。
+    This is free software, and you are welcome to redistribute it
+    under certain conditions; type `show c' for details.
+    这是一个自由软件，欢迎您在特定条件下再发布本程序；欲知详情请键入'show c'。
+    You can find the source code on <https://github.com/lifegpc/bili>.
+    你可以在<https://github.com/lifegpc/bili>上找到源代码。
+""")
+def prc() :
+	try :
+		f=open("LICENSE","r",encoding="utf8")
+		t=f.readline()
+		while t :
+			print(t)
+			t=f.readline()
+		f.close()
+	except :
+		print("Can't find GNU GPL3 LICENSE file, please see <http://www.gnu.org/licenses/>.")
+		print("找不到GNU GPL3 LICENSE文件，请看<http://www.gnu.org/licenses/>。")
