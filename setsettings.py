@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from JSONParser import loadset,saveset,getset
 from re import search
-from goto import with_goto
 from PrintInfo import pr
 l1=['x','','']
 l2=['','x','']

@@ -21,7 +21,6 @@ import time
 import os
 from dictcopy import copydict,copylist
 from re import search
-from goto import with_goto
 from requests.structures import CaseInsensitiveDict
 from biliTime import tostr2
 import bstr
@@ -161,7 +160,6 @@ def sev(s:str) :
     if t:
         return t.groups()[0]
     return ""
-@with_goto
 def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     """下载av号视频
     -1 cookies.json读取错误
@@ -327,126 +325,130 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         for k in durl :
             if len(durl)==1 :
                 fn='%s.%s' % (filen,hzm)
-                label .a # pylint: disable=undefined-variable
-                ar=False
-                if JSONParser.getset(se,'a')==True :
-                    ar=True
-                if 'ar' in ip :
-                    if ip['ar']:
+                bs2=True
+                while bs2:
+                    bs2=False
+                    ar=False
+                    if JSONParser.getset(se,'a')==True :
                         ar=True
-                    else :
-                        ar=False
-                if os.system('aria2c -h 1>&0')==0 and ar :
-                    ab=True
-                    if JSONParser.getset(se,'ab')==False :
-                        ab=False
-                    if 'ab' in ip:
-                        if ip['ab']:
-                            ab=True
+                    if 'ar' in ip :
+                        if ip['ar']:
+                            ar=True
                         else :
+                            ar=False
+                    if os.system('aria2c -h 1>&0')==0 and ar :
+                        ab=True
+                        if JSONParser.getset(se,'ab')==False :
                             ab=False
-                    if ab :
-                        read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se)
+                        if 'ab' in ip:
+                            if ip['ab']:
+                                ab=True
+                            else :
+                                ab=False
+                        if ab :
+                            read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se)
+                        else :
+                            read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se)
+                        if read==-3 :
+                            print('aria2c 参数错误')
+                            return -4
                     else :
-                        read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se)
-                    if read==-3 :
-                        print('aria2c 参数错误')
-                        return -4
-                else :
-                    re=r2.get(k['url'],stream=True)
-                    read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
-                if read==-1 :
-                    return -1
-                elif read==-2 :
-                    bs=True
-                    rc=False
-                    read=JSONParser.getset(se,'rd')
-                    if read==True :
-                        bs=False
-                        rc=True
-                    elif read==False :
-                        bs=False
-                    if 'r' in ip:
-                        if ip['r']:
+                        re=r2.get(k['url'],stream=True)
+                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
+                    if read==-1 :
+                        return -1
+                    elif read==-2 :
+                        bs=True
+                        rc=False
+                        read=JSONParser.getset(se,'rd')
+                        if read==True :
+                            bs=False
                             rc=True
+                        elif read==False :
                             bs=False
-                        else:
-                            rc=False
-                            bs=False
-                    while bs :
-                        inp=input('文件下载失败，是否重新下载？(y/n)')
-                        if len(inp)>0 :
-                            if inp[0].lower()=='y' :
-                                bs=False
+                        if 'r' in ip:
+                            if ip['r']:
                                 rc=True
-                            elif inp[0].lower()=='n' :
                                 bs=False
-                    if rc :
-                        os.remove(fn)
-                        goto .a # pylint: disable=undefined-variable
-                    else :
-                        return -3
+                            else:
+                                rc=False
+                                bs=False
+                        while bs :
+                            inp=input('文件下载失败，是否重新下载？(y/n)')
+                            if len(inp)>0 :
+                                if inp[0].lower()=='y' :
+                                    bs=False
+                                    rc=True
+                                elif inp[0].lower()=='n' :
+                                    bs=False
+                        if rc :
+                            os.remove(fn)
+                            bs2=True
+                        else :
+                            return -3
             else :
                 fn='%s_%s.%s' %(filen,j,hzm)
-                label .b # pylint: disable=undefined-variable
-                ar=False
-                if JSONParser.getset(se,'a')==True :
-                    ar=True
-                if 'ar' in ip :
-                    if ip['ar']:
+                bs2=True
+                while bs2:
+                    bs2=False
+                    ar=False
+                    if JSONParser.getset(se,'a')==True :
                         ar=True
-                    else :
-                        ar=False
-                if os.system('aria2c -h 1>&0')==0 and ar :
-                    ab=True
-                    if JSONParser.getset(se,'ab')==False :
-                        ab=False
-                    if 'ab' in ip:
-                        if ip['ab']:
-                            ab=True
+                    if 'ar' in ip :
+                        if ip['ar']:
+                            ar=True
                         else :
+                            ar=False
+                    if os.system('aria2c -h 1>&0')==0 and ar :
+                        ab=True
+                        if JSONParser.getset(se,'ab')==False :
                             ab=False
-                    if ab:
-                        read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se,j,len(durl),True)
+                        if 'ab' in ip:
+                            if ip['ab']:
+                                ab=True
+                            else :
+                                ab=False
+                        if ab:
+                            read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se,j,len(durl),True)
+                        else :
+                            read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se,j,len(durl),True)
+                        if read==-3 :
+                            print('aria2c 参数错误')
+                            return -4
                     else :
-                        read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se,j,len(durl),True)
-                    if read==-3 :
-                        print('aria2c 参数错误')
-                        return -4
-                else :
-                    re=r2.get(k['url'],stream=True)
-                    read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
-                if read==-1 :
-                    return -1
-                elif read==-2 :
-                    bs=True
-                    rc=False
-                    read=JSONParser.getset(se,'rd')
-                    if read==True :
-                        bs=False
-                        rc=True
-                    elif read==False :
-                        bs=False
-                    if 'r' in ip:
-                        if ip['r']:
+                        re=r2.get(k['url'],stream=True)
+                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                    if read==-1 :
+                        return -1
+                    elif read==-2 :
+                        bs=True
+                        rc=False
+                        read=JSONParser.getset(se,'rd')
+                        if read==True :
+                            bs=False
                             rc=True
+                        elif read==False :
                             bs=False
-                        else:
-                            rc=False
-                            bs=False
-                    while bs :
-                        inp=input('文件下载失败，是否重新下载？(y/n)')
-                        if len(inp)>0 :
-                            if inp[0].lower()=='y' :
-                                bs=False
+                        if 'r' in ip:
+                            if ip['r']:
                                 rc=True
-                            elif inp[0].lower()=='n' :
                                 bs=False
-                    if rc :
-                        os.remove(fn)
-                        goto .b # pylint: disable=undefined-variable
-                    else :
-                        return -3
+                            else:
+                                rc=False
+                                bs=False
+                        while bs :
+                            inp=input('文件下载失败，是否重新下载？(y/n)')
+                            if len(inp)>0 :
+                                if inp[0].lower()=='y' :
+                                    bs=False
+                                    rc=True
+                                elif inp[0].lower()=='n' :
+                                    bs=False
+                        if rc :
+                            os.remove(fn)
+                            bs2=True
+                        else :
+                            return -3
                 com=com+k['size']
             j=j+1
         if 'sub' in data :
@@ -681,124 +683,128 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             else:
                 return 0
         durz=dash['video']['size']+dash['audio']['size']
-        label .c # pylint: disable=undefined-variable
-        ar=False
-        if JSONParser.getset(se,'a')==True :
-            ar=True
-        if 'ar' in ip :
-            if ip['ar']:
+        bs2=True
+        while bs2:
+            bs2=False
+            ar=False
+            if JSONParser.getset(se,'a')==True :
                 ar=True
-            else :
-                ar=False
-        if os.system('aria2c -h 1>&0')==0 and ar :
-            ab=True
-            if JSONParser.getset(se,'ab')==False :
-                ab=False
-            if 'ab' in ip:
-                if ip['ab']:
-                    ab=True
+            if 'ar' in ip :
+                if ip['ar']:
+                    ar=True
                 else :
+                    ar=False
+            if os.system('aria2c -h 1>&0')==0 and ar :
+                ab=True
+                if JSONParser.getset(se,'ab')==False :
                     ab=False
-            if ab:
-                read=dwaria2(r2,getfn(0,i,data,vqs,hzm),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
+                if 'ab' in ip:
+                    if ip['ab']:
+                        ab=True
+                    else :
+                        ab=False
+                if ab:
+                    read=dwaria2(r2,getfn(0,i,data,vqs,hzm),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
+                else :
+                    read=dwaria2(r2,getfn(0,i,data,vqs,hzm),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
+                if read==-3 :
+                    print('aria2c 参数错误')
+                    return -4
             else :
-                read=dwaria2(r2,getfn(0,i,data,vqs,hzm),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
-            if read==-3 :
-                print('aria2c 参数错误')
-                return -4
-        else :
-            re=r2.get(dash['video']['base_url'],stream=True)
-            read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
-        if read==-1 :
-            return -1
-        elif read==-2 :
-            bs=True
-            rc=False
-            read=JSONParser.getset(se,'rd')
-            if read==True :
-                bs=False
-                rc=True
-            elif read==False :
-                bs=False
-            if 'r' in ip:
-                if ip['r']:
+                re=r2.get(dash['video']['base_url'],stream=True)
+                read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
+            if read==-1 :
+                return -1
+            elif read==-2 :
+                bs=True
+                rc=False
+                read=JSONParser.getset(se,'rd')
+                if read==True :
+                    bs=False
                     rc=True
+                elif read==False :
                     bs=False
-                else:
-                    rc=False
-                    bs=False
-            while bs :
-                inp=input('文件下载失败，是否重新下载？(y/n)')
-                if len(inp)>0 :
-                    if inp[0].lower()=='y' :
-                        bs=False
+                if 'r' in ip:
+                    if ip['r']:
                         rc=True
-                    elif inp[0].lower()=='n' :
                         bs=False
-            if rc :
-                os.remove(getfn(0,i,data,vqs,hzm))
-                goto .c # pylint: disable=undefined-variable
-            else :
-                return -3
-        label .d # pylint: disable=undefined-variable
-        ar=False
-        if JSONParser.getset(se,'a')==True :
-            ar=True
-        if 'ar' in ip :
-            if ip['ar']:
+                    else:
+                        rc=False
+                        bs=False
+                while bs :
+                    inp=input('文件下载失败，是否重新下载？(y/n)')
+                    if len(inp)>0 :
+                        if inp[0].lower()=='y' :
+                            bs=False
+                            rc=True
+                        elif inp[0].lower()=='n' :
+                            bs=False
+                if rc :
+                    os.remove(getfn(0,i,data,vqs,hzm))
+                    bs2=True
+                else :
+                    return -3
+        bs2=True
+        while bs2:
+            bs2=False
+            ar=False
+            if JSONParser.getset(se,'a')==True :
                 ar=True
-            else :
-                ar=False
-        if os.system('aria2c -h 1>&0')==0 and ar :
-            ab=True
-            if JSONParser.getset(se,'ab')==False :
-                ab=False
-            if 'ab' in ip:
-                if ip['ab']:
-                    ab=True
+            if 'ar' in ip :
+                if ip['ar']:
+                    ar=True
                 else :
+                    ar=False
+            if os.system('aria2c -h 1>&0')==0 and ar :
+                ab=True
+                if JSONParser.getset(se,'ab')==False :
                     ab=False
-            if ab:
-                read=dwaria2(r2,getfn(1,i,data,vqs,hzm),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
+                if 'ab' in ip:
+                    if ip['ab']:
+                        ab=True
+                    else :
+                        ab=False
+                if ab:
+                    read=dwaria2(r2,getfn(1,i,data,vqs,hzm),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
+                else :
+                    read=dwaria2(r2,getfn(1,i,data,vqs,hzm),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
+                if read==-3 :
+                    print('aria2c 参数错误')
+                    return -4
             else :
-                read=dwaria2(r2,getfn(1,i,data,vqs,hzm),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
-            if read==-3 :
-                print('aria2c 参数错误')
-                return -4
-        else :
-            re=r2.get(dash['audio']['base_url'],stream=True)
-            read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
-        if read==-1:
-            return -1
-        elif read==-2 :
-            bs=True
-            rc=False
-            read=JSONParser.getset(se,'rd')
-            if read==True :
-                bs=False
-                rc=True
-            elif read==False :
-                bs=False
-            if 'r' in ip:
-                if ip['r']:
+                re=r2.get(dash['audio']['base_url'],stream=True)
+                read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+            if read==-1:
+                return -1
+            elif read==-2 :
+                bs=True
+                rc=False
+                read=JSONParser.getset(se,'rd')
+                if read==True :
+                    bs=False
                     rc=True
+                elif read==False :
                     bs=False
-                else:
-                    rc=False
-                    bs=False
-            while bs :
-                inp=input('文件下载失败，是否重新下载？(y/n)')
-                if len(inp)>0 :
-                    if inp[0].lower()=='y' :
-                        bs=False
+                if 'r' in ip:
+                    if ip['r']:
                         rc=True
-                    elif inp[0].lower()=='n' :
                         bs=False
-            if rc :
-                os.remove(getfn(1,i,data,vqs,hzm))
-                goto .d # pylint: disable=undefined-variable
-            else :
-                return -3
+                    else:
+                        rc=False
+                        bs=False
+                while bs :
+                    inp=input('文件下载失败，是否重新下载？(y/n)')
+                    if len(inp)>0 :
+                        if inp[0].lower()=='y' :
+                            bs=False
+                            rc=True
+                        elif inp[0].lower()=='n' :
+                            bs=False
+                if rc :
+                    os.remove(getfn(1,i,data,vqs,hzm))
+                    bs2=True
+                else :
+                    return -3
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2,filen,s,ip,se)
@@ -840,7 +846,6 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if 'sub' in data:
                     for j in data['sub'] :
                         os.remove(j['fn'])
-@with_goto
 def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     """下载番剧等视频"""
     if not os.path.exists('Download/') :
@@ -1042,124 +1047,128 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             else:
                 return 0
         durz=dash['video']['size']+dash['audio']['size']
-        label .e # pylint: disable=undefined-variable
-        ar=False
-        if JSONParser.getset(se,'a')==True :
-            ar=True
-        if 'ar' in ip :
-            if ip['ar']:
+        bs2=True
+        while bs2:
+            bs2=False
+            ar=False
+            if JSONParser.getset(se,'a')==True :
                 ar=True
-            else :
-                ar=False
-        if os.system('aria2c -h 1>&0')==0 and ar :
-            ab=True
-            if JSONParser.getset(se,'ab')==False :
-                ab=False
-            if 'ab' in ip:
-                if ip['ab']:
-                    ab=True
+            if 'ar' in ip :
+                if ip['ar']:
+                    ar=True
                 else :
+                    ar=False
+            if os.system('aria2c -h 1>&0')==0 and ar :
+                ab=True
+                if JSONParser.getset(se,'ab')==False :
                     ab=False
-            if ab:
-                read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
+                if 'ab' in ip:
+                    if ip['ab']:
+                        ab=True
+                    else :
+                        ab=False
+                if ab:
+                    read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
+                else :
+                    read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
+                if read==-3 :
+                    print('aria2c 参数错误')
+                    return -4
             else :
-                read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
-            if read==-3 :
-                print('aria2c 参数错误')
-                return -4
-        else :
-            re=r2.get(dash['video']['base_url'],stream=True)
-            read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
-        if read==-1 :
-            return -1
-        elif read==-2 :
-            bs=True
-            rc=False
-            read=JSONParser.getset(se,'rd')
-            if read==True :
-                bs=False
-                rc=True
-            elif read==False :
-                bs=False
-            if 'r' in ip:
-                if ip['r']:
+                re=r2.get(dash['video']['base_url'],stream=True)
+                read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
+            if read==-1 :
+                return -1
+            elif read==-2 :
+                bs=True
+                rc=False
+                read=JSONParser.getset(se,'rd')
+                if read==True :
+                    bs=False
                     rc=True
+                elif read==False :
                     bs=False
-                else:
-                    rc=False
-                    bs=False
-            while bs :
-                inp=input('文件下载失败，是否重新下载？(y/n)')
-                if len(inp)>0 :
-                    if inp[0].lower()=='y' :
-                        bs=False
+                if 'r' in ip:
+                    if ip['r']:
                         rc=True
-                    elif inp[0].lower()=='n' :
                         bs=False
-            if rc :
-                os.remove(getfn2(i,0,fdir,vqs,hzm))
-                goto .e # pylint: disable=undefined-variable
-            else :
-                return -3
-        label .f # pylint: disable=undefined-variable
-        ar=False
-        if JSONParser.getset(se,'a')==True :
-            ar=True
-        if 'ar' in ip :
-            if ip['ar']:
+                    else:
+                        rc=False
+                        bs=False
+                while bs :
+                    inp=input('文件下载失败，是否重新下载？(y/n)')
+                    if len(inp)>0 :
+                        if inp[0].lower()=='y' :
+                            bs=False
+                            rc=True
+                        elif inp[0].lower()=='n' :
+                            bs=False
+                if rc :
+                    os.remove(getfn2(i,0,fdir,vqs,hzm))
+                    bs2=True
+                else :
+                    return -3
+        bs2=True
+        while bs2:
+            bs2=False
+            ar=False
+            if JSONParser.getset(se,'a')==True :
                 ar=True
-            else :
-                ar=False
-        if os.system('aria2c -h 1>&0')==0 and ar :
-            ab=True
-            if JSONParser.getset(se,'ab')==False :
-                ab=False
-            if 'ab' in ip:
-                if ip['ab']:
-                    ab=True
+            if 'ar' in ip :
+                if ip['ar']:
+                    ar=True
                 else :
+                    ar=False
+            if os.system('aria2c -h 1>&0')==0 and ar :
+                ab=True
+                if JSONParser.getset(se,'ab')==False :
                     ab=False
-            if ab:
-                read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
+                if 'ab' in ip:
+                    if ip['ab']:
+                        ab=True
+                    else :
+                        ab=False
+                if ab:
+                    read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
+                else :
+                    read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
+                if read==-3 :
+                    print('aria2c 参数错误')
+                    return -4
             else :
-                read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
-            if read==-3 :
-                print('aria2c 参数错误')
-                return -4
-        else :
-            re=r2.get(dash['audio']['base_url'],stream=True)
-            read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
-        if read==-1 :
-            return -1
-        elif read==-2 :
-            bs=True
-            rc=False
-            read=JSONParser.getset(se,'rd')
-            if read==True :
-                bs=False
-                rc=True
-            elif read==False :
-                bs=False
-            if 'r' in ip:
-                if ip['r']:
+                re=r2.get(dash['audio']['base_url'],stream=True)
+                read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+            if read==-1 :
+                return -1
+            elif read==-2 :
+                bs=True
+                rc=False
+                read=JSONParser.getset(se,'rd')
+                if read==True :
+                    bs=False
                     rc=True
+                elif read==False :
                     bs=False
-                else:
-                    rc=False
-                    bs=False
-            while bs :
-                inp=input('文件下载失败，是否重新下载？(y/n)')
-                if len(inp)>0 :
-                    if inp[0].lower()=='y' :
-                        bs=False
+                if 'r' in ip:
+                    if ip['r']:
                         rc=True
-                    elif inp[0].lower()=='n' :
                         bs=False
-            if rc :
-                os.remove(getfn2(i,1,fdir,vqs,hzm))
-                goto .f # pylint: disable=undefined-variable
-            else :
-                return -3
+                    else:
+                        rc=False
+                        bs=False
+                while bs :
+                    inp=input('文件下载失败，是否重新下载？(y/n)')
+                    if len(inp)>0 :
+                        if inp[0].lower()=='y' :
+                            bs=False
+                            rc=True
+                        elif inp[0].lower()=='n' :
+                            bs=False
+                if rc :
+                    os.remove(getfn2(i,1,fdir,vqs,hzm))
+                    bs2=True
+                else :
+                    return -3
         if os.system('ffmpeg -h 2>&0 1>&0')==0 and ff:
             print('将用ffmpeg自动合成')
             re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen))
@@ -1302,126 +1311,130 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         for k in durl :
             if len(durl)==1 :
                 fn='%s.%s' % (filen,hzm)
-                label .a # pylint: disable=undefined-variable
-                ar=False
-                if JSONParser.getset(se,'a')==True :
-                    ar=True
-                if 'ar' in ip :
-                    if ip['ar']:
+                bs2=True
+                while bs2:
+                    bs2=False
+                    ar=False
+                    if JSONParser.getset(se,'a')==True :
                         ar=True
-                    else :
-                        ar=False
-                if os.system('aria2c -h 1>&0')==0 and ar :
-                    ab=True
-                    if JSONParser.getset(se,'ab')==False :
-                        ab=False
-                    if 'ab' in ip:
-                        if ip['ab']:
-                            ab=True
+                    if 'ar' in ip :
+                        if ip['ar']:
+                            ar=True
                         else :
+                            ar=False
+                    if os.system('aria2c -h 1>&0')==0 and ar :
+                        ab=True
+                        if JSONParser.getset(se,'ab')==False :
                             ab=False
-                    if ab :
-                        read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se)
+                        if 'ab' in ip:
+                            if ip['ab']:
+                                ab=True
+                            else :
+                                ab=False
+                        if ab :
+                            read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se)
+                        else :
+                            read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se)
+                        if read==-3 :
+                            print('aria2c 参数错误')
+                            return -4
                     else :
-                        read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se)
-                    if read==-3 :
-                        print('aria2c 参数错误')
-                        return -4
-                else :
-                    re=r2.get(k['url'],stream=True)
-                    read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
-                if read==-1 :
-                    return -1
-                elif read==-2 :
-                    bs=True
-                    rc=False
-                    read=JSONParser.getset(se,'rd')
-                    if read==True :
-                        bs=False
-                        rc=True
-                    elif read==False :
-                        bs=False
-                    if 'r' in ip:
-                        if ip['r']:
+                        re=r2.get(k['url'],stream=True)
+                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
+                    if read==-1 :
+                        return -1
+                    elif read==-2 :
+                        bs=True
+                        rc=False
+                        read=JSONParser.getset(se,'rd')
+                        if read==True :
+                            bs=False
                             rc=True
+                        elif read==False :
                             bs=False
-                        else:
-                            rc=False
-                            bs=False
-                    while bs :
-                        inp=input('文件下载失败，是否重新下载？(y/n)')
-                        if len(inp)>0 :
-                            if inp[0].lower()=='y' :
-                                bs=False
+                        if 'r' in ip:
+                            if ip['r']:
                                 rc=True
-                            elif inp[0].lower()=='n' :
                                 bs=False
-                    if rc :
-                        os.remove(fn)
-                        goto .a # pylint: disable=undefined-variable
-                    else :
-                        return -3
+                            else:
+                                rc=False
+                                bs=False
+                        while bs :
+                            inp=input('文件下载失败，是否重新下载？(y/n)')
+                            if len(inp)>0 :
+                                if inp[0].lower()=='y' :
+                                    bs=False
+                                    rc=True
+                                elif inp[0].lower()=='n' :
+                                    bs=False
+                        if rc :
+                            os.remove(fn)
+                            bs2=True
+                        else :
+                            return -3
             else :
                 fn='%s_%s.%s' %(filen,j,hzm)
-                label .b # pylint: disable=undefined-variable
-                ar=False
-                if JSONParser.getset(se,'a')==True :
-                    ar=True
-                if 'ar' in ip :
-                    if ip['ar']:
+                bs2=True
+                while bs2:
+                    bs2=False
+                    ar=False
+                    if JSONParser.getset(se,'a')==True :
                         ar=True
-                    else :
-                        ar=False
-                if os.system('aria2c -h 1>&0')==0 and ar :
-                    ab=True
-                    if JSONParser.getset(se,'ab')==False :
-                        ab=False
-                    if 'ab' in ip:
-                        if ip['ab']:
-                            ab=True
+                    if 'ar' in ip :
+                        if ip['ar']:
+                            ar=True
                         else :
+                            ar=False
+                    if os.system('aria2c -h 1>&0')==0 and ar :
+                        ab=True
+                        if JSONParser.getset(se,'ab')==False :
                             ab=False
-                    if ab:
-                        read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se,j,len(durl),True)
+                        if 'ab' in ip:
+                            if ip['ab']:
+                                ab=True
+                            else :
+                                ab=False
+                        if ab:
+                            read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se,j,len(durl),True)
+                        else :
+                            read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se,j,len(durl),True)
+                        if read==-3 :
+                            print('aria2c 参数错误')
+                            return -4
                     else :
-                        read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se,j,len(durl),True)
-                    if read==-3 :
-                        print('aria2c 参数错误')
-                        return -4
-                else :
-                    re=r2.get(k['url'],stream=True)
-                    read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
-                if read==-1 :
-                    return -1
-                elif read==-2 :
-                    bs=True
-                    rc=False
-                    read=JSONParser.getset(se,'rd')
-                    if read==True :
-                        bs=False
-                        rc=True
-                    elif read==False :
-                        bs=False
-                    if 'r' in ip:
-                        if ip['r']:
+                        re=r2.get(k['url'],stream=True)
+                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                    if read==-1 :
+                        return -1
+                    elif read==-2 :
+                        bs=True
+                        rc=False
+                        read=JSONParser.getset(se,'rd')
+                        if read==True :
+                            bs=False
                             rc=True
+                        elif read==False :
                             bs=False
-                        else:
-                            rc=False
-                            bs=False
-                    while bs :
-                        inp=input('文件下载失败，是否重新下载？(y/n)')
-                        if len(inp)>0 :
-                            if inp[0].lower()=='y' :
-                                bs=False
+                        if 'r' in ip:
+                            if ip['r']:
                                 rc=True
-                            elif inp[0].lower()=='n' :
                                 bs=False
-                    if rc :
-                        os.remove(fn)
-                        goto .b # pylint: disable=undefined-variable
-                    else :
-                        return -3
+                            else:
+                                rc=False
+                                bs=False
+                        while bs :
+                            inp=input('文件下载失败，是否重新下载？(y/n)')
+                            if len(inp)>0 :
+                                if inp[0].lower()=='y' :
+                                    bs=False
+                                    rc=True
+                                elif inp[0].lower()=='n' :
+                                    bs=False
+                        if rc :
+                            os.remove(fn)
+                            bs2=True
+                        else :
+                            return -3
                 com=com+k['size']
             j=j+1
         if (len(durl)>1 or ma) and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
@@ -1558,16 +1571,17 @@ def getfn2(i,i2,f,vqs,hzm) :
         return '%s/%s'%(f,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
     else :
         return '%s/%s'%(f,file.filtern('%s.%s(%s%s,AV%s,%s,ID%s,%s,%s).%s'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
-@with_goto
 def streamgetlength(r:requests.Session,uri):
-    label .g # pylint: disable=undefined-variable
-    try :
-        re=r.get(uri,stream=True)
-        a=int(re.headers.get('Content-Length'))
-        re.close()
-        return a
-    except :
-        print('获取文件大小失败。尝试重新获取……')
-        goto .g # pylint: disable=undefined-variable
+    bs=True
+    while bs:
+        bs=False
+        try :
+            re=r.get(uri,stream=True)
+            a=int(re.headers.get('Content-Length'))
+            re.close()
+            return a
+        except :
+            print('获取文件大小失败。尝试重新获取……')
+            bs=True
 if __name__=="__main__" :
     print("请使用start.py")
