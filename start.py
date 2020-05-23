@@ -52,6 +52,7 @@ def main(ip={}):
     fid=-1 #收藏夹id
     cid=-1 #频道id
     uvd={} #投稿查询信息
+    pld={} #收藏夹扩展信息
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -69,7 +70,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?fid=([0-9]+))?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -117,8 +118,20 @@ def main(ip={}):
             elif re[12] :
                 pl=True
                 uid=int(re[12])
+                pld['k']=''
+                pld['t']=0
                 if re[14] :
-                    fid=int(re[14])
+                    sl=re[14].split('&')
+                    for us in sl:
+                        rep=search(r'^(fid=([0-9]+))?(keyword=(.+))?(type=([0-9]+))?',us,I)
+                        if rep!=None :
+                            rep=rep.groups()
+                            if rep[0]:
+                                fid=int(rep[1])
+                            if rep[2]:
+                                pld['k']=rep[3]
+                            if rep[4]:
+                                pld['t']=int(rep[5])
             elif re[15]:
                 ch=True
                 uid=int(re[16])
@@ -201,7 +214,7 @@ def main(ip={}):
                     print('获取收藏夹列表失败')
                     return -1
         i=1
-        re=JSONParser.getpli(section,fid,i)
+        re=JSONParser.getpli(section,fid,i,pld)
         if re==-1 :
             return -1
         pli=JSONParser.getplinfo(re)
@@ -211,7 +224,7 @@ def main(ip={}):
         JSONParser.getpliv(plv,re)
         while i<n :
             i=i+1
-            re=JSONParser.getpli(section,fid,i)
+            re=JSONParser.getpli(section,fid,i,pld)
             if re==-1 :
                 return -1
             JSONParser.getpliv(plv,re)

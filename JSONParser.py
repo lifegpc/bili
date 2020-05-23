@@ -165,8 +165,8 @@ def getplinfo(d:dict) :
     r['mtime']=t['mtime']
     r['count']=t['media_count']
     return r
-def getpli(r,f,i):
-    uri='https://api.bilibili.com/x/v3/fav/resource/list?media_id=%s&pn=%s&ps=20&keyword=&order=mtime&type=0&tid=0&jsonp=jsonp'%(f,i)
+def getpli(r,f,i,d:dict):
+    uri='https://api.bilibili.com/x/v3/fav/resource/list?media_id=%s&pn=%s&ps=20&keyword=%s&order=mtime&type=%s&tid=0&jsonp=jsonp'%(f,i,d['k'],d['t'])
     bs=True
     while bs :
         try :
