@@ -166,6 +166,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     -2 API Error
     -3 下载错误
     -4 aria2c参数错误"""
+    F=False #仅输出视频信息
+    if 'F' in ip:
+        F=True
     if not os.path.exists('Download/') :
         os.mkdir('Download/')
     r2=requests.Session()
@@ -212,7 +215,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         durl={vq:re["data"]['durl']}
         durz={}
         vqs=""
-        if not c :
+        if not c or F:
             j=0
             for l in avq :
                 if not l in durl :
@@ -242,6 +245,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 durz[l]=size
                 print("大小：%s(%sB,%s)"%(file.info.size(size),size,file.cml(size,re['data']['timelength'])))
             r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+            if F :
+                return 0
             bs=True
             while bs :
                 inp=input('请选择画质：')
@@ -556,7 +561,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
         aaq.sort(reverse=True)
-        if c:
+        if c and not F:
             p=0 #0 第一个 1 avc 2 hev
             read=JSONParser.getset(se,'mpc')
             if read==True :
@@ -600,7 +605,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
                 print('大小：%s(%sB,%s)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size'],file.cml(dash['video'][j]['size'],re['data']['timelength'])))
                 k=k+1
-            if len(avq)>1 :
+            if len(avq)>1 and not F :
                 bs=True
                 while bs:
                     inp=input('请选择画质：')
@@ -610,7 +615,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             dash['video']=dash['video'][avq[int(inp)-1]]
                             print('已选择%s(%s)画质'%(vqd[sea(avq[int(inp)-1],avq2)],sev(avq[int(inp)-1])))
                             vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
-            else :
+            elif not F :
                 dash['video']=dash['video'][avq[0]]
                 vqs.append(vqd[0]+","+sev(avq[0]))
             print('音频轨：')
@@ -620,6 +625,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 dash['audio'][j]['size']=streamgetlength(r2,dash['audio'][j]['base_url'])
                 print('大小：%s(%sB,%s)'%(file.info.size(dash['audio'][j]['size']),dash['audio'][j]['size'],file.cml(dash['audio'][j]['size'],re['data']['timelength'])))
                 k=k+1
+            if F:
+                return 0
             if len(aaq)>1:
                 bs=True
                 while bs:
@@ -850,6 +857,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     """下载番剧等视频"""
     if not os.path.exists('Download/') :
         os.mkdir('Download/')
+    F=False
+    if 'F' in ip:
+        F=True
     fdir='Download/%s'%(file.filtern('%s(SS%s)'%(data['mediaInfo']['title'],data['mediaInfo']['ssId'])))
     url2='https://bilibili.com/bangumi/play/ep'+str(i['id'])
     if not os.path.exists(fdir):
@@ -920,7 +930,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
         aaq.sort(reverse=True)
-        if c:
+        if c and not F:
             p=0 #0 第一个 1 avc 2 hev
             read=JSONParser.getset(se,'mpc')
             if read==True :
@@ -964,7 +974,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
                 print('大小：%s(%sB,%s)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size'],file.cml(dash['video'][j]['size'],re['data']['timelength'])))
                 k=k+1
-            if len(avq)>1 :
+            if len(avq)>1 and not F:
                 bs=True
                 while bs:
                     inp=input('请选择画质：')
@@ -974,7 +984,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             dash['video']=dash['video'][avq[int(inp)-1]]
                             print('已选择%s(%s)画质'%(vqd[sea(avq[int(inp)-1],avq2)],sev(avq[int(inp)-1])))
                             vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
-            else :
+            elif not F :
                 dash['video']=dash['video'][avq[0]]
                 vqs.append(vqd[0]+","+sev(avq[0]))
             print('音频轨：')
@@ -984,6 +994,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 dash['audio'][j]['size']=streamgetlength(r2,dash['audio'][j]['base_url'])
                 print('大小：%s(%sB,%s)'%(file.info.size(dash['audio'][j]['size']),dash['audio'][j]['size'],file.cml(dash['audio'][j]['size'],re['data']['timelength'])))
                 k=k+1
+            if F:
+                return 0
             if len(aaq)>1:
                 bs=True
                 while bs:
@@ -1207,7 +1219,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         durl={vq:re["data"]['durl']}
         durz={}
         vqs=""
-        if not c :
+        if not c or F:
             j=0
             for l in avq :
                 if not l in durl :
@@ -1228,6 +1240,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 durz[l]=size
                 print("大小：%s(%sB,%s)"%(file.info.size(size),size,file.cml(size,re['data']['timelength'])))
             r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+            if F:
+                return 0
             bs=True
             while bs :
                 inp=input('请选择画质：')
