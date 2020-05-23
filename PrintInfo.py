@@ -140,6 +140,8 @@ def pr() :
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
     这是一个自由软件，欢迎您在特定条件下再发布本程序；欲知详情请键入'show c'。
+    You can find the source code on <https://github.com/lifegpc/bili>.
+    你可以在<https://github.com/lifegpc/bili>上找到源代码。
 """)
 def prc() :
 	try :
