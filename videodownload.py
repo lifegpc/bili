@@ -248,15 +248,20 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if F :
                 return 0
             bs=True
+            fi=True
             while bs :
-                inp=input('请选择画质：')
+                if fi and 'v' in ip :
+                    fi=False
+                    inp=ip['v']
+                else :
+                    inp=input('请选择画质：')
                 if len(inp) > 0 and inp.isnumeric() and int(inp)>0 and int(inp)<len(avq)+1 :
                     durl=durl[avq[int(inp)-1]]
                     durz=durz[avq[int(inp)-1]]
                     vq=avq[int(inp)-1]
                     bs=False
-                print('已选择%s画质'%(vqd[int(inp)-1]))
-                vqs=vqd[int(inp)-1]
+            print('已选择%s画质'%(vqd[int(inp)-1]))
+            vqs=vqd[int(inp)-1]
         else :
             j=0
             for l in avq :
@@ -607,8 +612,13 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 k=k+1
             if len(avq)>1 and not F :
                 bs=True
+                fi=True
                 while bs:
-                    inp=input('请选择画质：')
+                    if fi and 'v' in ip:
+                        fi=False
+                        inp=ip['v']
+                    else :
+                        inp=input('请选择画质：')
                     if len(inp)>0 and inp.isnumeric() :
                         if int(inp)>0 and int(inp)<len(avq)+1 :
                             bs=False
@@ -629,8 +639,13 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 return 0
             if len(aaq)>1:
                 bs=True
+                fi=True
                 while bs:
-                    inp=input('请选择音质：')
+                    if fi and 'a' in ip:
+                        fi=False
+                        inp=ip['a']
+                    else :
+                        inp=input('请选择音质：')
                     if len(inp)>0 and inp.isnumeric() :
                         if int(inp)>0 and int(inp)<len(aaq)+1 :
                             bs=False
@@ -976,8 +991,13 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 k=k+1
             if len(avq)>1 and not F:
                 bs=True
+                fi=True
                 while bs:
-                    inp=input('请选择画质：')
+                    if fi and 'v' in ip:
+                        fi=False
+                        inp=ip['v']
+                    else:
+                        inp=input('请选择画质：')
                     if len(inp)>0 and inp.isnumeric() :
                         if int(inp)>0 and int(inp)<len(avq)+1 :
                             bs=False
@@ -998,8 +1018,13 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 return 0
             if len(aaq)>1:
                 bs=True
+                fi=True
                 while bs:
-                    inp=input('请选择音质：')
+                    if fi and 'a' in ip:
+                        fi=False
+                        inp=ip['a']
+                    else:
+                        inp=input('请选择音质：')
                     if len(inp)>0 and inp.isnumeric() :
                         if int(inp)>0 and int(inp)<len(aaq)+1 :
                             bs=False
@@ -1243,15 +1268,20 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if F:
                 return 0
             bs=True
+            fi=True
             while bs :
-                inp=input('请选择画质：')
+                if fi and 'v' in ip :
+                    fi=False
+                    inp=ip['v']
+                else:
+                    inp=input('请选择画质：')
                 if len(inp) > 0 and inp.isnumeric() and int(inp)>0 and int(inp)<len(avq)+1 :
                     durl=durl[avq[int(inp)-1]]
                     durz=durz[avq[int(inp)-1]]
                     vq=avq[int(inp)-1]
                     bs=False
-                print('已选择%s画质'%(vqd[int(inp)-1]))
-                vqs=vqd[int(inp)-1]
+            print('已选择%s画质'%(vqd[int(inp)-1]))
+            vqs=vqd[int(inp)-1]
         else :
             j=0
             for l in avq :

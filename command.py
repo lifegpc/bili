@@ -20,7 +20,7 @@ from biliTime import checktime
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F]
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>]
     start.py show c/w   显示许可证
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
@@ -52,13 +52,15 @@ def ph() :
     --jt <number>|a|b 下载全弹幕时两次抓取之间的天数，范围为1-365，a会启用自动模式（推荐自动模式），番剧模式下b修改抓取起始日期
     --jts <date>    下载全弹幕时且视频为番剧时抓取起始日期的默认值（原始值为番剧上传时间），格式例如1989-02-25，即年-月-日
     -F  视频下载时仅显示所有可选画质但不下载
+    -v <id>     视频下载时选择相应的画质，id为画质前序号
+    -a <id>     视频下载时选择相应的音质，id为音质前序号
     注1：如出现相同的选项，只有第一个会生效
     注2：命令行参数的优先级高于settings.json里的设置
     注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
     注4：当下载收藏夹/频道，除了-i和-p参数外，其他参数将被沿用至收藏夹/频道视频的下载设置，-i和-p参数只对收藏夹/频道起作用'''
     print(h)
 def gopt(args) :
-    re=getopt(args,'h?i:d:p:m:r:ynF',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts='])
+    re=getopt(args,'h?i:d:p:m:r:ynFv:a:',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts='])
     rr=re[0]
     r={}
     for i in rr:
@@ -166,6 +168,14 @@ def gopt(args) :
                 r['jts']=i[1]
         if i[0]=='-F' and not 'F' in r:
             r['F']=True
+        if i[0]=='-v' and not 'v' in r:
+            if i[1].isnumeric() :
+                if int(i[1])>0 :
+                    r['v']=i[1]
+        if i[0]=='-a' and not 'a' in r:
+            if i[1].isnumeric():
+                if int(i[1])>0:
+                    r['a']=i[1]
     for i in re[1] :
         if i.lower()=="show":
             prc()
