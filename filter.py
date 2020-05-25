@@ -21,6 +21,7 @@ from os import remove
 import biliDanmuXmlFilter
 import biliDanmuCreate
 from PrintInfo import pr
+from JSONParser import loadset,getset
 if __name__!="__main__" :
     print('请直接运行filter.py')
 else :
@@ -30,6 +31,13 @@ else :
     if read==-1 :
         print('没有tv.bilibili.plater.xml文件')
         exit(-1)
+    se=loadset()
+    if not isinstance(se,dict) :
+        se=None
+    o='Download/'
+    read=getset(se,'o')
+    if read!=None :
+        o=read
     bs=True
     while bs :
         inp=input('请输入要过滤的文件数量：')
@@ -37,7 +45,7 @@ else :
             if inp.isnumeric() :
                 g=int(inp)
                 bs=False
-    fl=file.getfilen(g=g)
+    fl=file.getfilen(l=o,g=g)
     for i in fl :
         if exists(i['a']) :
             try :
@@ -47,7 +55,7 @@ else :
                 continue
             r=read
             input('按Enter开始选择保存文件名')
-            read=file.getfilen(save=True)
+            read=file.getfilen(l=o,save=True)
             if read==-1 :
                 read=file.getfilen('.',save=True)
             fn=read[0]

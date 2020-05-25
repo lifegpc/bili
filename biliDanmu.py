@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import biliDanmuDown
 from os.path import exists
-from os import mkdir,remove
+from os import remove
 import biliDanmuXmlParser
 import biliDanmuCreate
 import biliDanmuXmlFilter
@@ -26,6 +26,7 @@ import biliLogin
 import biliDanmuAuto
 import file
 from JSONParser import getset
+from file import mkdir
 def downloadh(filen,r,pos,da) :
     d=biliDanmuDown.downloadh(pos,r,biliTime.tostr(biliTime.getDate(da)))
     if d==-1 :
@@ -46,13 +47,19 @@ def downloadh(filen,r,pos,da) :
         return d
     except :
         return {'status':-2,'d':d}
-def DanmuGetn(c,data,r,t,xml,xmlc,ip) :
+def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     "处理现在的弹幕"
+    o="Download/"
+    read=getset(se,'o')
+    if read!=None :
+        o=read
+    if 'o' in ip:
+        o=ip['o']
     try :
-        if not exists('Download') :
-            mkdir('Download')
+        if not exists(o) :
+            mkdir(o)
     except:
-        print("创建Download文件夹失败")
+        print("创建%s文件夹失败"%(o))
         return -3
     try :
         if not exists('Temp') :
@@ -63,9 +70,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip) :
     if t=='av' :
         d=biliDanmuDown.downloadn(data['page'][c-1]['cid'],r)
         if data['videos'] ==1 :
-            filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            filen=o+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         else :
-            filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            filen=o+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         if d==-1 :
             print("网络错误")
             exit()
@@ -150,7 +157,7 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip) :
             return 0
     elif t=='ss' :
         d=biliDanmuDown.downloadn(c['cid'],r)
-        pat='Download/'+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
+        pat=o+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
         try :
             if not exists(pat) :
                 mkdir(pat)
@@ -245,11 +252,17 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip) :
             return 0
 def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     "全弹幕处理"
+    o="Download/"
+    read=getset(se,'o')
+    if read!=None :
+        o=read
+    if 'o' in ip:
+        o=ip['o']
     try :
-        if not exists('Download') :
-            mkdir('Download')
+        if not exists(o) :
+            mkdir(o)
     except:
-        print("创建Download文件夹失败")
+        print("创建%s文件夹失败"%(o))
         return -1
     try :
         if not exists('Temp') :
@@ -280,9 +293,9 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 at=1
                 bs=False
         if data['videos'] ==1 :
-            filen='Download/'+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            filen=o+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         else :
-            filen='Download/'+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            filen=o+file.filtern(data['title']+'-'+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
         if exists(filen) :
             fg=False
             bs=True
@@ -619,7 +632,7 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                         print('输入格式有误或者该日期不存在')
         pubt=biliTime.mkt(time.strptime(pubt,'%Y-%m-%d'))
         da=int(pubt)
-        pat='Download/'+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
+        pat=o+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
         try :
             if not exists(pat) :
                 mkdir(pat)

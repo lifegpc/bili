@@ -616,7 +616,7 @@ def main(ip={}):
             	bs=False
         if cho2==1 or cho2==4 :
             for i in cho :
-                read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc,ip)
+                read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc,ip,se)
                 if read==-1 or read==-4 :
                     pass
                 elif read==0 :
@@ -685,6 +685,8 @@ def main(ip={}):
                         bs=False
             for i in cho :
                 read=videodownload.avvideodownload(i,s,data,section,cho3,cho5,se,ip,ud)
+                if read==-5 :
+                    return -1
     if ss or ep :
         if ep :
             epl='，仅下载输入的ep号可输入b'
@@ -756,7 +758,7 @@ def main(ip={}):
             	bs=False
         if cho2==1 or cho2==4 :
             for i in cho:
-                read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc,ip)
+                read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc,ip,se)
                 if read==-1 or read==-4 :
                     pass
                 elif read==0 :
@@ -815,6 +817,8 @@ def main(ip={}):
                         bs=False
             for i in cho:
                 read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip,ud)
+                if read==-5 :
+                    return -1
     return 0
 if __name__=="__main__" :
     PrintInfo.pr()

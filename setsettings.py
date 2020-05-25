@@ -16,7 +16,7 @@
 from JSONParser import loadset,saveset,getset
 from re import search
 from PrintInfo import pr
-from file import filtern
+from file import filterd
 l1=['x','','']
 l2=['','x','']
 l3=['','','x']
@@ -183,4 +183,14 @@ if __name__=='__main__' :
     r=gk(se,'jt')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'jt',se)
+    o="Download/"
+    if se and 'o' in se:
+        o=se['o']
+    print('下载文件夹位置（默认为Download/，当前为%s）'%(o))
+    inp=input('请输入下载文件夹的位置：')
+    if len(inp)>0:
+        if inp!='Download/':
+            ne['o']=filterd(inp)
+    elif o!='Download/' :
+        ne['o']=o
     saveset(ne)
