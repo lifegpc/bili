@@ -16,6 +16,7 @@
 from JSONParser import loadset,saveset,getset
 from re import search
 from PrintInfo import pr
+from file import filtern
 l1=['x','','']
 l2=['','x','']
 l3=['','','x']
@@ -111,6 +112,8 @@ if __name__=='__main__' :
             i=int(inp)
             if i>=1 and i<=16 and i!=3:
                 ne['ax']=i
+    elif n!=3 :
+        ne['ax']=n
     n=5
     if se and 'as' in se :
         n=se['as']
@@ -121,6 +124,8 @@ if __name__=='__main__' :
             i=int(inp)
             if i>=1 and i!=5:
                 ne['as']=i
+    elif n!=5:
+        ne['as']=n
     n=5
     if se and 'ak' in se :
         n=se['ak']
@@ -131,6 +136,8 @@ if __name__=='__main__' :
             i=int(inp)
             if i>=1 and i<=1024 and i!=5:
                 ne['ak']=i
+    elif n!=5 :
+        ne['ak']=n
     print('在使用aria2c下载时是否使用备用网址？（不设置情况下为是）')
     r=gk(se,'ab')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
@@ -146,6 +153,8 @@ if __name__=='__main__' :
         x=['none','prealloc','trunc','falloc']
         if i>0 and i<5 and i!=2 :
             ne['fa']=x[i-1]
+    elif n!="prealloc" :
+        ne['fa']=n
     print('文件名中是否输出视频画质信息？（不设置情况下为是）')
     r=gk(se,'sv')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
@@ -164,6 +173,8 @@ if __name__=='__main__' :
         if t!=None :
             if inp!="0" :
                 ne['ms']=inp
+    elif n!="0" :
+        ne['ms']=n
     print('收藏夹是否自动下载每一个视频的所有分P？')
     r=gk(se,'da')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
