@@ -3,7 +3,8 @@
 对于大佬，可以看[README](README.md)
 
 ## 现已提供适用于windows10 64位系统的exe
-去[RELEASE](../../releases)那下载bili_x.x.x_windows10_x64.7z的文件解压运行start.exe即可
+去[RELEASE](../../releases)那下载bili_x.x.x_windows10_x64.7z的文件解压运行start.exe即可   
+**建议先运行setsettings.exe以避免不必要的询问**
 
 ## 安装Python3
 [下载](https://www.python.org/downloads/)Python安装包   
