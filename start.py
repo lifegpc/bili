@@ -37,6 +37,7 @@ def main(ip={}):
     se=JSONParser.loadset()
     if not isinstance(se,dict) :
         se=None
+        print('建议运行setsettings.py设置程序以减少不必要的询问。')
     if 'i' in ip :
         inp=ip['i']
     else :
