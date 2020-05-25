@@ -126,6 +126,13 @@ def printInfo7(u:dict,l:list):
 		print('视频描述：%s'%(i['description']))
 		print('创建时间：%s'%(tostr2(i['ctime'])))
 		e=e+1
+def printInfo8(d:dict) :
+	k=1
+	for i in d['data']['list'] :
+		print('收藏夹%s：'%(k))
+		print('收藏夹ID：%s'%(i['id']))
+		print('收藏夹名字：%s'%(i['title']))
+		k=k+1
 def printcho(cho) :
 	if len(cho)==0 :
 		return

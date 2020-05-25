@@ -202,6 +202,11 @@ def main(ip={}):
     ud['vip']=ud['d']['vipStatus']
     if pl :
         if fid==-1 :
+            af=False
+            if JSONParser.getset(se,'af')==True :
+                af=True
+            if 'af' in ip :
+                af=ip['af']
             re=section.get('https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid=%s&jsonp=jsonp'%(uid))
             re.encoding='utf8'
             re=re.json()
@@ -210,7 +215,44 @@ def main(ip={}):
                 return -1
             else :
                 if 'data' in re and 'list' in re['data'] and re['data']['count']>0:
-                    fid=re['data']['list'][0]['fid']
+                    if af:
+                        dc=re['data']['count']
+                        PrintInfo.printInfo8(re)
+                        bs=True
+                        f=True
+                        while bs:
+                            if f and 'afp' in ip:
+                                f=False
+                                inp=ip['afp']
+                            else :
+                                inp=input('请输入你想选择的收藏夹编号，每两个编号间用,隔开，全部选择可输入a')
+                            cho=[]
+                            if len(inp)>0 and inp[0]=='a' :
+                                print('您全选了所有收藏夹')
+                                for i in range(1,dc+1) :
+                                    cho.append(i)
+                                    bs=False
+                            elif len(inp)>0 :
+                                inp=inp.split(',')
+                                bb=True
+                                for i in inp :
+                                    if i.isnumeric() and int(i)>0 and int(i)<=dc and (not (int(i) in cho)) :
+                                        cho.append(int(i))
+                                    else :
+                                        bb=False
+                                if bb :
+                                    bs=False
+                                    for i in cho :
+                                        print("您选中了第"+str(i)+"个收藏夹："+re['data']['list'][i-1]['title'])
+                        for i in cho:
+                            ip2=copyip(ip)
+                            ip2['i']="https://space.bilibili.com/%s/favlist?fid=%s"%(uid,re['data']['list'][i-1]['id'])
+                            read=main(ip2)
+                            if read!=0 :
+                                return read
+                        return 0
+                    else:
+                        fid=re['data']['list'][0]['id']
                 else :
                     print('获取收藏夹列表失败')
                     return -1

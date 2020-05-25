@@ -193,4 +193,8 @@ if __name__=='__main__' :
             ne['o']=filterd(inp)
     elif o!='Download/' :
         ne['o']=o
+    print('解析收藏夹时若未指定收藏夹，是否不自动解析为默认收藏夹而是返回列表以选择？（不设置情况下为否）')
+    r=gk(se,'af')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'af',se)
     saveset(ne)
