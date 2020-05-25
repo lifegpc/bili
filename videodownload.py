@@ -944,7 +944,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     elif ud['vip']>0 :
                         bs=True #大会员一旦强制获取所有
                     r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
-                    re=r2.get(url)
+                    re=r2.get(url2)
                     re.encoding='utf8'
                     rs=search('__playinfo__=([^<]+)',re.text)
                     if rs!=None :

@@ -772,7 +772,6 @@ def main(ip={}):
                                         co=False
                                         break
                                     iii=iii+1
-                        print(iii)
                         if not co:
                             cho.append(iii)
                             bs=False
