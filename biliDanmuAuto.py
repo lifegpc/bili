@@ -18,13 +18,17 @@ import json
 import biliLogin
 import time
 import biliTime
-def getMembers(filen,r,da,pos,mri) :
+def getMembers(filen,r,da,pos,mri,ip) :
     "获取弹幕条数"
+    ns=True
+    if 's' in ip :
+        ns=False
     bs=True
     ts=300
     rec=0
     m2=mri
-    print('正在抓取%s的弹幕......' % (biliTime.tostr(biliTime.getDate(da))))
+    if ns:
+        print('正在抓取%s的弹幕......' % (biliTime.tostr(biliTime.getDate(da))))
     while bs :
         read=biliDanmu.downloadh(filen,r,pos,da)
         if read==-1 :
@@ -49,7 +53,7 @@ def getMembers(filen,r,da,pos,mri) :
             if obj['code']==-101 :
                 if obj['message']=='账户未登录' :
                     ud={}
-                    read=biliLogin.login(r,ud)
+                    read=biliLogin.login(r,ud,ip)
                     if read>1 :
                         exit()
                 else :
@@ -68,7 +72,8 @@ def getMembers(filen,r,da,pos,mri) :
     l=0
     li=[]
     z=len(d['list'])
-    print('正在处理......')
+    if ns:
+        print('正在处理......')
     for i in d['list'] :
         if int(m2)<int(i['ri']) :
             m2=i['ri']
@@ -77,10 +82,11 @@ def getMembers(filen,r,da,pos,mri) :
             li.append(i)
     d['list']=li
     return {'z':z,'l':l,'m':m2,'d':d}
-def reload(d,mri) :
+def reload(d,mri,ns) :
     l=0
     li=[]
-    print('正在处理......')
+    if ns:
+        print('正在处理......')
     for i in d['d']['list'] :
         if int(mri)<int(i['ri']) :
             l=l+1

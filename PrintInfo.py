@@ -32,9 +32,9 @@ def printInfo(data) :
 		print("第"+str(i['page'])+"P：")
 		print("CID："+str(i['cid']))
 		print("分P名："+i['part'])
-def printInfo2(data) :
+def printInfo2(data,ns:bool) :
 	"未完成"
-	if 'mediaInfo' in data :
+	if 'mediaInfo' in data and ns:
 		t=data['mediaInfo']
 		print("ID："+str(t['id']))
 		print("SSID："+str(t['ssId']))
@@ -50,8 +50,12 @@ def printInfo2(data) :
 		print('发布时间：'+t['time'])
 	ii=1
 	if 'epList' in data:
-		print('内容：')
+		if ns:
+			print('内容：')
 		for i in data['epList'] :
+			if not ns:
+				ii=ii+1
+				continue
 			print(str(ii)+"、"+i['titleFormat'])
 			ii=ii+1
 			print('名字：'+i['longTitle'])
@@ -61,8 +65,12 @@ def printInfo2(data) :
 			print('ID:'+str(i['id']))
 	if 'sections' in data:
 		for i in data['sections'] :
-			print(i['title']+":")
+			if ns:
+				print(i['title']+":")
 			for j in i['epList'] :
+				if not ns:
+					ii=ii+1
+					continue
 				print(str(ii)+"、"+j['titleFormat'])
 				ii=ii+1
 				print('名字：'+j['longTitle'])

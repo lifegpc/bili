@@ -21,7 +21,7 @@ from file import filterd
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>]
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>] [-s]
     start.py show c/w   显示许可证
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
@@ -52,20 +52,21 @@ def ph() :
     --httpsproxy <URI>  使用HTTPS代理 
     --jt <number>|a|b 下载全弹幕时两次抓取之间的天数，范围为1-365，a会启用自动模式（推荐自动模式），番剧模式下b修改抓取起始日期
     --jts <date>    下载全弹幕时且视频为番剧时抓取起始日期的默认值（原始值为番剧上传时间），格式例如1989-02-25，即年-月-日
-    -F  视频下载时仅显示所有可选画质但不下载
+    -F  视频下载时仅显示所有可选画质但不下载（使用该参数时，不受静默模式影响）
     -v <id>     视频下载时选择相应的画质，id为画质前序号
     -a <id>     视频下载时选择相应的音质，id为音质前序号
     -o <dir>    设置下载文件夹
     --af    解析收藏夹时若未指定收藏夹，自动解析为默认收藏夹
     --naf   解析收藏夹时若未指定收藏夹，不自动解析为默认收藏夹而是返回列表以选择
     --afp <序号>  解析收藏夹时若未指定收藏夹，解析列表中指定序号的收藏夹，支持多个序号（中间用,隔开），可使用a全选
+    -s      启用静默模式，关闭除版权声明和错误信息和进度信息（即内置下载器和aria2输出的信息，以及下载完成的信息）外的所有输出（若有重复文件，在不手动设置的情况下默认为覆盖）
     注1：如出现相同的选项，只有第一个会生效
     注2：命令行参数的优先级高于settings.json里的设置
     注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
     注4：当下载收藏夹/频道，除了-i和-p参数外，其他参数将被沿用至收藏夹/频道视频的下载设置，-i和-p参数只对收藏夹/频道起作用'''
     print(h)
 def gopt(args) :
-    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp='])
+    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp='])
     rr=re[0]
     r={}
     for i in rr:
@@ -189,6 +190,8 @@ def gopt(args) :
             r['af']=True
         if i[0]=='--afp' and not 'afp' in r:
             r['afp']=i[1]
+        if i[0]=='-s' and not 's' in r:
+            r['s']=True
     for i in re[1] :
         if i.lower()=="show":
             prc()

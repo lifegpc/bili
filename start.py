@@ -35,13 +35,19 @@ from biliHdVideo import getninfo
 import traceback
 def main(ip={}):
     se=JSONParser.loadset()
+    ns=True
+    if 's' in ip :
+        ns=False
     if not isinstance(se,dict) :
         se=None
         print('建议运行setsettings.py设置程序以减少不必要的询问。')
     if 'i' in ip :
         inp=ip['i']
-    else :
+    elif ns:
         inp=input("请输入av号（支持SS、EP号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿链接）：")
+    else :
+        print('请使用-i <输入>')
+        return -1
     av=False
     ss=False
     ep=False
@@ -174,7 +180,8 @@ def main(ip={}):
     if read==0 :
         read=biliLogin.tryok(section,ud)
         if read==True :
-            print("登录校验成功！")
+            if ns:
+                print("登录校验成功！")
             login=1
         elif read==False :
             print('网络错误！校验失败！')
@@ -190,7 +197,7 @@ def main(ip={}):
     if login==2 :
         if os.path.exists('cookies.json') :
             os.remove('cookies.json')
-        read=biliLogin.login(section,ud)
+        read=biliLogin.login(section,ud,ip)
         if read==0 :
             login=1
         elif read==1 :
@@ -217,18 +224,23 @@ def main(ip={}):
                 if 'data' in re and 'list' in re['data'] and re['data']['count']>0:
                     if af:
                         dc=re['data']['count']
-                        PrintInfo.printInfo8(re)
+                        if ns:
+                            PrintInfo.printInfo8(re)
                         bs=True
                         f=True
                         while bs:
                             if f and 'afp' in ip:
                                 f=False
                                 inp=ip['afp']
-                            else :
+                            elif ns:
                                 inp=input('请输入你想选择的收藏夹编号，每两个编号间用,隔开，全部选择可输入a')
+                            else :
+                                print('请使用--afp <序号>选择收藏夹编号')
+                                return -1
                             cho=[]
                             if len(inp)>0 and inp[0]=='a' :
-                                print('您全选了所有收藏夹')
+                                if ns:
+                                    print('您全选了所有收藏夹')
                                 for i in range(1,dc+1) :
                                     cho.append(i)
                                     bs=False
@@ -243,7 +255,8 @@ def main(ip={}):
                                 if bb :
                                     bs=False
                                     for i in cho :
-                                        print("您选中了第"+str(i)+"个收藏夹："+re['data']['list'][i-1]['title'])
+                                        if ns:
+                                            print("您选中了第"+str(i)+"个收藏夹："+re['data']['list'][i-1]['title'])
                         for i in cho:
                             ip2=copyip(ip)
                             ip2['i']="https://space.bilibili.com/%s/favlist?fid=%s"%(uid,re['data']['list'][i-1]['id'])
@@ -261,7 +274,8 @@ def main(ip={}):
         if re==-1 :
             return -1
         pli=JSONParser.getplinfo(re)
-        PrintInfo.printInfo3(pli)
+        if ns:
+            PrintInfo.printInfo3(pli)
         n=ceil(pli['count']/20)
         plv=[]
         JSONParser.getpliv(plv,re)
@@ -274,18 +288,23 @@ def main(ip={}):
         if len(plv)!=pli['count'] :
             print('视频数量不符，貌似BUG了？')
             return -1
-        PrintInfo.printInfo4(plv)
+        if ns:
+            PrintInfo.printInfo4(plv)
         bs=True
         f=True
         while bs:
             if f and 'p' in ip:
                 f=False
                 inp=ip['p']
-            else :
+            elif ns :
                 inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+            else :
+                print('请使用-p <p数>选择视频编号')
+                return -1
             cho=[]
             if inp[0]=='a' :
-                print('您全选了所有视频')
+                if ns:
+                    print('您全选了所有视频')
                 for i in range(1,pli['count']+1) :
                     cho.append(i)
                 bs=False
@@ -300,9 +319,12 @@ def main(ip={}):
                 if bb :
                     bs=False
                     for i in cho :
-                        print("您选中了第"+str(i)+"个视频："+plv[i-1]['title'])
+                        if ns:
+                            print("您选中了第"+str(i)+"个视频："+plv[i-1]['title'])
         bs=True
         c1=False
+        if not ns:
+            bs=False
         read=JSONParser.getset(se,'da')
         if read!=None :
             c1=read
@@ -347,18 +369,23 @@ def main(ip={}):
                 print('%s %s'%(re['code'],re['message']))
                 return -1
             chl=JSONParser.getchl(re)
-            PrintInfo.printInfo5(chl)
+            if ns:
+                PrintInfo.printInfo5(chl)
             bs=True
             f=True
             while bs:
                 if f and 'p' in ip:
                     f=False
                     inp=ip['p']
-                else :
+                elif ns :
                     inp=input('请输入你想下载的频道，每两个编号间用,隔开，全部下载可输入a')
+                else :
+                    print('请使用-p <p数>选择视频编号')
+                    return -1
                 cho=[]
                 if inp[0]=='a' :
-                    print('您全选了所有频道')
+                    if ns:
+                        print('您全选了所有频道')
                     for i in range(1,len(chl)+1) :
                         cho.append(i)
                     bs=False
@@ -373,7 +400,8 @@ def main(ip={}):
                     if bb :
                         bs=False
                         for i in cho :
-                            print("您选中了第"+str(i)+"个频道："+chl[i-1]['name'])
+                            if ns:
+                                print("您选中了第"+str(i)+"个频道："+chl[i-1]['name'])
                 for i in cho :
                     ip2=copyip(ip)
                     ip2['i']='https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,chl[i-1]['cid'])
@@ -399,18 +427,23 @@ def main(ip={}):
         if chi['count'] != len(chv) :
             print('视频数量不符，貌似BUG了？')
             return -1
-        PrintInfo.printInfo6(chv,chi)
+        if ns:
+            PrintInfo.printInfo6(chv,chi)
         bs=True
         f=True
         while bs:
             if f and 'p' in ip:
                 f=False
                 inp=ip['p']
-            else :
+            elif ns:
                 inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+            else :
+                print('请使用-p <p数>选择视频编号')
+                return -1
             cho=[]
             if inp[0]=='a' :
-                print('您全选了所有视频')
+                if ns:
+                    print('您全选了所有视频')
                 for i in range(1,chi['count']+1) :
                     cho.append(i)
                 bs=False
@@ -425,9 +458,12 @@ def main(ip={}):
                 if bb :
                     bs=False
                     for i in cho :
-                        print("您选中了第"+str(i)+"个视频："+chv[i-1]['title'])
+                        if ns:
+                            print("您选中了第"+str(i)+"个视频："+chv[i-1]['title'])
         bs=True
         c1=False
+        if not ns:
+            bs=False
         read=JSONParser.getset(se,'da')
         if read!=None :
             c1=read
@@ -474,18 +510,23 @@ def main(ip={}):
         if len(vl) !=vn :
             print('视频数量不符，貌似BUG了？')
             return -1
-        PrintInfo.printInfo7(up,vl)
+        if ns:
+            PrintInfo.printInfo7(up,vl)
         bs=True
         f=True
         while bs:
             if f and 'p' in ip:
                 f=False
                 inp=ip['p']
-            else :
+            elif ns:
                 inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+            else :
+                print('请使用-p <p数>选择视频编号')
+                return -1
             cho=[]
             if inp[0]=='a' :
-                print('您全选了所有视频')
+                if 'ns':
+                    print('您全选了所有视频')
                 for i in range(1,vn+1) :
                     cho.append(i)
                 bs=False
@@ -500,9 +541,12 @@ def main(ip={}):
                 if bb :
                     bs=False
                     for i in cho :
-                        print("您选中了第"+str(i)+"个视频："+vl[i-1]['title'])
+                        if ns:
+                            print("您选中了第"+str(i)+"个视频："+vl[i-1]['title'])
         bs=True
         c1=False
+        if not ns:
+            bs=False
         read=JSONParser.getset(se,'da')
         if read!=None :
             c1=read
@@ -537,6 +581,8 @@ def main(ip={}):
         xmlc=read
     if xml==1 :
         bs=True
+        if not ns:
+            bs=False
         read=JSONParser.getset(se,'dmgl')
         if read==True :
             bs=False
@@ -615,7 +661,8 @@ def main(ip={}):
             read=getninfo(r,data)
             if read==-1 :
                 return -1
-        PrintInfo.printInfo(data)
+        if ns:
+            PrintInfo.printInfo(data)
         cho=[]
         if data['videos']==1 :
             cho.append(1)
@@ -626,11 +673,15 @@ def main(ip={}):
                 if f and 'p' in ip :
                     f=False
                     inp=ip['p']
-                else :
+                elif ns:
                     inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                else :
+                    print('请使用-p <p数>选择视频编号')
+                    return -1
                 cho=[]
                 if inp[0]=='a' :
-                    print('您全选了所有视频')
+                    if ns:
+                        print('您全选了所有视频')
                     for i in range(1,data['videos']+1) :
                         cho.append(i)
                     bs=False
@@ -645,13 +696,17 @@ def main(ip={}):
                     if bb :
                         bs=False
                         for i in cho :
-                            print("您选中了第"+str(i)+"P："+data['page'][i-1]['part'])
+                            if ns:
+                                print("您选中了第"+str(i)+"P："+data['page'][i-1]['part'])
         cho2=0
         bs=True
         if 'd' in ip :
             bs=False
             cho2=ip['d']
         while bs :
+            if not ns:
+                print('请使用-d <下载方式>选择下载方式')
+                return -1
             inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载')
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6 :
             	cho2=int(inp[0])
@@ -681,6 +736,8 @@ def main(ip={}):
         if cho2>2:
             bs=True
             cho3=False
+            if not ns:
+                bs=False
             read=JSONParser.getset(se,'mp')
             if read==True :
                 bs=False
@@ -704,6 +761,8 @@ def main(ip={}):
                         bs=False
             cho5=False
             bs=True
+            if not ns:
+                bs=False
             read=JSONParser.getset(se,'cd')
             if read==True :
                 bs=False
@@ -727,7 +786,7 @@ def main(ip={}):
                         bs=False
             for i in cho :
                 read=videodownload.avvideodownload(i,s,data,section,cho3,cho5,se,ip,ud)
-                if read==-5 :
+                if read==-5 or read==-6 :
                     return -1
     if ss or ep :
         if ep :
@@ -735,7 +794,7 @@ def main(ip={}):
         else :
             epl=''
         data=JSONParser.Myparser2(parser.videodata)
-        le=PrintInfo.printInfo2(data)
+        le=PrintInfo.printInfo2(data,ns)
         cho=[]
         if le==1:
             cho.append(1)
@@ -747,12 +806,16 @@ def main(ip={}):
                 if f and 'p' in ip :
                     inp=ip['p']
                     f=False
-                else :
+                elif ns :
                     inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a%s'%(epl))
+                else :
+                    print('请使用-p <p数>选择视频编号')
+                    return -1
                 cho=[]
                 if len(inp)>0:
                     if inp[0]=='a' :
-                        print('你全选了所有视频')
+                        if ns:
+                            print('你全选了所有视频')
                         for j in range(1,le+1) :
                             cho.append(j)
                         bs=False
@@ -786,13 +849,17 @@ def main(ip={}):
                         if bb:
                             bs=False
                 cho=chon.getcho(cho,data)
-                PrintInfo.printcho(cho)
+                if ns:
+                    PrintInfo.printcho(cho)
         cho2=0
         bs=True
         if 'd' in ip :
             bs=False
             cho2=ip['d']
         while bs :
+            if not ns:
+                print('请使用-d <下载方式>选择下载方式')
+                return -1
             inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载')
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6:
             	cho2=int(inp[0])
@@ -809,9 +876,15 @@ def main(ip={}):
         if cho2==2 or cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se)
+                if read==0 :
+                    print('%s下载完成' % (i['titleFormat']))
+                else :
+                    return -1
         if cho2>2 :
             bs=True
             cho3=False
+            if not ns:
+                bs=False
             read=JSONParser.getset(se,'mp')
             if read==True :
                 bs=False
@@ -835,6 +908,8 @@ def main(ip={}):
                         bs=False
             cho5=False
             bs=True
+            if not ns:
+                bs=False
             read=JSONParser.getset(se,'cd')
             if read==True :
                 bs=False
@@ -858,7 +933,7 @@ def main(ip={}):
                         bs=False
             for i in cho:
                 read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip,ud)
-                if read==-5 :
+                if read==-5 or read==-6 :
                     return -1
     return 0
 if __name__=="__main__" :

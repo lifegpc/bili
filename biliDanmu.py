@@ -49,6 +49,9 @@ def downloadh(filen,r,pos,da) :
         return {'status':-2,'d':d}
 def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     "处理现在的弹幕"
+    ns=True
+    if 's' in ip:
+        ns=False
     o="Download/"
     read=getset(se,'o')
     if read!=None :
@@ -79,11 +82,15 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         if exists(filen) :
             fg=False
             bs=True
+            if not ns:
+                bs=False
+                fg=True
             if 'y' in ip:
                 if ip['y']:
                     fg=True
                     bs=False
                 else :
+                    fg=False
                     bs=False
             while bs :
                 inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
@@ -133,8 +140,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             except :
                 print('保存文件失败'+filen)
                 return -2
-            print('总计：%s' % (len(d['list'])))
-            print('正在过滤......')
+            if ns:
+                print('总计：%s' % (len(d['list'])))
+                print('正在过滤......')
             l=0
             for i in d['list'] :
                 read=biliDanmuXmlFilter.Filter(i,xmlc)
@@ -146,8 +154,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                     except :
                         print('保存文件失败'+filen)
                         return -2
-            print('共计过滤%s条' % (l))
-            print('实际输出%s条' % (len(d['list'])-l))
+            if ns:
+                print('共计过滤%s条' % (l))
+                print('实际输出%s条' % (len(d['list'])-l))
             try :
                 f.write('</i>')
                 f.close()
@@ -174,11 +183,15 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         if exists(filen) :
             fg=False
             bs=True
+            if not ns:
+                fg=True
+                bs=False
             if 'y' in ip:
                 if ip['y']:
                     fg=True
                     bs=False
                 else :
+                    fg=False
                     bs=False
             while bs :
                 inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
@@ -228,8 +241,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             except :
                 print('保存文件失败'+filen)
                 return -2
-            print('总计：%s' % (len(d['list'])))
-            print('正在过滤......')
+            if ns:
+                print('总计：%s' % (len(d['list'])))
+                print('正在过滤......')
             l=0
             for i in d['list'] :
                 read=biliDanmuXmlFilter.Filter(i,xmlc)
@@ -241,8 +255,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                     except :
                         print('保存文件失败'+filen)
                         return -2
-            print('共计过滤%s条' % (l))
-            print('实际输出%s条' % (len(d['list'])-l))
+            if ns:
+                print('共计过滤%s条' % (l))
+                print('实际输出%s条' % (len(d['list'])-l))
             try :
                 f.write('</i>')
                 f.close()
@@ -252,6 +267,9 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             return 0
 def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     "全弹幕处理"
+    ns=True
+    if 's' in ip:
+        ns=False
     o="Download/"
     read=getset(se,'o')
     if read!=None :
@@ -283,8 +301,11 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 at=ip['jt']
             elif jt :
                 at='a'
-            else:
+            elif ns:
                 at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻）')
+            else :
+                print('请使用--jt <number>|a|b来设置两次抓取之间的天数')
+                return -1
             if at.isnumeric() and int(at)<=365 and int(at)>=1 :
                 at=int(at)
                 bs=False
@@ -299,11 +320,15 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         if exists(filen) :
             fg=False
             bs=True
+            if not ns:
+                fg=True
+                bs=False
             if 'y' in ip:
                 if ip['y']:
                     fg=True
                     bs=False
                 else :
+                    fg=False
                     bs=False
             while bs :
                 inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
@@ -326,7 +351,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         zm=0
         now=1
         now2=now
-        print('正在抓取最新弹幕......')
+        if ns:
+            print('正在抓取最新弹幕......')
         d2=biliDanmuDown.downloadn(data['page'][c-1]['cid'],r)
         if d2==-1 :
             print('网络错误！')
@@ -347,6 +373,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         allok=False
         if len(d3['list'])<ma-10 :
             bs=True
+            if not ns:
+                bs=False
             while bs :
                 sts=input('抓取到了%s条弹幕，距离限制（%s条）较远，是否继续抓取？(y/n)' % (len(d3['list']),ma))
                 if len(sts)>0 :
@@ -357,7 +385,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                         bs=False
         if not allok :
             d2=d3
-            print('抓取到%s条弹幕，最新弹幕将在最后处理' % (len(d2['list'])))
+            if ns:
+                print('抓取到%s条弹幕，最新弹幕将在最后处理' % (len(d2['list'])))
         try :
             f2=open(filen,mode='w',encoding='utf8')
         except :
@@ -379,7 +408,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         while not allok and biliTime.equal(biliTime.getDate(da),biliTime.getNowDate())<0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da+now*24*3600),biliTime.getNowDate())<0)) :
             t1=time.time()
             if (not at2) or fir :
-                print('正在抓取%s的弹幕......' % (biliTime.tostr(biliTime.getDate(da))))
+                if ns:
+                    print('正在抓取%s的弹幕......' % (biliTime.tostr(biliTime.getDate(da))))
                 bs=True
                 ts=300
                 rec=0
@@ -406,7 +436,7 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                         if obj['code']==-101 :
                             if obj['message']=='账户未登录' :
                                 ud={}
-                                read=biliLogin.login(r,ud)
+                                read=biliLogin.login(r,ud,ip)
                                 if read>1 :
                                     exit()
                             else :
@@ -424,7 +454,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 d=read
                 l=0
                 g=0
-                print('正在处理弹幕......')
+                if ns:
+                    print('正在处理弹幕......')
                 for i in d['list'] :
                     if mri2<int(i['ri']) :
                         mri2=int(i['ri'])
@@ -450,23 +481,25 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 rr=False
                 rr2=False
                 if biliTime.tostr(biliTime.getDate(da+now*24*3600)) in tem :
-                    print('从内存中获取了%s的弹幕内容' % (biliTime.tostr(biliTime.getDate(da+now*24*3600))))
-                    read=biliDanmuAuto.reload(tem.pop(biliTime.tostr(biliTime.getDate(da+now*24*3600))),mri)
+                    if ns:
+                        print('从内存中获取了%s的弹幕内容' % (biliTime.tostr(biliTime.getDate(da+now*24*3600))))
+                    read=biliDanmuAuto.reload(tem.pop(biliTime.tostr(biliTime.getDate(da+now*24*3600))),mri,ns)
                     rr=True
                     if read['z']==read['l'] and read['z']>ma-10 and now>1 :
                         rr2=True
                 if (not rr) or (rr and rr2) :
                     if (not rr) :
-                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,data['page'][c-1]['cid'],mri)
+                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,data['page'][c-1]['cid'],mri,ip)
                         if read==-1 :
                             return -3
                     while read['z']==read['l'] and read['z']>ma-10 and now>1 :
-                        print('尝试抓取了%s的弹幕，获取到%s条有效弹幕，未防止遗漏，间隔时间减半' % (biliTime.tostr(biliTime.getDate(da+now*24*3600)),read['l']))
+                        if ns:
+                            print('尝试抓取了%s的弹幕，获取到%s条有效弹幕，未防止遗漏，间隔时间减半' % (biliTime.tostr(biliTime.getDate(da+now*24*3600)),read['l']))
                         tem[biliTime.tostr(biliTime.getDate(da+now*24*3600))]=read
                         now=now/2
                         if now<1 :
                             now=1
-                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,data['page'][c-1]['cid'],mri)
+                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,data['page'][c-1]['cid'],mri,ip)
                         if read==-1 :
                             return -3
                         now2=now
@@ -477,7 +510,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 l=read['l']
                 g=0
                 mri2=read['m']
-                print('正在处理......')
+                if ns:
+                    print('正在处理......')
                 for i in read['d']['list'] :
                     if xml==2 :
                         try :
@@ -511,8 +545,9 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             zl=zl+l
             zm=zm+m
             zg=zg+g
-            print('获取了%s(%s)条弹幕' % (l,zl))
-            if xml==1 :
+            if ns:
+                print('获取了%s(%s)条弹幕' % (l,zl))
+            if xml==1 and ns:
                 print('过滤了%s(%s)条弹幕' % (g,zg))
                 print('实际输出了%s(%s)条弹幕' % (m,zm))
             if t2==0 or t1-t2<2 :
@@ -527,7 +562,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 now=now2
             mri=mri2
         if not allok:
-            print('开始处理当前弹幕文件......')
+            if ns:
+                print('开始处理当前弹幕文件......')
             l=0
             g=0
             for i in d2['list'] :
@@ -559,12 +595,14 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             zl=zl+l
             zg=zg+g
             zm=zm+m
-            print('在当前弹幕中获取有效弹幕%s条' % (l))
-            if xml==1 :
+            if ns:
+                print('在当前弹幕中获取有效弹幕%s条' % (l))
+            if xml==1 and ns :
                 print('过滤了%s条弹幕' % (g))
                 print('实际输出了%s条弹幕' % (m))
-            print('总共获取了%s条弹幕' % (zl))
-            if xml==1 :
+            if ns:
+                print('总共获取了%s条弹幕' % (zl))
+            if xml==1 and ns:
                 print('这个过滤了%s条弹幕' % (zg))
                 print('实际输出了%s条弹幕' % (zm))
         else :
@@ -594,9 +632,10 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                     print('保存内容至文件失败'+filen)
                     return -3
                 m=z-g
-                print('获取了%s条弹幕' % (z))
-                print('过滤了%s条弹幕' % (g))
-                print('实际输出了%s条弹幕' % (m))
+                if ns:
+                    print('获取了%s条弹幕' % (z))
+                    print('过滤了%s条弹幕' % (g))
+                    print('实际输出了%s条弹幕' % (m))
         return 0
     elif t=='ss' :
         bs=True
@@ -614,8 +653,11 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 at=ip['jt']
             elif jt :
                 at='a'
-            else:
+            elif ns:
                 at=input('请输入两次抓取之间的天数（1-365)，输入a启动自动模式（可能有点傻），输入b手动输入日期(当前日期：%s)' % (pubt))
+            else :
+                print('请使用--jt <number>|a|b来设置两次抓取之间的天数')
+                return -1
             if at.isnumeric() and int(at)<=365 and int(at)>=1 :
                 at=int(at)
                 bs=False
@@ -624,6 +666,9 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 at=1
                 bs=False
             elif len(at)>0 and at[0].lower()=='b' :
+                if not ns:
+                    print('请使用--jts <date>来修改开始时间。')
+                    return -1
                 at3=input('请按1989-02-25这样的格式输入开始日期：')
                 if len(at3)>0 :
                     if biliTime.checktime(at3) :
@@ -646,11 +691,15 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         if exists(filen) :
             fg=False
             bs=True
+            if not ns:
+                fg=True
+                bs=False
             if 'y' in ip:
                 if ip['y']:
                     fg=True
                     bs=False
                 else :
+                    fg=False
                     bs=False
             while bs :
                 inp=input('已经有'+filen+'文件了，是否覆盖(y/n)？')
@@ -672,7 +721,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         zm=0
         now=1
         now2=now
-        print('正在抓取最新弹幕......')
+        if ns:
+            print('正在抓取最新弹幕......')
         d2=biliDanmuDown.downloadn(c['cid'],r)
         if d2==-1 :
             print('网络错误！')
@@ -693,6 +743,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         allok=False
         if len(d3['list'])<ma-10 :
             bs=True
+            if not ns:
+                bs=False
             while bs :
                 sts=input('抓取到了%s条弹幕，距离限制（%s条）较远，是否继续抓取？(y/n)' % (len(d3['list']),ma))
                 if len(sts)>0 :
@@ -703,7 +755,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                         bs=False
         if not allok :
             d2=d3
-            print('抓取到%s条弹幕，最新弹幕将在最后处理' % (len(d2['list'])))
+            if ns:
+                print('抓取到%s条弹幕，最新弹幕将在最后处理' % (len(d2['list'])))
         try :
             f2=open(filen,mode='w',encoding='utf8')
         except :
@@ -725,7 +778,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         while not allok and biliTime.equal(biliTime.getDate(da),biliTime.getNowDate())<0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da+now*24*3600),biliTime.getNowDate())<0)) :
             t1=time.time()
             if (not at2) or fir :
-                print('正在抓取%s的弹幕......' % (biliTime.tostr(biliTime.getDate(da))))
+                if ns:
+                    print('正在抓取%s的弹幕......' % (biliTime.tostr(biliTime.getDate(da))))
                 bs=True
                 ts=300
                 rec=0
@@ -752,7 +806,7 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                         if obj['code']==-101 :
                             if obj['message']=='账户未登录' :
                                 ud={}
-                                read=biliLogin.login(r,ud)
+                                read=biliLogin.login(r,ud,ip)
                                 if read>1 :
                                     exit()
                             else :
@@ -770,7 +824,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 d=read
                 l=0
                 g=0
-                print('正在处理弹幕......')
+                if ns:
+                    print('正在处理弹幕......')
                 for i in d['list'] :
                     if mri2<int(i['ri']) :
                         mri2=int(i['ri'])
@@ -796,23 +851,25 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 rr=False
                 rr2=False
                 if biliTime.tostr(biliTime.getDate(da+now*24*3600)) in tem :
-                    print('从内存中获取了%s的弹幕内容' % (biliTime.tostr(biliTime.getDate(da+now*24*3600))))
-                    read=biliDanmuAuto.reload(tem.pop(biliTime.tostr(biliTime.getDate(da+now*24*3600))),mri)
+                    if ns:
+                        print('从内存中获取了%s的弹幕内容' % (biliTime.tostr(biliTime.getDate(da+now*24*3600))))
+                    read=biliDanmuAuto.reload(tem.pop(biliTime.tostr(biliTime.getDate(da+now*24*3600))),mri,ns)
                     rr=True
                     if read['z']==read['l'] and read['z']>ma-10 and now>1 :
                         rr2=True
                 if (not rr) or (rr and rr2) :
                     if (not rr) :
-                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,c['cid'],mri)
+                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,c['cid'],mri,ip)
                         if read==-1 :
                             return -3
                     while read['z']==read['l'] and read['z']>ma-10 and now>1 :
-                        print('尝试抓取了%s的弹幕，获取到%s条有效弹幕，未防止遗漏，间隔时间减半' % (biliTime.tostr(biliTime.getDate(da+now*24*3600)),read['l']))
+                        if ns:
+                            print('尝试抓取了%s的弹幕，获取到%s条有效弹幕，未防止遗漏，间隔时间减半' % (biliTime.tostr(biliTime.getDate(da+now*24*3600)),read['l']))
                         tem[biliTime.tostr(biliTime.getDate(da+now*24*3600))]=read
                         now=now/2
                         if now<1 :
                             now=1
-                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,c['cid'],mri)
+                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,c['cid'],mri,ip)
                         if read==-1 :
                             return -3
                         now2=now
@@ -823,7 +880,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 l=read['l']
                 g=0
                 mri2=read['m']
-                print('正在处理......')
+                if ns:
+                    print('正在处理......')
                 for i in read['d']['list'] :
                     if xml==2 :
                         try :
@@ -857,8 +915,9 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             zl=zl+l
             zm=zm+m
             zg=zg+g
-            print('获取了%s(%s)条弹幕' % (l,zl))
-            if xml==1 :
+            if ns:
+                print('获取了%s(%s)条弹幕' % (l,zl))
+            if xml==1 and ns:
                 print('过滤了%s(%s)条弹幕' % (g,zg))
                 print('实际输出了%s(%s)条弹幕' % (m,zm))
             if t2==0 or t1-t2<2 :
@@ -873,7 +932,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 now=now2
             mri=mri2
         if not allok:
-            print('开始处理当前弹幕文件......')
+            if ns:
+                print('开始处理当前弹幕文件......')
             l=0
             g=0
             for i in d2['list'] :
@@ -905,12 +965,14 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             zl=zl+l
             zg=zg+g
             zm=zm+m
-            print('在当前弹幕中获取有效弹幕%s条' % (l))
-            if xml==1 :
+            if ns:
+                print('在当前弹幕中获取有效弹幕%s条' % (l))
+            if xml==1 and ns:
                 print('过滤了%s条弹幕' % (g))
                 print('实际输出了%s条弹幕' % (m))
-            print('总共获取了%s条弹幕' % (zl))
-            if xml==1 :
+            if ns:
+                print('总共获取了%s条弹幕' % (zl))
+            if xml==1 and ns:
                 print('这个过滤了%s条弹幕' % (zg))
                 print('实际输出了%s条弹幕' % (zm))
         else :
@@ -940,7 +1002,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                     print('保存内容至文件失败'+filen)
                     return -3
                 m=z-g
-                print('获取了%s条弹幕' % (z))
-                print('过滤了%s条弹幕' % (g))
-                print('实际输出了%s条弹幕' % (m))
+                if ns:
+                    print('获取了%s条弹幕' % (z))
+                    print('过滤了%s条弹幕' % (g))
+                    print('实际输出了%s条弹幕' % (m))
         return 0
