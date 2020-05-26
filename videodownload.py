@@ -990,8 +990,16 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     re=r2.get(url2)
     re.encoding='utf8'
     rs=search('__playinfo__=([^<]+)',re.text)
+    rs2=search('__PGC_USERSTATE__=([^<]+)',re.text)
     if rs!=None :
         re=json.loads(rs.groups()[0])
+    elif rs2!=None :
+        rs2=json.loads(rs2.groups()[0])
+        if 'dialog' in rs2:
+            print(rs2['dialog']['title'])
+        if rs2['area_limit']:
+            print('有区域限制，请尝试使用proxy。')
+        return -2
     else :
         return -2
     if 'data' in re and 'dash' in re['data']:
