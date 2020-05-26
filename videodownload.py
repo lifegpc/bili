@@ -26,6 +26,7 @@ from biliTime import tostr2
 import bstr
 from biliSub import downsub,ffinputstr
 from file import mkdir
+from dict import delli,dellk
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -260,6 +261,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             print({"code":re["code"],"message":re["message"]})
                             return -2
                     durl[re["data"]['quality']]=re['data']['durl']
+                if ud['vip']<1 and (l>80 or l==74) :
+                    avq,ii=delli(avq,l)
+                    if ii>-1 :
+                        vqd=dellk(vqd,ii)
+                    continue
                 if ns or(not ns and F):
                     print('%s.图质：%s'%(j+1,vqd[j]))
                 j=j+1
@@ -1377,6 +1383,11 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     else :
                         return -2
                     durl[re["data"]['quality']]=re['data']['durl']
+                if ud['vip']<1 and (l>80 or l==74) :
+                    avq,ii=delli(avq,l)
+                    if ii>-1 :
+                        vqd=dellk(vqd,ii)
+                    continue
                 if ns or(not ns and F):
                     print('%s.图质：%s'%(j+1,vqd[j]))
                 j=j+1
