@@ -154,7 +154,7 @@ def geturll(d):
         l.append(d['url'])
     if 'base_url' in d:
         l.append(d['base_url'])
-    if 'backup_url' in d :
+    if 'backup_url' in d and d['backup_url']!=None :
         for i in d['backup_url'] :
             if isp(i,l) :
                 l.append(i)
