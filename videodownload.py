@@ -398,7 +398,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             ar=True
                         else :
                             ar=False
-                    if os.system('aria2c -h 1>&0')==0 and ar :
+                    if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
                             ab=False
@@ -463,7 +463,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             ar=True
                         else :
                             ar=False
-                    if os.system('aria2c -h 1>&0')==0 and ar :
+                    if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
                             ab=False
@@ -798,7 +798,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     ar=True
                 else :
                     ar=False
-            if os.system('aria2c -h 1>&0')==0 and ar :
+            if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                 ab=True
                 if JSONParser.getset(se,'ab')==False :
                     ab=False
@@ -861,7 +861,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     ar=True
                 else :
                     ar=False
-            if os.system('aria2c -h 1>&0')==0 and ar :
+            if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                 ab=True
                 if JSONParser.getset(se,'ab')==False :
                     ab=False
@@ -1230,7 +1230,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     ar=True
                 else :
                     ar=False
-            if os.system('aria2c -h 1>&0')==0 and ar :
+            if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                 ab=True
                 if JSONParser.getset(se,'ab')==False :
                     ab=False
@@ -1293,7 +1293,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     ar=True
                 else :
                     ar=False
-            if os.system('aria2c -h 1>&0')==0 and ar :
+            if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                 ab=True
                 if JSONParser.getset(se,'ab')==False :
                     ab=False
@@ -1528,7 +1528,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             ar=True
                         else :
                             ar=False
-                    if os.system('aria2c -h 1>&0')==0 and ar :
+                    if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
                             ab=False
@@ -1593,7 +1593,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             ar=True
                         else :
                             ar=False
-                    if os.system('aria2c -h 1>&0')==0 and ar :
+                    if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
                             ab=False
