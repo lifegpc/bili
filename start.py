@@ -628,6 +628,12 @@ def main(ip={}):
                 return 0
             print(traceback.format_exc())
             return -1
+        if ss:
+            if re.status_code==404 :
+                print('404了 找不到啦')
+                return 0
+            print(traceback.format_exc())
+            return -1
         else :
             print(traceback.format_exc())
             return -1
