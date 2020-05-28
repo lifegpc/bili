@@ -27,11 +27,21 @@ import bstr
 from biliSub import downsub,ffinputstr
 from file import mkdir
 from dict import delli,dellk
+import platform
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
 # session = md5(String((getCookie('buvid3') || Math.floor(Math.random() * 100000).toString(16)) + Date.now()));
 #第二个需要带referer，可以解析4K
+def getnul():
+    "获取不输出stdout的命令行"
+    s=platform.system()
+    if s=="Windows":
+        return " 2>&0 1>&0"
+    elif s=="Linux" :
+        return " >/dev/null"
+    else :
+        return " 2>&0 1>&0"
 def geth(h:CaseInsensitiveDict) :
     s=''
     for i in h.keys() :
@@ -340,7 +350,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             ma=True
         if 'ma' in ip:
             ma=ip['ma']
-        if ff and (len(durl)>1 or ma) and os.path.exists('%s.mkv'%(filen)) and os.system('ffmpeg -h 2>&0 1>&0')==0 :
+        if ff and (len(durl)>1 or ma) and os.path.exists('%s.mkv'%(filen)) and os.system('ffmpeg -h%s'%(getnul()))==0 :
             fg=False
             bs=True
             if not ns:
@@ -510,14 +520,14 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2,filen+".mkv",s,ip,se)
-        if (len(durl)>1 or ma) and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
+        if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
             sa=""
             sb=""
             nss=""
             if not ns:
-                nss=" 2>&0 1>&0"
+                nss=getnul()
             if 'sub' in data:
                 sa,sb=ffinputstr(data['sub'],1)
             if len(durl) > 1:
@@ -747,7 +757,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 ff=True
             else :
                 ff=False
-        if ff and os.path.exists(filen) and os.system('ffmpeg -h 2>&0 1>&0')==0:
+        if ff and os.path.exists(filen) and os.system('ffmpeg -h%s'%(getnul()))==0:
             fg=False
             bs=True
             if not ns:
@@ -906,13 +916,13 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2,filen,s,ip,se)
-        if os.system('ffmpeg -h 2>&0 1>&0')==0 and ff:
+        if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print('将用ffmpeg自动合成')
             sa=""
             sb=""
             nss=""
             if not ns:
-                nss=" 2>&0 1>&0"
+                nss=getnul()
             if 'sub' in data:
                 sa,sb=ffinputstr(data['sub'],2)
             re=os.system('ffmpeg -i "%s" -i "%s"%s -metadata title="%s-%s" -metadata description="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata atitle="%s" -metadata pubdate="%s" -metadata ctime="%s" -metadata uid="%s" -metadata author="%s" -metadata p="%sP/%sP" -metadata part="%s" -metadata vq="%s" -metadata aq="%s"%s -c:s copy -c copy "%s"%s'%(getfn(0,i,data,vqs,hzm,o),getfn(1,i,data,vqs,hzm,o),sa,data['title'],data['page'][i-1]['part'],bstr.f(data['desc']),data['aid'],data['bvid'],data['page'][i-1]['cid'],data['title'],tostr2(data['pubdate']),tostr2(data['ctime']),data['uid'],data['name'],i,data['videos'],data['page'][i-1]['part'],vqs[0],vqs[1],sb,filen,nss))
@@ -1179,7 +1189,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 ff=True
             else :
                 ff=False
-        if ff and os.path.exists(filen) and os.system('ffmpeg -h 2>&0 1>&0')==0 :
+        if ff and os.path.exists(filen) and os.system('ffmpeg -h%s'%(getnul()))==0 :
             fg=False
             bs=True
             if not ns:
@@ -1335,11 +1345,11 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     bs2=True
                 else :
                     return -3
-        if os.system('ffmpeg -h 2>&0 1>&0')==0 and ff:
+        if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print('将用ffmpeg自动合成')
             nss=""
             if not ns:
-                nss=" 2>&0 1>&0"
+                nss=getnul()
             re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"%s'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen,nss))
             de=False
             if re==0 :
@@ -1470,7 +1480,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             ma=True
         if 'ma' in ip:
             ma=ip['ma']
-        if ff and (len(durl)>1 or ma) and os.path.exists('%s.mkv'%(filen)) and os.system('ffmpeg -h 2>&0 1>&0')==0 :
+        if ff and (len(durl)>1 or ma) and os.path.exists('%s.mkv'%(filen)) and os.system('ffmpeg -h%s'%(getnul()))==0 :
             fg=False
             bs=True
             if not ns:
@@ -1637,12 +1647,12 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             return -3
                 com=com+k['size']
             j=j+1
-        if (len(durl)>1 or ma) and os.system('ffmpeg -h 2>&0 1>&0')==0 and ff :
+        if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
             nss=""
             if not ns:
-                nss=" 2>&0 1>&0"
+                nss=getnul()
             if len(durl)>1 :
                 te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt),'wt',encoding='utf8')
                 j=1
