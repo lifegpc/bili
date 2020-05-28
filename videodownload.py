@@ -39,7 +39,7 @@ def getnul():
     if s=="Windows":
         return " 2>&0 1>&0"
     elif s=="Linux" :
-        return " >/dev/null"
+        return " > /dev/null 2>&1"
     else :
         return " 2>&0 1>&0"
 def geth(h:CaseInsensitiveDict) :
