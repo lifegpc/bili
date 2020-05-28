@@ -17,7 +17,7 @@ from selenium import webdriver
 import requests
 import JSONParser
 import time
-def login(r,ud:dict):
+def login(r,ud:dict,ip:dict):
     '登录至B站'
     driver=webdriver.Chrome()
     driver.get('https://passport.bilibili.com/ajax/miniLogin/minilogin')
@@ -34,7 +34,8 @@ def login(r,ud:dict):
     driver.close()
     rr=tryok(r,ud)
     if rr==True :
-        print('登录成功')
+        if not 's' in ip:
+            print('登录成功')
         JSONParser.savecookie(sa)
         return 0
     elif rr==False :

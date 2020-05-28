@@ -25,11 +25,15 @@ def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict) :
     if os.path.exists(fn) :
         fg=False
         bs=True
+        if 's' in ip:
+            fg=True
+            bs=False
         if 'y' in ip :
             if ip['y'] :
                 fg=True
                 bs=False
             else :
+                fg=False
                 bs=False
         while bs:
             inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(fn))

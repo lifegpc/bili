@@ -9,6 +9,7 @@
 *.flv
 *.mp4
 *.m4s
+*.mkv
 Download/
 #other file
 .project

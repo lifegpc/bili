@@ -13,16 +13,22 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from file.info import getinfo,getinfox,printinfo,spfn
-from file.dir import getinfod,printinfod,listd
-from file.filter import listf,listfd,listff,filtern,filterd
-from file.get import getfilen
-from file.info import geturlfe
-from file.str import cml
-from file.md import mkdir
-#对后缀名过滤
-LX_FILTER=0
-#对文件名进行正则过滤
-TEXT_FILTER=1
-#对后缀名进行过滤时，保留无后缀名名文件
-ILX_FILTER=2
+def delli(l:list,i) -> (list,int):
+    r=[]
+    a=-1
+    b=0
+    for j in l:
+        if i!=j :
+            r.append(j)
+        else :
+            a=b
+        b=b+1
+    return r,a
+def dellk(l:list,i:int) -> list:
+    r=[]
+    a=0
+    for k in l:
+        if a!=i :
+            r.append(k)
+        a=a+1
+    return r

@@ -13,16 +13,18 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from file.info import getinfo,getinfox,printinfo,spfn
-from file.dir import getinfod,printinfod,listd
-from file.filter import listf,listfd,listff,filtern,filterd
-from file.get import getfilen
-from file.info import geturlfe
-from file.str import cml
-from file.md import mkdir
-#对后缀名过滤
-LX_FILTER=0
-#对文件名进行正则过滤
-TEXT_FILTER=1
-#对后缀名进行过滤时，保留无后缀名名文件
-ILX_FILTER=2
+from os.path import exists
+import os
+from file import filterd
+def mkdir(dir:str) :
+    dir=filterd(dir)
+    dl=dir.split('/')[:-1]
+    if len(dl) :
+        s=""
+        for i in dl:
+            if s=="" :
+                s=i
+            else :
+                s=s+"/"+i
+            if not exists(s) :
+                os.mkdir(s)
