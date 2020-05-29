@@ -33,6 +33,17 @@ import platform
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
 # session = md5(String((getCookie('buvid3') || Math.floor(Math.random() * 100000).toString(16)) + Date.now()));
 #第二个需要带referer，可以解析4K
+def getfps(s:str)->str:
+    "解析B站API返回的fps"
+    if s.isnumeric() :
+        return s+"fps"
+    else :
+        r=search(r"([0-9]+)/([0-9]+)",s)
+        if r!=None :
+            r=r.groups()
+            return "%.3f(%s)fps"%(int(r[0])/int(r[1]),s)
+        else :
+            return ""
 def getnul():
     "获取不输出stdout的命令行"
     s=platform.system()
@@ -656,7 +667,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             dash['audio']=dash['audio'][aaq[i2]]
             if ns:
                 print('视频轨：')
-                print("图质：%s(%sx%s)"%(vqd[0],dash['video']['width'],dash['video']['height']))
+                print("图质：%s(%sx%s,%s)"%(vqd[0],dash['video']['width'],dash['video']['height'],getfps(dash['video']['frame_rate'])))
             dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
             if ns:
                 print('大小：%s(%sB,%s)'%(file.info.size(dash['video']['size']),dash['video']['size'],file.cml(dash['video']['size'],re['data']['timelength'])))
@@ -672,7 +683,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             k=0
             for j in avq:
                 if ns or(not ns and F):
-                    print('%s.图质：%s(%sx%s,%s)'%(k+1,vqd[sea(j,avq2)],dash['video'][j]['width'],dash['video'][j]['height'],sev(j)))
+                    print('%s.图质：%s(%sx%s,%s,%s)'%(k+1,vqd[sea(j,avq2)],dash['video'][j]['width'],dash['video'][j]['height'],sev(j),getfps(dash['video'][j]['frame_rate'])))
                 dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
                 if ns or(not ns and F):
                     print('大小：%s(%sB,%s)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size'],file.cml(dash['video'][j]['size'],re['data']['timelength'])))
@@ -1088,7 +1099,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             dash['audio']=dash['audio'][aaq[i2]]
             if ns:
                 print('视频轨：')
-                print("图质：%s(%sx%s)"%(vqd[0],dash['video']['width'],dash['video']['height']))
+                print("图质：%s(%sx%s,%s)"%(vqd[0],dash['video']['width'],dash['video']['height'],getfps(dash['video']['frame_rate'])))
             dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
             if ns:
                 print('大小：%s(%sB,%s)'%(file.info.size(dash['video']['size']),dash['video']['size'],file.cml(dash['video']['size'],re['data']['timelength'])))
@@ -1104,7 +1115,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             k=0
             for j in avq:
                 if ns or(not ns and F):
-                    print('%s.图质：%s(%sx%s,%s)'%(k+1,vqd[sea(j,avq2)],dash['video'][j]['width'],dash['video'][j]['height'],sev(j)))
+                    print('%s.图质：%s(%sx%s,%s,%s)'%(k+1,vqd[sea(j,avq2)],dash['video'][j]['width'],dash['video'][j]['height'],sev(j),getfps(dash['video'][j]['frame_rate'])))
                 dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
                 if ns or(not ns and F):
                     print('大小：%s(%sB,%s)'%(file.info.size(dash['video'][j]['size']),dash['video'][j]['size'],file.cml(dash['video'][j]['size'],re['data']['timelength'])))
