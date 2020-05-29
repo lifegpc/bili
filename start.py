@@ -356,7 +356,7 @@ def main(ip={}):
         if read!=0 :
             print("读取cookies.json出现错误")
             return -1
-        r.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
         r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
         r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
@@ -650,7 +650,7 @@ def main(ip={}):
                 print("读取cookies.json出现错误")
                 return -1
             r.headers.update({'referer':"https://www.bilibili.com/video/%s"%(data['bvid'])})
-            r.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+            r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
             r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
             r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
             r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')

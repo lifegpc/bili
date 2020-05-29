@@ -213,7 +213,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     if i>1:
         url="%s?p=%s"%(url,i)
     r2.headers.update({'referer':url})
-    r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
     r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
@@ -224,7 +224,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     if rs!=None :
         re=json.loads(rs.groups()[0])
     elif data['videos']>1 :
-        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16"%(data['page'][i-1]['cid'],116,data['bvid'])
+        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16"%(data['page'][i-1]['cid'],120,data['bvid'])
         re=r2.get(uri)
         re.encoding="utf8"
         re=re.json()
@@ -285,7 +285,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 durz[l]=size
                 if ns or(not ns and F):
                     print("大小：%s(%sB,%s)"%(file.info.size(size),size,file.cml(size,re['data']['timelength'])))
-            r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+            r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
             if F :
                 return 0
             bs=True
@@ -622,7 +622,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         break
                     else :
                         return -2
-        r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+        r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
         for j in re['data']['dash']['audio']:
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
@@ -993,7 +993,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         print("读取cookies.json出现错误")
         return -1
     r2.headers.update({'referer':url2})
-    r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
     r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
@@ -1054,7 +1054,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         break
                     else :
                         return -2
-        r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+        r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
         for j in re['data']['dash']['audio']:
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
@@ -1415,7 +1415,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 durz[l]=size
                 if ns or(not ns and F):
                     print("大小：%s(%sB,%s)"%(file.info.size(size),size,file.cml(size,re['data']['timelength'])))
-            r2.cookies.set('CURRENT_QUALITY','116',domain='.bilibili.com',path='/')
+            r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
             if F:
                 return 0
             bs=True
