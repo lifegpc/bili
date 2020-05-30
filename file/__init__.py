@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from file.info import getinfo,getinfox,printinfo,spfn
+from file.info import getinfo,getinfox,printinfo,spfn,spfln
 from file.dir import getinfod,printinfod,listd
 from file.filter import listf,listfd,listff,filtern,filterd
 from file.get import getfilen

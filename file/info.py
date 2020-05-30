@@ -16,6 +16,8 @@
 from os.path import getatime,getmtime,getctime,getsize,exists,isfile,isdir
 from file.time import ttos
 from file.str import width,size,ftts
+from re import split
+from platform import system
 def getinfo(fn) :
     "获取文件信息"
     if not exists(fn['a']) :
@@ -90,3 +92,19 @@ def spfn(fn:str) -> (str,str):
         else :
             s=s+"."+i
     return s,h
+def spfln(f:str)->(str,str):
+    "分离完整文件名"
+    r=split(r'[\\/]',f)
+    n=r[-1]
+    s=""
+    for i in r[:-1] :
+        if s=="":
+            s=i
+        else :
+            s=s+"/"+i
+    if s=="" :
+        if system()=="Linux" :
+            s="/"
+        else :
+            s="."
+    return s,n

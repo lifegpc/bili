@@ -63,7 +63,8 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
         print('正在开始下载第%s个文件，共%s个文件'%(i,n))
     else :
         print('正在开始下载')
-    cm='aria2c --auto-file-renaming=false'+geth(r.headers)+' -o "'+fn+'"'
+    (fn1,fn2)=file.spfln(fn)
+    cm='aria2c --auto-file-renaming=false'+geth(r.headers)+' -o "'+fn2+'" -d "'+fn1+'"'
     arc=3
     read=JSONParser.getset(se,'ax')
     if read!=None :
