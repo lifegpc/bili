@@ -97,8 +97,10 @@ def spfln(f:str)->(str,str):
     r=split(r'[\\/]',f)
     n=r[-1]
     s=""
+    f=True
     for i in r[:-1] :
-        if s=="":
+        if f:
+            f=False
             s=i
         else :
             s=s+"/"+i
