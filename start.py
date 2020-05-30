@@ -680,7 +680,7 @@ def main(ip={}):
                     f=False
                     inp=ip['p']
                 elif ns:
-                    inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                    inp=input('请输入你想下载弹幕/视频的视频编号，每两个编号间用,隔开，全部下载可输入a')
                 else :
                     print('请使用-p <p数>选择视频编号')
                     return -1
@@ -801,6 +801,17 @@ def main(ip={}):
             epl=''
         data=JSONParser.Myparser2(parser.videodata)
         le=PrintInfo.printInfo2(data,ns)
+        rs=search(r'__PGC_USERSTATE__=([^<]+)',re.text)
+        led=-1#上一次播放epid
+        if rs!=None:
+            rs=rs.groups()[0]
+            pgc=json.loads(rs)
+            if 'progress' in pgc and pgc['progress']!=None :
+                if 'last_ep_id' in pgc['progress'] and pgc['progress']['last_ep_id']>-1:
+                    led=pgc['progress']['last_ep_id']
+        epr=""
+        if led>-1 :
+            epr='，下载上次观看的EP%s可输入l'%(led)
         cho=[]
         if le==1:
             cho.append(1)
@@ -813,7 +824,7 @@ def main(ip={}):
                     inp=ip['p']
                     f=False
                 elif ns :
-                    inp=input('请输入你想下载弹幕的视频编号，每两个编号间用,隔开，全部下载可输入a%s'%(epl))
+                    inp=input('请输入你想下载弹幕/视频的视频编号，每两个编号间用,隔开，全部下载可输入a%s%s'%(epl,epr))
                 else :
                     print('请使用-p <p数>选择视频编号')
                     return -1
@@ -838,6 +849,25 @@ def main(ip={}):
                             for i in data['sections'] :
                                 for j in i['epList'] :
                                     if j['loaded']:
+                                        co=False
+                                        break
+                                    iii=iii+1
+                        if not co:
+                            cho.append(iii)
+                            bs=False
+                    elif led>-1 and inp[0]=='l':
+                        iii=1
+                        co=True
+                        if 'epList' in data:
+                            for i in data['epList'] :
+                                if i['id']==led :
+                                    co=False
+                                    break
+                                iii=iii+1
+                        if co and 'sections' in data:
+                            for i in data['sections'] :
+                                for j in i['epList'] :
+                                    if j['id']==led :
                                         co=False
                                         break
                                     iii=iii+1
