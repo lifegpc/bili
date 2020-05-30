@@ -86,8 +86,10 @@ def spfn(fn:str) -> (str,str):
     r=fn.split('.')
     h=r[-1]
     s=""
+    f=True
     for i in r[:-1]:
-        if s=="" :
+        if f :
+            f=False
             s=i
         else :
             s=s+"."+i
