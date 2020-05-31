@@ -65,8 +65,10 @@ def ph() :
     注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
     注4：当下载收藏夹/频道，除了-i和-p参数外，其他参数将被沿用至收藏夹/频道视频的下载设置，-i和-p参数只对收藏夹/频道起作用'''
     print(h)
-def gopt(args) :
+def gopt(args,d:bool=False) :
     re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp='])
+    if d:
+        print(re)
     rr=re[0]
     r={}
     for i in rr:
@@ -204,4 +206,4 @@ if __name__ == "__main__":
     if len(sys.argv)==1 :
         print('该文件仅供测试命令行输入使用，请运行start.py')
     else :
-        print(gopt(sys.argv[1:]))
+        print(gopt(sys.argv[1:],True))
