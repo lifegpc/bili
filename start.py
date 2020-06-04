@@ -44,7 +44,7 @@ def main(ip={}):
     if 'i' in ip :
         inp=ip['i']
     elif ns:
-        inp=input("请输入av号（支持SS、EP、MD号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿链接）：")
+        inp=input("请输入av号（支持SS、EP、MD号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿、小视频链接）：")
     else :
         print('请使用-i <输入>')
         return -1
@@ -84,7 +84,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -113,29 +113,29 @@ def main(ip={}):
                     exit()
         else :
             re=re.groups()
-            if re[5] :
-                inp=re[5]
+            if re[6] :
+                inp=re[6]
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
-            elif re[7] :
-                inp=str(biliBv.debv(re[7]))
+            elif re[8] :
+                inp=str(biliBv.debv(re[8]))
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
-            elif re[9] :
-                inp=re[9]
+            elif re[10] :
+                inp=re[10]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ss=True
-            elif re[11] :
-                inp=re[11]
+            elif re[12] :
+                inp=re[12]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ep=True
-            elif re[13] :
+            elif re[14] :
                 pl=True
-                uid=int(re[13])
+                uid=int(re[14])
                 pld['k']=''
                 pld['t']=0
-                if re[15] :
-                    sl=re[15].split('&')
+                if re[16] :
+                    sl=re[16].split('&')
                     for us in sl:
                         rep=search(r'^(fid=([0-9]+))?(keyword=(.+))?(type=([0-9]+))?',us,I)
                         if rep!=None :
@@ -146,19 +146,19 @@ def main(ip={}):
                                 pld['k']=rep[3]
                             if rep[4]:
                                 pld['t']=int(rep[5])
-            elif re[16]:
+            elif re[17]:
                 ch=True
-                uid=int(re[17])
-                if re[20] :
-                    cid=int(re[20])
-            elif re[21]:
+                uid=int(re[18])
+                if re[21] :
+                    cid=int(re[21])
+            elif re[22]:
                 uv=True
-                uid=int(re[22])
+                uid=int(re[23])
                 uvd['t']=0
                 uvd['k']=''
                 uvd['o']='pubdate'
-                if re[24]:
-                    sl=re[24].split('&')
+                if re[25]:
+                    sl=re[25].split('&')
                     for us in sl:
                         rep=search(r'^(tid=([0-9]+))?(keyword=(.+)?)?(order=(.+)?)?',us,I)
                         if rep!=None :
@@ -169,12 +169,15 @@ def main(ip={}):
                                 uvd['k']=rep[3]
                             elif rep[5]:
                                 uvd['o']=rep[5]
-            elif re[25] :
+            elif re[26] :
                 md=True
-                mid=int(re[26])
-            elif re[27] :
+                mid=int(re[27])
+            elif re[28] :
                 sm=True
-                sid=int(re[28])
+                sid=int(re[29])
+            elif re[30]:
+                sm=True
+                sid=int(re[31])
             else :
                 print('输入有误')
                 exit()
