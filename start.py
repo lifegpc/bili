@@ -44,7 +44,7 @@ def main(ip={}):
     if 'i' in ip :
         inp=ip['i']
     elif ns:
-        inp=input("请输入av号（支持SS、EP号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿链接）：")
+        inp=input("请输入av号（支持SS、EP、MD号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿链接）：")
     else :
         print('请使用-i <输入>')
         return -1
@@ -55,11 +55,13 @@ def main(ip={}):
     hd=False #互动视频
     ch=False #频道
     uv=False #投稿
+    md=False #番剧信息页
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
     uvd={} #投稿查询信息
     pld={} #收藏夹扩展信息
+    mid=-1 #md号
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -73,11 +75,14 @@ def main(ip={}):
         inp=str(biliBv.debv(inp))
         s="https://www.bilibili.com/video/av"+inp
         av=True
+    elif inp[0:2].lower()=='md' and inp[2:].isnumeric() :
+        md=True
+        mid=int(inp[2:])
     elif inp.isnumeric() :
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -162,6 +167,9 @@ def main(ip={}):
                                 uvd['k']=rep[3]
                             elif rep[5]:
                                 uvd['o']=rep[5]
+            elif re[24] :
+                md=True
+                mid=int(re[25])
             else :
                 print('输入有误')
                 exit()
@@ -207,6 +215,24 @@ def main(ip={}):
     if not 'd' in ud:
         return -1
     ud['vip']=ud['d']['vipStatus']
+    if md :
+        re=section.get('https://www.bilibili.com/bangumi/media/md%s'%(mid))
+        re.encoding="utf8"
+        rs=search(r'__INITIAL_STATE__=([^;]+)',re.text,I)
+        if rs!=None :
+            rs=rs.groups()[0]
+            re=json.loads(rs)
+            ip2=copyip(ip)
+            if 'p' in ip :
+                ip2['p']=ip['p']
+            ip2['i']='ss%s'%(re['mediaInfo']['season_id'])
+            read=main(ip2)
+            if read!=0 :
+                return read
+        else :
+            print('md号解析失败')
+            return -1
+        return 0
     if pl :
         if fid==-1 :
             af=False
