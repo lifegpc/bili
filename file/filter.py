@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from re import search
 from os.path import isdir,isfile
+import platform
 def listf(filelist,lx=0,ft=["xml"]) :
     "对listd获得列表进行过滤，文件夹都将保留"
     r=[]
@@ -65,6 +66,17 @@ def filtern(filen:str) :
     return filen
 def filterd(dir:str)->str:
     "对文件夹去除不应该出现的字符"
+    p=platform.system()
+    if p=="Windows" :
+        f=""
+        r=search(r'^[A-Z]:[\\/]?',dir)
+        if r!=None :
+            f=r.group()
+            dir=dir[len(f):]
+            if f[-1] != "/" and f[-1]!='\\' :
+                f=f+'/'
+            if dir=="":
+                return f
     if dir[-1]!='/' and dir[-1]!='\\' :
         dir=dir+'/'
     dir=dir.replace(':','_')
@@ -74,4 +86,6 @@ def filterd(dir:str)->str:
     dir=dir.replace('<','_')
     dir=dir.replace('>','_')
     dir=dir.replace('|','_')
+    if p=='Windows' :
+        dir=f+dir
     return dir

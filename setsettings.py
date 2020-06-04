@@ -197,4 +197,8 @@ if __name__=='__main__' :
     r=gk(se,'af')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'af',se)
+    print('下载小视频时，放入文件名中的描述长度是否可以超过20字？（不设置情况下为否）')
+    r=gk(se,'slt')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'slt',se)
     saveset(ne)

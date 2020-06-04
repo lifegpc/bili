@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from time import localtime,strftime
 from biliTime import tostr2
+from bstr import gettags
 def printInfo(data) :
 	"输出普通AV号获取的信息"
 	print("视频av号："+str(data['aid']))
@@ -141,6 +142,13 @@ def printInfo8(d:dict) :
 		print('收藏夹ID：%s'%(i['id']))
 		print('收藏夹名字：%s'%(i['title']))
 		k=k+1
+def printInfo9(d:dict) :
+	print('小视频ID：%s'%(d['id']))
+	print('描述：%s'%(d['description']))
+	print('标签：%s'%(gettags(d['tags'])))
+	print('上传时间：%s'%(d['upload_time']))
+	print('UP主名字：%s'%(d['name']))
+	print('UID：%s'%(d['uid']))
 def printcho(cho) :
 	if len(cho)==0 :
 		return
