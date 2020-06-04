@@ -166,8 +166,14 @@ def geturll(d):
         l.append(d['url'])
     if 'base_url' in d:
         l.append(d['base_url'])
+    if 'video_playurl' in d:
+        l.append(d['video_playurl'])
     if 'backup_url' in d and d['backup_url']!=None :
         for i in d['backup_url'] :
+            if isp(i,l) :
+                l.append(i)
+    if 'backup_playurl' in d and d['backup_playurl']!=None :
+        for i in d['backup_playurl'] :
             if isp(i,l) :
                 l.append(i)
     return l
@@ -1713,6 +1719,201 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     os.remove('%s.%s'%(filen,hzm))
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt))
+def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
+    """下载小视频
+    c 继续下载"""
+    ns=True
+    if 's' in ip:
+        ns=False
+    o="Download/"
+    read=JSONParser.getset(se,'o')
+    if read!=None :
+        o=read
+    if 'o' in ip:
+        o=ip['o']
+    try :
+        if not os.path.exists(o) :
+            mkdir(o)
+    except :
+        print("创建%s文件夹失败"%(o))
+        return -5
+    F=False
+    if 'F' in ip:
+        F=True
+    r2=requests.session()
+    r2.headers=copydict(r.headers)
+    r2.headers.update({'referer':'https://vc.bilibili.com/video/%s'%(i['id'])})
+    fz=streamgetlength(r2,i['video_playurl'])
+    if ns or(not ns and F):
+        print('画质：')
+        print('%sx%s,%s(%sB,%s)'%(i['width'],i['height'],file.info.size(fz),fz,file.cml(fz,i['video_time']*1000)))
+    if F:
+        return 0
+    sv=True
+    if JSONParser.getset(se,'sv')==False :
+        sv=False
+    if 'sv' in ip:
+        sv=ip['sv']
+    slt=False
+    if JSONParser.getset(se,'slt')==True :
+        slt=True
+    if 'slt' in ip :
+        slt=ip['slt']
+    if slt :
+        sn=i['description']
+    else :
+        if len(i['description']) >20 :
+            sn=i['description'][0:20]
+        else :
+            sn=i['description']
+    if sv:
+        filen='%s%s'%(o,file.filtern('%s-%s(小视频,ID%s,UID%s,%sx%s)'%(i['name'],sn,i['id'],i['uid'],i['width'],i['height'])))
+    else :
+        filen='%s%s'%(o,file.filtern('%s-%s(小视频,ID%s,UID%s)'%(i['name'],sn,i['id'],i['uid'])))
+    ff=True
+    if JSONParser.getset(se,'nf')==True :
+        ff=False
+    if 'yf' in ip :
+        if ip['yf']:
+            ff=True
+        else :
+            ff=False
+    ma=False
+    if JSONParser.getset(se,"ma")==True :
+        ma=True
+    if 'ma' in ip:
+        ma=ip['ma']
+    if ff and ma and os.path.exists('%s.mkv'%(filen)) and os.system('ffmpeg -h%s'%(getnul()))==0 :
+        fg=False
+        bs=True
+        if not ns:
+            fg=True
+            bs=False
+        if 'y' in ip :
+            if ip['y'] :
+                fg=True
+                bs=False
+            else :
+                fg=False
+                bs=False
+        while bs:
+            inp=input('"%s.mkv"文件已存在，是否覆盖？(y/n)'%(filen))
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    fg=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        if fg:
+            try :
+                os.remove('%s.mkv'%(filen))
+            except :
+                print('删除原有文件失败，跳过下载')
+                return 0
+        else:
+            return 0
+    hzm=file.geturlfe(i['video_playurl'])
+    fn='%s.%s'%(filen,hzm)
+    bs2=True
+    while bs2:
+        bs2=False
+        ar=False
+        if JSONParser.getset(se,'a')==True :
+            ar=True
+        if 'ar' in ip :
+            if ip['ar']:
+                ar=True
+            else :
+                ar=False
+        if os.system('aria2c -h%s'%(getnul()))==0 and ar :
+            ab=True
+            if JSONParser.getset(se,'ab')==False :
+                ab=False
+            if 'ab' in ip:
+                if ip['ab']:
+                    ab=True
+                else :
+                    ab=False
+            if ab:
+                read=dwaria2(r2,fn,geturll(i),fz,c,ip,se)
+            else :
+                read=dwaria2(r2,fn,i['video_playurl'],fz,c,ip,se)
+            if read==-3 :
+                print('aria2c 参数错误')
+                return -4
+        else :
+            re=r2.get(i['video_playurl'],stream=True)
+            read=downloadstream(ip,i['video_playurl'],r2,re,fn,fz,c)
+        if read==-1 :
+            return -1
+        elif read==-2 :
+            bs=True
+            rc=False
+            if not ns:
+                bs=False
+            read=JSONParser.getset(se,'rd')
+            if read==True :
+                bs=False
+                rc=True
+            elif read==False :
+                bs=False
+            if 'r' in ip:
+                if ip['r']:
+                    rc=True
+                    bs=False
+                else:
+                    rc=False
+                    bs=False
+            while bs :
+                inp=input('文件下载失败，是否重新下载？(y/n)')
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        bs=False
+                        rc=True
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            if rc :
+                os.remove(fn)
+                bs2=True
+            else :
+                return -3
+    if ma and ff and os.system('ffmpeg -h%s'%(getnul()))==0 :
+        print('将用ffmpeg自动合成')
+        nss=""
+        if not ns:
+            nss=getnul()
+        ml='ffmpeg -i "%s.%s" -metadata title="%s-%s" -metadata description="%s" -metadata id="%s" -metadata pubtime="%s" -metadata author="%s" -metadata uid="%s" -metadata vq="%sx%s" -metadata tags="%s" -metadata purl="https://vc.bilibili.com/video/%s" -c copy "%s.mkv"%s'%(filen,hzm,i['name'],sn,i['description'],i['id'],i['upload_time'],i['name'],i['uid'],i['width'],i['height'],bstr.gettags(i['tags']),i['id'],filen,nss)
+        re=os.system(ml)
+        if re==0:
+            print('合并完成！')
+        de=False
+        if re==0:
+            bs=True
+            if not ns:
+                bs=False
+            if JSONParser.getset(se,'ad')==True :
+                de=True
+                bs=False
+            elif JSONParser.getset(se,'ad')==False:
+                bs=False
+            if 'ad' in ip :
+                if ip['ad'] :
+                    de=True
+                    bs=False
+                else :
+                    de=False
+                    bs=False
+            while bs :
+                inp=input('是否删除中间文件？(y/n)')
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        bs=False
+                        de=True
+                    elif inp[0].lower()=='n' :
+                        bs=False
+        if re==0 and de:
+            os.remove('%s.%s'%(filen,hzm))
+    return 0
 def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
     s=0
     if d :

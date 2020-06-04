@@ -56,12 +56,14 @@ def main(ip={}):
     ch=False #频道
     uv=False #投稿
     md=False #番剧信息页
+    sm=False #小视频
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
     uvd={} #投稿查询信息
     pld={} #收藏夹扩展信息
     mid=-1 #md号
+    sid=-1 #小视频id
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -82,7 +84,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -111,29 +113,29 @@ def main(ip={}):
                     exit()
         else :
             re=re.groups()
-            if re[4] :
-                inp=re[4]
+            if re[5] :
+                inp=re[5]
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
-            elif re[6] :
-                inp=str(biliBv.debv(re[6]))
+            elif re[7] :
+                inp=str(biliBv.debv(re[7]))
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
-            elif re[8] :
-                inp=re[8]
+            elif re[9] :
+                inp=re[9]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ss=True
-            elif re[10] :
-                inp=re[10]
+            elif re[11] :
+                inp=re[11]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ep=True
-            elif re[12] :
+            elif re[13] :
                 pl=True
-                uid=int(re[12])
+                uid=int(re[13])
                 pld['k']=''
                 pld['t']=0
-                if re[14] :
-                    sl=re[14].split('&')
+                if re[15] :
+                    sl=re[15].split('&')
                     for us in sl:
                         rep=search(r'^(fid=([0-9]+))?(keyword=(.+))?(type=([0-9]+))?',us,I)
                         if rep!=None :
@@ -144,19 +146,19 @@ def main(ip={}):
                                 pld['k']=rep[3]
                             if rep[4]:
                                 pld['t']=int(rep[5])
-            elif re[15]:
+            elif re[16]:
                 ch=True
-                uid=int(re[16])
-                if re[19] :
-                    cid=int(re[19])
-            elif re[20]:
+                uid=int(re[17])
+                if re[20] :
+                    cid=int(re[20])
+            elif re[21]:
                 uv=True
-                uid=int(re[21])
+                uid=int(re[22])
                 uvd['t']=0
                 uvd['k']=''
                 uvd['o']='pubdate'
-                if re[23]:
-                    sl=re[23].split('&')
+                if re[24]:
+                    sl=re[24].split('&')
                     for us in sl:
                         rep=search(r'^(tid=([0-9]+))?(keyword=(.+)?)?(order=(.+)?)?',us,I)
                         if rep!=None :
@@ -167,9 +169,12 @@ def main(ip={}):
                                 uvd['k']=rep[3]
                             elif rep[5]:
                                 uvd['o']=rep[5]
-            elif re[24] :
+            elif re[25] :
                 md=True
-                mid=int(re[25])
+                mid=int(re[26])
+            elif re[27] :
+                sm=True
+                sid=int(re[28])
             else :
                 print('输入有误')
                 exit()
@@ -215,6 +220,43 @@ def main(ip={}):
     if not 'd' in ud:
         return -1
     ud['vip']=ud['d']['vipStatus']
+    if sm :
+        re=section.get('https://api.vc.bilibili.com/clip/v1/video/detail?video_id=%s&need_playurl=1'%(sid))
+        re.encoding="utf8"
+        re=re.json()
+        if re['code']!=0 :
+            print('%s %s'%(re['code'],re['message']))
+            return -1
+        inf=JSONParser.getsmi(re)
+        if ns:
+            PrintInfo.printInfo9(inf)
+        cho5=False
+        bs=True
+        if not ns:
+            bs=False
+        read=JSONParser.getset(se,'cd')
+        if read==True :
+            bs=False
+            cho5=True
+        elif read==False:
+            bs=False
+        if 'ac' in ip :
+            if ip['ac'] :
+                bs=False
+                cho5=True
+            else :
+                bs=False
+                cho5=False
+        while bs:
+            inp=input('是否开启继续下载功能？(y/n)')
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    cho5=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        videodownload.smdownload(section,inf,cho5,se,ip)
+        return 0
     if md :
         re=section.get('https://www.bilibili.com/bangumi/media/md%s'%(mid))
         re.encoding="utf8"

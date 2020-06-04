@@ -301,3 +301,24 @@ def getupi(d:dict)->dict :
     r['sign']=q['sign']
     r['b']=q['birthday']
     return r
+def getsmi(d:dict)->dict :
+    "获取小视频信息"
+    r={}
+    if 'data' in d :
+        if 'item' in d['data'] :
+            x=d['data']['item']
+            r['backup_playurl']=x['backup_playurl']
+            r['description']=x['description']
+            r['id']=x['id']
+            r['height']=x['height']
+            r['reply']=x['reply']
+            r['tags']=x['tags']
+            r['upload_time']=x['upload_time']
+            r['video_playurl']=x['video_playurl']
+            r['video_time']=x['video_time']
+            r['width']=x['width']
+        if 'user' in d['data'] :
+            x=d['data']['user']
+            r['name']=x['name']
+            r['uid']=x['uid']
+    return r
