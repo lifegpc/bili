@@ -1001,7 +1001,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     if F:
         print("%s:%s"%(i['titleFormat'],i['longTitle']))
     fdir='%s%s'%(o,file.filtern('%s(SS%s)'%(data['mediaInfo']['title'],data['mediaInfo']['ssId'])))
-    url2='https://bilibili.com/bangumi/play/ep'+str(i['id'])
+    url2='https://www.bilibili.com/bangumi/play/ep'+str(i['id'])
     if not os.path.exists(fdir):
         os.mkdir(fdir)
     r2=requests.Session()
