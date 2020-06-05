@@ -190,6 +190,7 @@ def main(ip={}):
         if 'httpsproxy' in ip:
             pr['https']=ip['httpsproxy']
         section.proxies=pr
+    section.trust_env=False
     read=JSONParser.loadcookie(section)
     ud={}
     login=0
@@ -423,6 +424,8 @@ def main(ip={}):
     if ch :
         r=requests.Session()
         r.headers=copydict(section.headers)
+        r.proxies=section.proxies
+        r.trust_env=False
         read=JSONParser.loadcookie(r)
         if read!=0 :
             print("读取cookies.json出现错误")
@@ -716,6 +719,8 @@ def main(ip={}):
         if data['videos']!=len(data['page']) :
             r=requests.Session()
             r.headers=copydict(section.headers)
+            r.proxies=section.proxies
+            r.trust_env=False
             read=JSONParser.loadcookie(r)
             if read!=0 :
                 print("读取cookies.json出现错误")

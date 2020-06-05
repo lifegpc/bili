@@ -223,6 +223,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         return -5
     r2=requests.Session()
     r2.headers=copydict(r.headers)
+    r2.trust_env=False
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
@@ -1005,6 +1006,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         os.mkdir(fdir)
     r2=requests.Session()
     r2.headers=copydict(r.headers)
+    r2.trust_env=False
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
@@ -1742,6 +1744,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         F=True
     r2=requests.session()
     r2.headers=copydict(r.headers)
+    r2.proxies=r.proxies
+    r2.trust_env=False
     r2.headers.update({'referer':'https://vc.bilibili.com/video/%s'%(i['id'])})
     fz=streamgetlength(r2,i['video_playurl'])
     if ns or(not ns and F):
@@ -1935,6 +1939,7 @@ def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             re.close()
             r2=requests.session()
             r2.headers=copydict(r.headers)
+            r2.trust_env=False
             r2.proxies=r.proxies
             r2.headers.update({'Range':'bytes=%s-%s'%(fsize,size-1)})
             read=JSONParser.loadcookie(r2)
