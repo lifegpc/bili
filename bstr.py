@@ -16,6 +16,7 @@
 def f(i:str):
     s=i.replace('\r','\\r')
     s=s.replace('\n','\\n')
+    s=s.replace('"',"'")
     return s
 def gettags(t:list) -> str:
     "将tag列表转换为文字"
