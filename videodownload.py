@@ -465,7 +465,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                                 elif inp[0].lower()=='n' :
                                     bs=False
                         if rc :
-                            os.remove(fn)
+                            if os.path.exists(fn) :
+                                os.remove(fn)
                             bs2=True
                         else :
                             return -3
@@ -530,7 +531,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                                 elif inp[0].lower()=='n' :
                                     bs=False
                         if rc :
-                            os.remove(fn)
+                            if os.path.exists(fn):
+                                os.remove(fn)
                             bs2=True
                         else :
                             return -3
@@ -865,7 +867,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    os.remove(getfn(0,i,data,vqs,hzm,o))
+                    if os.path.exists(getfn(0,i,data,vqs,hzm,o)):
+                        os.remove(getfn(0,i,data,vqs,hzm,o))
                     bs2=True
                 else :
                     return -3
@@ -928,7 +931,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    os.remove(getfn(1,i,data,vqs,hzm,o))
+                    if os.path.exists(getfn(1,i,data,vqs,hzm,o)):
+                        os.remove(getfn(1,i,data,vqs,hzm,o))
                     bs2=True
                 else :
                     return -3
@@ -1298,7 +1302,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    os.remove(getfn2(i,0,fdir,vqs,hzm))
+                    if os.path.exists(getfn2(i,0,fdir,vqs,hzm)):
+                        os.remove(getfn2(i,0,fdir,vqs,hzm))
                     bs2=True
                 else :
                     return -3
@@ -1361,7 +1366,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    os.remove(getfn2(i,1,fdir,vqs,hzm))
+                    if os.path.exists(getfn2(i,1,fdir,vqs,hzm)):
+                        os.remove(getfn2(i,1,fdir,vqs,hzm))
                     bs2=True
                 else :
                     return -3
@@ -1596,7 +1602,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                                 elif inp[0].lower()=='n' :
                                     bs=False
                         if rc :
-                            os.remove(fn)
+                            if os.path.exists(fn):
+                                os.remove(fn)
                             bs2=True
                         else :
                             return -3
@@ -1661,7 +1668,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                                 elif inp[0].lower()=='n' :
                                     bs=False
                         if rc :
-                            os.remove(fn)
+                            if os.path.exists(fn):
+                                os.remove(fn)
                             bs2=True
                         else :
                             return -3
@@ -1877,7 +1885,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                     elif inp[0].lower()=='n' :
                         bs=False
             if rc :
-                os.remove(fn)
+                if os.path.exists(fn):
+                    os.remove(fn)
                 bs2=True
             else :
                 return -3
