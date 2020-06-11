@@ -223,6 +223,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         return -5
     r2=requests.Session()
     r2.headers=copydict(r.headers)
+    r2.trust_env=False
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
@@ -464,7 +465,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                                 elif inp[0].lower()=='n' :
                                     bs=False
                         if rc :
-                            os.remove(fn)
+                            if os.path.exists(fn) :
+                                os.remove(fn)
                             bs2=True
                         else :
                             return -3
@@ -529,7 +531,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                                 elif inp[0].lower()=='n' :
                                     bs=False
                         if rc :
-                            os.remove(fn)
+                            if os.path.exists(fn):
+                                os.remove(fn)
                             bs2=True
                         else :
                             return -3
@@ -864,7 +867,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    os.remove(getfn(0,i,data,vqs,hzm,o))
+                    if os.path.exists(getfn(0,i,data,vqs,hzm,o)):
+                        os.remove(getfn(0,i,data,vqs,hzm,o))
                     bs2=True
                 else :
                     return -3
@@ -927,7 +931,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    os.remove(getfn(1,i,data,vqs,hzm,o))
+                    if os.path.exists(getfn(1,i,data,vqs,hzm,o)):
+                        os.remove(getfn(1,i,data,vqs,hzm,o))
                     bs2=True
                 else :
                     return -3
@@ -1000,11 +1005,12 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     if F:
         print("%s:%s"%(i['titleFormat'],i['longTitle']))
     fdir='%s%s'%(o,file.filtern('%s(SS%s)'%(data['mediaInfo']['title'],data['mediaInfo']['ssId'])))
-    url2='https://bilibili.com/bangumi/play/ep'+str(i['id'])
+    url2='https://www.bilibili.com/bangumi/play/ep'+str(i['id'])
     if not os.path.exists(fdir):
         os.mkdir(fdir)
     r2=requests.Session()
     r2.headers=copydict(r.headers)
+    r2.trust_env=False
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
@@ -1296,7 +1302,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    os.remove(getfn2(i,0,fdir,vqs,hzm))
+                    if os.path.exists(getfn2(i,0,fdir,vqs,hzm)):
+                        os.remove(getfn2(i,0,fdir,vqs,hzm))
                     bs2=True
                 else :
                     return -3
@@ -1359,7 +1366,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    os.remove(getfn2(i,1,fdir,vqs,hzm))
+                    if os.path.exists(getfn2(i,1,fdir,vqs,hzm)):
+                        os.remove(getfn2(i,1,fdir,vqs,hzm))
                     bs2=True
                 else :
                     return -3
@@ -1368,7 +1376,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             nss=""
             if not ns:
                 nss=getnul()
-            re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"%s'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen,nss))
+            re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"%s'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],bstr.f(i['longTitle']),data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],bstr.f(i['longTitle']),i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen,nss))
             de=False
             if re==0 :
                 print('合并完成！')
@@ -1594,7 +1602,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                                 elif inp[0].lower()=='n' :
                                     bs=False
                         if rc :
-                            os.remove(fn)
+                            if os.path.exists(fn):
+                                os.remove(fn)
                             bs2=True
                         else :
                             return -3
@@ -1659,7 +1668,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                                 elif inp[0].lower()=='n' :
                                     bs=False
                         if rc :
-                            os.remove(fn)
+                            if os.path.exists(fn):
+                                os.remove(fn)
                             bs2=True
                         else :
                             return -3
@@ -1678,9 +1688,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
                     j=j+1
                 te.close()
-                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(file.filtern('%s'%(i['id'])),tt,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
+                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(file.filtern('%s'%(i['id'])),tt,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],bstr.f(i['longTitle']),data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],bstr.f(i['longTitle']),i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
             else :
-                ml='ffmpeg -i "%s.%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(filen,hzm,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],i['longTitle'],data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],i['longTitle'],i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
+                ml='ffmpeg -i "%s.%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(filen,hzm,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],bstr.f(i['longTitle']),data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],bstr.f(i['longTitle']),i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
             re=os.system(ml)
             if re==0:
                 print('合并完成！')
@@ -1742,6 +1752,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         F=True
     r2=requests.session()
     r2.headers=copydict(r.headers)
+    r2.proxies=r.proxies
+    r2.trust_env=False
     r2.headers.update({'referer':'https://vc.bilibili.com/video/%s'%(i['id'])})
     fz=streamgetlength(r2,i['video_playurl'])
     if ns or(not ns and F):
@@ -1873,7 +1885,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                     elif inp[0].lower()=='n' :
                         bs=False
             if rc :
-                os.remove(fn)
+                if os.path.exists(fn):
+                    os.remove(fn)
                 bs2=True
             else :
                 return -3
@@ -1935,6 +1948,7 @@ def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             re.close()
             r2=requests.session()
             r2.headers=copydict(r.headers)
+            r2.trust_env=False
             r2.proxies=r.proxies
             r2.headers.update({'Range':'bytes=%s-%s'%(fsize,size-1)})
             read=JSONParser.loadcookie(r2)

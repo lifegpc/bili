@@ -13,7 +13,7 @@
     + [全弹幕下载问题](#全弹幕下载问题)
   * [已知BUG](#已知bug)
     + [一直出现保存内容至文件失败或显示cgi库escape出错](#一直出现保存内容至文件失败或显示cgi库escape出错)
-    + [登录时浏览器闪了一下关闭](#登录时浏览器闪了一下关闭)
+    + [登录时发生错误](#登录时发生错误)
 ## 简介
 程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver。   
 软件只有控制台界面，萌新不会可以看[这里](easyuse.md)   
@@ -65,6 +65,7 @@
 **BiliDanmuCreate.py**下cgi没有正确引用**escape()**   
 低版本python可以使用cgi.escape()而高版本可以使用cgi.html.escape()
 
-### 登录时浏览器闪了一下关闭
-这是由于第三方库[selenium](https://pypi.org/project/selenium/)支持的ChromeDriver版本与自带的版本不一致导致的。   
-**可以到这里[下载](https://chromedriver.chromium.org/downloads)其他版本**
+### 登录时发生错误
+这是由于你的电脑未安装Chrome或者Chrome版本与Chrome Driver版本不一致导致的，请安装Chrome或下载匹配Chrome版本的Chrome Driver。  
+**可以到这里[下载](https://chromedriver.chromium.org/downloads)Chrome Driver的其他版本**  
+具体的错误提示可以参考[#9](https://github.com/lifegpc/bili/issues/9)和[#11](https://github.com/lifegpc/bili/issues/11)。

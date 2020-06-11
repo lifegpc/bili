@@ -190,6 +190,7 @@ def main(ip={}):
         if 'httpsproxy' in ip:
             pr['https']=ip['httpsproxy']
         section.proxies=pr
+    section.trust_env=False
     read=JSONParser.loadcookie(section)
     ud={}
     login=0
@@ -423,6 +424,8 @@ def main(ip={}):
     if ch :
         r=requests.Session()
         r.headers=copydict(section.headers)
+        r.proxies=section.proxies
+        r.trust_env=False
         read=JSONParser.loadcookie(r)
         if read!=0 :
             print("读取cookies.json出现错误")
@@ -716,6 +719,8 @@ def main(ip={}):
         if data['videos']!=len(data['page']) :
             r=requests.Session()
             r.headers=copydict(section.headers)
+            r.proxies=section.proxies
+            r.trust_env=False
             read=JSONParser.loadcookie(r)
             if read!=0 :
                 print("读取cookies.json出现错误")
@@ -1039,7 +1044,7 @@ def main(ip={}):
                     elif inp[0].lower()=='n' :
                         bs=False
             for i in cho:
-                read=videodownload.epvideodownload(i,"https://bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip,ud)
+                read=videodownload.epvideodownload(i,"https://www.bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip,ud)
                 if read==-5 or read==-6 :
                     return -1
     return 0
