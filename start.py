@@ -41,6 +41,11 @@ def main(ip={}):
     if not isinstance(se,dict) :
         se=None
         print('建议运行setsettings.py设置程序以减少不必要的询问。')
+    nte=False
+    if JSONParser.getset(se,'te')==False :
+        nte=True
+    if 'te' in ip:
+        nte=not ip['te']
     if 'i' in ip :
         inp=ip['i']
     elif ns:
@@ -190,7 +195,8 @@ def main(ip={}):
         if 'httpsproxy' in ip:
             pr['https']=ip['httpsproxy']
         section.proxies=pr
-    section.trust_env=False
+    if nte:
+        section.trust_env=False
     read=JSONParser.loadcookie(section)
     ud={}
     login=0
@@ -425,7 +431,8 @@ def main(ip={}):
         r=requests.Session()
         r.headers=copydict(section.headers)
         r.proxies=section.proxies
-        r.trust_env=False
+        if nte:
+            r.trust_env=False
         read=JSONParser.loadcookie(r)
         if read!=0 :
             print("读取cookies.json出现错误")
@@ -720,7 +727,8 @@ def main(ip={}):
             r=requests.Session()
             r.headers=copydict(section.headers)
             r.proxies=section.proxies
-            r.trust_env=False
+            if nte:
+                r.trust_env=False
             read=JSONParser.loadcookie(r)
             if read!=0 :
                 print("读取cookies.json出现错误")

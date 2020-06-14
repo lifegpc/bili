@@ -201,4 +201,8 @@ if __name__=='__main__' :
     r=gk(se,'slt')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'slt',se)
+    print('requests是否使用环境变量中的代理设置？（不设置情况下为是）')
+    r=gk(se,'te')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'te',se)
     saveset(ne)

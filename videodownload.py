@@ -206,6 +206,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     ns=True
     if 's' in ip:
         ns=False
+    nte=False
+    if JSONParser.getset(se,'te')==False :
+        nte=True
+    if 'te' in ip:
+        nte=not ip['te']
     o="Download/"
     read=JSONParser.getset(se,'o')
     if read!=None :
@@ -223,7 +228,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         return -5
     r2=requests.Session()
     r2.headers=copydict(r.headers)
-    r2.trust_env=False
+    if nte:
+        r2.trust_env=False
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
@@ -435,7 +441,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
+                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3)
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -501,7 +507,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -837,7 +843,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     return -4
             else :
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm,o),dash['video']['size'],c3,1,2,True,durz,0)
+                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm,o),dash['video']['size'],c3,1,2,True,durz,0)
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -901,7 +907,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     return -4
             else :
                 re=r2.get(dash['audio']['base_url'],stream=True)
-                read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm,o),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+                read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm,o),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
             if read==-1:
                 return -1
             elif read==-2 :
@@ -987,6 +993,11 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     ns=True
     if 's' in ip:
         ns=False
+    nte=False
+    if JSONParser.getset(se,'te')==False :
+        nte=True
+    if 'te' in ip:
+        nte=not ip['te']
     o="Download/"
     read=JSONParser.getset(se,'o')
     if read!=None :
@@ -1010,7 +1021,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         os.mkdir(fdir)
     r2=requests.Session()
     r2.headers=copydict(r.headers)
-    r2.trust_env=False
+    if nte:
+        r2.trust_env=False
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
@@ -1272,7 +1284,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     return -4
             else :
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
+                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -1336,7 +1348,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     return -4
             else :
                 re=r2.get(dash['audio']['base_url'],stream=True)
-                read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+                read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -1572,7 +1584,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
+                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3)
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -1638,7 +1650,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -1736,6 +1748,11 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     if 's' in ip:
         ns=False
     o="Download/"
+    nte=False
+    if JSONParser.getset(se,'te')==False :
+        nte=True
+    if 'te' in ip:
+        nte=not ip['te']
     read=JSONParser.getset(se,'o')
     if read!=None :
         o=read
@@ -1753,7 +1770,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     r2=requests.session()
     r2.headers=copydict(r.headers)
     r2.proxies=r.proxies
-    r2.trust_env=False
+    if nte:
+        r2.trust_env=False
     r2.headers.update({'referer':'https://vc.bilibili.com/video/%s'%(i['id'])})
     fz=streamgetlength(r2,i['video_playurl'])
     if ns or(not ns and F):
@@ -1855,7 +1873,7 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 return -4
         else :
             re=r2.get(i['video_playurl'],stream=True)
-            read=downloadstream(ip,i['video_playurl'],r2,re,fn,fz,c)
+            read=downloadstream(nte,ip,i['video_playurl'],r2,re,fn,fz,c)
         if read==-1 :
             return -1
         elif read==-2 :
@@ -1927,7 +1945,7 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         if re==0 and de:
             os.remove('%s.%s'%(filen,hzm))
     return 0
-def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
+def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
     s=0
     if d :
         print('正在开始下载第%s个文件，共%s个文件'%(i,n))
@@ -1948,7 +1966,8 @@ def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             re.close()
             r2=requests.session()
             r2.headers=copydict(r.headers)
-            r2.trust_env=False
+            if nte:
+                r2.trust_env=False
             r2.proxies=r.proxies
             r2.headers.update({'Range':'bytes=%s-%s'%(fsize,size-1)})
             read=JSONParser.loadcookie(r2)
