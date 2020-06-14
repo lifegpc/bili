@@ -674,7 +674,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 else :
                     i2=0
             dash['video']=dash['video'][avq[i2]]
-            dash['audio']=dash['audio'][aaq[i2]]
+            dash['audio']=dash['audio'][aaq[0]]
             if ns:
                 print('视频轨：')
                 print("图质：%s(%sx%s,%s)"%(vqd[0],dash['video']['width'],dash['video']['height'],getfps(dash['video']['frame_rate'])))
@@ -1109,7 +1109,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 else :
                     i2=0
             dash['video']=dash['video'][avq[i2]]
-            dash['audio']=dash['audio'][aaq[i2]]
+            dash['audio']=dash['audio'][aaq[0]]
             if ns:
                 print('视频轨：')
                 print("图质：%s(%sx%s,%s)"%(vqd[0],dash['video']['width'],dash['video']['height'],getfps(dash['video']['frame_rate'])))
