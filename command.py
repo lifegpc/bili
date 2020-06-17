@@ -21,7 +21,7 @@ from file import filterd
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>] [-s] [--slt/--nslt]
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>] [-s] [--slt/--nslt] [--te/--nte]
     start.py show c/w   显示许可证
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
@@ -62,13 +62,15 @@ def ph() :
     -s      启用静默模式，关闭除版权声明和错误信息和进度信息（即内置下载器和aria2输出的信息，以及下载完成的信息）外的所有输出（若有重复文件，在不手动设置的情况下默认为覆盖）
     --slt   下载小视频时，放入文件名中的描述长度可以超过20字
     --nslt  下载小视频时，放入文件名中的描述长度无法超过20字，超出部分将被舍弃
+    --te    requests使用环境变量中的代理设置
+    --nte   requests不使用环境变量中的代理设置
     注1：如出现相同的选项，只有第一个会生效
     注2：命令行参数的优先级高于settings.json里的设置
     注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
     注4：当下载收藏夹/频道，除了-i和-p参数外，其他参数将被沿用至收藏夹/频道视频的下载设置，-i和-p参数只对收藏夹/频道起作用'''
     print(h)
 def gopt(args,d:bool=False) :
-    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt'])
+    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt','te','nte'])
     if d:
         print(re)
     rr=re[0]
@@ -200,6 +202,10 @@ def gopt(args,d:bool=False) :
             r['slt']=True
         if i[0]=='--nslt' and not 'slt' in r:
             r['slt']=False
+        if i[0]=='--te' and not 'te' in r:
+            r['te']=True
+        if i[0]=='--nte' and not 'te' in r:
+            r['nte']=True
     for i in re[1] :
         if i.lower()=="show":
             prc()

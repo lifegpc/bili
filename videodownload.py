@@ -206,6 +206,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     ns=True
     if 's' in ip:
         ns=False
+    nte=False
+    if JSONParser.getset(se,'te')==False :
+        nte=True
+    if 'te' in ip:
+        nte=not ip['te']
     o="Download/"
     read=JSONParser.getset(se,'o')
     if read!=None :
@@ -223,7 +228,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         return -5
     r2=requests.Session()
     r2.headers=copydict(r.headers)
-    r2.trust_env=False
+    if nte:
+        r2.trust_env=False
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
@@ -435,7 +441,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
+                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3)
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -501,7 +507,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -558,9 +564,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
                     j=j+1
                 te.close()
-                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt"%s -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s"%s -c copy "%s.mkv"%s' %(file.filtern('%s'%(data['aid'])),tt,sa,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],data['title'],data['page'][i-1]['part'],tostr2(data['pubdate']),data['uid'],data['name'],data['page'][i-1]['cid'],data['title'],data['page'][i-1]['part'],vqs,sb,filen,nss)
+                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt"%s -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s"%s -c copy "%s.mkv"%s' %(file.filtern('%s'%(data['aid'])),tt,sa,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),tostr2(data['pubdate']),data['uid'],bstr.f(data['name']),data['page'][i-1]['cid'],bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),vqs,sb,filen,nss)
             else :
-                ml='ffmpeg -i "%s.%s"%s -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s"%s -c copy "%s.mkv"%s'%(filen,hzm,sa,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],data['title'],data['page'][i-1]['part'],tostr2(data['pubdate']),data['uid'],data['name'],data['page'][i-1]['cid'],data['title'],data['page'][i-1]['part'],vqs,sb,filen,nss)
+                ml='ffmpeg -i "%s.%s"%s -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s"%s -c copy "%s.mkv"%s'%(filen,hzm,sa,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),tostr2(data['pubdate']),data['uid'],bstr.f(data['name']),data['page'][i-1]['cid'],bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),vqs,sb,filen,nss)
             re=os.system(ml)
             if re==0:
                 print('合并完成！')
@@ -674,7 +680,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 else :
                     i2=0
             dash['video']=dash['video'][avq[i2]]
-            dash['audio']=dash['audio'][aaq[i2]]
+            dash['audio']=dash['audio'][aaq[0]]
             if ns:
                 print('视频轨：')
                 print("图质：%s(%sx%s,%s)"%(vqd[0],dash['video']['width'],dash['video']['height'],getfps(dash['video']['frame_rate'])))
@@ -837,7 +843,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     return -4
             else :
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm,o),dash['video']['size'],c3,1,2,True,durz,0)
+                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm,o),dash['video']['size'],c3,1,2,True,durz,0)
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -901,7 +907,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     return -4
             else :
                 re=r2.get(dash['audio']['base_url'],stream=True)
-                read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm,o),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+                read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm,o),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
             if read==-1:
                 return -1
             elif read==-2 :
@@ -948,7 +954,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 nss=getnul()
             if 'sub' in data:
                 sa,sb=ffinputstr(data['sub'],2)
-            re=os.system('ffmpeg -i "%s" -i "%s"%s -metadata title="%s-%s" -metadata description="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata atitle="%s" -metadata pubdate="%s" -metadata ctime="%s" -metadata uid="%s" -metadata author="%s" -metadata p="%sP/%sP" -metadata part="%s" -metadata vq="%s" -metadata aq="%s"%s -c:s copy -c copy "%s"%s'%(getfn(0,i,data,vqs,hzm,o),getfn(1,i,data,vqs,hzm,o),sa,data['title'],data['page'][i-1]['part'],bstr.f(data['desc']),data['aid'],data['bvid'],data['page'][i-1]['cid'],data['title'],tostr2(data['pubdate']),tostr2(data['ctime']),data['uid'],data['name'],i,data['videos'],data['page'][i-1]['part'],vqs[0],vqs[1],sb,filen,nss))
+            re=os.system('ffmpeg -i "%s" -i "%s"%s -metadata title="%s-%s" -metadata description="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata atitle="%s" -metadata pubdate="%s" -metadata ctime="%s" -metadata uid="%s" -metadata author="%s" -metadata p="%sP/%sP" -metadata part="%s" -metadata vq="%s" -metadata aq="%s"%s -c:s copy -c copy "%s"%s'%(getfn(0,i,data,vqs,hzm,o),getfn(1,i,data,vqs,hzm,o),sa,bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),bstr.f(data['desc']),data['aid'],data['bvid'],data['page'][i-1]['cid'],bstr.f(data['title']),tostr2(data['pubdate']),tostr2(data['ctime']),data['uid'],bstr.f(data['name']),i,data['videos'],bstr.f(data['page'][i-1]['part']),vqs[0],vqs[1],sb,filen,nss))
             de=False
             if re==0 :
                 print('合并完成！')
@@ -987,6 +993,11 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     ns=True
     if 's' in ip:
         ns=False
+    nte=False
+    if JSONParser.getset(se,'te')==False :
+        nte=True
+    if 'te' in ip:
+        nte=not ip['te']
     o="Download/"
     read=JSONParser.getset(se,'o')
     if read!=None :
@@ -1010,7 +1021,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         os.mkdir(fdir)
     r2=requests.Session()
     r2.headers=copydict(r.headers)
-    r2.trust_env=False
+    if nte:
+        r2.trust_env=False
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
@@ -1109,7 +1121,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 else :
                     i2=0
             dash['video']=dash['video'][avq[i2]]
-            dash['audio']=dash['audio'][aaq[i2]]
+            dash['audio']=dash['audio'][aaq[0]]
             if ns:
                 print('视频轨：')
                 print("图质：%s(%sx%s,%s)"%(vqd[0],dash['video']['width'],dash['video']['height'],getfps(dash['video']['frame_rate'])))
@@ -1272,7 +1284,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     return -4
             else :
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read=downloadstream(ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
+                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -1336,7 +1348,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     return -4
             else :
                 re=r2.get(dash['audio']['base_url'],stream=True)
-                read=downloadstream(ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+                read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -1376,7 +1388,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             nss=""
             if not ns:
                 nss=getnul()
-            re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"%s'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],bstr.f(i['longTitle']),data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],bstr.f(i['longTitle']),i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen,nss))
+            re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"%s'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],bstr.f(data['mediaInfo']['title']),bstr.f(i['titleFormat']),bstr.f(i['longTitle']),bstr.f(data['mediaInfo']['series']),bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],bstr.f(data['mediaInfo']['title']),bstr.f(i['longTitle']),bstr.f(i['titleFormat']),i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen,nss))
             de=False
             if re==0 :
                 print('合并完成！')
@@ -1572,7 +1584,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3)
+                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3)
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -1638,7 +1650,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -1688,9 +1700,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
                     j=j+1
                 te.close()
-                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(file.filtern('%s'%(i['id'])),tt,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],bstr.f(i['longTitle']),data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],bstr.f(i['longTitle']),i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
+                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(file.filtern('%s'%(i['id'])),tt,data['mediaInfo']['id'],data['mediaInfo']['ssId'],bstr.f(data['mediaInfo']['title']),bstr.f(i['titleFormat']),bstr.f(i['longTitle']),bstr.f(data['mediaInfo']['series']),bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],bstr.f(data['mediaInfo']['title']),bstr.f(i['longTitle']),bstr.f(i['titleFormat']),i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
             else :
-                ml='ffmpeg -i "%s.%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(filen,hzm,data['mediaInfo']['id'],data['mediaInfo']['ssId'],data['mediaInfo']['title'],i['titleFormat'],bstr.f(i['longTitle']),data['mediaInfo']['series'],bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],data['mediaInfo']['title'],bstr.f(i['longTitle']),i['titleFormat'],i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
+                ml='ffmpeg -i "%s.%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(filen,hzm,data['mediaInfo']['id'],data['mediaInfo']['ssId'],bstr.f(data['mediaInfo']['title']),bstr.f(i['titleFormat']),bstr.f(i['longTitle']),bstr.f(data['mediaInfo']['series']),bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],bstr.f(data['mediaInfo']['title']),bstr.f(i['longTitle']),bstr.f(i['titleFormat']),i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
             re=os.system(ml)
             if re==0:
                 print('合并完成！')
@@ -1736,6 +1748,11 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     if 's' in ip:
         ns=False
     o="Download/"
+    nte=False
+    if JSONParser.getset(se,'te')==False :
+        nte=True
+    if 'te' in ip:
+        nte=not ip['te']
     read=JSONParser.getset(se,'o')
     if read!=None :
         o=read
@@ -1753,7 +1770,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     r2=requests.session()
     r2.headers=copydict(r.headers)
     r2.proxies=r.proxies
-    r2.trust_env=False
+    if nte:
+        r2.trust_env=False
     r2.headers.update({'referer':'https://vc.bilibili.com/video/%s'%(i['id'])})
     fz=streamgetlength(r2,i['video_playurl'])
     if ns or(not ns and F):
@@ -1855,7 +1873,7 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 return -4
         else :
             re=r2.get(i['video_playurl'],stream=True)
-            read=downloadstream(ip,i['video_playurl'],r2,re,fn,fz,c)
+            read=downloadstream(nte,ip,i['video_playurl'],r2,re,fn,fz,c)
         if read==-1 :
             return -1
         elif read==-2 :
@@ -1895,7 +1913,7 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         nss=""
         if not ns:
             nss=getnul()
-        ml='ffmpeg -i "%s.%s" -metadata title="%s-%s" -metadata description="%s" -metadata id="%s" -metadata pubtime="%s" -metadata author="%s" -metadata uid="%s" -metadata vq="%sx%s" -metadata tags="%s" -metadata purl="https://vc.bilibili.com/video/%s" -c copy "%s.mkv"%s'%(filen,hzm,i['name'],sn,i['description'],i['id'],i['upload_time'],i['name'],i['uid'],i['width'],i['height'],bstr.gettags(i['tags']),i['id'],filen,nss)
+        ml='ffmpeg -i "%s.%s" -metadata title="%s-%s" -metadata description="%s" -metadata id="%s" -metadata pubtime="%s" -metadata author="%s" -metadata uid="%s" -metadata vq="%sx%s" -metadata tags="%s" -metadata purl="https://vc.bilibili.com/video/%s" -c copy "%s.mkv"%s'%(filen,hzm,bstr.f(i['name']),bstr.f(sn),bstr.f(i['description']),i['id'],i['upload_time'],bstr.f(i['name']),i['uid'],i['width'],i['height'],bstr.f(bstr.gettags(i['tags'])),i['id'],filen,nss)
         re=os.system(ml)
         if re==0:
             print('合并完成！')
@@ -1927,7 +1945,7 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         if re==0 and de:
             os.remove('%s.%s'%(filen,hzm))
     return 0
-def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
+def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
     s=0
     if d :
         print('正在开始下载第%s个文件，共%s个文件'%(i,n))
@@ -1948,7 +1966,8 @@ def downloadstream(ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             re.close()
             r2=requests.session()
             r2.headers=copydict(r.headers)
-            r2.trust_env=False
+            if nte:
+                r2.trust_env=False
             r2.proxies=r.proxies
             r2.headers.update({'Range':'bytes=%s-%s'%(fsize,size-1)})
             read=JSONParser.loadcookie(r2)
