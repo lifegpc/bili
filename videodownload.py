@@ -248,7 +248,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     napi=True #新api
     if rs!=None :
         re=json.loads(rs.groups()[0])
-    elif data['videos']>1 :
+    elif data['videos']>=1 :
         uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16"%(data['page'][i-1]['cid'],120,data['bvid'])
         re=r2.get(uri)
         re.encoding="utf8"
