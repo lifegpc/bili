@@ -63,6 +63,8 @@ def filtern(filen:str) :
     filen=filen.replace('<','_')
     filen=filen.replace('>','_')
     filen=filen.replace('|','_')
+    while len(filen)>0 and filen[0]==' ':
+        filen=filen[1:]
     return filen
 def filterd(dir:str)->str:
     "对文件夹去除不应该出现的字符"
