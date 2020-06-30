@@ -551,7 +551,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             j=j+1
         if 'sub' in data :
             for s in data['sub']:
-                downsub(r2,filen+".mkv",s,ip,se)
+                downsub(r2,filen+".mkv",s,ip,se,ns,i)
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print('将用ffmpeg自动合成')
             tt=int(time.time())
@@ -949,7 +949,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     return -3
         if 'sub' in data :
             for s in data['sub']:
-                downsub(r2,filen,s,ip,se)
+                downsub(r2,filen,s,ip,se,ns,i)
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print('将用ffmpeg自动合成')
             sa=""
