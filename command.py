@@ -24,7 +24,7 @@ def ph() :
     start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>] [-s] [--slt/--nslt] [--te/--nte]
     start.py show c/w   显示许可证
     -i <输入>   av/bv/ep/ss号或者视频链接
-    -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频
+    -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频6.仅字幕下载（番剧除外）
     -p <p数>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号，下载上次观看的视频可输入l（仅限番剧）
     -m <boolean>    是否默认下载最高画质
     --ac <boolean>  是否开启继续下载功能
@@ -81,7 +81,7 @@ def gopt(args,d:bool=False) :
             exit()
         if i[0]=='-i' and not 'i' in r:
             r['i']=i[1]
-        if i[0]=='-d' and not 'd' in r and i[1].isnumeric() and int(i[1])>0 and int(i[1])<6 :
+        if i[0]=='-d' and not 'd' in r and i[1].isnumeric() and int(i[1])>0 and int(i[1])<7 :
             r['d']=int(i[1])
         if i[0]=='-p' and not 'p' in r :
             r['p']=i[1]

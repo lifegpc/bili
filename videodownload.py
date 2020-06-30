@@ -988,6 +988,65 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if 'sub' in data:
                     for j in data['sub'] :
                         os.remove(j['fn'])
+def avsubdownload(i,url,data,r,se,ip,ud) :
+    '''下载普通类视频字幕
+    -1 文件夹创建失败'''
+    ns=True
+    if 's' in ip:
+        ns=False
+    nte=False
+    if JSONParser.getset(se,'te')==False :
+        nte=True
+    if 'te' in ip:
+        nte=not ip['te']
+    o="Download/"
+    read=JSONParser.getset(se,'o')
+    if read!=None :
+        o=read
+    if 'o' in ip:
+        o=ip['o']
+    try :
+        if not os.path.exists(o) :
+            mkdir(o)
+    except :
+        print("创建%s文件夹失败"%(o))
+        return -1
+    r2=requests.Session()
+    r2.headers=copydict(r.headers)
+    if nte:
+        r2.trust_env=False
+    r2.proxies=r.proxies
+    read=JSONParser.loadcookie(r2)
+    if read!=0 :
+        print("读取cookies.json出现错误")
+        return -1
+    if i>1:
+        url="%s?p=%s"%(url,i)
+    r2.headers.update({'referer':url})
+    r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+    r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
+    r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+    rr=r2.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][i-1]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
+    rr.encoding='utf8'
+    rs2=search(r'<subtitle>(.+)</subtitle>',rr.text)
+    if rs2!=None :
+        rs2=json.loads(rs2.groups()[0])
+        JSONParser.getsub(rs2,data)
+        if data['videos']==1 :
+            filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
+        else :
+            filen='%s%s'%(o,file.filtern('%s-%s(AV%s,%s,P%s,%s)'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
+        if 'sub' in data and len(data['sub'])>0:
+            for s in data['sub'] :
+                downsub(r2,filen+".mkv",s,ip,se,True,i)
+        else :
+            if ns:
+                print('第%sP没有可以下载的字幕。'%(i))
+    else :
+        if ns:
+            print('第%sP没有可以下载的字幕。'%(i))
+    return 0
 def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     """下载番剧等视频"""
     ns=True
