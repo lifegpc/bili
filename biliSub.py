@@ -17,10 +17,10 @@ from file import spfn
 from requests import Session
 from biliTime import tostr3
 import os
-def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict) :
+def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict,pr:bool=False,pi:int=1) :
     "下载字幕"
     fq=spfn(fn)[0]
-    fn="%s_%s.srt"%(fq,i['lan'])
+    fn="%s.%s.srt"%(fq,i['lan'])
     i['fn']=fn
     if os.path.exists(fn) :
         fg=False
@@ -52,7 +52,8 @@ def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict) :
     re=r.get(i['url'])
     re.encoding='utf8'
     re=re.json()
-    assrt(fn,re['body'])
+    if assrt(fn,re['body'])==0 and pr :
+        print('第%sP%s字幕下载完毕！'%(pi,i['land']))
     return 0
 def assrt(fn:str,b:list):
     "保存至srt格式"
