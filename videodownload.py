@@ -420,9 +420,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 bs2=True
                 while bs2:
                     bs2=False
-                    ar=False
-                    if JSONParser.getset(se,'a')==True :
-                        ar=True
+                    ar=True
+                    if JSONParser.getset(se,'a')==False :
+                        ar=False
                     if 'ar' in ip :
                         if ip['ar']:
                             ar=True
@@ -486,9 +486,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 bs2=True
                 while bs2:
                     bs2=False
-                    ar=False
-                    if JSONParser.getset(se,'a')==True :
-                        ar=True
+                    ar=True
+                    if JSONParser.getset(se,'a')==False :
+                        ar=False
                     if 'ar' in ip :
                         if ip['ar']:
                             ar=True
@@ -822,9 +822,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         bs2=True
         while bs2:
             bs2=False
-            ar=False
-            if JSONParser.getset(se,'a')==True :
-                ar=True
+            ar=True
+            if JSONParser.getset(se,'a')==False :
+                ar=False
             if 'ar' in ip :
                 if ip['ar']:
                     ar=True
@@ -886,9 +886,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         bs2=True
         while bs2:
             bs2=False
-            ar=False
-            if JSONParser.getset(se,'a')==True :
-                ar=True
+            ar=True
+            if JSONParser.getset(se,'a')==False :
+                ar=False
             if 'ar' in ip :
                 if ip['ar']:
                     ar=True
@@ -1322,9 +1322,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         bs2=True
         while bs2:
             bs2=False
-            ar=False
-            if JSONParser.getset(se,'a')==True :
-                ar=True
+            ar=True
+            if JSONParser.getset(se,'a')==False :
+                ar=False
             if 'ar' in ip :
                 if ip['ar']:
                     ar=True
@@ -1386,9 +1386,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         bs2=True
         while bs2:
             bs2=False
-            ar=False
-            if JSONParser.getset(se,'a')==True :
-                ar=True
+            ar=True
+            if JSONParser.getset(se,'a')==False :
+                ar=False
             if 'ar' in ip :
                 if ip['ar']:
                     ar=True
@@ -1622,9 +1622,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 bs2=True
                 while bs2:
                     bs2=False
-                    ar=False
-                    if JSONParser.getset(se,'a')==True :
-                        ar=True
+                    ar=True
+                    if JSONParser.getset(se,'a')==False :
+                        ar=False
                     if 'ar' in ip :
                         if ip['ar']:
                             ar=True
@@ -1688,9 +1688,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 bs2=True
                 while bs2:
                     bs2=False
-                    ar=False
-                    if JSONParser.getset(se,'a')==True :
-                        ar=True
+                    ar=True
+                    if JSONParser.getset(se,'a')==False :
+                        ar=False
                     if 'ar' in ip :
                         if ip['ar']:
                             ar=True
@@ -1911,9 +1911,9 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     bs2=True
     while bs2:
         bs2=False
-        ar=False
-        if JSONParser.getset(se,'a')==True :
-            ar=True
+        ar=True
+        if JSONParser.getset(se,'a')==False :
+            ar=False
         if 'ar' in ip :
             if ip['ar']:
                 ar=True

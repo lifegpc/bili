@@ -98,7 +98,7 @@ if __name__=='__main__' :
     r=gk(se,'mpc')
     print2('%s1.avc(h.264)\t%s2.hevc(h.265)\t%s3.不设置（默认）',r)
     sk(ne,'mpc',se)
-    print('是否使用aria2c下载？')
+    print('是否使用aria2c下载？（不设置相当于是）')
     r=gk(se,'a')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'a',se)
