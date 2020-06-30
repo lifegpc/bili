@@ -205,7 +205,7 @@ def gopt(args,d:bool=False) :
         if i[0]=='--te' and not 'te' in r:
             r['te']=True
         if i[0]=='--nte' and not 'te' in r:
-            r['nte']=True
+            r['te']=False
     for i in re[1] :
         if i.lower()=="show":
             prc()
