@@ -605,9 +605,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     os.remove('%s.%s'%(filen,hzm))
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
-                if 'sub' in data:
-                    for j in data['sub'] :
-                        os.remove(j['fn'])
+            if 'sub' in data:
+                for j in data['sub'] :
+                    os.remove(j['fn'])
     elif "data" in re and "dash" in re['data'] :
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
