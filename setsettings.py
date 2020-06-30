@@ -205,4 +205,8 @@ if __name__=='__main__' :
     r=gk(se,'te')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'te',se)
+    print('合并完成后删除文件时是否保留字幕文件？（不设置情况下为否）')
+    r=gk(se,'bd')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'bd',se)
     saveset(ne)

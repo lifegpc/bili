@@ -226,6 +226,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     except :
         print("创建%s文件夹失败"%(o))
         return -5
+    nbd=True
+    if JSONParser.getset(se,'bd')==True :
+        nbd=False
+    if 'bd' in ip:
+        nbd=not ip['bd']
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
@@ -603,11 +608,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         j=j+1
                 else :
                     os.remove('%s.%s'%(filen,hzm))
+                if 'sub' in data and nbd:
+                    for j in data['sub'] :
+                        os.remove(j['fn'])
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
-            if 'sub' in data:
-                for j in data['sub'] :
-                    os.remove(j['fn'])
     elif "data" in re and "dash" in re['data'] :
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
@@ -985,7 +990,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if re==0 and de:
                 for j in[0,1]:
                     os.remove(getfn(j,i,data,vqs,hzm,o))
-                if 'sub' in data:
+                if 'sub' in data and nbd:
                     for j in data['sub'] :
                         os.remove(j['fn'])
 def avsubdownload(i,url,data,r,se,ip,ud) :
