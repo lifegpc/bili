@@ -209,4 +209,8 @@ if __name__=='__main__' :
     r=gk(se,'bd')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'bd',se)
+    print('使用aria2c时是否关闭异步DNS（关闭后在Windows系统下可以解决Timeout while contacting DNS servers问题）？（不设置情况下为否）')
+    r=gk(se,'cad')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'cad',se)
     saveset(ne)
