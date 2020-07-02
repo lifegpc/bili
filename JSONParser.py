@@ -322,3 +322,34 @@ def getsmi(d:dict)->dict :
             r['name']=x['name']
             r['uid']=x['uid']
     return r
+def getlr1(d:dict) -> dict :
+    "获取直播回放信息"
+    r={}
+    t=d['data']
+    r['dm']=t['dm_info']
+    t=t['live_record_info']
+    r['rid']=t['rid']
+    r['roomid']=t['room_id']
+    r['uid']=t['uid']
+    r['title']=t['title']
+    r['areaid']=t['area_id']
+    r['pareaid']=t['parent_area_id']
+    r['st']=t['start_timestamp']
+    r['et']=t['end_timestamp']
+    r['online']=t['online']
+    r['danmunum']=t['danmu_num']
+    return r
+def getlr2(d:dict,r:dict) :
+    "获得房间信息（可能与当前回放信息不同）"
+    t=d['data']
+    r['des']=t['description']
+    r['arean']=t['area_name']
+    r['parean']=t['parent_area_name']
+    r['tags']=t['tags']
+    r['hotwords']=t['hot_words']
+def getlr3(d:dict,r:dict):
+    "获得UP主信息"
+    t=d['data']
+    r['name']=t['name']
+    r['sex']=t['sex']
+    r['sign']=t['sign']

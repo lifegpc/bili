@@ -62,6 +62,7 @@ def main(ip={}):
     uv=False #投稿
     md=False #番剧信息页
     sm=False #小视频
+    lr=False #直播回放
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
@@ -69,6 +70,7 @@ def main(ip={}):
     pld={} #收藏夹扩展信息
     mid=-1 #md号
     sid=-1 #小视频id
+    rid="" #直播回放id
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -89,7 +91,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -118,29 +120,29 @@ def main(ip={}):
                     exit()
         else :
             re=re.groups()
-            if re[6] :
-                inp=re[6]
+            if re[7] :
+                inp=re[7]
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
-            elif re[8] :
-                inp=str(biliBv.debv(re[8]))
+            elif re[9] :
+                inp=str(biliBv.debv(re[9]))
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
-            elif re[10] :
-                inp=re[10]
+            elif re[11] :
+                inp=re[11]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ss=True
-            elif re[12] :
-                inp=re[12]
+            elif re[13] :
+                inp=re[13]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ep=True
-            elif re[14] :
+            elif re[15] :
                 pl=True
-                uid=int(re[14])
+                uid=int(re[15])
                 pld['k']=''
                 pld['t']=0
-                if re[16] :
-                    sl=re[16].split('&')
+                if re[17] :
+                    sl=re[17].split('&')
                     for us in sl:
                         rep=search(r'^(fid=([0-9]+))?(keyword=(.+))?(type=([0-9]+))?',us,I)
                         if rep!=None :
@@ -151,19 +153,19 @@ def main(ip={}):
                                 pld['k']=rep[3]
                             if rep[4]:
                                 pld['t']=int(rep[5])
-            elif re[17]:
+            elif re[18]:
                 ch=True
-                uid=int(re[18])
-                if re[21] :
-                    cid=int(re[21])
-            elif re[22]:
+                uid=int(re[19])
+                if re[22] :
+                    cid=int(re[22])
+            elif re[23]:
                 uv=True
-                uid=int(re[23])
+                uid=int(re[24])
                 uvd['t']=0
                 uvd['k']=''
                 uvd['o']='pubdate'
-                if re[25]:
-                    sl=re[25].split('&')
+                if re[26]:
+                    sl=re[26].split('&')
                     for us in sl:
                         rep=search(r'^(tid=([0-9]+))?(keyword=(.+)?)?(order=(.+)?)?',us,I)
                         if rep!=None :
@@ -174,15 +176,18 @@ def main(ip={}):
                                 uvd['k']=rep[3]
                             elif rep[5]:
                                 uvd['o']=rep[5]
-            elif re[26] :
+            elif re[27] :
                 md=True
-                mid=int(re[27])
-            elif re[28] :
+                mid=int(re[28])
+            elif re[29] :
                 sm=True
-                sid=int(re[29])
-            elif re[30]:
+                sid=int(re[30])
+            elif re[31]:
                 sm=True
-                sid=int(re[31])
+                sid=int(re[32])
+            elif re[33] :
+                lr=True
+                rid=re[34]
             else :
                 print('输入有误')
                 exit()
@@ -684,6 +689,109 @@ def main(ip={}):
             if yn[0].lower() =='n' :
                 bs=False
                 xml=2
+    if lr: #直播回放
+        r=requests.Session()
+        r.headers=copydict(section.headers)
+        r.proxies=section.proxies
+        if nte:
+            r.trust_env=False
+        read=JSONParser.loadcookie(r)
+        if read!=0 :
+            print("读取cookies.json出现错误")
+            return -1
+        r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+        r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
+        r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+        re=r.get('https://api.live.bilibili.com/xlive/web-room/v1/record/getInfoByLiveRecord?rid=%s'%(rid)) #直播回放信息
+        re=re.json()
+        if re['code']!=0 :
+            print('%s %s'%(re['code'],re['message']))
+            return -1
+        ri=JSONParser.getlr1(re)
+        re=r.get('https://api.live.bilibili.com/room/v1/Room/get_info?room_id=%s&from=room'%(ri['roomid'])) #直播房间信息
+        re=re.json()
+        if re['code']!=0 :
+            print('%s %s'%(re['code'],re['message']))
+            return -1
+        JSONParser.getlr2(re,ri)
+        re=r.get('https://api.bilibili.com/x/space/acc/info?mid=%s&jsonp=jsonp'%(ri['uid'])) #UP主信息
+        re=re.json()
+        if re['code']!=0 :
+            print('%s %s'%(re['code'],re['message']))
+            return -1
+        JSONParser.getlr3(re,ri)
+        if ns:
+            PrintInfo.printlr(ri)
+        bs=True
+        f=True
+        while bs:
+            if f and 'd' in ip:
+                inp=str(ip['d'])
+                f=False
+            elif ns:
+                inp=input('请输入你要下载的方式：\n1.视频下载')
+            else :
+                print('请使用-d <下载方式>选择下载方式')
+                return -1
+            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<2:
+                cho=int(inp[0])
+                bs=False
+        if cho==1 :
+            bs=True
+            cho3=False
+            if not ns:
+                bs=False
+            read=JSONParser.getset(se,'mp')
+            if read==True :
+                bs=False
+                cho3=True
+            elif read==False :
+                bs=False
+            if 'm' in ip :
+                if ip['m'] :
+                    bs=False
+                    cho3=True
+                else :
+                    bs=False
+                    cho3=False
+            while bs :
+                inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
+                if len(inp) > 0:
+                    if inp[0].lower()=='y' :
+                        cho3=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            cho5=False
+            bs=True
+            if not ns:
+                bs=False
+            read=JSONParser.getset(se,'cd')
+            if read==True :
+                bs=False
+                cho5=True
+            elif read==False:
+                bs=False
+            if 'ac' in ip :
+                if ip['ac'] :
+                    bs=False
+                    cho5=True
+                else :
+                    bs=False
+                    cho5=False
+            while bs:
+                inp=input('是否开启继续下载功能？(y/n)')
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        cho5=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            read=videodownload.lrvideodownload(ri,section,cho3,cho5,se,ip)
+            if read==-5 :
+                return -1
+        return 0
     re=section.get(s)
     parser=HTMLParser.Myparser()
     parser.feed(re.text)
