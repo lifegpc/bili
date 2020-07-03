@@ -213,4 +213,8 @@ if __name__=='__main__' :
     r=gk(se,'cad')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
     sk(ne,'cad',se)
+    print('直播回放简介写入元数据时是否进行去HTML化？（不设置情况下为是）')
+    r=gk(se,'lrh')
+    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    sk(ne,'lrh',se)
     saveset(ne)

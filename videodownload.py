@@ -2276,7 +2276,13 @@ def lrvideodownload(data,r,c,c3,se,ip):
                 com=com+k['size']
             j=j+1
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
-            data['des']=bstr.rhtml(data['des'])
+            lrh=True #是否进行去HTML化
+            if JSONParser.getset(se,'lrh')==False :
+                lrh=False
+            if 'lrh' in ip:
+                lrh=ip['lrh']
+            if lrh:
+                data['des']=bstr.rhtml(data['des'])
             print('将用ffmpeg自动合成')
             tt=int(time.time())
             nss=""
