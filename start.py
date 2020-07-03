@@ -33,6 +33,7 @@ from math import ceil
 from dictcopy import copyip,copydict
 from biliHdVideo import getninfo
 import traceback
+import biliLiveDanmu
 def main(ip={}):
     se=JSONParser.loadset()
     ns=True
@@ -49,7 +50,7 @@ def main(ip={}):
     if 'i' in ip :
         inp=ip['i']
     elif ns:
-        inp=input("请输入av号（支持SS、EP、MD号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿、小视频链接）：")
+        inp=input("请输入av号（支持SS、EP、MD号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿、小视频链接，支持直播回放链接）：")
     else :
         print('请使用-i <输入>')
         return -1
@@ -730,14 +731,18 @@ def main(ip={}):
                 inp=str(ip['d'])
                 f=False
             elif ns:
-                inp=input('请输入你要下载的方式：\n1.视频下载')
+                inp=input('请输入你要下载的方式：\n1.视频下载\n2.弹幕下载\n3.视频+弹幕下载')
             else :
                 print('请使用-d <下载方式>选择下载方式')
                 return -1
-            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<2:
+            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<4:
                 cho=int(inp[0])
                 bs=False
-        if cho==1 :
+        if cho>1 :
+            read=biliLiveDanmu.lrdownload(ri,section,ip,se,xml,xmlc)
+            if read==-1 :
+                return -1
+        if cho==1 or cho==3 :
             bs=True
             cho3=False
             if not ns:
