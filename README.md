@@ -13,7 +13,7 @@
     + [全弹幕下载问题](#全弹幕下载问题)
   * [已知BUG](#已知bug)
     + [一直出现保存内容至文件失败或显示cgi库escape出错](#一直出现保存内容至文件失败或显示cgi库escape出错)
-    + [登录时发生错误](#登录时发生错误)
+    + [登录时发生错误（使用ChromeDriver时）](#登录时发生错误使用chromedriver时)
 ## 简介
 程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver。   
 软件只有控制台界面，萌新不会可以看[这里](easyuse.md)   
@@ -21,9 +21,12 @@
 ## 依赖库
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)  
+[rsa](https://pypi.org/project/rsa/)  
 自己写的file库   
 如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
-如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。
+如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
+用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。  
+识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。
 ### 其他
 程序目录下需要有相应系统版本的ChromeDriver。   
 没有ChromeDriver将无法进行登录操作（同理，由于手机平台没有ChromeDriver，也无法进行登录，但可以用[其他方法](#a)绕过）
@@ -65,7 +68,7 @@
 **BiliDanmuCreate.py**下cgi没有正确引用**escape()**   
 低版本python可以使用cgi.escape()而高版本可以使用cgi.html.escape()
 
-### 登录时发生错误
+### 登录时发生错误（使用ChromeDriver时）
 这是由于你的电脑未安装Chrome或者Chrome版本与Chrome Driver版本不一致导致的，请安装Chrome或下载匹配Chrome版本的Chrome Driver。  
 **可以到这里[下载](https://chromedriver.chromium.org/downloads)Chrome Driver的其他版本**  
 具体的错误提示可以参考[#9](https://github.com/lifegpc/bili/issues/9)和[#11](https://github.com/lifegpc/bili/issues/11)。
