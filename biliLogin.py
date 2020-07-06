@@ -118,6 +118,7 @@ def login2(r:requests.Session):
                 print('服务繁忙, 尝试使用V3接口登录')
                 pm=f"access_key=&actionKey=appkey&appkey={appkey}&build=6040500&captcha=&challenge=&channel=bili&cookies=&device=phone&mobi_app=android&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(),pubkey)))}&permission=ALL&platform=android&seccode=&subid=1&ts={int(time.time())}&username={parse.quote_plus(username)}&validate="
                 re=r.post('https://passport.bilibili.com/api/v3/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
+                re=re.json()
             else :
                 print(f"{re['code']} {re['message']}")
                 return -1
