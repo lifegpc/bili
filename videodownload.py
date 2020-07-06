@@ -113,6 +113,10 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
     cm=cm+' -k %sM'%(ark)
     cm=cm+' --max-overall-download-limit='+ms
     cm=cm+' --async-dns='+asd
+    if 'ahttpproxy' in ip:
+        cm=cm+' --http-proxy='+ip['ahttpproxy']
+    if 'ahttpsproxy' in ip:
+        cm=cm+' --https-proxy='+ip['ahttpsproxy']
     if os.path.exists(fn) :
         oa=os.path.exists('%s.aria2'%(fn))
         if oa :

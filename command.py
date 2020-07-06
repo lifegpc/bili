@@ -21,7 +21,7 @@ from file import filterd
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh]
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>]
     start.py show c/w   显示许可证
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频6.仅字幕下载（番剧除外）
@@ -87,13 +87,15 @@ def ph() :
     --ncad  使用aria2c时启用异步DNS
     --lrh   直播回放简介写入元数据时进行去HTML化
     --nlrh  直播回放简介写入元数据时不进行去HTML化
+    --ahttpproxy <PROXY>    指定aria2c使用的http代理，即aria2c的--http-proxy参数
+    --ahttpsproxy <PROXY>   指定aria2c使用的https代理，即aria2c的--https-proxy参数
     注1：如出现相同的选项，只有第一个会生效
     注2：命令行参数的优先级高于settings.json里的设置
     注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
     注4：当下载收藏夹/频道，除了-i和-p参数外，其他参数将被沿用至收藏夹/频道视频的下载设置，-i和-p参数只对收藏夹/频道起作用'''
     print(h)
 def gopt(args,d:bool=False) :
-    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt','te','nte','bd','nbd','cad','ncad','lrh','nlrh','ym','nm','yac','nac','ydm','ndm','yad','nad','yr','nr','ysv','nsv','yma','nma','yda','nda'])
+    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt','te','nte','bd','nbd','cad','ncad','lrh','nlrh','ym','nm','yac','nac','ydm','ndm','yad','nad','yr','nr','ysv','nsv','yma','nma','yda','nda','ahttpproxy=','ahttpsproxy='])
     if d:
         print(re)
     rr=re[0]
@@ -273,6 +275,10 @@ def gopt(args,d:bool=False) :
             r['lrh']=True
         if i[0]=='--nlrh' and not 'lrh' in r:
             r['lrh']=False
+        if i[0]=='--ahttpproxy' and not 'ahttpproxy' in r:
+            r['ahttpproxy']=i[1]
+        if i[0]=='--ahttpsproxy' and not 'ahttpsproxy' in r:
+            r['ahttpsproxy']=i[1]
     for i in re[1] :
         if i.lower()=="show":
             prc()
