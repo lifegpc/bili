@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from time import localtime,strftime
 from biliTime import tostr2
-from bstr import gettags
+from bstr import gettags,rhtml
 def printInfo(data) :
 	"输出普通AV号获取的信息"
 	print("视频av号："+str(data['aid']))
@@ -156,6 +156,20 @@ def printcho(cho) :
 	for i in cho :
 		print('%s,' %(i['titleFormat']),end='')
 	print()
+def printlr(d:dict):
+	print('直播回放id：%s'%(d['rid']))
+	print('房间id：%s'%(d['roomid']))
+	print('UP主：%s'%(d['name']))
+	print('UP主UID：%s'%(d['uid']))
+	print('UP主性别：%s'%(d['sex']))
+	print('UP主个性签名：%s'%(d['sign']))
+	print('直播名称：%s'%(d['title']))
+	print('开始时间：%s'%(tostr2(d['st'])))
+	print('结束时间：%s'%(tostr2(d['et'])))
+	print('简介（去HTML化）：%s'%(rhtml(d['des'])))
+	print('区域：%s-%s'%(d['parean'],d['arean']))
+	print('房间标签：%s'%(d['tags']))
+	print('房间热词：%s'%(gettags(d['hotwords'])))
 def pr() :
 	print("""    bili  版权所有 (C) 2019-2020  lifegpc
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.

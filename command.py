@@ -21,16 +21,27 @@ from file import filterd
 def ph() :
     h='''命令行帮助：
     start.py -h/-?/--help   显示命令行帮助信息
-    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>] [--ac <boolean>] [--dm <boolean>] [--ad <boolean>] [-r <boolean>] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>] [--ma <boolean>] [--ms <speed>] [--da <boolean>] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd]
+    start.py [-i <输入>] [-d <下载方式>] [-p <p数>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <序号>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>]
     start.py show c/w   显示许可证
     -i <输入>   av/bv/ep/ss号或者视频链接
     -d <下载方式>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频6.仅字幕下载（番剧除外）
+    直播回放下载方式：1.视频2.弹幕3.视频+弹幕
     -p <p数>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号，下载上次观看的视频可输入l（仅限番剧）
     -m <boolean>    是否默认下载最高画质
+    --ym    相当于-m true
+    --nm    相当于-m false
     --ac <boolean>  是否开启继续下载功能
+    --yac   相当于--ac true
+    --nac   相当于--ac false
     --dm <boolean>  是否启用弹幕过滤
+    --ydm   相当于--dm true
+    --ndm   相当于--dm false
     --ad <boolean>  是否在合并完成后删除文件
+    --yad   相当于--ad true
+    --nad   相当于--ad false
     -r <boolean>    是否在下载失败后重新下载
+    --yr    相当于-r true
+    --nr    相当于-r false
     -y  覆盖所有重复文件
     -n  不覆盖重复文件
     --yf    使用ffmpeg
@@ -45,9 +56,15 @@ def ph() :
     --nab   在使用aria2c下载时不使用备用网址
     --fa none/prealloc/trunc/falloc 在使用arai2c下载时预分配方式即--file-allocation的参数
     --sv <boolean>  文件名中是否输出视频画质信息
+    --ysv   相当于--sv true
+    --nsv   相当于--sv false
     --ma <boolean>  是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）
+    --yma   相当于--ma true
+    --nma   相当于--ma false
     --ms <speed>    在使用aria2c下载时最大总体速度，即--max-overall-download-limit的参数，默认单位为B，可以使用K和M为单位
     --da <boolean>  收藏夹是否自动下载每一个视频的所有分P
+    --yda   相当于--da true
+    --nda   相当于--da false
     --httpproxy <URI>   使用HTTP代理
     --httpsproxy <URI>  使用HTTPS代理 
     --jt <number>|a|b 下载全弹幕时两次抓取之间的天数，范围为1-365，a会启用自动模式（推荐自动模式），番剧模式下b修改抓取起始日期
@@ -66,13 +83,19 @@ def ph() :
     --nte   requests不使用环境变量中的代理设置
     --bd    合并完成后删除文件时保留字幕文件
     --nbd   合并完成后删除文件时删除字幕文件
+    --cad   使用aria2c时关闭异步DNS（关闭后在Windows系统下可以解决Timeout while contacting DNS servers问题）
+    --ncad  使用aria2c时启用异步DNS
+    --lrh   直播回放简介写入元数据时进行去HTML化
+    --nlrh  直播回放简介写入元数据时不进行去HTML化
+    --ahttpproxy <PROXY>    指定aria2c使用的http代理，即aria2c的--http-proxy参数
+    --ahttpsproxy <PROXY>   指定aria2c使用的https代理，即aria2c的--https-proxy参数
     注1：如出现相同的选项，只有第一个会生效
     注2：命令行参数的优先级高于settings.json里的设置
     注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
     注4：当下载收藏夹/频道，除了-i和-p参数外，其他参数将被沿用至收藏夹/频道视频的下载设置，-i和-p参数只对收藏夹/频道起作用'''
     print(h)
 def gopt(args,d:bool=False) :
-    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt','te','nte','bd','nbd'])
+    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt','te','nte','bd','nbd','cad','ncad','lrh','nlrh','ym','nm','yac','nac','ydm','ndm','yad','nad','yr','nr','ysv','nsv','yma','nma','yda','nda','ahttpproxy=','ahttpsproxy='])
     if d:
         print(re)
     rr=re[0]
@@ -92,26 +115,46 @@ def gopt(args,d:bool=False) :
                 r['m']=True
             elif i[1].lower()=='false' :
                 r['m']=False
+        if i[0]=='--ym' and not 'm' in r:
+            r['m']=True
+        if i[0]=='--nm' and not 'm' in r:
+            r['m']=False
         if i[0]=='--ac' and not 'ac' in r:
             if i[1].lower()=='true' :
                 r['ac']=True
             elif i[1].lower()=='false' :
                 r['ac']=False
+        if i[0]=='--yac' and not 'ac' in r:
+            r['ac']=True
+        if i[0]=='--nac' and not 'ac' in r:
+            r['ac']=False
         if i[0]=='--dm' and not 'dm' in r:
             if i[1].lower()=='true' :
                 r['dm']=True
             elif i[1].lower()=='false' :
                 r['dm']=False
+        if i[0]=='--ydm' and not 'dm' in r:
+            r['dm']=True
+        if i[0]=='--ndm' and not 'dm' in r:
+            r['dm']=False
         if i[0]=='--ad' and not 'ad' in r:
             if i[1].lower()=='true' :
                 r['ad']=True
             elif i[1].lower()=='false' :
                 r['ad']=False
+        if i[0]=='--yad' and not 'ad' in r:
+            r['ad']=True
+        if i[0]=='--nad' and not 'ad' in r:
+            r['ad']=False
         if i[0]=='-r' and not 'r' in r:
             if i[1].lower()=='true' :
                 r['r']=True
             elif i[1].lower()=='false' :
                 r['r']=False
+        if i[0]=='--yr' and not 'r' in r:
+            r['r']=True
+        if i[0]=='--nr' and not 'r' in r:
+            r['r']=False
         if i[0]=='-y' and not 'y' in r:
             r['y']=True
         if i[0]=='-n' and not 'y' in r:
@@ -156,11 +199,19 @@ def gopt(args,d:bool=False) :
                 r['sv']=True
             elif i[1].lower()=='false' :
                 r['sv']=False
+        if i[0]=='--ysv' and not 'sv' in r:
+            r['sv']=True
+        if i[0]=='--nsv' and not 'sv' in r:
+            r['sv']=False
         if i[0]=='--ma' and not 'ma' in r:
             if i[1].lower()=='true' :
                 r['ma']=True
             elif i[1].lower()=='false' :
                 r['ma']=False
+        if i[0]=='--yma' and not 'ma' in r:
+            r['ma']=True
+        if i[0]=='--nma' and not 'ma' in r:
+            r['ma']=False
         if i[0]=='--ms' and not 'ms' in r:
             t=search("^[0-9]+[MK]?$",i[1])
             if t!=None :
@@ -170,6 +221,10 @@ def gopt(args,d:bool=False) :
                 r['da']=True
             elif i[1].lower()=='false' :
                 r['da']=False
+        if i[0]=='--yda' and not 'da' in r:
+            r['da']=True
+        if i[0]=='--nda' and not 'da' in r:
+            r['da']=False
         if i[0]=='--httpproxy' and not 'httpproxy' in r:
             r['httpproxy']=i[1]
         if i[0]=='--httpsproxy' and not 'httpsproxy' in r:
@@ -212,6 +267,18 @@ def gopt(args,d:bool=False) :
             r['bd']=True
         if i[0]=='--nbd' and not 'bd' in r:
             r['bd']=False
+        if i[0]=='--cad' and not 'cad' in r:
+            r['cad']=True
+        if i[0]=='--ncad' and not 'cad' in r:
+            r['cad']=False
+        if i[0]=='--lrh' and not 'lrh' in r:
+            r['lrh']=True
+        if i[0]=='--nlrh' and not 'lrh' in r:
+            r['lrh']=False
+        if i[0]=='--ahttpproxy' and not 'ahttpproxy' in r:
+            r['ahttpproxy']=i[1]
+        if i[0]=='--ahttpsproxy' and not 'ahttpsproxy' in r:
+            r['ahttpsproxy']=i[1]
     for i in re[1] :
         if i.lower()=="show":
             prc()
