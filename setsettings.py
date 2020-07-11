@@ -17,6 +17,7 @@ from JSONParser import loadset,saveset,getset
 from re import search
 from PrintInfo import pr
 from file import filterd
+from lang import lan
 l1=['x','','']
 l2=['','x','']
 l3=['','','x']
@@ -70,6 +71,20 @@ if __name__=='__main__' :
     print('选项前的x说明了当前选中的设置，直接回车会保持当前设置')
     if se :
         print('删除当前文件夹下的setting.json可以重置设置')
+    n="不设置"
+    p=""
+    if se and 'lan' in se :
+        p=se['lan']
+        n=lan[p]
+    print(f'请选择程序语言（目前为{n}）：')
+    print('null : 不设置')
+    for i in lan.keys() :
+        print(f'{i} : {lan[i]}')
+    r=input('请输入:之前的语言代码：')
+    if len(r) >0 and (r in lan or r=="null"):
+        p=r
+    if p!="null" :
+        ne['lan']=p
     print('是否默认启用弹幕过滤？')
     r=gk(se,'dmgl')
     print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)

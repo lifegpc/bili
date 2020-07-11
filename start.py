@@ -34,14 +34,19 @@ from dictcopy import copyip,copydict
 from biliHdVideo import getninfo
 import traceback
 import biliLiveDanmu
+from lang import getlan,getdict
+lan=None
+se=JSONParser.loadset()
+ip={}
 def main(ip={}):
-    se=JSONParser.loadset()
+    global se
+    global lan
     ns=True
     if 's' in ip :
         ns=False
     if not isinstance(se,dict) :
         se=None
-        print('建议运行setsettings.py设置程序以减少不必要的询问。')
+        print(f'{lan["RUN_SETTINGS_TIPS"]}')
     nte=False
     if JSONParser.getset(se,'te')==False :
         nte=True
@@ -50,9 +55,9 @@ def main(ip={}):
     if 'i' in ip :
         inp=ip['i']
     elif ns:
-        inp=input("请输入av号（支持SS、EP、MD号，BV号请以BV开头，现在已支持链接，支持用户页的收藏夹、频道、投稿、小视频链接，支持直播回放链接）：")
+        inp=input(f"{lan['INPUT1']}")
     else :
-        print('请使用-i <输入>')
+        print(f'{lan["ERROR1"]}')
         return -1
     av=False
     ss=False
@@ -96,7 +101,7 @@ def main(ip={}):
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
-                print('输入有误')
+                print(f'{lan["ERROR2"]}')
                 exit()
             else :
                 re=re.groups()
@@ -117,7 +122,7 @@ def main(ip={}):
                     s="https://www.bilibili.com/bangumi/play/"+inp
                     ep=True
                 else :
-                    print('输入有误')
+                    print(f'{lan["ERROR2"]}')
                     exit()
         else :
             re=re.groups()
@@ -190,7 +195,7 @@ def main(ip={}):
                 lr=True
                 rid=re[34]
             else :
-                print('输入有误')
+                print(f'{lan["ERROR2"]}')
                 exit()
     section=requests.session()
     section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36","Connection": "keep-alive","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","Accept-Language": "zh-CN,zh;q=0.8"})
@@ -1172,11 +1177,11 @@ def main(ip={}):
                 if read==-5 or read==-6 :
                     return -1
     return 0
+if len(sys.argv)>1 :
+    ip=gopt(sys.argv[1:])
+lan=getdict('start',getlan(se,ip))
 if __name__=="__main__" :
     PrintInfo.pr()
-    if len(sys.argv)==1 :
-        main()
-    else :
-        main(gopt(sys.argv[1:]))
+    main(ip)
 else :
     print("请运行根目录下的start.py")
