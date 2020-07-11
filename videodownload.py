@@ -247,7 +247,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if not os.path.exists(o) :
             mkdir(o)
     except :
-        print("创建%s文件夹失败"%(o))
+        print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败
         return -5
     nbd=True
     if JSONParser.getset(se,'bd')==True :
@@ -261,7 +261,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     r2.proxies=r.proxies
     read=JSONParser.loadcookie(r2)
     if read!=0 :
-        print("读取cookies.json出现错误")
+        print(lan['ERROR2'])#读取cookies.json出现错误
         return -1
     if i>1:
         url="%s?p=%s"%(url,i)
@@ -291,7 +291,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     rr.encoding='utf8'
     rs2=search(r'<subtitle>(.+)</subtitle>',rr.text)
     if F:
-        print('第%sP：%s'%(i,data['page'][i-1]['part']))
+        print(f"{lan['OUTPUT8'].replace('<number>',str(i))}{data['page'][i-1]['part']}")#第<number>P：
     if rs2!=None :
         rs2=json.loads(rs2.groups()[0])
         JSONParser.getsub(rs2,data)
@@ -330,14 +330,14 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         vqd=dellk(vqd,ii)
                     continue
                 if ns or(not ns and F):
-                    print('%s.图质：%s'%(j+1,vqd[j]))
+                    print(f"{j+1}.{lan['OUTPUT9']}{vqd[j]}")#图质：
                 j=j+1
                 size=0
                 for k in durl[l] :
                     size=size+k['size']
                 durz[l]=size
                 if ns or(not ns and F):
-                    print("大小：%s(%sB,%s)"%(file.info.size(size),size,file.cml(size,re['data']['timelength'])))
+                    print(f"{lan['OUTPUT10']}{file.info.size(size)}({size}B,{file.cml(size,re['data']['timelength'])})")#大小：
             r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
             if F :
                 return 0
@@ -348,9 +348,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     fi=False
                     inp=ip['v']
                 elif ns :
-                    inp=input('请选择画质：')
+                    inp=input(lan['INPUT2'])#请选择画质：
                 else :
-                    print('请使用-v <id>选择画质')
+                    print(lan['ERROR3'])#请使用"-v <id>"选择画质
                     return -6
                 if len(inp) > 0 and inp.isnumeric() and int(inp)>0 and int(inp)<len(avq)+1 :
                     durl=durl[avq[int(inp)-1]]
@@ -358,14 +358,14 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     vq=avq[int(inp)-1]
                     bs=False
             if ns:
-                print('已选择%s画质'%(vqd[int(inp)-1]))
+                print(lan['OUTPUT11'].replace('<videoquality>',vqd[int(inp)-1]))#已选择<videoquality>画质
             vqs=vqd[int(inp)-1]
         else :
             j=0
             for l in avq :
                 if l==vq :
                     if ns:
-                        print('图质：%s'%(vqd[j]))
+                        print(f"{lan['OUTPUT9']}{vqd[j]}")#画质：
                     vqs=vqd[j]
                     break
                 j=j+1
@@ -373,7 +373,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             for k in durl[vq] :
                 durz=durz+k['size']
             if ns:
-                print('大小：%s(%sBm,%s)'%(file.info.size(durz),durz,file.cml(durz,re['data']['timelength'])))
+                print(f"{lan['OUTPUT10']}{file.info.size(durz)}({durz}B,{file.cml(durz,re['data']['timelength'])})")#大小：
             durl=durl[vq]
         sv=True
         if JSONParser.getset(se,'sv')==False :
@@ -417,7 +417,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     fg=False
                     bs=False
             while bs:
-                inp=input('"%s.mkv"文件已存在，是否覆盖？(y/n)'%(filen))
+                inp=input(f"{lan['INPUT1'].replace('<filename>','%s.mkv'%(filen))}(y/n)")
                 if len(inp)>0 :
                     if inp[0].lower()=='y' :
                         fg=True
@@ -428,12 +428,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 try :
                     os.remove('%s.mkv'%(filen))
                 except :
-                    print('删除原有文件失败，跳过下载')
+                    print(lan['OUTPUT7'])
                     return 0
             else:
                 return 0
         if ns:
-            print('共有%s个文件'%(len(durl)))
+            print(lan['OUTPUT12'].replace('<number>',str(len(durl))))#共有<number>个文件
         j=1
         hzm=file.geturlfe(durl[0]['url'])
         com=0

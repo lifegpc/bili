@@ -46,3 +46,39 @@ msgstr ""
 msgctxt "OUTPUT7"
 msgid "Failed to delete the original file, skip download."
 msgstr ""
+
+msgctxt "ERROR1"
+msgid "Unable to create folder \"<dirname>\"."
+msgstr ""
+
+msgctxt "ERROR2"
+msgid "An error occurred when reading the file: \"cookies.json\"."
+msgstr ""
+
+msgctxt "OUTPUT8"
+msgid "Part <number> :"
+msgstr ""
+
+msgctxt "OUTPUT9"
+msgid "Video quality:"
+msgstr ""
+
+msgctxt "OUTPUT10"
+msgid "File size:"
+msgstr ""
+
+msgctxt "INPUT2"
+msgid "Please select video quality :"
+msgstr ""
+
+msgctxt "ERROR3"
+msgid "Please use \"-v <id>\" to select the video quality."
+msgstr ""
+
+msgctxt "OUTPUT11"
+msgid "You have selected the video quality: <videoquality>"
+msgstr ""
+
+msgctxt "OUTPUT12"
+msgid "<number> files in total."
+msgstr ""

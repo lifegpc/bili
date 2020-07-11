@@ -54,3 +54,39 @@ msgstr "文件\"<filename>\"已存在，是否覆盖？"
 msgctxt "OUTPUT7"
 msgid "Failed to delete the original file, skip download."
 msgstr "删除原有文件失败，跳过下载。"
+
+msgctxt "ERROR1"
+msgid "Unable to create folder \"<dirname>\"."
+msgstr "创建文件夹\"<dirname>\"失败。"
+
+msgctxt "ERROR2"
+msgid "An error occurred when reading the file: \"cookies.json\"."
+msgstr "读取cookies.json出现错误"
+
+msgctxt "OUTPUT8"
+msgid "Part <number> :"
+msgstr "第<number>P："
+
+msgctxt "OUTPUT9"
+msgid "Video quality:"
+msgstr "画质："
+
+msgctxt "OUTPUT10"
+msgid "File size:"
+msgstr "文件大小："
+
+msgctxt "INPUT2"
+msgid "Please select video quality :"
+msgstr "请选择画质："
+
+msgctxt "ERROR3"
+msgid "Please use \"-v <id>\" to select the video quality."
+msgstr "请使用\"-v <id>\"选择画质。"
+
+msgctxt "OUTPUT11"
+msgid "You have selected the video quality: <videoquality>"
+msgstr "已选择<videoquality>画质。"
+
+msgctxt "OUTPUT12"
+msgid "<number> files in total."
+msgstr "共有<number>个文件。"
