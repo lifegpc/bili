@@ -1,0 +1,36 @@
+# bili - biliLogin.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 07:10:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+msgctxt "INPUT1"
+msgid "The file \"<filename>\" already exists, do you want to overwrite it?"
+msgstr ""
+
+msgctxt "OUTPUT1"
+msgid "Failed to delete the original file, skip download."
+msgstr ""
+
+msgctxt "OUTPUT2"
+msgid "<languagename> subtitles for part <number> download complete."
+msgstr ""
+
+msgctxt "ERROR1"
+msgid "Failed to save \"<filename>\"."
+msgstr ""
+
+msgctxt "ERROR2"
+msgid "Failed to write to the file \"<filename>\"."
+msgstr ""
