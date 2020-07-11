@@ -113,7 +113,7 @@ msgctxt "INPUT13"
 msgid ""
 "The maximum number of connections while downloading a file with aria2c "
 "(Possible Values:<value1>, Default:<value2>, Now:<value3>):"
-msgstr "使用aria2c时单个服务器最大连接数(有效值：<value1>，默认：<value2>，目前：<value3>)："
+msgstr "使用aria2c时单个文件最大连接数(有效值：<value1>，默认：<value2>，目前：<value3>)："
 
 msgctxt "INPUT14"
 msgid "Please enter a number greater than or equal to <min>:"

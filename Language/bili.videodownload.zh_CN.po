@@ -1,0 +1,56 @@
+# bili - videodownload.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 12:54:00+0000\n"
+"PO-Revision-Date: 2020-07-11 13:31+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "OUTPUT1"
+msgid "Start downloading file <i> of <count> files."
+msgstr "正在开始下载第<i>个文件，共<count>个文件。"
+
+msgctxt "OUTPUT2"
+msgid "Start downloading."
+msgstr "正在开始下载。"
+
+msgctxt "OUTPUT3"
+msgid ""
+"The maximum number of connections for a file: <value1>, The maximum number "
+"of connections to one server: <value2>, The minimum split file size: "
+"<value3>M, The file allocation method: <value4><maxspeed>"
+msgstr ""
+"单文件最大<value1>个连接，单个服务器最大<value2>个连接，文件分片大小<value3>M，预分配方式为<value4><maxspeed>"
+
+msgctxt "OUTPUT4"
+msgid ", The maximum overall download speed in bytes/s: <value>"
+msgstr "，限速为<value>"
+
+msgctxt "OUTPUT5"
+msgid "(Because the aria2 file is found, it is recommended to overwrite.)"
+msgstr "（发现aria2文件，建议覆盖）"
+
+msgctxt "OUTPUT6"
+msgid "The aria2 file is not found, skip download."
+msgstr "未找到aria2文件，跳过下载。"
+
+msgctxt "INPUT1"
+msgid "The file \"<filename>\" already exists, do you want to overwrite it?"
+msgstr "文件\"<filename>\"已存在，是否覆盖？"
+
+msgctxt "OUTPUT7"
+msgid "Failed to delete the original file, skip download."
+msgstr "删除原有文件失败，跳过下载。"

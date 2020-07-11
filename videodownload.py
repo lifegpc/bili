@@ -28,11 +28,20 @@ from biliSub import downsub,ffinputstr
 from file import mkdir
 from dict import delli,dellk
 import platform
+from command import gopt
+from lang import getlan,getdict
+import sys
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
 # session = md5(String((getCookie('buvid3') || Math.floor(Math.random() * 100000).toString(16)) + Date.now()));
 #第二个需要带referer，可以解析4K
+lan=None
+se=JSONParser.loadset()
+ip={}
+if len(sys.argv)>1 :
+    ip=gopt(sys.argv[1:])
+lan=getdict('videodownload',getlan(se,ip))
 def getfps(s:str)->str:
     "解析B站API返回的fps"
     if s.isnumeric() :
@@ -60,9 +69,9 @@ def geth(h:CaseInsensitiveDict) :
     return s
 def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
     if d :
-        print('正在开始下载第%s个文件，共%s个文件'%(i,n))
+        print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件
     else :
-        print('正在开始下载')
+        print(lan['OUTPUT2'])#正在开始下载
     (fn1,fn2)=file.spfln(fn)
     cm='aria2c --auto-file-renaming=false'+geth(r.headers)+' -o "'+fn2+'" -d "'+fn1+'"'
     arc=3
@@ -96,7 +105,7 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
         ms=ip['ms']
     xs=""
     if ms!="0" :
-        xs="，限速为%s"%(ms)
+        xs=lan['OUTPUT4'].replace('<value>',ms)#，限速为<value>
     asd=True
     if JSONParser.getset(se,'cad')==True :
         asd=False
@@ -106,7 +115,7 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
         asd="true"
     else :
         asd="false"
-    print('单文件最大%s个连接，单个服务器最大%s个连接，文件分片大小%sM，预分配方式为%s%s'%(ars,arc,ark,arfa,xs))
+    print(lan['OUTPUT3'].replace('<value1>',str(ars)).replace('<value2>',str(arc)).replace('<value3>',str(ark)).replace('<value4>',arfa).replace('<maxspeed>',xs))#单文件最大<value1>个连接，单个服务器最大<value2>个连接，文件分片大小<value3>M，预分配方式为<value4><maxspeed>
     cm=cm+' -x '+str(arc)
     cm=cm+' -s '+str(ars)
     cm=cm+' --file-allocation='+arfa
@@ -120,13 +129,13 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
     if os.path.exists(fn) :
         oa=os.path.exists('%s.aria2'%(fn))
         if oa :
-            s="(发现aria2文件，建议覆盖)"
+            s=lan['OUTPUT5']#(发现aria2文件，建议覆盖)
         else :
             s=""
         bs=True
         fg=False
         if d2 and not oa :
-            print('未找到aria2文件，跳过下载')
+            print(lan['OUTPUT6'])#未找到aria2文件，跳过下载
             return 0
         if d2 and oa :
             cm=cm+' -c'
@@ -142,7 +151,7 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
                     fg=False
                     bs=False
         while bs and not d2 :
-            inp=input('"%s"文件已存在，是否覆盖？%s(y/n)'%(fn,s))
+            inp=input(f'{lan["INPUT1"].replace("<filename>",fn)}{s}(y/n)')#"<filename>"文件已存在，是否覆盖？
             if len(inp)>0 :
                 if inp[0].lower()=='y':
                     fg=True
@@ -153,7 +162,7 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
             try :
                 os.remove(fn)
             except :
-                print('删除原有文件失败，跳过下载')
+                print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 return 0
         elif not d2:
             return 0
