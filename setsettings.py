@@ -17,7 +17,16 @@ from JSONParser import loadset,saveset,getset
 from re import search
 from PrintInfo import pr
 from file import filterd
-from lang import lan
+from lang import lan,getlan,getdict
+import sys
+from command import gopt
+from JSONParser import loadset
+la=None
+se=loadset()
+ip={}
+if len(sys.argv)>1 :
+    ip=gopt(sys.argv[1:])
+la=getdict('setsettings',getlan(se,ip))
 l1=['x','','']
 l2=['','x','']
 l3=['','','x']
@@ -46,7 +55,7 @@ def gk(se:dict,key:str) :
 def sk(se:dict,key:str,re:dict) :
     b=True
     while b:
-        i=input('请输入选项中的数字以选择')
+        i=input(la['INPUT1'])#请输入选项中的数字以选择
         if len(i) > 0 and i.isnumeric():
             i=int(i)
             if i==1 :
@@ -68,34 +77,34 @@ if __name__=='__main__' :
     if not isinstance(se,dict) :
         se=None
     r=[]
-    print('选项前的x说明了当前选中的设置，直接回车会保持当前设置')
+    print(la['OUTPUT1'])#选项前的x指明了当前选中的设置，直接回车会保持当前设置
     if se :
-        print('删除当前文件夹下的setting.json可以重置设置')
-    n="不设置"
+        print(la['OUTPUT2'])#删除当前文件夹下的setting.json可以重置设置
+    n=la['NOTSET']#不设置
     p=""
     if se and 'lan' in se :
         p=se['lan']
         n=lan[p]
-    print(f'请选择程序语言（目前为{n}）：')
-    print('null : 不设置')
+    print(la['OUTPUT3'].replace('<languagename>',n))#请选择程序语言（目前为<languagename>）：
+    print(f'null : {la["NOTSET"]}')
     for i in lan.keys() :
         print(f'{i} : {lan[i]}')
-    r=input('请输入:之前的语言代码：')
+    r=input(la['INPUT2'])#请输入:之前的语言代码：
     if len(r) >0 and (r in lan or r=="null"):
         p=r
     if p!="null" :
         ne['lan']=p
-    print('是否默认启用弹幕过滤？')
+    print(la['INPUT3'])#是否默认启用弹幕过滤？
     r=gk(se,'dmgl')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'dmgl',se)
-    print('是否要默认下载最高画质（这样将不会询问具体画质）？')
+    print(la['INPUT4'])#是否要默认下载最高画质（这样将不会询问具体画质）？
     r=gk(se,'mp')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'mp',se)
-    print('在合并完成后是否删除文件？')
+    print(la['INPUT5'])#在合并完成后是否删除无用文件？
     r=gk(se,'ad')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'ad',se)
     print('是否开启继续下载功能？')
     r=gk(se,'cd')

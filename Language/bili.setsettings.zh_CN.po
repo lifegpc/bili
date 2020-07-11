@@ -1,0 +1,72 @@
+# bili - setsettings.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 08:17:00+0000\n"
+"PO-Revision-Date: 2020-07-11 08:38+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "INPUT1"
+msgid "Please input the number before \".\" to select the setting."
+msgstr "请输入选项中的数字以选择。"
+
+msgctxt "OUTPUT1"
+msgid ""
+"The \"x\" before the option indicates the currently selected setting. If "
+"nothing is entered, the current settings will be maintained."
+msgstr "选项前的x指明了当前选中的设置，直接回车会保持当前设置。"
+
+msgctxt "OUTPUT2"
+msgid "Delete the \"setting.json\" in the current folder can reset the settings."
+msgstr "删除当前文件夹下的setting.json可以重置设置。"
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr "不设置"
+
+msgctxt "OUTPUT3"
+msgid "Please select a language for program (Now is <languagename>):"
+msgstr "请选择程序语言（目前为<languagename>）："
+
+msgctxt "INPUT2"
+msgid "Please input the language code before \":\" :"
+msgstr "请输入:之前的语言代码："
+
+msgctxt "INPUT3"
+msgid "Do you want filter barrage by default?"
+msgstr "是否默认启用弹幕过滤？"
+
+msgctxt "DE"
+msgid "(Default)"
+msgstr "（默认）"
+
+msgctxt "YES"
+msgid "Yes"
+msgstr "是"
+
+msgctxt "NO"
+msgid "No"
+msgstr "否"
+
+msgctxt "INPUT4"
+msgid ""
+"Do you want download with maximum quality by default(this will not ask for "
+"specific quality)?"
+msgstr "是否要默认下载最高画质（这样将不会询问具体画质）？"
+
+msgctxt "INPUT5"
+msgid "Do you want delete useless files after merge is complete?"
+msgstr "在合并完成后是否删除无用文件？"

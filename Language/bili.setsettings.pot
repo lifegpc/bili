@@ -1,0 +1,64 @@
+# bili - setsettings.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 08:17:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+msgctxt "INPUT1"
+msgid "Please input the number before \".\" to select the setting."
+msgstr ""
+
+msgctxt "OUTPUT1"
+msgid "The \"x\" before the option indicates the currently selected setting. If nothing is entered, the current settings will be maintained."
+msgstr ""
+
+msgctxt "OUTPUT2"
+msgid "Delete the \"setting.json\" in the current folder can reset the settings."
+msgstr ""
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr ""
+
+msgctxt "OUTPUT3"
+msgid "Please select a language for program (Now is <languagename>):"
+msgstr ""
+
+msgctxt "INPUT2"
+msgid "Please input the language code before \":\" :"
+msgstr ""
+
+msgctxt "INPUT3"
+msgid "Do you want filter barrage by default?"
+msgstr ""
+
+msgctxt "DE"
+msgid "(Default)"
+msgstr ""
+
+msgctxt "YES"
+msgid "Yes"
+msgstr ""
+
+msgctxt "NO"
+msgid "No"
+msgstr ""
+
+msgctxt "INPUT4"
+msgid "Do you want download with maximum quality by default(this will not ask for specific quality)?"
+msgstr ""
+
+msgctxt "INPUT5"
+msgid "Do you want delete useless files after merge is complete?"
+msgstr ""
