@@ -422,7 +422,7 @@ def main(ip={}):
             c1=ip['da']
             bs=False
         while bs :
-            inp=input("是否自动下载每一个视频的所有分P？(y/n)")
+            inp=input(f"{lan['INPUT4']}(y/n)")#是否自动下载每一个视频的所有分P？
             if len(inp)>0 :
                 if inp[0].lower()=='y' :
                     c1=True
@@ -446,7 +446,7 @@ def main(ip={}):
             r.trust_env=False
         read=JSONParser.loadcookie(r)
         if read!=0 :
-            print("读取cookies.json出现错误")
+            print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
         r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
         r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
@@ -470,14 +470,14 @@ def main(ip={}):
                     f=False
                     inp=ip['p']
                 elif ns :
-                    inp=input('请输入你想下载的频道，每两个编号间用,隔开，全部下载可输入a')
+                    inp=input(lan['INPUT5'])#请输入你想下载的频道（每两个编号间用,隔开，全部下载可输入a）：
                 else :
-                    print('请使用-p <p数>选择视频编号')
+                    print(lan['ERROR9'])#请使用-p <number>选择视频编号
                     return -1
                 cho=[]
                 if inp[0]=='a' :
                     if ns:
-                        print('您全选了所有频道')
+                        print(lan['OUTPUT7'])#您全选了所有频道
                     for i in range(1,len(chl)+1) :
                         cho.append(i)
                     bs=False
@@ -493,7 +493,7 @@ def main(ip={}):
                         bs=False
                         for i in cho :
                             if ns:
-                                print("您选中了第"+str(i)+"个频道："+chl[i-1]['name'])
+                                print(lan['OUTPUT8']+i+','+chl[i-1]['name'])#您选中了频道：
                 for i in cho :
                     ip2=copyip(ip)
                     ip2['i']='https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,chl[i-1]['cid'])
@@ -517,7 +517,7 @@ def main(ip={}):
                 return -1
             JSONParser.getchs(chv,re)
         if chi['count'] != len(chv) :
-            print('视频数量不符，貌似BUG了？')
+            print(lan['ERROR8'])#视频数量与预计数量不符，貌似BUG了。
             return -1
         if ns:
             PrintInfo.printInfo6(chv,chi)
@@ -528,14 +528,14 @@ def main(ip={}):
                 f=False
                 inp=ip['p']
             elif ns:
-                inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                inp=input(lan['OUTPUT4'])#请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
             else :
-                print('请使用-p <p数>选择视频编号')
+                print(lan['ERROR9'])#请使用-p <number>选择视频编号
                 return -1
             cho=[]
             if inp[0]=='a' :
                 if ns:
-                    print('您全选了所有视频')
+                    print(lan['OUTPUT5'])#您全选了所有视频
                 for i in range(1,chi['count']+1) :
                     cho.append(i)
                 bs=False
@@ -551,7 +551,7 @@ def main(ip={}):
                     bs=False
                     for i in cho :
                         if ns:
-                            print("您选中了第"+str(i)+"个视频："+chv[i-1]['title'])
+                            print(lan['OUTPUT6']+i+','+chv[i-1]['title'])#您选中了视频：
         bs=True
         c1=False
         if not ns:
@@ -564,7 +564,7 @@ def main(ip={}):
             c1=ip['da']
             bs=False
         while bs :
-            inp=input("是否自动下载每一个视频的所有分P？(y/n)")
+            inp=input(f"{lan['INPUT4']}(y/n)")#是否自动下载每一个视频的所有分P？
             if len(inp)>0 :
                 if inp[0].lower()=='y' :
                     c1=True
@@ -600,7 +600,7 @@ def main(ip={}):
                 return -1
             JSONParser.getuvl(re,vl)
         if len(vl) !=vn :
-            print('视频数量不符，貌似BUG了？')
+            print(lan['ERROR8'])#视频数量与预计数量不符，貌似BUG了。
             return -1
         if ns:
             PrintInfo.printInfo7(up,vl)
@@ -611,14 +611,14 @@ def main(ip={}):
                 f=False
                 inp=ip['p']
             elif ns:
-                inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                inp=input(lan['OUTPUT4'])#请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
             else :
-                print('请使用-p <p数>选择视频编号')
+                print(lan['ERROR9'])#请使用-p <number>选择视频编号
                 return -1
             cho=[]
             if inp[0]=='a' :
                 if 'ns':
-                    print('您全选了所有视频')
+                    print(lan['OUTPUT5'])#您全选了所有视频
                 for i in range(1,vn+1) :
                     cho.append(i)
                 bs=False
@@ -634,7 +634,7 @@ def main(ip={}):
                     bs=False
                     for i in cho :
                         if ns:
-                            print("您选中了第"+str(i)+"个视频："+vl[i-1]['title'])
+                            print(lan['OUTPUT6']+i+','+vl[i-1]['title'])#您选中了视频：
         bs=True
         c1=False
         if not ns:
@@ -647,7 +647,7 @@ def main(ip={}):
             c1=ip['da']
             bs=False
         while bs :
-            inp=input("是否自动下载每一个视频的所有分P？(y/n)")
+            inp=input(f"{lan['INPUT4']}(y/n)")#是否自动下载每一个视频的所有分P？
             if len(inp)>0 :
                 if inp[0].lower()=='y' :
                     c1=True
@@ -689,7 +689,7 @@ def main(ip={}):
                 bs=False
                 xml=2
         while bs:
-            yn=input("是否启用弹幕过滤(y/n)？")
+            yn=input(f"{lan['INPUT6']}(y/n)")#是否启用弹幕过滤？
             if yn[0].lower() =='y' :
                 bs=False
             if yn[0].lower() =='n' :
@@ -703,7 +703,7 @@ def main(ip={}):
             r.trust_env=False
         read=JSONParser.loadcookie(r)
         if read!=0 :
-            print("读取cookies.json出现错误")
+            print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
         r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
         r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
@@ -736,9 +736,9 @@ def main(ip={}):
                 inp=str(ip['d'])
                 f=False
             elif ns:
-                inp=input('请输入你要下载的方式：\n1.视频下载\n2.弹幕下载\n3.视频+弹幕下载')
+                inp=input(lan['INPUT7'])#请输入你要下载的方式：\n1.视频下载\n2.弹幕下载\n3.视频+弹幕下载
             else :
-                print('请使用-d <下载方式>选择下载方式')
+                print(lan['ERROR11'])#请使用-d <method>选择下载方式
                 return -1
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<4:
                 cho=int(inp[0])
@@ -766,7 +766,7 @@ def main(ip={}):
                     bs=False
                     cho3=False
             while bs :
-                inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
+                inp=input(f'{lan["INPUT8"]}(y/n)')#是否要默认下载最高画质（这样将不会询问具体画质）？
                 if len(inp) > 0:
                     if inp[0].lower()=='y' :
                         cho3=True
@@ -829,7 +829,7 @@ def main(ip={}):
             return -1
         elif ss:
             if re.status_code==404 :
-                print('404了 找不到啦')
+                print('404 Not Found')
                 return 0
             print(traceback.format_exc())
             return -1
@@ -849,7 +849,7 @@ def main(ip={}):
                 r.trust_env=False
             read=JSONParser.loadcookie(r)
             if read!=0 :
-                print("读取cookies.json出现错误")
+                print(lan['ERROR10'])#读取cookies.json出现错误
                 return -1
             r.headers.update({'referer':"https://www.bilibili.com/video/%s"%(data['bvid'])})
             r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
@@ -882,14 +882,14 @@ def main(ip={}):
                     f=False
                     inp=ip['p']
                 elif ns:
-                    inp=input('请输入你想下载弹幕/视频的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                    inp=input(lan['OUTPUT4'])#请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
                 else :
-                    print('请使用-p <p数>选择视频编号')
+                    print(lan['ERROR9'])#请使用-p <number>选择视频编号
                     return -1
                 cho=[]
                 if inp[0]=='a' :
                     if ns:
-                        print('您全选了所有视频')
+                        print(lan['OUTPUT5'])#您全选了所有视频
                     for i in range(1,data['videos']+1) :
                         cho.append(i)
                     bs=False
@@ -905,7 +905,7 @@ def main(ip={}):
                         bs=False
                         for i in cho :
                             if ns:
-                                print("您选中了第"+str(i)+"P："+data['page'][i-1]['part'])
+                                print(lan['OUTPUT6']+i+','+data['page'][i-1]['part'])#您选中了视频：
         cho2=0
         bs=True
         if 'd' in ip :
@@ -913,9 +913,9 @@ def main(ip={}):
             cho2=ip['d']
         while bs :
             if not ns:
-                print('请使用-d <下载方式>选择下载方式')
+                print(lan['ERROR11'])#请使用-d <method>选择下载方式
                 return -1
-            inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n6.仅字幕下载')
+            inp=input(lan['INPUT9'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n6.仅字幕下载
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<7 :
             	cho2=int(inp[0])
             	bs=False
@@ -925,20 +925,20 @@ def main(ip={}):
                 if read==-1 or read==-4 :
                     pass
                 elif read==0 :
-                    print('第'+str(i)+"P下载完成")
+                    print(lan['OUTPUT9'].replace('<number>',str(i)))#<number>P下载完成
                 else :
                     exit()
         if cho2==2 or cho2==5 :
             read=biliTime.equal(biliTime.getDate(data['pubdate']),biliTime.getNowDate())
             if read==0 or read==1 :
-                print('不能下载该视频全弹幕！')
+                print(lan['ERROR12'])#该视频不支持全弹幕！
                 exit()
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc,ip,se)
                 if read==-2 :
                     pass
                 elif read==0 :
-                    print("第"+str(i)+"P下载完成")
+                    print(lan['OUTPUT9'].replace('<number>',str(i)))#<number>P下载完成
                 else :
                     exit()
         if cho2>2 and cho2<6:
@@ -960,7 +960,7 @@ def main(ip={}):
                     bs=False
                     cho3=False
             while bs :
-                inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
+                inp=input(f'{lan["INPUT8"]}(y/n)')#是否要默认下载最高画质（这样将不会询问具体画质）？
                 if len(inp) > 0:
                     if inp[0].lower()=='y' :
                         cho3=True
@@ -1001,7 +1001,7 @@ def main(ip={}):
                 videodownload.avsubdownload(i,s,data,section,se,ip,ud)
     if ss or ep :
         if ep :
-            epl='，仅下载输入的ep号可输入b'
+            epl=lan['INPUT10']#，仅下载输入的ep号可输入b
         else :
             epl=''
         data=JSONParser.Myparser2(parser.videodata)
@@ -1016,7 +1016,7 @@ def main(ip={}):
                     led=pgc['progress']['last_ep_id']
         epr=""
         if led>-1 :
-            epr='，下载上次观看的EP%s可输入l'%(led)
+            epr=lan['INPUT11'].replace('<number>',str(led))#，下载上次观看的EP<number>可输入l
         cho=[]
         if le==1:
             cho.append(1)
@@ -1029,15 +1029,18 @@ def main(ip={}):
                     inp=ip['p']
                     f=False
                 elif ns :
-                    inp=input('请输入你想下载弹幕/视频的视频编号，每两个编号间用,隔开，全部下载可输入a%s%s'%(epl,epr))
+                    tee=""
+                    if epl!="" or epr!="" :
+                        tee=f"({epl}{epr})"
+                    inp=input(lan['OUTPUT4']+tee)#请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
                 else :
-                    print('请使用-p <p数>选择视频编号')
+                    print(lan['ERROR9'])#请使用-p <number>选择视频编号
                     return -1
                 cho=[]
                 if len(inp)>0:
                     if inp[0]=='a' :
                         if ns:
-                            print('你全选了所有视频')
+                            print(lan['OUTPUT5'])#您全选了所有视频
                         for j in range(1,le+1) :
                             cho.append(j)
                         bs=False
@@ -1099,9 +1102,9 @@ def main(ip={}):
             cho2=ip['d']
         while bs :
             if not ns:
-                print('请使用-d <下载方式>选择下载方式')
+                print(lan['ERROR11'])#请使用-d <method>选择下载方式
                 return -1
-            inp=input('请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载')
+            inp=input(lan['INPUT12'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6:
             	cho2=int(inp[0])
             	bs=False
@@ -1111,14 +1114,14 @@ def main(ip={}):
                 if read==-1 or read==-4 :
                     pass
                 elif read==0 :
-                    print('%s下载完成' % (i['titleFormat']))
+                    print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
                 else :
                     exit()
         if cho2==2 or cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se)
                 if read==0 :
-                    print('%s下载完成' % (i['titleFormat']))
+                    print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
                 else :
                     return -1
         if cho2>2 :
@@ -1140,7 +1143,7 @@ def main(ip={}):
                     bs=False
                     cho3=False
             while bs :
-                inp=input('是否要默认下载最高画质（这样将不会询问具体画质）？(y/n)')
+                inp=input(f'{lan["INPUT8"]}(y/n)')#是否要默认下载最高画质（这样将不会询问具体画质）？
                 if len(inp) > 0:
                     if inp[0].lower()=='y' :
                         cho3=True
@@ -1184,4 +1187,4 @@ if __name__=="__main__" :
     PrintInfo.pr()
     main(ip)
 else :
-    print("请运行根目录下的start.py")
+    print(lan['OUTPUT11'])#请运行start.py
