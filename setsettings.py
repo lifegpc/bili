@@ -106,31 +106,31 @@ if __name__=='__main__' :
     r=gk(se,'ad')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'ad',se)
-    print('是否开启继续下载功能？')
+    print(la['INPUT6'])#是否开启继续下载功能？
     r=gk(se,'cd')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'cd',se)
-    print('是否开启下载失败后自动重新下载？')
+    print(la['INPUT7'])#是否开启下载失败后自动重新下载？
     r=gk(se,'rd')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'rd',se)
-    print('是否不使用ffmpeg合并（不设置相当于否）？')
+    print(f"{la['INPUT8']}{la['NTN']}")#是否不使用ffmpeg合并？ （不设置相当于否）
     r=gk(se,'nf')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'nf',se)
-    print('默认下载最高画质偏好编码器：')
+    print(la['INPUT9'])#默认下载最高画质时偏好的视频编码：
     r=gk(se,'mpc')
-    print2('%s1.avc(h.264)\t%s2.hevc(h.265)\t%s3.不设置（默认）',r)
+    print2(f'%s1.avc(h.264)\t%s2.hevc(h.265)\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'mpc',se)
-    print('是否使用aria2c下载？（不设置相当于是）')
+    print(f"{la['INPUT10']}{la['NTY']}")#是否使用aria2c下载？（不设置相当于是）
     r=gk(se,'a')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'a',se)
     n=3
     if se and 'ax' in se :
         n=se['ax']
-    print('aria2c单个服务器最大连接数即-x的参数(1-16，默认3，目前为%s)：'%(n))
-    inp=input('请输入1-16中的数字：')
+    print(la['INPUT11'].replace('<value3>',str(n)).replace('<value1>','1-16').replace('<value2>','3'))#使用aria2c时单个服务器最大连接数(有效值：<value1>，默认：<value2>，目前：<value3>)： 1-16 3
+    inp=input(la['INPUT12'].replace('<min>','1').replace('<max>','16'))#请输入<min>-<max>中的数字： 1 16
     if len(inp)>0 :
         if inp.isnumeric() :
             i=int(inp)
@@ -141,8 +141,8 @@ if __name__=='__main__' :
     n=5
     if se and 'as' in se :
         n=se['as']
-    print('aria2c单个文件最大连接数即-s的参数(1-*，默认5，目前为%s)：'%(n))
-    inp=input('请输入大于等于1的数字：')
+    print(la['INPUT13'].replace('<value3>',str(n)).replace('<value1>','1-*').replace('<value2>','5'))#使用aria2c时单个文件最大连接数(1-*，默认5，目前为%s)：
+    inp=input(la['INPUT14'].replace('<min>','1'))#请输入大于等于<min>的数字： 1
     if len(inp)>0 :
         if inp.isnumeric() :
             i=int(inp)
@@ -153,8 +153,8 @@ if __name__=='__main__' :
     n=5
     if se and 'ak' in se :
         n=se['ak']
-    print('aria2c文件分片大小即-k的参数(单位M，1-1024，默认5，目前为%s)：'%(n))
-    inp=input('请输入1-1024的数字：')
+    print(la['INPUT15'].replace('<value4>',str(n)).replace('<value1>','M').replace('<value2>','1-1024').replace('<value3>','5'))#aria2c文件分片大小(单位M，1-1024，默认5，目前为%s)：
+    inp=input(la['INPUT12'].replace('<min>','1').replace('<max>','1024'))#请输入1-1024的数字：
     if len(inp)>0 :
         if inp.isnumeric() :
             i=int(inp)

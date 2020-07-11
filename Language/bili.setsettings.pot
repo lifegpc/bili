@@ -62,3 +62,51 @@ msgstr ""
 msgctxt "INPUT5"
 msgid "Do you want delete useless files after merge is complete?"
 msgstr ""
+
+msgctxt "INPUT6"
+msgid "Do you want to enable \"Continue Download\" function by default?"
+msgstr ""
+
+msgctxt "INPUT7"
+msgid "Do you want to download again automatically after the download failed."
+msgstr ""
+
+msgctxt "INPUT8"
+msgid "Do you want disable the use of ffmpeg to merge videos?"
+msgstr ""
+
+msgctxt "NTN"
+msgid "(Not set equals no in this setting.)"
+msgstr ""
+
+msgctxt "INPUT9"
+msgid "The preferred video coding when downloading with maximum quality :"
+msgstr ""
+
+msgctxt "INPUT10"
+msgid "Do you want to download with aria2c?"
+msgstr ""
+
+msgctxt "NTY"
+msgid "(Not set equals yes in this setting.)"
+msgstr ""
+
+msgctxt "INPUT11"
+msgid "The maximum number of connections to one server for each download while using aria2c (Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr ""
+
+msgctxt "INPUT12"
+msgid "Please enter a number between <min> and <max>:"
+msgstr ""
+
+msgctxt "INPUT13"
+msgid "The maximum number of connections while downloading a file with aria2c (Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr ""
+
+msgctxt "INPUT14"
+msgid "Please enter a number greater than or equal to <min>:"
+msgstr ""
+
+msgctxt "INPUT15"
+msgid "The minimum split file size while using aria2c (Unit: <value1>, Possible Values:<value2>, Default:<value3>, Now:<value4>):"
+msgstr ""

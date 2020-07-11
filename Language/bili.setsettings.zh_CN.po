@@ -70,3 +70,57 @@ msgstr "是否要默认下载最高画质（这样将不会询问具体画质）
 msgctxt "INPUT5"
 msgid "Do you want delete useless files after merge is complete?"
 msgstr "在合并完成后是否删除无用文件？"
+
+msgctxt "INPUT6"
+msgid "Do you want to enable \"Continue Download\" function by default?"
+msgstr "是否开启继续下载功能？"
+
+msgctxt "INPUT7"
+msgid "Do you want to download again automatically after the download failed."
+msgstr "是否开启下载失败后自动重新下载？"
+
+msgctxt "INPUT8"
+msgid "Do you want disable the use of ffmpeg to merge videos?"
+msgstr "是否不使用ffmpeg合并视频？"
+
+msgctxt "NTN"
+msgid "(Not set equals no in this setting.)"
+msgstr "（不设置相当于否）"
+
+msgctxt "INPUT9"
+msgid "The preferred video coding when downloading with maximum quality :"
+msgstr "默认下载最高画质时偏好的视频编码："
+
+msgctxt "INPUT10"
+msgid "Do you want to download with aria2c?"
+msgstr "是否使用aria2c下载？"
+
+msgctxt "NTY"
+msgid "(Not set equals yes in this setting.)"
+msgstr "（不设置相当于是）"
+
+msgctxt "INPUT11"
+msgid ""
+"The maximum number of connections to one server for each download while "
+"using aria2c (Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr "使用aria2c时单个服务器最大连接数(有效值：<value1>，默认：<value2>，目前：<value3>)："
+
+msgctxt "INPUT12"
+msgid "Please enter a number between <min> and <max>:"
+msgstr "请输入<min>-<max>中的数字："
+
+msgctxt "INPUT13"
+msgid ""
+"The maximum number of connections while downloading a file with aria2c "
+"(Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr "使用aria2c时单个服务器最大连接数(有效值：<value1>，默认：<value2>，目前：<value3>)："
+
+msgctxt "INPUT14"
+msgid "Please enter a number greater than or equal to <min>:"
+msgstr "请输入大于等于<min>的数字："
+
+msgctxt "INPUT15"
+msgid ""
+"The minimum split file size while using aria2c (Unit: <value1>, Possible "
+"Values:<value2>, Default:<value3>, Now:<value4>):"
+msgstr "使用aria2c时文件分片大小（单位：<value1>，有效值：<value2>，默认：<value3>，目前：<value4>）："

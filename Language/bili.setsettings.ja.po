@@ -27,46 +27,102 @@ msgctxt "OUTPUT1"
 msgid ""
 "The \"x\" before the option indicates the currently selected setting. If "
 "nothing is entered, the current settings will be maintained."
-msgstr "オプションの前の「x」は、現在選択されている設定を示します。何も入力しない場合は、現在の設定が維持されます。"
+msgstr "オプションの前の \"x\" は、現在選択されている設定を示します。何も入力しない場合は、現在の設定が維持されます。"
 
 msgctxt "OUTPUT2"
 msgid "Delete the \"setting.json\" in the current folder can reset the settings."
-msgstr ""
+msgstr "フォルダ内の \"setting.json\" を削除することで設定をリセットすることができます。"
 
 msgctxt "NOTSET"
 msgid "Not set"
-msgstr ""
+msgstr "未設定"
 
 msgctxt "OUTPUT3"
 msgid "Please select a language for program (Now is <languagename>):"
-msgstr ""
+msgstr "プログラムの言語を選択してください（現在 <languagename>）:"
 
 msgctxt "INPUT2"
 msgid "Please input the language code before \":\" :"
-msgstr ""
+msgstr "言語コードを \":\" の前に入力してください:"
 
 msgctxt "INPUT3"
 msgid "Do you want filter barrage by default?"
-msgstr ""
+msgstr "デフォルトで弾幕フィルターが必要ですか？"
 
 msgctxt "DE"
 msgid "(Default)"
-msgstr ""
+msgstr "（デフォルト）"
 
 msgctxt "YES"
 msgid "Yes"
-msgstr ""
+msgstr "はい"
 
 msgctxt "NO"
 msgid "No"
-msgstr ""
+msgstr "いいえ"
 
 msgctxt "INPUT4"
 msgid ""
 "Do you want download with maximum quality by default(this will not ask for "
 "specific quality)?"
-msgstr ""
+msgstr "最高画質でダウンロードしますか？（これは特定の画質を要求するものではありません）"
 
 msgctxt "INPUT5"
 msgid "Do you want delete useless files after merge is complete?"
+msgstr "マージが完了した後、無駄なファイルを削除しますか？"
+
+msgctxt "INPUT6"
+msgid "Do you want to enable \"Continue Download\" function by default?"
+msgstr "\"ダウンロードを続ける\" 機能をデフォルトで有効にしますか？"
+
+msgctxt "INPUT7"
+msgid "Do you want to download again automatically after the download failed."
+msgstr "ダウンロードに失敗した後、自動的に再ダウンロードしますか？"
+
+msgctxt "INPUT8"
+msgid "Do you want disable the use of ffmpeg to merge videos?"
+msgstr "動画をマージするためにffmpegの使用を無効にしますか？"
+
+msgctxt "NTN"
+msgid "(Not set equals no in this setting.)"
+msgstr "(この設定では、設定していない場合は「いいえ」になります)"
+
+msgctxt "INPUT9"
+msgid "The preferred video coding when downloading with maximum quality :"
+msgstr "最高画質でダウンロードする時に好ましいビデオコーディング:"
+
+msgctxt "INPUT10"
+msgid "Do you want to download with aria2c?"
+msgstr "aria2cを使用してダウンロードしますか？"
+
+msgctxt "NTY"
+msgid "(Not set equals yes in this setting.)"
+msgstr "(この設定では、設定していない場合は「はい」になります)"
+
+msgctxt "INPUT11"
+msgid ""
+"The maximum number of connections to one server for each download while "
+"using aria2c (Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr ""
+"aria2cを使用している間の各ダウンロードのための1つのサーバーへの最大接続数（可能:<value1>, デフォルト:<value2>, "
+"現在:<value3>）:"
+
+msgctxt "INPUT12"
+msgid "Please enter a number between <min> and <max>:"
+msgstr ""
+
+msgctxt "INPUT13"
+msgid ""
+"The maximum number of connections while downloading a file with aria2c "
+"(Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr ""
+
+msgctxt "INPUT14"
+msgid "Please enter a number greater than or equal to <min>:"
+msgstr ""
+
+msgctxt "INPUT15"
+msgid ""
+"The minimum split file size while using aria2c (Unit: <value1>, Possible "
+"Values:<value2>, Default:<value3>, Now:<value4>):"
 msgstr ""
