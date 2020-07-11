@@ -18,7 +18,7 @@ from os.path import exists
 import platform
 import ctypes
 dll=None
-lan={'en':'English','zh_CN':'中文（中国）'}
+lan={'en':'English','ja':'日本語','zh_CN':'中文（中国）'}
 def getdict(sn:str,lan:str) -> dict:
     """获取翻译词典
     sn 资源名称
@@ -54,6 +54,8 @@ def getsyslan(d:bool=False) :
             print(f"SystemDefaultUILanguage:{hex(l)}")
         if l==2052:
             r="zh_CN"
+        elif l==1041 :
+            r="ja"
         else :
             r="en"
         if d:

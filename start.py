@@ -215,18 +215,18 @@ def main(ip={}):
         read=biliLogin.tryok(section,ud)
         if read==True :
             if ns:
-                print("登录校验成功！")
+                print(f"{lan['OUTPUT1']}") #登录校验成功！
             login=1
         elif read==False :
-            print('网络错误！校验失败！')
+            print(f'{lan["ERROR3"]}') #网络错误！校验失败！
             exit()
         else :
-            print("登录信息已过期！")
+            print(f"{lan['WARN1']}") #登录信息已过期！
             login=2
     elif read==-1 :
         login=2
     else :
-        print("文件读取错误！")
+        print(f"{lan['ERROR4']}") #文件读取错误！
         login=2
     if login==2 :
         if os.path.exists('cookies.json') :
@@ -269,7 +269,7 @@ def main(ip={}):
                 bs=False
                 cho5=False
         while bs:
-            inp=input('是否开启继续下载功能？(y/n)')
+            inp=input(f'{lan["INPUT2"]}(y/n)') #是否开启继续下载功能？
             if len(inp)>0 :
                 if inp[0].lower()=='y' :
                     cho5=True
@@ -293,7 +293,7 @@ def main(ip={}):
             if read!=0 :
                 return read
         else :
-            print('md号解析失败')
+            print(f'{lan["ERROR5"]}') #md号解析失败
             return -1
         return 0
     if pl :
@@ -322,14 +322,14 @@ def main(ip={}):
                                 f=False
                                 inp=ip['afp']
                             elif ns:
-                                inp=input('请输入你想选择的收藏夹编号，每两个编号间用,隔开，全部选择可输入a')
+                                inp=input(f'{lan["INPUT3"]}')
                             else :
-                                print('请使用--afp <序号>选择收藏夹编号')
+                                print(f'{lan["ERROR6"]}')
                                 return -1
                             cho=[]
                             if len(inp)>0 and inp[0]=='a' :
                                 if ns:
-                                    print('您全选了所有收藏夹')
+                                    print(f'{lan["OUTPUT2"]}')
                                 for i in range(1,dc+1) :
                                     cho.append(i)
                                     bs=False
@@ -345,7 +345,7 @@ def main(ip={}):
                                     bs=False
                                     for i in cho :
                                         if ns:
-                                            print("您选中了第"+str(i)+"个收藏夹："+re['data']['list'][i-1]['title'])
+                                            print(lan['OUTPUT3']+i+","+re['data']['list'][i-1]['title'])
                         for i in cho:
                             ip2=copyip(ip)
                             ip2['i']="https://space.bilibili.com/%s/favlist?fid=%s"%(uid,re['data']['list'][i-1]['id'])
@@ -356,7 +356,7 @@ def main(ip={}):
                     else:
                         fid=re['data']['list'][0]['id']
                 else :
-                    print('获取收藏夹列表失败')
+                    print(lan["ERROR7"])
                     return -1
         i=1
         re=JSONParser.getpli(section,fid,i,pld)
@@ -375,7 +375,7 @@ def main(ip={}):
                 return -1
             JSONParser.getpliv(plv,re)
         if len(plv)!=pli['count'] :
-            print('视频数量不符，貌似BUG了？')
+            print(lan['ERROR8']) #视频数量与预计数量不符，貌似BUG了。
             return -1
         if ns:
             PrintInfo.printInfo4(plv)
@@ -386,14 +386,14 @@ def main(ip={}):
                 f=False
                 inp=ip['p']
             elif ns :
-                inp=input('请输入你想下载的视频编号，每两个编号间用,隔开，全部下载可输入a')
+                inp=input(lan['OUTPUT4'])#请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
             else :
-                print('请使用-p <p数>选择视频编号')
+                print(lan['ERROR9'])#请使用-p <number>选择视频编号
                 return -1
             cho=[]
             if inp[0]=='a' :
                 if ns:
-                    print('您全选了所有视频')
+                    print(lan['OUTPUT5'])#您全选了所有视频
                 for i in range(1,pli['count']+1) :
                     cho.append(i)
                 bs=False
@@ -409,7 +409,7 @@ def main(ip={}):
                     bs=False
                     for i in cho :
                         if ns:
-                            print("您选中了第"+str(i)+"个视频："+plv[i-1]['title'])
+                            print(lan['OUTPUT6']+i+','+plv[i-1]['title']) #您选中了视频：
         bs=True
         c1=False
         if not ns:
@@ -791,7 +791,7 @@ def main(ip={}):
                     bs=False
                     cho5=False
             while bs:
-                inp=input('是否开启继续下载功能？(y/n)')
+                inp=input(f'{lan["INPUT2"]}(y/n)')
                 if len(inp)>0 :
                     if inp[0].lower()=='y' :
                         cho5=True
@@ -985,7 +985,7 @@ def main(ip={}):
                     bs=False
                     cho5=False
             while bs:
-                inp=input('是否开启继续下载功能？(y/n)')
+                inp=input(f'{lan["INPUT2"]}(y/n)')
                 if len(inp)>0 :
                     if inp[0].lower()=='y' :
                         cho5=True
@@ -1165,7 +1165,7 @@ def main(ip={}):
                     bs=False
                     cho5=False
             while bs:
-                inp=input('是否开启继续下载功能？(y/n)')
+                inp=input(f'{lan["INPUT2"]}(y/n)')
                 if len(inp)>0 :
                     if inp[0].lower()=='y' :
                         cho5=True

@@ -28,5 +28,69 @@ msgid "Please use \"-i <input>\"."
 msgstr ""
 
 msgctxt "ERROR2"
-msgid "Input is invalid."
+msgid "Invalid input."
+msgstr ""
+
+msgctxt "OUTPUT1"
+msgid "The login is successfully verified."
+msgstr ""
+
+msgctxt "ERROR3"
+msgid "Network Error! Verification failed!"
+msgstr ""
+
+msgctxt "WARN1"
+msgid "The login information has expired."
+msgstr ""
+
+msgctxt "ERROR4"
+msgid "An error occurred when reading the file."
+msgstr ""
+
+msgctxt "INPUT2"
+msgid "Do you want to enable \"Continue Download\" function?"
+msgstr ""
+
+msgctxt "ERROR5"
+msgid "An error occurred when parsing md number page."
+msgstr ""
+
+msgctxt "INPUT3"
+msgid "Please enter the number of the favorite you want to choose (You can use \",\" to separate each two numbers. If you want to select all favorites, please enter \"a\".):"
+msgstr ""
+
+msgctxt "ERROR6"
+msgid "Please use \"--afp <number>\" to choose favorite."
+msgstr ""
+
+msgctxt "OUTPUT2"
+msgid "You have selected all favorites."
+msgstr ""
+
+msgctxt "OUTPUT3"
+msgid "You have selected the favorite:"
+msgstr ""
+
+msgctxt "ERROR7"
+msgid "An error occurred when getting the list of favorites."
+msgstr ""
+
+msgctxt "ERROR8"
+msgid "The count of video in list is not equal to the estimated count which from bilibili. Maybe an bug occurred."
+msgstr ""
+
+msgctxt "OUTPUT4"
+msgid "Please enter the number of the video you want to choose (You can use \",\" to separate each two numbers. If you want to select all videos, please enter \"a\".):"
+msgstr ""
+
+msgctxt "ERROR9"
+msgid "Please use \"-p <number>\" to choose video."
+msgstr ""
+
+msgctxt "OUTPUT5"
+msgid "You have selected all videos."
+msgstr ""
+
+msgctxt "OUTPUT6"
+msgid "You have selected the video:"
 msgstr ""
