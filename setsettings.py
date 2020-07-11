@@ -162,16 +162,16 @@ if __name__=='__main__' :
                 ne['ak']=i
     elif n!=5 :
         ne['ak']=n
-    print('在使用aria2c下载时是否使用备用网址？（不设置情况下为是）')
+    print(f"{la['INPUT16']}{la['NTY']}")#在使用aria2c下载时是否使用备用网址？（不设置情况下为是）
     r=gk(se,'ab')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'ab',se)
     n='prealloc'
     if se and 'fa' in se:
         n=se['fa']
-    print('在使用arai2c下载时预分配方式即--file-allocation的参数(默认为prealloc，目前为%s)'%(n))
+    print(la['INPUT17'].replace('<value2>',n).replace('<value1>','prealloc'))#在使用arai2c下载时预分配方式即--file-allocation的参数(默认为prealloc，目前为%s)
     print('1.none\t2.prealloc\t3.trunc\t4.falloc')
-    inp=input('请输入选项中的数字以选择')
+    inp=input(la['INPUT1'])#请输入选项中的数字以选择
     if len(inp)>0 and inp.isnumeric() :
         i=int(inp)
         x=['none','prealloc','trunc','falloc']
@@ -179,19 +179,18 @@ if __name__=='__main__' :
             ne['fa']=x[i-1]
     elif n!="prealloc" :
         ne['fa']=n
-    print('文件名中是否输出视频画质信息？（不设置情况下为是）')
+    print(f"{la['INPUT18']}{la['NTY']}")#文件名中是否输出视频画质信息？（不设置情况下为是）
     r=gk(se,'sv')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'sv',se)
-    print('是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）？（不设置情况下为否）')
+    print(f"{la['INPUT19']}{la['NTN']}")#是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）？（不设置情况下为否）
     r=gk(se,'ma')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'ma',se)
     n="0"
     if se and 'ms' in se :
         n=se['ms']
-    print('在使用aria2c下载时最大总体速度，即--max-overall-download-limit的参数，默认单位为B，可以使用K和M为单位（默认为0，即不限制，目前为%s）：'%(n))
-    inp=input('请输入大小（100B可以输入100，100KiB输入100K，100MiB输入100M）：')
+    inp=input(la['INPUT20'].replace('<value2>',n).replace('<value1>','0'))#在使用aria2c时最大总体速度(B/s)（0代表无限制，可以使用K和M为单位（1K=1024，1M=1024K），默认：，目前为%s）：
     if len(inp)>0 :
         t=search("^[0-9]+[MK]?$",inp)
         if t!=None :
@@ -199,46 +198,45 @@ if __name__=='__main__' :
                 ne['ms']=inp
     elif n!="0" :
         ne['ms']=n
-    print('收藏夹是否自动下载每一个视频的所有分P？')
+    print(la['INPUT21'])#收藏夹/频道/投稿是否自动下载每一个视频的所有分P？
     r=gk(se,'da')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'da',se)
-    print('下载全弹幕时两次抓取之间的天数默认设置为自动？（不设置情况下为否）')
+    print(f"{la['INPUT22']}{la['NTN']}")#下载全弹幕时两次抓取之间的天数默认设置为自动？（不设置情况下为否）
     r=gk(se,'jt')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'jt',se)
     o="Download/"
     if se and 'o' in se:
         o=se['o']
-    print('下载文件夹位置（默认为Download/，当前为%s）'%(o))
-    inp=input('请输入下载文件夹的位置：')
+    inp=input(la['INPUT23'].replace('<value2>',o).replace('<value1>','Download/'))#下载文件夹位置（默认为Download/，当前为%s）：
     if len(inp)>0:
         if inp!='Download/':
             ne['o']=filterd(inp)
     elif o!='Download/' :
         ne['o']=o
-    print('解析收藏夹时若未指定收藏夹，是否不自动解析为默认收藏夹而是返回列表以选择？（不设置情况下为否）')
+    print(f"{la['INPUT24']}{la['NTN']}")#解析收藏夹时若未指定收藏夹，是否不自动解析为默认收藏夹而是返回列表以选择？（不设置情况下为否）
     r=gk(se,'af')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'af',se)
-    print('下载小视频时，放入文件名中的描述长度是否可以超过20字？（不设置情况下为否）')
+    print(f"{la['INPUT25']}{la['NTN']}")#下载小视频时，放入文件名中的描述长度是否可以超过20字？（不设置情况下为否）
     r=gk(se,'slt')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'slt',se)
-    print('requests是否使用环境变量中的代理设置？（不设置情况下为是）')
+    print(f"{la['INPUT26']}{la['NTY']}")#requests是否使用环境变量中的代理设置？（不设置情况下为是）
     r=gk(se,'te')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'te',se)
-    print('合并完成后删除文件时是否保留字幕文件？（不设置情况下为否）')
+    print(f"{la['INPUT27']}{la['NTN']}")#合并完成后删除文件时是否保留字幕文件？（不设置情况下为否）
     r=gk(se,'bd')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'bd',se)
-    print('使用aria2c时是否关闭异步DNS（关闭后在Windows系统下可以解决Timeout while contacting DNS servers问题）？（不设置情况下为否）')
+    print(f"{la['INPUT28']}{la['NTN']}")#使用aria2c时是否关闭异步DNS（关闭后在Windows系统下可以解决Timeout while contacting DNS servers问题）？（不设置情况下为否）
     r=gk(se,'cad')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'cad',se)
-    print('直播回放简介写入元数据时是否进行去HTML化？（不设置情况下为是）')
+    print(f"{la['INPUT29']}{la['NTY']}")#直播回放简介写入元数据时是否进行去HTML化？（不设置情况下为是）
     r=gk(se,'lrh')
-    print2('%s1.是\t%s2.否\t%s3.不设置（默认）',r)
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'lrh',se)
     saveset(ne)
