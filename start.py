@@ -345,7 +345,7 @@ def main(ip={}):
                                     bs=False
                                     for i in cho :
                                         if ns:
-                                            print(lan['OUTPUT3']+i+","+re['data']['list'][i-1]['title'])
+                                            print(lan['OUTPUT3']+str(i)+","+re['data']['list'][i-1]['title'])
                         for i in cho:
                             ip2=copyip(ip)
                             ip2['i']="https://space.bilibili.com/%s/favlist?fid=%s"%(uid,re['data']['list'][i-1]['id'])
