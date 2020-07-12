@@ -85,3 +85,91 @@ msgstr ""
 msgctxt "OUTPUT12"
 msgid "<number> files in total."
 msgstr ""
+
+msgctxt "ERROR4"
+msgid ""
+"Bad/unrecognized option was given or unexpected option argument was given "
+"when calling aria2c."
+msgstr ""
+
+msgctxt "ERROR5"
+msgid ""
+"Please create an issue on <https://github.com/lifegpc/bili/issues> to "
+"describe the problem.(Please use English or Chinese.)"
+msgstr ""
+
+msgctxt "INPUT3"
+msgid "Failed to download the file. Do you want to download again?"
+msgstr ""
+
+msgctxt "OUTPUT13"
+msgid "Use ffmpeg to merge files."
+msgstr ""
+
+msgctxt "OUTPUT14"
+msgid "Merge complete."
+msgstr ""
+
+msgctxt "INPUT4"
+msgid "Do you want to delete useless files?"
+msgstr ""
+
+msgctxt "OUTPUT15"
+msgid "Video track:"
+msgstr ""
+
+msgctxt "OUTPUT16"
+msgid "Audio track:"
+msgstr ""
+
+msgctxt "INPUT5"
+msgid "Please select audio quality :"
+msgstr ""
+
+msgctxt "ERROR6"
+msgid "Please use \"-a <id>\" to select the audio quality."
+msgstr ""
+
+msgctxt "OUTPUT17"
+msgid "You have selected the audio quality: <audioquality>"
+msgstr ""
+
+msgctxt "OUTPUT18"
+msgid "There are no subtitles in Part <number>."
+msgstr ""
+
+msgctxt "ERROR7"
+msgid "This video has regional restrictions. Please use proxy."
+msgstr ""
+
+msgctxt "ERROR8"
+msgid ""
+"This video has multiple video quality but this program not support it. You "
+"can continue to download with default video quality."
+msgstr ""
+
+msgctxt "INPUT6"
+msgid "Please press \"Enter\" to continue downloading."
+msgstr ""
+
+msgctxt "OUTPUT19"
+msgid ""
+"(Because the file size is not equal to the estimated size, it is recommended"
+" to overwrite.)"
+msgstr ""
+
+msgctxt "OUTPUT20"
+msgid "The file size is equal to the estimated size, skip download."
+msgstr ""
+
+msgctxt "ERROR9"
+msgid "The file size is not equal to the estimated size."
+msgstr ""
+
+msgctxt "OUTPUT21"
+msgid "Unable to get file size. Try to get again ……"
+msgstr ""
+
+msgctxt "OUTPUT22"
+msgid "Please use \"start.py\"."
+msgstr ""
