@@ -31,6 +31,7 @@ import platform
 from command import gopt
 from lang import getlan,getdict
 import sys
+import JSONParser2
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -296,7 +297,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         print(f"{lan['OUTPUT8'].replace('<number>',str(i))}{data['page'][i-1]['part']}")#第<number>P：
     if rs2!=None :
         rs2=json.loads(rs2.groups()[0])
-        JSONParser.getsub(rs2,data)
+        JSONParser2.getsub(rs2,data)
     if "data" in re and "durl" in re['data']:
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
@@ -1062,7 +1063,7 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
     rs2=search(r'<subtitle>(.+)</subtitle>',rr.text)
     if rs2!=None :
         rs2=json.loads(rs2.groups()[0])
-        JSONParser.getsub(rs2,data)
+        JSONParser2.getsub(rs2,data)
         if data['videos']==1 :
             filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
         else :

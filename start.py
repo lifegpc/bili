@@ -35,6 +35,7 @@ from biliHdVideo import getninfo
 import traceback
 import biliLiveDanmu
 from lang import getlan,getdict
+import JSONParser2
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -250,7 +251,7 @@ def main(ip={}):
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
-        inf=JSONParser.getsmi(re)
+        inf=JSONParser2.getsmi(re)
         if ns:
             PrintInfo.printInfo9(inf)
         cho5=False
@@ -361,21 +362,21 @@ def main(ip={}):
                     print(lan["ERROR7"])
                     return -1
         i=1
-        re=JSONParser.getpli(section,fid,i,pld)
+        re=JSONParser2.getpli(section,fid,i,pld)
         if re==-1 :
             return -1
-        pli=JSONParser.getplinfo(re)
+        pli=JSONParser2.getplinfo(re)
         if ns:
             PrintInfo.printInfo3(pli)
         n=ceil(pli['count']/20)
         plv=[]
-        JSONParser.getpliv(plv,re)
+        JSONParser2.getpliv(plv,re)
         while i<n :
             i=i+1
-            re=JSONParser.getpli(section,fid,i,pld)
+            re=JSONParser2.getpli(section,fid,i,pld)
             if re==-1 :
                 return -1
-            JSONParser.getpliv(plv,re)
+            JSONParser2.getpliv(plv,re)
         if len(plv)!=pli['count'] :
             print(lan['ERROR8']) #视频数量与预计数量不符，貌似BUG了。
             return -1
@@ -462,7 +463,7 @@ def main(ip={}):
             if re['code']!=0 :
                 print('%s %s'%(re['code'],re['message']))
                 return -1
-            chl=JSONParser.getchl(re)
+            chl=JSONParser2.getchl(re)
             if ns:
                 PrintInfo.printInfo5(chl)
             bs=True
@@ -504,20 +505,20 @@ def main(ip={}):
                         return read
             return 0
         r.headers.update({'referer':'https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,cid)})
-        re=JSONParser.getchi(r,uid,cid,1)
+        re=JSONParser2.getchi(r,uid,cid,1)
         if re == -1:
             return -1
-        chi=JSONParser.getchn(re)
+        chi=JSONParser2.getchn(re)
         n=ceil(chi['count']/30)
         i=1
         chv=[]
-        JSONParser.getchs(chv,re)
+        JSONParser2.getchs(chv,re)
         while i<n :
             i=i+1
-            re=JSONParser.getchi(r,uid,cid,i)
+            re=JSONParser2.getchi(r,uid,cid,i)
             if re==-1 :
                 return -1
-            JSONParser.getchs(chv,re)
+            JSONParser2.getchs(chv,re)
         if chi['count'] != len(chv) :
             print(lan['ERROR8'])#视频数量与预计数量不符，貌似BUG了。
             return -1
@@ -583,24 +584,24 @@ def main(ip={}):
                 return read
         return 0
     if uv:
-        re=JSONParser.getup(uid,section)
+        re=JSONParser2.getup(uid,section)
         if re==-1 :
             return -1
-        up=JSONParser.getupi(re)
-        re=JSONParser.getuvi(uid,1,uvd,section)
+        up=JSONParser2.getupi(re)
+        re=JSONParser2.getuvi(uid,1,uvd,section)
         if re==-1:
             return -1
         vn=re['data']['page']['count']
         n=ceil(vn/30)
         i=1
         vl=[]
-        JSONParser.getuvl(re,vl)
+        JSONParser2.getuvl(re,vl)
         while i<n :
             i=i+1
-            re=JSONParser.getuvi(uid,i,uvd,section)
+            re=JSONParser2.getuvi(uid,i,uvd,section)
             if re==-1 :
                 return -1
-            JSONParser.getuvl(re,vl)
+            JSONParser2.getuvl(re,vl)
         if len(vl) !=vn :
             print(lan['ERROR8'])#视频数量与预计数量不符，貌似BUG了。
             return -1
@@ -716,19 +717,19 @@ def main(ip={}):
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
-        ri=JSONParser.getlr1(re)
+        ri=JSONParser2.getlr1(re)
         re=r.get('https://api.live.bilibili.com/room/v1/Room/get_info?room_id=%s&from=room'%(ri['roomid'])) #直播房间信息
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
-        JSONParser.getlr2(re,ri)
+        JSONParser2.getlr2(re,ri)
         re=r.get('https://api.bilibili.com/x/space/acc/info?mid=%s&jsonp=jsonp'%(ri['uid'])) #UP主信息
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
-        JSONParser.getlr3(re,ri)
+        JSONParser2.getlr3(re,ri)
         if ns:
             PrintInfo.printlr(ri)
         bs=True
