@@ -18,56 +18,58 @@ from re import search
 from PrintInfo import pr,prc
 from biliTime import checktime
 from file import filterd
-from lang import lan
+from lang import lan,getlan,getdict
+from JSONParser import loadset
+import sys
 def ph() :
-    h='''命令行帮助：
-    start.py -h/-?/--help   显示命令行帮助信息
+    h=f'''{la['O1']}
+    start.py -h/-?/--help   {la['O2']}
     start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>]
-    start.py show c/w   显示许可证
-    -i <input>   av/bv/ep/ss号或者视频链接
-    -d <method>   下载方式：1.当前弹幕2.全弹幕3.视频4.当前弹幕+视频5.全弹幕+视频6.仅字幕下载（番剧除外）
-    直播回放下载方式：1.视频2.弹幕3.视频+弹幕
-    -p <number>    要下载的P数(两个p数可用,连接)，使用a全选，输入为ep号时可用b选择该ep号，下载上次观看的视频可输入l（仅限番剧）
-    -m <boolean>    是否默认下载最高画质
-    --ym    相当于-m true
-    --nm    相当于-m false
-    --ac <boolean>  是否开启继续下载功能
-    --yac   相当于--ac true
-    --nac   相当于--ac false
-    --dm <boolean>  是否启用弹幕过滤
-    --ydm   相当于--dm true
-    --ndm   相当于--dm false
-    --ad <boolean>  是否在合并完成后删除文件
-    --yad   相当于--ad true
-    --nad   相当于--ad false
-    -r <boolean>    是否在下载失败后重新下载
-    --yr    相当于-r true
-    --nr    相当于-r false
-    -y  覆盖所有重复文件
-    -n  不覆盖重复文件
-    --yf    使用ffmpeg
-    --nf    不使用ffmpeg
-    --mc avc/hev    默认下载最高画质偏好编码器
-    --ar    使用aria2c下载
-    --nar   不使用aria2c下载
-    --ax <number>   aria2c单个服务器最大连接数即-x的参数，范围为1-16
-    --as <number>   aria2c单个文件最大连接数即-s的参数，范围为1-*
-    --ak <number>   aria2c文件分片大小即-k的参数，范围为1-1024，单位为M
-    --ab    在使用aria2c下载时使用备用网址
-    --nab   在使用aria2c下载时不使用备用网址
-    --fa none/prealloc/trunc/falloc 在使用arai2c下载时预分配方式即--file-allocation的参数
-    --sv <boolean>  文件名中是否输出视频画质信息
-    --ysv   相当于--sv true
-    --nsv   相当于--sv false
-    --ma <boolean>  是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）
-    --yma   相当于--ma true
-    --nma   相当于--ma false
-    --ms <speed>    在使用aria2c下载时最大总体速度，即--max-overall-download-limit的参数，默认单位为B，可以使用K和M为单位
-    --da <boolean>  收藏夹是否自动下载每一个视频的所有分P
-    --yda   相当于--da true
-    --nda   相当于--da false
-    --httpproxy <URI>   使用HTTP代理
-    --httpsproxy <URI>  使用HTTPS代理 
+    start.py show c/w   {la['O3']}
+    -i <input>   {la['O4']}
+    -d <method>   {la['O5']}
+    {la['O6']}
+    -p <number>    {la['O7']}
+    -m <boolean>    {la['O8']}
+    --ym    {la['AL'].replace('<value>','-m true')}
+    --nm    {la['AL'].replace('<value>','-m false')}
+    --ac <boolean>  {la['O9']}
+    --yac   {la['AL'].replace('<value>','--ac true')}
+    --nac   {la['AL'].replace('<value>','--ac false')}
+    --dm <boolean>  {la['O10']}
+    --ydm   {la['AL'].replace('<value>','--dm true')}
+    --ndm   {la['AL'].replace('<value>','--dm false')}
+    --ad <boolean>  {la['O11']}
+    --yad   {la['AL'].replace('<value>','--ad true')}
+    --nad   {la['AL'].replace('<value>','--ad false')}
+    -r <boolean>    {la['O12']}
+    --yr    {la['AL'].replace('<value>','-r true')}
+    --nr    {la['AL'].replace('<value>','-r false')}
+    -y  {la['O13']}
+    -n  {la['O14']}
+    --yf    {la['O15']}
+    --nf    {la['O16']}
+    --mc avc/hev    {la['O17']}
+    --ar    {la['O18']}
+    --nar   {la['O19']}
+    --ax <number>   {la['O20'].replace('<value>','1-16')}
+    --as <number>   {la['O21'].replace('<value>','1-*')}
+    --ak <number>   {la['O22'].replace('<value1>','M').replace('<value2>','1-1024')}
+    --ab    {la['O23']}
+    --nab   {la['O24']}
+    --fa none/prealloc/trunc/falloc {la['O25']}
+    --sv <boolean>  {la['O26']}
+    --ysv   {la['AL'].replace('<value>','--sv true')}
+    --nsv   {la['AL'].replace('<value>','--sv false')}
+    --ma <boolean>  {la['O27']}
+    --yma   {la['AL'].replace('<value>','--ma true')}
+    --nma   {la['AL'].replace('<value>','--ma false')}
+    --ms <speed>    {la['O28']}
+    --da <boolean>  {la['O29']}
+    --yda   {la['AL'].replace('<value>','--da true')}
+    --nda   {la['AL'].replace('<value>','--da false')}
+    --httpproxy <URI>   {la['O30']}{la['O31']}
+    --httpsproxy <URI>  {la['O32']}{la['O31']}
     --jt <number>|a|b 下载全弹幕时两次抓取之间的天数，范围为1-365，a会启用自动模式（推荐自动模式），番剧模式下b修改抓取起始日期
     --jts <date>    下载全弹幕时且视频为番剧时抓取起始日期的默认值（原始值为番剧上传时间），格式例如1989-02-25，即年-月-日
     -F  视频下载时仅显示所有可选画质但不下载（使用该参数时，不受静默模式影响）
@@ -288,6 +290,11 @@ def gopt(args,d:bool=False) :
             prc()
             exit()
     return r
+la=None
+se=loadset()
+if se==-1 or se==-2 :
+    se={}
+la=getdict('command',getlan(se,{}))
 if __name__ == "__main__":
     pr()
     import sys

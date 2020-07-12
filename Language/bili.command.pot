@@ -1,0 +1,148 @@
+# bili - command.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-12 10:37:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+msgctxt "O1"
+msgid "Command line help:"
+msgstr ""
+
+msgctxt "O2"
+msgid "Display command line help information."
+msgstr ""
+
+msgctxt "O3"
+msgid "Display LICENSE."
+msgstr ""
+
+msgctxt "O4"
+msgid "AV/SS/EP/MD/BV number or link"
+msgstr ""
+
+msgctxt "O5"
+msgid "Download method: 1.barrage 2.all barrage from historical records 3.video 4.barrage and video 5.all barrage from historical records and video 6.subtitles only"
+msgstr ""
+
+msgctxt "O6"
+msgid "Live record download method: 1.video 2.barrage 3.video and barrage"
+msgstr ""
+
+msgctxt "O7"
+msgid "The number of videos/parts you want to download. (You can use \",\" to separate each two numbers. Use \"a\" to select all videos/parts. Use \"b\" to select video which match the EP number you entered. Use \"l\" to select the last viewed EP video.)"
+msgstr ""
+
+msgctxt "O8"
+msgid "Enable/Disable download with maximum quality."
+msgstr ""
+
+msgctxt "AL"
+msgid "Alias of <value>."
+msgstr ""
+
+msgctxt "O9"
+msgid "Enable/Disable \"Continue Download\" function."
+msgstr ""
+
+msgctxt "O10"
+msgid "Enable/Disable filter barrage."
+msgstr ""
+
+msgctxt "O11"
+msgid "Enable/Disable delete useless files after merge is complete."
+msgstr ""
+
+msgctxt "O12"
+msgid "Enable/Disable download again automatically after the download failed."
+msgstr ""
+
+msgctxt "O13"
+msgid "Overwrite existing files."
+msgstr ""
+
+msgctxt "O14"
+msgid "Do not overwrite existing files."
+msgstr ""
+
+msgctxt "O15"
+msgid "Use ffmpeg."
+msgstr ""
+
+msgctxt "O16"
+msgid "Do not use ffmpeg."
+msgstr ""
+
+msgctxt "O17"
+msgid "The preferred video coding when downloading with maximum quality."
+msgstr ""
+
+msgctxt "O18"
+msgid "Download with aria2c."
+msgstr ""
+
+msgctxt "O19"
+msgid "Download without aria2c."
+msgstr ""
+
+msgctxt "O20"
+msgid "The maximum number of connections to one server for each download while using aria2c. Possible Values: <value>."
+msgstr ""
+
+msgctxt "O21"
+msgid "The maximum number of connections while downloading a file with aria2c. Possible Values: <value>."
+msgstr ""
+
+msgctxt "O22"
+msgid "The minimum split file size while using aria2c. Unit: <value1>, Possible Values: <value2>"
+msgstr ""
+
+msgctxt "O23"
+msgid "Use the backup download links when using aria2c."
+msgstr ""
+
+msgctxt "O24"
+msgid "Do not use the backup download links when using aria2c."
+msgstr ""
+
+msgctxt "O25"
+msgid "The file allocation method while using aria2c."
+msgstr ""
+
+msgctxt "O26"
+msgid "Put or not put video/audio quality information in the file name."
+msgstr ""
+
+msgctxt "O27"
+msgid "Add or not add video information to file forcibly. (This will transcode the video and transcoding will not affect the video/audio quality.)"
+msgstr ""
+
+msgctxt "O28"
+msgid "The maximum overall download speed in bytes/s when using aria2c. (0 means unrestricted. You can append K or M (1K = 1024, 1M = 1024K)"
+msgstr ""
+
+msgctxt "O29"
+msgid "Enable/Disable \"download all parts of each video automatically\" when you input Favorites, Channels, Uploaded Video page link."
+msgstr ""
+
+msgctxt "O30"
+msgid "Use http proxy."
+msgstr ""
+
+msgctxt "O31"
+msgid "(This setting will not affect aria2c.)"
+msgstr ""
+
+msgctxt "O32"
+msgid "Use https proxy."
+msgstr ""
