@@ -1,0 +1,193 @@
+# bili - PrintInfo.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-12 04:24:00+0000\n"
+"PO-Revision-Date: 2020-07-12 05:16+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "O1"
+msgid "AV number :"
+msgstr "AV号："
+
+msgctxt "O2"
+msgid "BV number :"
+msgstr "BV号："
+
+msgctxt "O3"
+msgid "Total parts :"
+msgstr "分P数："
+
+msgctxt "O4"
+msgid "Title :"
+msgstr "标题："
+
+msgctxt "O5"
+msgid "Publish time :"
+msgstr "发布时间："
+
+msgctxt "O6"
+msgid "Last modified time :"
+msgstr "上次修改时间："
+
+msgctxt "O7"
+msgid "Description :"
+msgstr "描述："
+
+msgctxt "O8"
+msgid "Uploader's info :"
+msgstr "UP主信息："
+
+msgctxt "O9"
+msgid "Name :"
+msgstr "名字："
+
+msgctxt "O10"
+msgid "Information of each part :"
+msgstr "分P信息："
+
+msgctxt "O11"
+msgid "Part <number> :"
+msgstr "第<number>P："
+
+msgctxt "O12"
+msgid "Part name :"
+msgstr "分P名："
+
+msgctxt "O13"
+msgid "Japanese name :"
+msgstr "日语名字："
+
+msgctxt "O14"
+msgid "Series name :"
+msgstr "系列名字："
+
+msgctxt "O15"
+msgid "Alias :"
+msgstr "别名："
+
+msgctxt "O16"
+msgid "Type name :"
+msgstr "类型："
+
+msgctxt "O17"
+msgid "Content :"
+msgstr "内容："
+
+msgctxt "O18"
+msgid "Favorites ID:"
+msgstr "收藏夹ID："
+
+msgctxt "O19"
+msgid "Favorites title :"
+msgstr "收藏夹标题："
+
+msgctxt "O20"
+msgid "Creator's name :"
+msgstr "创建者名字："
+
+msgctxt "O21"
+msgid "Create time :"
+msgstr "创建时间："
+
+msgctxt "O22"
+msgid "Video count :"
+msgstr "视频数量："
+
+msgctxt "O23"
+msgid "Video <number> :"
+msgstr "视频<number>："
+
+msgctxt "O24"
+msgid "Uploader's name :"
+msgstr "UP主名称："
+
+msgctxt "O25"
+msgid "Favorites time :"
+msgstr "收藏时间："
+
+msgctxt "O26"
+msgid "Channel ID :"
+msgstr "频道ID："
+
+msgctxt "O27"
+msgid "Uploader's gender :"
+msgstr "UP主性别："
+
+msgctxt "O28"
+msgid "Uploader's level :"
+msgstr "UP主等级："
+
+msgctxt "O29"
+msgid "Personalized signature :"
+msgstr "个性签名："
+
+msgctxt "O30"
+msgid "Birthday :"
+msgstr "生日："
+
+msgctxt "O31"
+msgid "Favorites <number> :"
+msgstr "收藏夹<number>："
+
+msgctxt "O32"
+msgid "Small Video ID :"
+msgstr "小视频ID："
+
+msgctxt "O33"
+msgid "Tags :"
+msgstr "标签："
+
+msgctxt "O34"
+msgid "Upload time :"
+msgstr "上传时间："
+
+msgctxt "O35"
+msgid "You selected :"
+msgstr "你选中了"
+
+msgctxt "O36"
+msgid "Live Record ID :"
+msgstr "直播回放ID："
+
+msgctxt "O37"
+msgid "Room ID :"
+msgstr "房间ID："
+
+msgctxt "O38"
+msgid "Start time :"
+msgstr "开始时间："
+
+msgctxt "O39"
+msgid "End time :"
+msgstr "结束时间："
+
+msgctxt "O40"
+msgid "Area name :"
+msgstr "区域："
+
+msgctxt "O41"
+msgid "Room hot words :"
+msgstr "房间热词："
+
+msgctxt "O42"
+msgid "You can find the source code on <https://github.com/lifegpc/bili>."
+msgstr "你可以在<https://github.com/lifegpc/bili>上找到源代码。"
+
+msgctxt "O43"
+msgid ""
+"Can't find GNU GPL3 LICENSE file, please see <http://www.gnu.org/licenses/>."
+msgstr "找不到GNU GPL3 LICENSE文件，请看<http://www.gnu.org/licenses/>。"

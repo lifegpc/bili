@@ -16,52 +16,55 @@
 from time import localtime,strftime
 from biliTime import tostr2
 from bstr import gettags,rhtml
+from JSONParser import loadset
+import sys
+from lang import getdict,getlan
 def printInfo(data) :
 	"输出普通AV号获取的信息"
-	print("视频av号："+str(data['aid']))
-	print("视频bv号："+data['bvid'])
-	print("分P数："+str(data['videos']))
-	print("标题："+data['title'])
-	print("发布时间："+strftime("%Y-%m-%d %H:%M:%S",localtime(data['pubdate'])))
-	print("上次修改时间："+strftime("%Y-%m-%d %H:%M:%S",localtime(data['ctime'])))
-	print("描述："+data['desc'])
-	print("UP主信息：")
+	print(lan['O1']+str(data['aid']))#AV号：
+	print(lan['O2']+data['bvid'])#BV号：
+	print(lan['O3']+str(data['videos']))#分P数：
+	print(lan['O4']+data['title'])#标题：
+	print(lan['O5']+strftime("%Y-%m-%d %H:%M:%S",localtime(data['pubdate'])))#发布时间：
+	print(lan['O6']+strftime("%Y-%m-%d %H:%M:%S",localtime(data['ctime'])))#上次修改时间：
+	print(lan['O7']+data['desc'])#描述：
+	print(lan['O8'])#UP主信息：
 	print("UID："+str(data['uid']))
-	print("名字："+data['name'])
-	print("分P信息：")
+	print(lan['O9']+data['name'])#名字：
+	print(lan['O10'])#分P信息：
 	for i in data['page'] :
-		print("第"+str(i['page'])+"P：")
+		print(lan['O11'].replace('<number>',str(i['page'])))#第<number>P：
 		print("CID："+str(i['cid']))
-		print("分P名："+i['part'])
+		print(lan['O12']+i['part'])#分P名：
 def printInfo2(data,ns:bool) :
 	"未完成"
 	if 'mediaInfo' in data and ns:
 		t=data['mediaInfo']
 		print("ID："+str(t['id']))
 		print("SSID："+str(t['ssId']))
-		print("名字："+t['title'])
+		print(lan['O4']+t['title'])#标题：
 		if t['jpTitle']!='' : 
-			print("日本语名字："+t['jpTitle'])
+			print(lan['O13']+t['jpTitle'])#日语名字：
 		if t['series']!='' :
-			print("系列名字："+t['series'])
+			print(lan['O14']+t['series'])#系列名字：
 		if t['alias']!='' :
-			print("别名："+t['alias'])
-		print("简介："+t['evaluate'])
-		print("类型："+t['type'])
-		print('发布时间：'+t['time'])
+			print(lan['O15']+t['alias'])#别名：
+		print(lan['O7']+t['evaluate'])#简介：
+		print(lan['O16']+t['type'])#类型：
+		print(lan['O5']+t['time'])#发布时间：
 	ii=1
 	if 'epList' in data:
 		if ns:
-			print('内容：')
+			print(lan['O17'])#内容：
 		for i in data['epList'] :
 			if not ns:
 				ii=ii+1
 				continue
-			print(str(ii)+"、"+i['titleFormat'])
+			print(str(ii)+"."+i['titleFormat'])
 			ii=ii+1
-			print('名字：'+i['longTitle'])
-			print('AV号：'+str(i['aid']))
-			print('BV号：'+str(i['bvid']))
+			print(lan['O4']+i['longTitle'])#标题：
+			print(lan['O1']+str(i['aid']))#AV号：
+			print(lan['O2']+str(i['bvid']))#BV号：
 			print('CID:'+str(i['cid']))
 			print('ID:'+str(i['id']))
 	if 'sections' in data:
@@ -72,113 +75,110 @@ def printInfo2(data,ns:bool) :
 				if not ns:
 					ii=ii+1
 					continue
-				print(str(ii)+"、"+j['titleFormat'])
+				print(str(ii)+"."+j['titleFormat'])
 				ii=ii+1
-				print('名字：'+j['longTitle'])
-				print('AV号：'+str(j['aid']))
-				print('BV号：'+str(j['bvid']))
+				print(lan['O4']+j['longTitle'])#标题：
+				print(lan['O1']+str(j['aid']))#AV号：
+				print(lan['O2']+str(j['bvid']))#BV号：
 				print('CID:'+str(j['cid']))
 				print('ID:'+str(j['id']))
 	return ii-1
 def printInfo3(d:dict) :
-	print('收藏夹id：%s'%(d['id']))
-	print('收藏夹名字：%s'%(d['title']))
-	print('UP主名字：%s'%(d['author']))
+	print(f"{lan['O18']}{d['id']}")#收藏夹ID：
+	print(f"{lan['O19']}{d['title']}")#收藏夹标题：
+	print(f"{lan['O20']}{d['author']}")#创建者名字：
 	print('UID：%s'%(d['uid']))
-	print('创建时间：%s'%(tostr2(d['ctime'])))
-	print('修改时间：%s'%(tostr2(d['mtime'])))
-	print('视频数量：%s'%(d['count']))
+	print(f"{lan['O21']}{tostr2(d['ctime'])}")#创建时间：
+	print(f"{lan['O6']}{tostr2(d['mtime'])}")#修改时间：
+	print(f"{lan['O22']}{d['count']}")#视频数量：
 def printInfo4(l:list) :
 	ii=1
 	for i in l:
-		print('视频%s：'%(ii))
-		print('AV号：%s'%(i['id']))
-		print('BV号：%s'%(i['bvid']))
-		print('视频标题：%s'%(i['title']))
-		print('UP主名称：%s'%(i['author']))
-		print('收藏时间：%s'%(tostr2(i['ftime'])))
+		print(lan['O23'].replace('<number>',str(ii)))#视频<number>：
+		print(f"{lan['O1']}{i['id']}")#AV号：
+		print(f"{lan['O2']}{i['bvid']}")#BV号：
+		print(f"{lan['O4']}{i['title']}")#标题：
+		print(f"{lan['O24']}{i['author']}")#UP主名称：
+		print(f"{lan['O25']}{tostr2(i['ftime'])}")#收藏时间：
 		ii=ii+1
 def printInfo5(l:list) :
 	e=1
 	for i in l:
-		print('%s、频道ID：%s'%(e,i['cid']))
-		print('名字：%s'%(i['name']))
-		print('介绍：%s'%(i['intro']))
-		print('上次修改时间：%s'%(tostr2(i['mtime'])))
-		print('视频数量：%s'%(i['count']))
+		print(f"{e}.{lan['O26']}{i['cid']}")#频道ID：
+		print(f"{lan['O9']}{i['name']}")#名字：
+		print(f"{lan['O7']}{i['intro']}")#介绍：
+		print(f"{lan['O6']}{tostr2(i['mtime'])}")#上次修改时间：
+		print(f"{lan['O22']}{i['count']}")#视频数量：
 		e=e+1
 def printInfo6(l:list,d:dict) :
-	print('频道ID：%s'%(d['cid']))
-	print('名字：%s'%(d['name']))
-	print('介绍：%s'%(d['intro']))
-	print('上次修改时间：%s'%(tostr2(d['mtime'])))
-	print('视频数量：%s'%(d['count']))
+	print(f"{lan['O26']}{d['cid']}")#频道ID：
+	print(f"{lan['O9']}{d['name']}")#名字：
+	print(f"{lan['O7']}{d['intro']}")#介绍：
+	print(f"{lan['O6']}{tostr2(d['mtime'])}")#上次修改时间：
+	print(f"{lan['O22']}{d['count']}")#视频数量：
 	e=1
 	for i in l :
-		print('视频%s：'%(e))
-		print('AV号：%s'%(i['aid']))
-		print('BV号：%s'%(i['bvid']))
-		print('视频标题：%s'%(i['title']))
+		print(lan['O23'].replace('<number>',str(e)))#视频%s：
+		print(f"{lan['O1']}{i['aid']}")#AV号：
+		print(f"{lan['O2']}{i['bvid']}")#BV号：
+		print(f"{lan['O4']}{i['title']}")#标题：
 		e=e+1
 def printInfo7(u:dict,l:list):
-	print('UP主名字：%s'%(u['n']))
-	print('UP主性别：%s'%(u['s']))
-	print('UP主等级：%s'%(u['l']))
-	print('个性签名：%s'%(u['sign']))
-	print('生日：%s'%(u['b']))
+	print(f"{lan['O24']}{u['n']}")#UP主名字：
+	print(f"{lan['O27']}{u['s']}")#UP主性别：
+	print(f"{lan['O28']}{u['l']}")#UP主等级：
+	print(f"{lan['O29']}{u['sign']}")#个性签名：
+	print(f"{lan['O30']}{u['b']}")#生日：
 	e=1
 	for i in l:
-		print('视频%s：'%(e))
-		print('AV号：%s'%(i['aid']))
-		print('BV号：%s'%(i['bvid']))
-		print('视频标题：%s'%(i['title']))
-		print('视频描述：%s'%(i['description']))
-		print('创建时间：%s'%(tostr2(i['ctime'])))
+		print(lan['O23'].replace('<number>',str(e)))#视频%s：
+		print(f"{lan['O1']}{i['aid']}")#AV号：
+		print(f"{lan['O2']}{i['bvid']}")#BV号：
+		print(f"{lan['O4']}{i['title']}")#标题：
+		print(f"{lan['O7']}{i['description']}")#描述：
+		print(f"{lan['O21']}{tostr2(i['ctime'])}")#创建时间：
 		e=e+1
 def printInfo8(d:dict) :
 	k=1
 	for i in d['data']['list'] :
-		print('收藏夹%s：'%(k))
-		print('收藏夹ID：%s'%(i['id']))
-		print('收藏夹名字：%s'%(i['title']))
+		print(lan['O31'].replace('<number>',str(k)))#收藏夹%s：
+		print(f"{lan['O18']}{i['id']}")#收藏夹ID：
+		print(f"{lan['O19']}{i['title']}")#收藏夹名字：
 		k=k+1
 def printInfo9(d:dict) :
-	print('小视频ID：%s'%(d['id']))
-	print('描述：%s'%(d['description']))
-	print('标签：%s'%(gettags(d['tags'])))
-	print('上传时间：%s'%(d['upload_time']))
-	print('UP主名字：%s'%(d['name']))
+	print(f"{lan['O32']}{d['id']}")#小视频ID：
+	print(f"{lan['O7']}{d['description']}")#描述：
+	print(f"{lan['O33']}{gettags(d['tags'])}")#标签：
+	print(f"{lan['O34']}{d['upload_time']}")#上传时间：
+	print(f"{lan['O24']}{d['name']}")#UP主名字：
 	print('UID：%s'%(d['uid']))
 def printcho(cho) :
 	if len(cho)==0 :
 		return
-	print('你选中了',end='')
+	print(lan['O35'],end='')#你选中了
 	for i in cho :
 		print('%s,' %(i['titleFormat']),end='')
 	print()
 def printlr(d:dict):
-	print('直播回放id：%s'%(d['rid']))
-	print('房间id：%s'%(d['roomid']))
-	print('UP主：%s'%(d['name']))
-	print('UP主UID：%s'%(d['uid']))
-	print('UP主性别：%s'%(d['sex']))
-	print('UP主个性签名：%s'%(d['sign']))
-	print('直播名称：%s'%(d['title']))
-	print('开始时间：%s'%(tostr2(d['st'])))
-	print('结束时间：%s'%(tostr2(d['et'])))
-	print('简介（去HTML化）：%s'%(rhtml(d['des'])))
-	print('区域：%s-%s'%(d['parean'],d['arean']))
-	print('房间标签：%s'%(d['tags']))
-	print('房间热词：%s'%(gettags(d['hotwords'])))
+	print(f"{lan['O36']}{d['rid']}")#直播回放ID：
+	print(f"{lan['O37']}{d['roomid']}")#房间ID：
+	print(f"{lan['O24']}{d['name']}")#UP主：
+	print('UID：%s'%(d['uid']))
+	print(f"{lan['O27']}{d['sex']}")#UP主性别：
+	print(f"{lan['O29']}{d['sign']}")#UP主个性签名：
+	print(f"{lan['O4']}{d['title']}")#直播名称：
+	print(f"{lan['O38']}{tostr2(d['st'])}")#开始时间：
+	print(f"{lan['O39']}{tostr2(d['et'])}")#结束时间：
+	print(f"{lan['O7']}{rhtml(d['des'])}")#简介：
+	print(f"{lan['O40']}{d['parean']}-{d['arean']}")#区域：
+	print(f"{lan['O33']}{d['tags']}")#房间标签：
+	print(f"{lan['O41']}{gettags(d['hotwords'])}")#房间热词：
 def pr() :
-	print("""    bili  版权所有 (C) 2019-2020  lifegpc
+	print(f"""    bili  Copyright (C) 2019-2020  lifegpc
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
-    本程序不负任何担保责任，欲知详情请键入'show w'。
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
-    这是一个自由软件，欢迎您在特定条件下再发布本程序；欲知详情请键入'show c'。
-    You can find the source code on <https://github.com/lifegpc/bili>.
-    你可以在<https://github.com/lifegpc/bili>上找到源代码。
+    {lan['O42']}
 """)
 def prc() :
 	try :
@@ -189,5 +189,11 @@ def prc() :
 			t=f.readline()
 		f.close()
 	except :
-		print("Can't find GNU GPL3 LICENSE file, please see <http://www.gnu.org/licenses/>.")
-		print("找不到GNU GPL3 LICENSE文件，请看<http://www.gnu.org/licenses/>。")
+		print(lan['O43'])#找不到GNU GPL3 LICENSE文件，请看<http://www.gnu.org/licenses/>。
+from command import gopt
+lan=None
+se=loadset()
+ip={}
+if len(sys.argv)>1 :
+    ip=gopt(sys.argv[1:])
+lan=getdict('PrintInfo',getlan(se,ip))
