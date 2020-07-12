@@ -23,6 +23,8 @@ from command import gopt
 from JSONParser import loadset
 la=None
 se=loadset()
+if se==-1 or se==-2 :
+    se={}
 ip={}
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])

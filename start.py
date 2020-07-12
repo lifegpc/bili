@@ -37,6 +37,8 @@ import biliLiveDanmu
 from lang import getlan,getdict
 lan=None
 se=JSONParser.loadset()
+if se==-1 or se==-2 :
+    se={}
 ip={}
 def main(ip={}):
     global se

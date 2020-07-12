@@ -38,6 +38,8 @@ import sys
 #第二个需要带referer，可以解析4K
 lan=None
 se=JSONParser.loadset()
+if se==-1 or se==-2 :
+    se={}
 ip={}
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])

@@ -28,6 +28,8 @@ import sys
 from command import gopt
 lan=None
 se=JSONParser.loadset()
+if se==-1 or se==-2 :
+    se={}
 ip={}
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
