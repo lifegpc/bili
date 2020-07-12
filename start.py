@@ -409,7 +409,7 @@ def main(ip={}):
                     bs=False
                     for i in cho :
                         if ns:
-                            print(lan['OUTPUT6']+i+','+plv[i-1]['title']) #您选中了视频：
+                            print(lan['OUTPUT6']+str(i)+','+plv[i-1]['title']) #您选中了视频：
         bs=True
         c1=False
         if not ns:
@@ -493,7 +493,7 @@ def main(ip={}):
                         bs=False
                         for i in cho :
                             if ns:
-                                print(lan['OUTPUT8']+i+','+chl[i-1]['name'])#您选中了频道：
+                                print(lan['OUTPUT8']+str(i)+','+chl[i-1]['name'])#您选中了频道：
                 for i in cho :
                     ip2=copyip(ip)
                     ip2['i']='https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,chl[i-1]['cid'])
@@ -551,7 +551,7 @@ def main(ip={}):
                     bs=False
                     for i in cho :
                         if ns:
-                            print(lan['OUTPUT6']+i+','+chv[i-1]['title'])#您选中了视频：
+                            print(lan['OUTPUT6']+str(i)+','+chv[i-1]['title'])#您选中了视频：
         bs=True
         c1=False
         if not ns:
@@ -634,7 +634,7 @@ def main(ip={}):
                     bs=False
                     for i in cho :
                         if ns:
-                            print(lan['OUTPUT6']+i+','+vl[i-1]['title'])#您选中了视频：
+                            print(lan['OUTPUT6']+str(i)+','+vl[i-1]['title'])#您选中了视频：
         bs=True
         c1=False
         if not ns:
@@ -905,7 +905,7 @@ def main(ip={}):
                         bs=False
                         for i in cho :
                             if ns:
-                                print(lan['OUTPUT6']+i+','+data['page'][i-1]['part'])#您选中了视频：
+                                print(lan['OUTPUT6']+str(i)+','+data['page'][i-1]['part'])#您选中了视频：
         cho2=0
         bs=True
         if 'd' in ip :
