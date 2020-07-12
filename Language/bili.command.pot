@@ -146,3 +146,27 @@ msgstr ""
 msgctxt "O32"
 msgid "Use https proxy."
 msgstr ""
+
+msgctxt "O33"
+msgid "The number of days between crawls when downloading all barrage (Possible Values: <value>). You can use \"a\" to enable automatic mode (Recommend). Use \"b\" to modify crawl start date (This will be effective when downloading SS/EP video)."
+msgstr ""
+
+msgctxt "O34"
+msgid "The default crawl start date when downloading all barrage. (This will be effective when downloading SS/EP video. The default value is upload time. The format is Year-Month-Day, for example 1989-02-25.)"
+msgstr ""
+
+msgctxt "O35"
+msgid "Only display video/audio quality and exit when downloading videos. (This is not affected by silent mode.)"
+msgstr ""
+
+msgctxt "O36"
+msgid "Choose video quality while downloading videos."
+msgstr ""
+
+msgctxt "O37"
+msgid "Choose audio quality while downloading videos."
+msgstr ""
+
+msgctxt "O38"
+msgid "Set the download folder location."
+msgstr ""
