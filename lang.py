@@ -66,7 +66,7 @@ def getsyslan(d:bool=False) :
         return "en" #非Windows系统默认英文
 def getlan(se:dict,ip:dict) :
     l=getsyslan()
-    if 'lan' in se:
+    if se!=-1 and 'lan' in se:
         l=se['lan']
     if 'lan' in ip:
         l=ip['lan']
