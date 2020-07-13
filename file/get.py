@@ -16,6 +16,7 @@
 from file.dir import listd,getinfod,printinfod,listc
 from file.filter import listf
 from os.path import abspath,exists,isdir,isfile
+from file import lan
 def getfilen(l='Download',lx=['xml'],yl=15,g=1,save=False) :
     """获取需要的文件名
     l 初始目录 lx 过滤类型 yl 每页个数 g 获取文件的数量 save 是否为保存文件
@@ -47,27 +48,27 @@ def getfilen(l='Download',lx=['xml'],yl=15,g=1,save=False) :
             sl=(len(nlf)-1)%yl+1
         else :
             sl=yl
-        print('当前显示第%s/%s页'%(ys,zys))
+        print(lan['OUTPUT3'].replace('<num>',str(ys)).replace('<count>',str(zys)))#第<num>页，共<count>页
         if ys!=1 :
-            print('a.上一页\t',end='')
+            print(f"a.{lan['O1']}\t",end='')#上一页
         if ys!=zys :
-            print('b.下一页\t',end='')
-        print('c.上一文件夹\t',end='')
+            print(f"b.{lan['O2']}\t",end='')#下一页
+        print(f"c.{lan['O3']}\t",end='')#上一文件夹
         if gg and gl==2 :
-            print('d.不显示无后缀名文件\t',end='')
+            print(f"d.{lan['O4']}\t",end='')#不显示无后缀名文件
         elif gg and gl==0 :
-            print('d.显示无后缀名文件\t',end='')
+            print(f"d.{lan['O5']}\t",end='')#显示无后缀名文件
         if gg:
-            print('e.显示所有文件\t',end='')
+            print(f"e.{lan['O6']}\t",end='')#显示所有文件
         else :
-            print('e.显示过滤后文件\t',end='')
+            print(f"e.{lan['O7']}\t",end='')#显示过滤后文件
         if save :
-            print('f.手动输入其他文件夹\tg.手动输入文件名')
+            print(f"f.{lan['O8']}\tg.{lan['O9']}")#输入文件名
         else :
-            print('f.手动输入其他文件夹')
+            print(f"f.{lan['O8']}")#输入文件夹名称
         bs2=True
         while bs2:
-            inp=input('请输入文件名之前的序号选中文件，或输入文件夹名之前的序号进入文件夹，或输入操作之前的字母进行该操作')
+            inp=input(lan['OUTPUT4'])#请输入文件名之前的序号选中文件，或输入文件夹名之前的序号进入文件夹，或输入操作之前的字母进行该操作
             if len(inp)>0 :
                 if inp[0]=='a' and ys!=1 :
                     ys=ys-1
@@ -89,7 +90,7 @@ def getfilen(l='Download',lx=['xml'],yl=15,g=1,save=False) :
                         ys=1
                         bs2=False
                     else :
-                        print('上一层文件夹不存在')
+                        print(lan['ERROR1'])#上一层文件夹不存在。
                 elif inp[0]=='d' and gg :
                     if gl==2 :
                         gl=0
@@ -114,7 +115,7 @@ def getfilen(l='Download',lx=['xml'],yl=15,g=1,save=False) :
                     ys=1
                     bs2=False
                 elif inp[0]=='f' :
-                    inp2=input('请输入文件夹位置（支持绝对和相对位置）：')
+                    inp2=input(lan['INPUT1'])#请输入文件夹位置（支持绝对和相对位置）：
                     tmp=abspath(inp2)
                     if exists(tmp) :
                         nml=tmp
@@ -128,18 +129,18 @@ def getfilen(l='Download',lx=['xml'],yl=15,g=1,save=False) :
                         ys=1
                         bs2=False
                     else :
-                        print('该文件不存在')
+                        print(lan['ERROR2'])#该文件夹不存在
                 elif inp[0]=='g' and save :
-                    inp2=input('请输入文件名称：')
+                    inp2=input(lan['INPUT2'])#请输入文件名称：
                     tmp={'a':abspath('%s/%s'%(nml,inp2)),'f':inp2}
                     if ci>0 and checkcf(c,tmp) :
-                        print('文件与已选择文件重复')
+                        print(lan['ERROR3'])#之前已选择此文件。
                     else :
                         if exists(tmp['a']) :
                             if isfile(tmp['a']) :
                                 bs3=True
                                 while bs3 :
-                                    inp3=input('已有该文件，是否保存到这?(y/n)')
+                                    inp3=input(f"{lan['INPUT3']}(y/n)")#该文件已存在，是否覆盖？
                                     if len(inp3)>0 :
                                         if inp3[0].lower()=='y' :
                                             c.append(tmp)
@@ -157,11 +158,11 @@ def getfilen(l='Download',lx=['xml'],yl=15,g=1,save=False) :
                         tmp=nlf[(ys-1)*yl+int(inp)-1]
                         if isfile(tmp['a']) :
                             if ci>0 and checkcf(c,tmp) :
-                                print('文件与已选择文件重复')
+                                print(lan['ERROR3'])#之前已选择此文件。
                             else :
                                 bs3=True
                                 while bs3 :
-                                    inp2=input('是否选中\"%s\"？(y/n)' %(tmp['f']))
+                                    inp2=input(f"{lan['INPUT4'].replace('<filename>',tmp['f'])}(y/n)")#是否选中文件"<filename>"？
                                     if len(inp2)>0 :
                                         if inp2[0].lower()=='y' :
                                             c.append(tmp)

@@ -1,0 +1,228 @@
+# bili - start.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-10 23:16:38+0000\n"
+"PO-Revision-Date: 2020-07-10 23:26+0000\n"
+"Last-Translator: Kum4423, 2020\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "RUN_SETTINGS_TIPS"
+msgid ""
+"It is recommended to setup program by runing \"settings.py\" in order to "
+"reduce unnecessary queries."
+msgstr "不要なクエリを減らすために、\"settings.py \"を実行してプログラムを設定することをお勧めします。"
+
+msgctxt "INPUT1"
+msgid ""
+"Please enter the av/ss/ep/md/bv number (bv number needs start with BV) or "
+"link (Support Favorites, Channels, Uploaded Video and Small Video page from "
+"user page. Also support live records video link.):"
+msgstr ""
+"動画番号 "
+"av/ss/ep/md/bv（bv番号はBVで始まる必要があります）またはURLリンクを入力してください（ユーザーページからお気に入り、チャンネル、アップロードされたビデオと小さなビデオページをサポートしています。また、ライブレコードの動画リンクにも対応しています。）"
+
+msgctxt "ERROR1"
+msgid "Please use \"-i <input>\"."
+msgstr "\"-i <input>\" を使用してください。"
+
+msgctxt "ERROR2"
+msgid "Invalid input."
+msgstr "無効な入力です。"
+
+msgctxt "OUTPUT1"
+msgid "The login is successfully verified."
+msgstr "ログインが正常に認証されました。"
+
+msgctxt "ERROR3"
+msgid "Network Error! Verification failed!"
+msgstr "ネットワークエラー！ 認証に失敗しました！"
+
+msgctxt "WARN1"
+msgid "The login information has expired."
+msgstr "ログイン情報の有効期限が切れています。"
+
+msgctxt "ERROR4"
+msgid "An error occurred when reading the file."
+msgstr "ファイルの読み込み時にエラーが発生しました。"
+
+msgctxt "INPUT2"
+msgid "Do you want to enable \"Continue Download\" function?"
+msgstr "「ダウンロードを続ける」機能を有効にしますか？"
+
+msgctxt "ERROR5"
+msgid "An error occurred when parsing md number page."
+msgstr "対象動画のページの解析中にエラーが発生しました。"
+
+msgctxt "INPUT3"
+msgid ""
+"Please enter the number of the favorite you want to choose (You can use "
+"\",\" to separate each two numbers. If you want to select all favorites, "
+"please enter \"a\".):"
+msgstr ""
+"選択したいお気に入りの番号を入力してください（2つの番号を区切るには「,」で区切ってください。全てのお気に入りを選択したい場合は「a」を入力してください）。"
+
+msgctxt "ERROR6"
+msgid "Please use \"--afp <number>\" to choose favorite."
+msgstr "お気に入りを選択するには \"--afp <number>\" を使用してください。"
+
+msgctxt "OUTPUT2"
+msgid "You have selected all favorites."
+msgstr "全てのお気に入りを選択しました。"
+
+msgctxt "OUTPUT3"
+msgid "You have selected the favorite:"
+msgstr "お気に入りを選択しました。"
+
+msgctxt "ERROR7"
+msgid "An error occurred when getting the list of favorites."
+msgstr "お気に入りのリストを取得する際にエラーが発生しました。"
+
+msgctxt "ERROR8"
+msgid ""
+"The count of video in list is not equal to the estimated count which from "
+"bilibili. Maybe an bug occurred."
+msgstr "リスト内の動画の数がbilibiliからの推定数と一致しない場合があります。バグが発生したのかもしれません。"
+
+msgctxt "OUTPUT4"
+msgid ""
+"Please enter the number of the video you want to choose (You can use \",\" "
+"to separate each two numbers. If you want to select all videos, please enter"
+" \"a\".):"
+msgstr ""
+"選択したい動画の番号を入力してください（2つの番号を区切るには「,」を使用できます。全ての動画を選択したい場合は「a」を入力してください。）:"
+
+msgctxt "ERROR9"
+msgid "Please use \"-p <number>\" to choose video."
+msgstr "動画を選択するには \"-p <number>\" を使用してください。"
+
+msgctxt "OUTPUT5"
+msgid "You have selected all videos."
+msgstr "全ての動画を選択しました。"
+
+msgctxt "OUTPUT6"
+msgid "You have selected the video:"
+msgstr "動画を選択しました:"
+
+msgctxt "INPUT4"
+msgid "Do you want to enable \"download all parts of each video automatically\"?"
+msgstr "「それぞれの動画の全てを自動的にダウンロードする」を有効にしますか？"
+
+msgctxt "ERROR10"
+msgid "An error occurred when reading the file: \"cookies.json\"."
+msgstr "ファイルの読み込み時にエラーが発生しました: \"cookies.json\"."
+
+msgctxt "INPUT5"
+msgid ""
+"Please enter the number of the channel you want to choose (You can use \",\""
+" to separate each two numbers. If you want to select all channels, please "
+"enter \"a\".):"
+msgstr ""
+"選択したいチャンネルの番号を入力してください（2つの番号を区切るには「,」を使用できます。全てのチャンネルを選択したい場合は「a」を入力してください。）:"
+
+msgctxt "OUTPUT7"
+msgid "You have selected all channels."
+msgstr "全てのチャンネルを選択しました。"
+
+msgctxt "OUTPUT8"
+msgid "You have selected the channel:"
+msgstr "チャンネルを選択しました:"
+
+msgctxt "INPUT6"
+msgid "Do you want filter barrage?"
+msgstr "弾幕フィルターが欲しいですか？"
+
+msgctxt "INPUT7"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download video\n"
+"2.download barrage\n"
+"3.download video and barrage"
+msgstr ""
+"\".\" の前に数字を入力してダウンロード方法を選択してください:\n"
+"1.動画をダウンロードする\n"
+"2.弾幕をダウンロードする\n"
+"3.動画と弾幕をダウンロードする"
+
+msgctxt "ERROR11"
+msgid "Please use \"-d <method>\" to choose download method."
+msgstr "ダウンロード方法は \"-d <method>\" で選択してください。"
+
+msgctxt "INPUT8"
+msgid ""
+"Do you want download with maximum quality (this will not ask for specific "
+"quality)?"
+msgstr "最高画質でダウンロードしますか？（これは特定の画質を要求するものではありません）"
+
+msgctxt "INPUT9"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download barrage\n"
+"2.download all barrage from historical records (may needs lots of time)\n"
+"3.download video\n"
+"4.download barrage and video\n"
+"5.download all barrage from historical records and video\n"
+"6.download subtitles only"
+msgstr ""
+"ダウンロード方法を選択するには \".\" の前に数字を入力してください:\n"
+"1.弾幕をダウンロードする\n"
+"2.過去の履歴から全ての弾幕をダウンロードする（多分、めっちゃ時間かかるで）\n"
+"3.動画をダウンロードする\n"
+"4.動画と弾幕をダウンロードする\n"
+"5.動画と過去の履歴から全ての弾幕をダウンロードする\n"
+"6.字幕のみダウンロードする"
+
+msgctxt "OUTPUT9"
+msgid "Part <number> download complete."
+msgstr "Part <number> のダウンロードが完了しました。"
+
+msgctxt "ERROR12"
+msgid ""
+"This video is not support to download all barrage from historical records."
+msgstr "このビデオは過去の履歴から全ての弾幕をダウンロードすることがサポートされていません。"
+
+msgctxt "INPUT10"
+msgid ""
+"If you only want to download video which match the ep number you entered, "
+"please enter \"b\"."
+msgstr "入力したエピソード番号に一致する動画だけをダウンロードしたい場合は \"b\" と入力してください。"
+
+msgctxt "INPUT11"
+msgid "If you want to download the last viewed \"EP<number>\", please enter \"l\"."
+msgstr "最後に視聴した「エピソード」をダウンロードしたい場合は \"l\" と入力してください。"
+
+msgctxt "INPUT12"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download barrage\n"
+"2.download all barrage from historical records (may needs lots of time)\n"
+"3.download video\n"
+"4.download barrage and video\n"
+"5.download all barrage from historical records and video"
+msgstr ""
+"ダウンロード方法を選択するには \".\" の前に数字を入力してください:\n"
+"1.弾幕をダウンロードする\n"
+"2.過去の履歴から全ての弾幕をダウンロードする（多分、めっちゃ時間かかるで）\n"
+"3.動画をダウンロードする\n"
+"4.動画と弾幕をダウンロードする\n"
+"5.動画と過去の履歴から全ての弾幕をダウンロードする"
+
+msgctxt "OUTPUT10"
+msgid "<title> download complete."
+msgstr "<title> ダウンロードが完了しました。 "
+
+msgctxt "OUTPUT11"
+msgid "Please run \"start.py\"."
+msgstr "\"start.py\" を実行してください。"

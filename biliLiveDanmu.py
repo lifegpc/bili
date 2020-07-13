@@ -14,12 +14,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from requests import Session
-from JSONParser import getset
+from JSONParser import getset,loadset
 from file import mkdir
 import os
 from biliDanmuXmlFilter import Filter
 from biliDanmuCreate import objtoxml
 import file
+import sys
+from command import gopt
+from lang import getdict,getlan
+lan=None
+se=loadset()
+if se==-1 or se==-2 :
+    se={}
+ip={}
+if len(sys.argv)>1 :
+    ip=gopt(sys.argv[1:])
+lan=getdict('biliDanmu',getlan(se,ip))
 def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
     """下载直播回放弹幕
     -1 文件夹创建失败
@@ -38,7 +49,7 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         if not os.path.exists(o) :
             mkdir(o)
     except :
-        print("创建%s文件夹失败"%(o))
+        print(lan['ERROR3'].replace('<dirname>',o))#创建文件夹<dirname>失败。
         return -1
     filen='%s%s.xml'%(o,file.filtern('%s(%s,%s)'%(data['title'],data['rid'],data['roomid'])))
     if os.path.exists(filen) :
@@ -55,7 +66,7 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
                 fg=False
                 bs=False
         while bs:
-            inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(filen))
+            inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
             if len(inp)>0 :
                 if inp[0].lower()=='y' :
                     fg=True
@@ -78,7 +89,7 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         for j in re['data']['dm']['dm_info'] :
             dm.append(j)
     if ns:
-        print('解析完毕，共获得%s条弹幕。\n将转换格式为XML'%(len(dm)))
+        print(lan['OUTPUT19'].replace('<number>',str(len(dm))))#解析完毕，共获得<number>条弹幕。\n正在将JSON转换为XML……
     for i in dm :
         t={}
         t['ti']='%.5f'%(i['ts']/1000)
@@ -96,7 +107,7 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         f.write('<?xml version="1.0" encoding="UTF-8"?>')
         f.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (ot['chatserver'],ot['chatid'],ot['mission'],ot['maxlimit'],ot['state'],ot['real_name'],ot['source']))
     except:
-        print('打开文件失败'+filen)
+        print(lan['ERROR5'].replace('<filename>',filen))#打开文件"<filename>"失败
         return -3
     if xml==1 :
         l=0 #过滤数量
@@ -109,11 +120,11 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
                 try :
                     f.write(objtoxml(i))
                 except :
-                    print('保存文件失败'+filen)
+                    print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
                     return -3
         if ns:
-            print('共计过滤%s条' % (l))
-            print('实际输出%s条' % (z-l))
+            print(lan['OUTPUT3'].replace('<number>',str(l)))#共计过滤%s条
+            print(lan['OUTPUT4'].replace('<number>',str(z-l)))#实际输出<number>条
     else :
         for i in ot['list'] :
             f.write(objtoxml(i))
@@ -121,7 +132,7 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         f.write('</i>')
         f.close()
     except :
-        print('保存文件失败'+filen)
+        print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
         return -3
-    print('弹幕下载完毕！')
+    print(lan['OUTPUT20'])#下载完毕！
     return 0

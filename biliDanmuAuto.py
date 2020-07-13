@@ -18,6 +18,18 @@ import json
 import biliLogin
 import time
 import biliTime
+from JSONParser import loadset
+import sys
+from command import gopt
+from lang import getdict,getlan
+lan=None
+se=loadset()
+if se==-1 or se==-2 :
+    se={}
+ip={}
+if len(sys.argv)>1 :
+    ip=gopt(sys.argv[1:])
+lan=getdict('biliDanmu',getlan(se,ip))
 def getMembers(filen,r,da,pos,mri,ip) :
     "获取弹幕条数"
     ns=True
@@ -28,7 +40,7 @@ def getMembers(filen,r,da,pos,mri,ip) :
     rec=0
     m2=mri
     if ns:
-        print('正在抓取%s的弹幕......' % (biliTime.tostr(biliTime.getDate(da))))
+        print(lan['OUTPUT7'].replace('<date>',biliTime.tostr(biliTime.getDate(da))))#正在抓取<date>的弹幕……
     while bs :
         read=biliDanmu.downloadh(filen,r,pos,da)
         if read==-1 :
@@ -36,15 +48,15 @@ def getMembers(filen,r,da,pos,mri,ip) :
         elif read == -3 :
             rec=rec+1
             if rec%5!=0 :
-                print('5秒后将进行第%s次重连' % (rec))
                 time.sleep(5)
+                print(lan['OUTPUT8'].replace('<number>',str(rec)))#正在进行第<number>次重连
             else :
                 bss=True
                 while bss:
-                    inn=input('已经第%s次失败了，是否继续重连？(y/n)' % (rec))
+                    inn=input(f"{lan['INPUT4'].replace('<number>',str(rec))}(y/n)")#是否重连？（已经失败<number>次）
                     if len(inn)>0 and inn[0].lower()=='y' :
-                        print('5秒后将进行第%s次重连' % (rec))
                         time.sleep(5)
+                        print(lan['OUTPUT8'].replace('<number>',str(rec)))#正在进行第<number>次重连
                         bss=False
                     elif len(inn)>0 and inn[0].lower()=='n' :
                         exit()
@@ -58,12 +70,12 @@ def getMembers(filen,r,da,pos,mri,ip) :
                         exit()
                 else :
                     print(obj)
-                    print('休眠%ss' % (ts))
+                    print(lan['OUTPUT9'].replace('<number>',str(ts)))#休眠<number>s
                     time.sleep(ts)
                     ts=ts+300
             else :
                 print(obj)
-                print('休眠%ss' % (ts))
+                print(lan['OUTPUT9'].replace('<number>',str(ts)))#休眠<number>s
                 time.sleep(ts)
                 ts=ts+300
         else :
@@ -73,7 +85,7 @@ def getMembers(filen,r,da,pos,mri,ip) :
     li=[]
     z=len(d['list'])
     if ns:
-        print('正在处理......')
+        print(lan['OUTPUT12'])#正在处理……
     for i in d['list'] :
         if int(m2)<int(i['ri']) :
             m2=i['ri']
@@ -86,7 +98,7 @@ def reload(d,mri,ns) :
     l=0
     li=[]
     if ns:
-        print('正在处理......')
+        print(lan['OUTPUT12'])#正在处理……
     for i in d['d']['list'] :
         if int(mri)<int(i['ri']) :
             l=l+1

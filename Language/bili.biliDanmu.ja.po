@@ -1,0 +1,175 @@
+# bili - biliDanmu.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-13 03:24:00+0000\n"
+"PO-Revision-Date: 2020-07-13 03:30+0000\n"
+"Last-Translator: Kum4423, 2020\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "ERROR1"
+msgid "Network Error!"
+msgstr "ネットワークエラー！"
+
+msgctxt "ERROR2"
+msgid "Failed to write to the file \"<filename>\"."
+msgstr "ファイル \"<filename>\"  への書き込みに失敗しました。"
+
+msgctxt "ERROR3"
+msgid "Unable to create folder \"<dirname>\"."
+msgstr "フォルダ \"<dirname>\" の作成ができません。"
+
+msgctxt "INPUT1"
+msgid "The file \"<filename>\" already exists, do you want to overwrite it?"
+msgstr "ファイル \"<filename>\" は既に存在していますが、上書きしますか？"
+
+msgctxt "ERROR4"
+msgid "Failed to delete the original file, skip download."
+msgstr "元のファイルの削除に失敗し、ダウンロードをスキップしました。"
+
+msgctxt "ERROR5"
+msgid "Unable to open file \"<filename>\"."
+msgstr "ファイル \"<filename>\"を開くことが出来ません。"
+
+msgctxt "ERROR6"
+msgid "Failed to save \"<filename>\"."
+msgstr "\"<filename>\" の保存に失敗しました。"
+
+msgctxt "OUTPUT1"
+msgid "Total :"
+msgstr "合計 :"
+
+msgctxt "OUTPUT2"
+msgid "Filtering..."
+msgstr "フィルタリング..."
+
+msgctxt "OUTPUT3"
+msgid "Filter <number> barrage in total."
+msgstr "全体に弾幕フィルター <number> "
+
+msgctxt "OUTPUT4"
+msgid "Output <number> barrage in total."
+msgstr "全体に弾幕出力<number>"
+
+msgctxt "INPUT2"
+msgid ""
+"Please enter the number of days between crawls (Possible Values: <value>. "
+"You can use \"a\" to enable automatic mode (Recommend).):"
+msgstr "クロール間の日数を入力してください（可能な値: <value> 。 自動モードを有効にするには \"a\" を使用することができます。（推奨））"
+
+msgctxt "ERROR7"
+msgid "Please use \"--jt <number>|a|b\" to set the number of days between crawls."
+msgstr "クロール間の日数は \"--jt <number>|a|b\" で設定してください。"
+
+msgctxt "OUTPUT5"
+msgid "Fetching the newest barrage..."
+msgstr "最新の弾幕を取得する..."
+
+msgctxt "INPUT3"
+msgid ""
+"<number> barrages were fetched. It is much less than the "
+"limitation(<limit>), do you want to continue?"
+msgstr "<number> の弾幕が取得されました。制限数（ <limit> ）よりも少ないですが、続けますか？"
+
+msgctxt "OUTPUT6"
+msgid "<number> barrages were fetched. It will be processed at the end."
+msgstr "<number> の弾幕が取得されました。最後に処理します。"
+
+msgctxt "OUTPUT7"
+msgid "Fetching the barrage of <date>..."
+msgstr "<date> の弾幕を取得しています..."
+
+msgctxt "OUTPUT8"
+msgid "Reconnect...(Failed <number> times.)"
+msgstr "再接続...（<number> 回失敗）"
+
+msgctxt "INPUT4"
+msgid "Do you want to reconnect? (Already failed <number> times.)"
+msgstr "再接続しますか？（既に <number> 回失敗してます）"
+
+msgctxt "OUTPUT9"
+msgid "Sleep for <number> seconds."
+msgstr "<number> 秒間のスリープ。"
+
+msgctxt "OUTPUT10"
+msgid "Processing barrage..."
+msgstr "弾幕の処理をしています..."
+
+msgctxt "OUTPUT11"
+msgid "Get the barrage of <date> from RAM."
+msgstr "RAMから <date> の弾幕を取得します。"
+
+msgctxt "OUTPUT12"
+msgid "Processing..."
+msgstr "処理中..."
+
+msgctxt "OUTPUT13"
+msgid "Fetched <number> barrages."
+msgstr "<number> の弾幕を取得しました。"
+
+msgctxt "OUTPUT14"
+msgid "Filtered <number> barrages."
+msgstr "<number> の弾幕をフィルタリングしました。"
+
+msgctxt "OUTPUT15"
+msgid "Output <number> barrages."
+msgstr "<number> の弾幕を出力しました。"
+
+msgctxt "OUTPUT16"
+msgid "Processing the newest barrage..."
+msgstr "最新の弾幕を処理しています..."
+
+msgctxt "OUTPUT17"
+msgid "Get <number> new barrages from the newest barrage."
+msgstr "最新の弾幕から <number> の弾幕を取得します。"
+
+msgctxt "OUTPUT18"
+msgid "Fetched <number> barrages in total."
+msgstr "合計 <number> の弾幕を取得しました。"
+
+msgctxt "INPUT5"
+msgid ""
+"Please enter the number of days between crawls (Possible Values: <value>. "
+"You can use \"a\" to enable automatic mode (Recommend). Use 'b' to modify "
+"crawl start date (Now: <date>).):"
+msgstr ""
+"クロール間の日数を入力してください。（可能: <value>。 自動モードを有効するには \"a\" を使用してください(推奨) "
+"クロール開始日を変更するには 'b' を使用してください（現在: <date>））:"
+
+msgctxt "ERROR8"
+msgid "Please use \"--jts <date>\" to modify crawl start date."
+msgstr "クロール開始日を変更するには \"--jts <date>\" を使用してください。"
+
+msgctxt "INPUT6"
+msgid ""
+"Please enter the date (The format is Year-Month-Day, for example "
+"1989-02-25.):"
+msgstr "日付を入力してください（形式は年-月-日、例：1989-02-25）:"
+
+msgctxt "ERROR9"
+msgid "The input format is incorrect or the date does not exist."
+msgstr "入力形式が正しくないか、日付が存在しません。"
+
+msgctxt "OUTPUT19"
+msgid ""
+"Parsing complete. Fetched <number> barrages in total.\n"
+"Converting JSON to XML..."
+msgstr ""
+"解析が完了しました。 合計 <number> の弾幕を取得しました。\n"
+"JSONをXMLに変換しています..."
+
+msgctxt "OUTPUT20"
+msgid "Download completed."
+msgstr "ダウンロードが完了しました。 "

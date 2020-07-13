@@ -1,0 +1,316 @@
+# bili - command.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-12 10:37:00+0000\n"
+"PO-Revision-Date: 2020-07-12 11:00+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "O1"
+msgid "Command line help:"
+msgstr "命令行帮助："
+
+msgctxt "O2"
+msgid "Display command line help information."
+msgstr "显示命令行帮助信息"
+
+msgctxt "O3"
+msgid "Display LICENSE."
+msgstr "显示许可证"
+
+msgctxt "O4"
+msgid "AV/SS/EP/MD/BV number or link"
+msgstr "AV/SS/EP/MD/BV号或者链接"
+
+msgctxt "O5"
+msgid ""
+"Download method: 1.barrage 2.all barrage from historical records 3.video "
+"4.barrage and video 5.all barrage from historical records and video "
+"6.subtitles only"
+msgstr "下载方式：1.当前弹幕 2.全弹幕 3.视频 4.当前弹幕+视频 5.全弹幕+视频 6.仅字幕"
+
+msgctxt "O6"
+msgid "Live record download method: 1.video 2.barrage 3.video and barrage"
+msgstr "直播回放下载方式：1.视频 2.弹幕 3.视频+弹幕"
+
+msgctxt "O7"
+msgid ""
+"The number of videos/parts you want to download. (You can use \",\" to "
+"separate each two numbers. Use \"a\" to select all videos/parts. Use \"b\" "
+"to select video which match the EP number you entered. Use \"l\" to select "
+"the last viewed EP video.)"
+msgstr "要下载的P数（两个P数可用,连接，使用a全选，输入为ep号时可用b选择该ep号，下载上次观看的视频可输入l）"
+
+msgctxt "O8"
+msgid "Enable/Disable download with maximum quality."
+msgstr "是否默认下载最高画质"
+
+msgctxt "AL"
+msgid "Alias of <value>."
+msgstr "相当于<value>"
+
+msgctxt "O9"
+msgid "Enable/Disable \"Continue Download\" function."
+msgstr "是否开启继续下载功能"
+
+msgctxt "O10"
+msgid "Enable/Disable filter barrage."
+msgstr "是否启用弹幕过滤"
+
+msgctxt "O11"
+msgid "Enable/Disable delete useless files after merge is complete."
+msgstr "是否在合并完成后删除无用文件"
+
+msgctxt "O12"
+msgid "Enable/Disable download again automatically after the download failed."
+msgstr "是否在下载失败后重新下载"
+
+msgctxt "O13"
+msgid "Overwrite existing files."
+msgstr "覆盖所有重复文件"
+
+msgctxt "O14"
+msgid "Do not overwrite existing files."
+msgstr "不覆盖重复文件"
+
+msgctxt "O15"
+msgid "Use ffmpeg."
+msgstr "使用ffmpeg"
+
+msgctxt "O16"
+msgid "Do not use ffmpeg."
+msgstr "不使用ffmpeg"
+
+msgctxt "O17"
+msgid "The preferred video coding when downloading with maximum quality."
+msgstr "默认下载最高画质时偏好的视频编码"
+
+msgctxt "O18"
+msgid "Download with aria2c."
+msgstr "使用aria2c下载"
+
+msgctxt "O19"
+msgid "Download without aria2c."
+msgstr "不使用aria2c下载"
+
+msgctxt "O20"
+msgid ""
+"The maximum number of connections to one server for each download while "
+"using aria2c. Possible Values: <value>."
+msgstr "使用aria2c时单个服务器最大连接数。有效值：<value>"
+
+msgctxt "O21"
+msgid ""
+"The maximum number of connections while downloading a file with aria2c. "
+"Possible Values: <value>."
+msgstr "使用aria2c时单个文件最大连接数。有效值：<value>"
+
+msgctxt "O22"
+msgid ""
+"The minimum split file size while using aria2c. Unit: <value1>, Possible "
+"Values: <value2>"
+msgstr "使用aria2c时文件分片大小。单位：<value1>，有效值：<value2>"
+
+msgctxt "O23"
+msgid "Use the backup download links when using aria2c."
+msgstr "在使用aria2c下载时使用备用网址"
+
+msgctxt "O24"
+msgid "Do not use the backup download links when using aria2c."
+msgstr "在使用aria2c下载时不使用备用网址"
+
+msgctxt "O25"
+msgid "The file allocation method while using aria2c."
+msgstr "使用aria2c下载时文件预分配方式"
+
+msgctxt "O26"
+msgid "Put or not put video/audio quality information in the file name."
+msgstr "是否在文件名中输出视频画质信息"
+
+msgctxt "O27"
+msgid ""
+"Add or not add video information to file forcibly. (This will transcode the "
+"video and transcoding will not affect the video/audio quality.)"
+msgstr "是否强制增加视频元数据（这会使视频被转码，转码不会影响画质）"
+
+msgctxt "O28"
+msgid ""
+"The maximum overall download speed in bytes/s when using aria2c. (0 means "
+"unrestricted. You can append K or M (1K = 1024, 1M = 1024K)"
+msgstr "在使用aria2c时最大总体速度(B/s)（0代表无限制，可以使用K和M为单位（1K=1024，1M=1024K））"
+
+msgctxt "O29"
+msgid ""
+"Enable/Disable \"download all parts of each video automatically\" when you "
+"input Favorites, Channels, Uploaded Video page link."
+msgstr "当输入收藏夹/频道/投稿链接时是否自动下载每一个视频的所有分P"
+
+msgctxt "O30"
+msgid "Use http proxy."
+msgstr "使用HTTP代理"
+
+msgctxt "O31"
+msgid "(This setting will not affect aria2c.)"
+msgstr "（该设置不会影响aria2c）"
+
+msgctxt "O32"
+msgid "Use https proxy."
+msgstr "使用HTTPS代理"
+
+msgctxt "O33"
+msgid ""
+"The number of days between crawls when downloading all barrage (Possible "
+"Values: <value>). You can use \"a\" to enable automatic mode (Recommend). "
+"Use \"b\" to modify crawl start date (This will be effective when "
+"downloading SS/EP video)."
+msgstr "下载全弹幕时两次抓取之间的天数，有效值为<value>，a会启用自动模式（推荐），番剧模式下b修改抓取起始日期"
+
+msgctxt "O34"
+msgid ""
+"The default crawl start date when downloading all barrage. (This will be "
+"effective when downloading SS/EP video. The default value is upload time. "
+"The format is Year-Month-Day, for example 1989-02-25.)"
+msgstr "下载全弹幕时且视频为番剧时抓取起始日期的默认值（默认值为番剧上传时间，格式为年-月-日，例如1989-02-25）"
+
+msgctxt "O35"
+msgid ""
+"Only display video/audio quality and exit when downloading videos. (This is "
+"not affected by silent mode.)"
+msgstr "视频下载时仅显示画质但不下载（不受静默模式影响）"
+
+msgctxt "O36"
+msgid "Choose video quality while downloading videos."
+msgstr "视频下载时选择画质"
+
+msgctxt "O37"
+msgid "Choose audio quality while downloading videos."
+msgstr "视频下载时选择音质"
+
+msgctxt "O38"
+msgid "Set the download folder location."
+msgstr "设置下载文件夹位置"
+
+msgctxt "O39"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, the default "
+"Favorite ID will be used."
+msgstr "解析收藏夹时若未指定收藏夹ID，自动解析为默认收藏夹"
+
+msgctxt "O40"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, return to the "
+"list of Favorites to select an ID."
+msgstr "解析收藏夹时若未指定收藏夹ID，返回收藏夹列表以选择一个ID"
+
+msgctxt "O41"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, specify the "
+"Favorite ID by selecting an number from list of Favorites. (You can use "
+"\",\" to separate each two numbers. Use \"a\" to select all Favorites.)"
+msgstr "解析收藏夹时若未指定收藏夹ID，解析列表中指定序号的收藏夹。（选择多个时中间用,隔开，可使用a全选）"
+
+msgctxt "O42"
+msgid ""
+"Enable Silent Mode. Only display Copyright notice, error messages and "
+"progress information (Contains output from downloader.). If you don't "
+"specify, this will overwrite existing files by default."
+msgstr "启用静默模式，仅显示版权声明和错误信息和进度信息（即下载器输出的信息）。在不手动设置的情况下默认覆盖重复文件。"
+
+msgctxt "O43"
+msgid ""
+"Disable the 20-character limit of description in file name while downloading"
+" Small Video."
+msgstr "下载小视频时，放入文件名中的描述长度可以超过20字"
+
+msgctxt "O44"
+msgid ""
+"Enable the 20-character limit of description in file name while downloading "
+"Small Video. The excess will be discarded."
+msgstr "下载小视频时，放入文件名中的描述长度无法超过20字，超出部分将被丢弃"
+
+msgctxt "O45"
+msgid "Trust environment variables when using \"requests\" package."
+msgstr "requests使用环境变量中的代理设置"
+
+msgctxt "O46"
+msgid "Do not trust environment variables when using \"requests\" package."
+msgstr "requests不使用环境变量中的代理设置"
+
+msgctxt "O47"
+msgid "Keep subtitle files when deleting useless files after merging."
+msgstr "合并完成后删除无用文件时保留字幕文件"
+
+msgctxt "O48"
+msgid "Delete subtitle files when deleting useless files after merging."
+msgstr "合并完成后删除无用文件时删除字幕文件"
+
+msgctxt "O49"
+msgid ""
+"Disable asynchronous DNS when using aria2c. (Disabling it can solve the "
+"\"Timeout while contacting DNS servers\" problem on Windows system.)"
+msgstr ""
+"使用aria2c时关闭异步DNS（关闭后在Windows系统下可以解决Timeout while contacting DNS servers问题）"
+
+msgctxt "O50"
+msgid "Enable asynchronous DNS when using aria2c."
+msgstr "使用aria2c时启用异步DNS"
+
+msgctxt "O51"
+msgid ""
+"Convert HTML to normal text while writing description of live record into "
+"file metadata."
+msgstr "直播回放简介写入元数据时将HTML转换为普通文本"
+
+msgctxt "O52"
+msgid ""
+"Do not convert HTML to normal text while writing description of live record "
+"into file metadata."
+msgstr "直播回放简介写入元数据时不将HTML转换为普通文本"
+
+msgctxt "O53"
+msgid "Use a proxy server for HTTP when calling aria2c."
+msgstr "指定aria2c使用的http代理"
+
+msgctxt "O54"
+msgid "Use a proxy server for HTTPS when calling aria2c."
+msgstr "指定aria2c使用的https代理"
+
+msgctxt "O55"
+msgid "Set the program language."
+msgstr "设置程序语言"
+
+msgctxt "O56"
+msgid "PS1. If the same option appears, only the first one will take effect."
+msgstr "注1：如出现相同的选项，只有第一个会生效"
+
+msgctxt "O57"
+msgid ""
+"PS2. Command line parameter will override the settings in \"settings.json\"."
+msgstr "注2：命令行参数会覆盖\"settings.json\"里的设置"
+
+msgctxt "O58"
+msgid ""
+"PS3. You need download ffmpeg and aria2c. Make sure they are placed in the "
+"current folder or in the directory specified by the environment variable "
+"\"PATH\"."
+msgstr "注3：ffmpeg和aria2c需要下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中"
+
+msgctxt "O59"
+msgid ""
+"PS4. When you input Favorites, Channels, Uploaded Video links, in addition "
+"to the \"-i <input>\" and \"-p <number>\" parameters, other parameters will "
+"be used while downloading video."
+msgstr "注4：当输入收藏夹/频道/投稿链接时，除了\"-i <input>\"和\"-p <number>\"参数外，其他参数会在下载视频时使用"

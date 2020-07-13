@@ -9,6 +9,7 @@
     + [tv.bilibili.player.xml](#tvbilibiliplayerxml)
   * [开始使用](#开始使用)
     + [过滤弹幕](#过滤弹幕)
+  * [翻译](#翻译)
   * [其他](#其他-1)
     + [全弹幕下载问题](#全弹幕下载问题)
   * [已知BUG](#已知bug)
@@ -22,6 +23,7 @@
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)  
 [rsa](https://pypi.org/project/rsa/)  
+[polib](https://pypi.org/project/polib/)  
 自己写的file库   
 如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
 如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
@@ -33,7 +35,8 @@
 ## 配置文件
 ### cookies.json
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用以及下载720P及以上视频使用）   
-<a name='a'></a>**当某些平台无法登录时，可以在其他平台先登录，再将cookies.json复制到程序目录下。**
+<a name='a'></a>**~~当某些平台无法登录时，可以在其他平台先登录，再将cookies.json复制到程序目录下。~~**  
+现在已经支持用户名和密码登录。
 
 ### settings.json
 该文件保存了一些默认操作的设置，可以运行**setsettings.py**来设置。
@@ -49,6 +52,10 @@
 ### 过滤弹幕
 运行filter.py即可   
 注意：必须要有**tv.bilibili.player.xml**文件才能进行弹幕过滤。
+
+## 翻译
+你可以在[Transifex](https://www.transifex.com/lifegpc/bili/)上为该程序提供翻译。  
+感谢Kum4423提供日语翻译。
 
 ## 其他
 完美支持**普通视频**的弹幕下载   

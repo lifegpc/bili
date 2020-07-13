@@ -17,8 +17,21 @@ from file import spfn
 from requests import Session
 from biliTime import tostr3
 import os
+from lang import getlan,getdict
+import sys
+from command import gopt
+import JSONParser
+lan=None
+se=JSONParser.loadset()
+if se==-1 or se==-2 :
+    se={}
+ip={}
+if len(sys.argv)>1 :
+    ip=gopt(sys.argv[1:])
+lan=getdict('biliSub',getlan(se,ip))
 def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict,pr:bool=False,pi:int=1) :
     "下载字幕"
+    global lan
     fq=spfn(fn)[0]
     fn="%s.%s.srt"%(fq,i['lan'])
     i['fn']=fn
@@ -36,7 +49,7 @@ def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict,pr:bool=False,pi:int=1) :
                 fg=False
                 bs=False
         while bs:
-            inp=input('"%s"文件已存在，是否覆盖？(y/n)'%(fn))
+            inp=input(f'{lan["INPUT1"]}(y/n)'.replace("<filename>",fn))#"<filename>"文件已存在，是否覆盖？
             if len(inp)>0 :
                 if inp[0].lower()=='y' :
                     fg=True
@@ -47,20 +60,20 @@ def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict,pr:bool=False,pi:int=1) :
             try :
                 os.remove('%s'%(fn))
             except :
-                print('删除原有文件失败，跳过下载')
+                print(lan['OUTPUT1'])#删除原有文件失败，跳过下载
                 return 0
     re=r.get(i['url'])
     re.encoding='utf8'
     re=re.json()
     if assrt(fn,re['body'])==0 and pr :
-        print('第%sP%s字幕下载完毕！'%(pi,i['land']))
+        print(lan['OUTPUT2'].replace('<number>',str(pi)).replace('<languagename>',i['land']))#第<number>P<languagename>字幕下载完毕！
     return 0
 def assrt(fn:str,b:list):
     "保存至srt格式"
     try :
         f=open(fn,'w',encoding="utf8")
     except :
-        print('保存"%s"失败！'%(fn))
+        print(lan['ERROR1'].replace('<filename>',fn))#保存"<filename>"失败！
         return -1
     i=1
     for k in b:
@@ -69,7 +82,7 @@ def assrt(fn:str,b:list):
             f.write('%s --> %s\n'%(tostr3(k['from']),tostr3(k['to'])))
             f.write('%s\n\n'%(k['content']))
         except :
-            print('写入到文件"%s"时失败！'%(fn))
+            print(lan['ERROR2'].replace('<filename>',fn))#写入到文件"<filename>"时失败！
             f.close()
             return -1
         i=i+1

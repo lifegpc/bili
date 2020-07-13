@@ -1,0 +1,208 @@
+# bili - setsettings.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 08:17:00+0000\n"
+"PO-Revision-Date: 2020-07-11 08:38+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "INPUT1"
+msgid "Please input the number before \".\" to select the setting."
+msgstr "请输入选项中的数字以选择。"
+
+msgctxt "OUTPUT1"
+msgid ""
+"The \"x\" before the option indicates the currently selected setting. If "
+"nothing is entered, the current settings will be maintained."
+msgstr "选项前的x指明了当前选中的设置，直接回车会保持当前设置。"
+
+msgctxt "OUTPUT2"
+msgid "Delete the \"setting.json\" in the current folder can reset the settings."
+msgstr "删除当前文件夹下的setting.json可以重置设置。"
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr "不设置"
+
+msgctxt "OUTPUT3"
+msgid "Please select a language for program (Now is <languagename>):"
+msgstr "请选择程序语言（目前为<languagename>）："
+
+msgctxt "INPUT2"
+msgid "Please input the language code before \":\" :"
+msgstr "请输入:之前的语言代码："
+
+msgctxt "INPUT3"
+msgid "Do you want filter barrage by default?"
+msgstr "是否默认启用弹幕过滤？"
+
+msgctxt "DE"
+msgid "(Default)"
+msgstr "（默认）"
+
+msgctxt "YES"
+msgid "Yes"
+msgstr "是"
+
+msgctxt "NO"
+msgid "No"
+msgstr "否"
+
+msgctxt "INPUT4"
+msgid ""
+"Do you want download with maximum quality by default(this will not ask for "
+"specific quality)?"
+msgstr "是否要默认下载最高画质（这样将不会询问具体画质）？"
+
+msgctxt "INPUT5"
+msgid "Do you want delete useless files after merge is complete?"
+msgstr "在合并完成后是否删除无用文件？"
+
+msgctxt "INPUT6"
+msgid "Do you want to enable \"Continue Download\" function by default?"
+msgstr "是否开启继续下载功能？"
+
+msgctxt "INPUT7"
+msgid "Do you want to download again automatically after the download failed."
+msgstr "是否开启下载失败后自动重新下载？"
+
+msgctxt "INPUT8"
+msgid "Do you want disable the use of ffmpeg to merge videos?"
+msgstr "是否不使用ffmpeg合并视频？"
+
+msgctxt "NTN"
+msgid "(Not set equals no in this setting.)"
+msgstr "（不设置相当于否）"
+
+msgctxt "INPUT9"
+msgid "The preferred video coding when downloading with maximum quality :"
+msgstr "默认下载最高画质时偏好的视频编码："
+
+msgctxt "INPUT10"
+msgid "Do you want to download with aria2c?"
+msgstr "是否使用aria2c下载？"
+
+msgctxt "NTY"
+msgid "(Not set equals yes in this setting.)"
+msgstr "（不设置相当于是）"
+
+msgctxt "INPUT11"
+msgid ""
+"The maximum number of connections to one server for each download while "
+"using aria2c (Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr "使用aria2c时单个服务器最大连接数(有效值：<value1>，默认：<value2>，目前：<value3>)："
+
+msgctxt "INPUT12"
+msgid "Please enter a number between <min> and <max>:"
+msgstr "请输入<min>-<max>中的数字："
+
+msgctxt "INPUT13"
+msgid ""
+"The maximum number of connections while downloading a file with aria2c "
+"(Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr "使用aria2c时单个文件最大连接数(有效值：<value1>，默认：<value2>，目前：<value3>)："
+
+msgctxt "INPUT14"
+msgid "Please enter a number greater than or equal to <min>:"
+msgstr "请输入大于等于<min>的数字："
+
+msgctxt "INPUT15"
+msgid ""
+"The minimum split file size while using aria2c (Unit: <value1>, Possible "
+"Values:<value2>, Default:<value3>, Now:<value4>):"
+msgstr "使用aria2c时文件分片大小（单位：<value1>，有效值：<value2>，默认：<value3>，目前：<value4>）："
+
+msgctxt "INPUT16"
+msgid "Do you want to use the backup download links when using aria2c?"
+msgstr "在使用aria2c时是否使用备用网址？"
+
+msgctxt "INPUT17"
+msgid ""
+"The file allocation method while using aria2c (Default:<value1>, "
+"Now:<value2>):"
+msgstr "使用aria2c下载时文件预分配方式（默认：<value1>，目前：<value2>）："
+
+msgctxt "INPUT18"
+msgid "Do you want to put video/audio quailty information in the file name?"
+msgstr "是否在文件名中输出视频画质信息？"
+
+msgctxt "INPUT19"
+msgid ""
+"Do you want to add video information to file forcibly (This will transcode "
+"the video and transcoding will not affect the video/audio quality.)?"
+msgstr "是否强制增加视频元数据（这会使视频被转码，转码不会影响画质）？"
+
+msgctxt "INPUT20"
+msgid ""
+"The maximum overall download speed in bytes/s when using aria2c (0 means "
+"unrestricted. You can append K or M (1K = 1024, 1M = 1024K). "
+"Default:<value1>, Now:<value2>):"
+msgstr ""
+"在使用aria2c时最大总体速度(B/s)（0代表无限制，可以使用K和M为单位（1K=1024，1M=1024K），默认：<value1>，目前：<value2>）："
+
+msgctxt "INPUT21"
+msgid ""
+"Do you want to enable \"download all parts of each video automatically\" "
+"when you input Favorites, Channels, Uploaded Video page link?"
+msgstr "当输入收藏夹/频道/投稿链接时是否自动下载每一个视频的所有分P？"
+
+msgctxt "INPUT22"
+msgid ""
+"Do you want to set the number of days between crawls to automatic by default"
+" when downloading all barrage?"
+msgstr "下载全弹幕时两次抓取之间的天数默认设置为自动？"
+
+msgctxt "INPUT23"
+msgid "Download folder location (Default:<value1>, Now:<value2>):"
+msgstr "下载文件夹位置（默认：<value1>，目前：<value2>）："
+
+msgctxt "INPUT24"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, return to the "
+"list of Favorites to select an ID instead of using default Favorite ID."
+msgstr "解析收藏夹时若未指定收藏夹ID，是否不自动解析为默认收藏夹而是返回列表以选择？"
+
+msgctxt "INPUT25"
+msgid ""
+"Do you want to disable the 20-character limit of description in file name "
+"while downloading Small Video?"
+msgstr "下载小视频时，放入文件名中的描述长度是否可以超过20字？"
+
+msgctxt "INPUT26"
+msgid ""
+"Do you want to trust environment variables when using \"requests\" package."
+msgstr "requests是否使用环境变量中的代理设置？"
+
+msgctxt "INPUT27"
+msgid ""
+"Do you want to keep subtitle files when deleting useless files after "
+"merging?"
+msgstr "合并完成后删除无用文件时是否保留字幕文件？"
+
+msgctxt "INPUT28"
+msgid ""
+"Do you want to disable asynchronous DNS when using aria2c (Disabling it can "
+"solve the \"Timeout while contacting DNS servers\" problem on Windows "
+"system.)?"
+msgstr ""
+"使用aria2c时是否关闭异步DNS（关闭后在Windows系统下可以解决“Timeout while contacting DNS "
+"servers”问题）？"
+
+msgctxt "INPUT29"
+msgid ""
+"Do you want to convert HTML to normal text while writing description of live"
+" record into file metadata?"
+msgstr "直播回放简介写入元数据时是否将HTML转换为普通文本？"

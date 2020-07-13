@@ -1,0 +1,50 @@
+# bili - filter.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-13 09:24:00+0000\n"
+"PO-Revision-Date: 2020-07-13 10:17+0000\n"
+"Last-Translator: Kum4423, 2020\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "OUTPUT1"
+msgid "Please run \"filter.py\"."
+msgstr "\"filter.py\" を実行してください。"
+
+msgctxt "OUTPUT2"
+msgid "Can not find the file \"<filename>\"."
+msgstr "ファイル \"<filename>\" を見つけることができません。"
+
+msgctxt "INPUT1"
+msgid "Please enter the number of files you want to filter:"
+msgstr "フィルタリングしたいファイル数を入力してください:"
+
+msgctxt "INPUT2"
+msgid "This file is not a barrage file."
+msgstr "このファイルは弾幕ではありません。"
+
+msgctxt "INPUT3"
+msgid "Press Enter to start choosing output file."
+msgstr "Enterキーを押して出力ファイルの選択を開始します。"
+
+msgctxt "ERROR1"
+msgid "Failed to save \"<filename>\"."
+msgstr "\"<filename>\" の保存に失敗しました。"
+
+msgctxt "OUTPUT3"
+msgid ""
+"There are <all> barrages in this file. Filtered <fn> barrages, <sn> barrages"
+" left."
+msgstr "このファイルには <all> の弾幕があります。<fn> のフィルタリングされた弾幕。残り <sn> の弾幕。"

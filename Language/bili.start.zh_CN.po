@@ -1,0 +1,223 @@
+# bili - start.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-10 23:16:38+0000\n"
+"PO-Revision-Date: 2020-07-10 23:26+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "RUN_SETTINGS_TIPS"
+msgid ""
+"It is recommended to setup program by runing \"settings.py\" in order to "
+"reduce unnecessary queries."
+msgstr "建议运行setsettings.py设置程序以减少不必要的询问。"
+
+msgctxt "INPUT1"
+msgid ""
+"Please enter the av/ss/ep/md/bv number (bv number needs start with BV) or "
+"link (Support Favorites, Channels, Uploaded Video and Small Video page from "
+"user page. Also support live records video link.):"
+msgstr "请输入av/ss/ep/md/bv号（BV号请以BV开头）或者链接（支持用户页的收藏夹、频道、投稿、小视频链接，支持直播回放链接）："
+
+msgctxt "ERROR1"
+msgid "Please use \"-i <input>\"."
+msgstr "请使用 -i <input>"
+
+msgctxt "ERROR2"
+msgid "Invalid input."
+msgstr "输入有误"
+
+msgctxt "OUTPUT1"
+msgid "The login is successfully verified."
+msgstr "登录校验成功！"
+
+msgctxt "ERROR3"
+msgid "Network Error! Verification failed!"
+msgstr "网络错误！校验失败！"
+
+msgctxt "WARN1"
+msgid "The login information has expired."
+msgstr "登录信息已过期！"
+
+msgctxt "ERROR4"
+msgid "An error occurred when reading the file."
+msgstr "文件读取错误！"
+
+msgctxt "INPUT2"
+msgid "Do you want to enable \"Continue Download\" function?"
+msgstr "是否开启继续下载功能？"
+
+msgctxt "ERROR5"
+msgid "An error occurred when parsing md number page."
+msgstr "md号页面解析失败！"
+
+msgctxt "INPUT3"
+msgid ""
+"Please enter the number of the favorite you want to choose (You can use "
+"\",\" to separate each two numbers. If you want to select all favorites, "
+"please enter \"a\".):"
+msgstr "请输入你想选择的收藏夹编号（每两个编号间用,隔开，全部选择可输入a）："
+
+msgctxt "ERROR6"
+msgid "Please use \"--afp <number>\" to choose favorite."
+msgstr "请使用--afp <number>选择收藏夹"
+
+msgctxt "OUTPUT2"
+msgid "You have selected all favorites."
+msgstr "您全选了所有收藏夹"
+
+msgctxt "OUTPUT3"
+msgid "You have selected the favorite:"
+msgstr "您选中了收藏夹："
+
+msgctxt "ERROR7"
+msgid "An error occurred when getting the list of favorites."
+msgstr "获取收藏夹列表失败！"
+
+msgctxt "ERROR8"
+msgid ""
+"The count of video in list is not equal to the estimated count which from "
+"bilibili. Maybe an bug occurred."
+msgstr "视频数量与预计数量不符，貌似BUG了。"
+
+msgctxt "OUTPUT4"
+msgid ""
+"Please enter the number of the video you want to choose (You can use \",\" "
+"to separate each two numbers. If you want to select all videos, please enter"
+" \"a\".):"
+msgstr "请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）："
+
+msgctxt "ERROR9"
+msgid "Please use \"-p <number>\" to choose video."
+msgstr "请使用-p <number>选择视频编号"
+
+msgctxt "OUTPUT5"
+msgid "You have selected all videos."
+msgstr "您全选了所有视频"
+
+msgctxt "OUTPUT6"
+msgid "You have selected the video:"
+msgstr "您选中了视频："
+
+msgctxt "INPUT4"
+msgid "Do you want to enable \"download all parts of each video automatically\"?"
+msgstr "是否自动下载每一个视频的所有分P？"
+
+msgctxt "ERROR10"
+msgid "An error occurred when reading the file: \"cookies.json\"."
+msgstr "读取cookies.json出现错误"
+
+msgctxt "INPUT5"
+msgid ""
+"Please enter the number of the channel you want to choose (You can use \",\""
+" to separate each two numbers. If you want to select all channels, please "
+"enter \"a\".):"
+msgstr "请输入你想下载的频道（每两个编号间用,隔开，全部下载可输入a）："
+
+msgctxt "OUTPUT7"
+msgid "You have selected all channels."
+msgstr "您全选了所有频道"
+
+msgctxt "OUTPUT8"
+msgid "You have selected the channel:"
+msgstr "您选中了频道："
+
+msgctxt "INPUT6"
+msgid "Do you want filter barrage?"
+msgstr "是否启用弹幕过滤？"
+
+msgctxt "INPUT7"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download video\n"
+"2.download barrage\n"
+"3.download video and barrage"
+msgstr ""
+"请输入你要下载的方式：\n"
+"1.视频下载\n"
+"2.弹幕下载\n"
+"3.视频+弹幕下载"
+
+msgctxt "ERROR11"
+msgid "Please use \"-d <method>\" to choose download method."
+msgstr "请使用-d <method>选择下载方式"
+
+msgctxt "INPUT8"
+msgid ""
+"Do you want download with maximum quality (this will not ask for specific "
+"quality)?"
+msgstr "是否要默认下载最高画质（这样将不会询问具体画质）？"
+
+msgctxt "INPUT9"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download barrage\n"
+"2.download all barrage from historical records (may needs lots of time)\n"
+"3.download video\n"
+"4.download barrage and video\n"
+"5.download all barrage from historical records and video\n"
+"6.download subtitles only"
+msgstr ""
+"请输入你要下载的方式：\n"
+"1.当前弹幕下载\n"
+"2.全弹幕下载（可能需要大量时间）\n"
+"3.视频下载\n"
+"4.当前弹幕+视频下载\n"
+"5.全弹幕+视频下载\n"
+"6.仅字幕下载"
+
+msgctxt "OUTPUT9"
+msgid "Part <number> download complete."
+msgstr "<number>P下载完成"
+
+msgctxt "ERROR12"
+msgid ""
+"This video is not support to download all barrage from historical records."
+msgstr "该视频不支持下载全弹幕！"
+
+msgctxt "INPUT10"
+msgid ""
+"If you only want to download video which match the ep number you entered, "
+"please enter \"b\"."
+msgstr "仅下载输入的ep号可输入b。"
+
+msgctxt "INPUT11"
+msgid "If you want to download the last viewed \"EP<number>\", please enter \"l\"."
+msgstr "下载上次观看的EP<number>可输入l。"
+
+msgctxt "INPUT12"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download barrage\n"
+"2.download all barrage from historical records (may needs lots of time)\n"
+"3.download video\n"
+"4.download barrage and video\n"
+"5.download all barrage from historical records and video"
+msgstr ""
+"请输入你要下载的方式：\n"
+"1.当前弹幕下载\n"
+"2.全弹幕下载（可能需要大量时间）\n"
+"3.视频下载\n"
+"4.当前弹幕+视频下载\n"
+"5.全弹幕+视频下载"
+
+msgctxt "OUTPUT10"
+msgid "<title> download complete."
+msgstr "<title>下载完成"
+
+msgctxt "OUTPUT11"
+msgid "Please run \"start.py\"."
+msgstr "请运行start.py"

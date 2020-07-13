@@ -1,0 +1,173 @@
+# bili - biliDanmu.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-13 03:24:00+0000\n"
+"PO-Revision-Date: 2020-07-13 03:30+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "ERROR1"
+msgid "Network Error!"
+msgstr "网络错误！"
+
+msgctxt "ERROR2"
+msgid "Failed to write to the file \"<filename>\"."
+msgstr "写入到文件\"<filename>\"时失败！"
+
+msgctxt "ERROR3"
+msgid "Unable to create folder \"<dirname>\"."
+msgstr "创建文件夹\"<dirname>\"失败。"
+
+msgctxt "INPUT1"
+msgid "The file \"<filename>\" already exists, do you want to overwrite it?"
+msgstr "文件\"<filename>\"已存在，是否覆盖？"
+
+msgctxt "ERROR4"
+msgid "Failed to delete the original file, skip download."
+msgstr "删除原有文件失败，跳过下载。"
+
+msgctxt "ERROR5"
+msgid "Unable to open file \"<filename>\"."
+msgstr "打开文件\"<filename>\"失败！"
+
+msgctxt "ERROR6"
+msgid "Failed to save \"<filename>\"."
+msgstr "保存\"<filename>\"失败！"
+
+msgctxt "OUTPUT1"
+msgid "Total :"
+msgstr "总计："
+
+msgctxt "OUTPUT2"
+msgid "Filtering..."
+msgstr "正在过滤……"
+
+msgctxt "OUTPUT3"
+msgid "Filter <number> barrage in total."
+msgstr "共计过滤<number>条弹幕。"
+
+msgctxt "OUTPUT4"
+msgid "Output <number> barrage in total."
+msgstr "实际输出<number>条弹幕。"
+
+msgctxt "INPUT2"
+msgid ""
+"Please enter the number of days between crawls (Possible Values: <value>. "
+"You can use \"a\" to enable automatic mode (Recommend).):"
+msgstr "请输入两次抓取之间的天数（有效值为<value>，a会启用自动模式（推荐））："
+
+msgctxt "ERROR7"
+msgid "Please use \"--jt <number>|a|b\" to set the number of days between crawls."
+msgstr "请使用\"--jt <number>|a|b\"来设置两次抓取之间的天数。"
+
+msgctxt "OUTPUT5"
+msgid "Fetching the newest barrage..."
+msgstr "正在抓取最新弹幕……"
+
+msgctxt "INPUT3"
+msgid ""
+"<number> barrages were fetched. It is much less than the "
+"limitation(<limit>), do you want to continue?"
+msgstr "抓取到了<number>条弹幕，距离限制（<limit>条）较远，是否继续抓取？"
+
+msgctxt "OUTPUT6"
+msgid "<number> barrages were fetched. It will be processed at the end."
+msgstr "抓取到<number>条弹幕，最新弹幕将在最后处理"
+
+msgctxt "OUTPUT7"
+msgid "Fetching the barrage of <date>..."
+msgstr "正在抓取<date>的弹幕……"
+
+msgctxt "OUTPUT8"
+msgid "Reconnect...(Failed <number> times.)"
+msgstr "正在进行第<number>次重连……"
+
+msgctxt "INPUT4"
+msgid "Do you want to reconnect? (Already failed <number> times.)"
+msgstr "是否重连？（已经失败<number>次）"
+
+msgctxt "OUTPUT9"
+msgid "Sleep for <number> seconds."
+msgstr "休眠<number>s"
+
+msgctxt "OUTPUT10"
+msgid "Processing barrage..."
+msgstr "正在处理弹幕……"
+
+msgctxt "OUTPUT11"
+msgid "Get the barrage of <date> from RAM."
+msgstr "从内存中获取了<date>的弹幕。"
+
+msgctxt "OUTPUT12"
+msgid "Processing..."
+msgstr "正在处理……"
+
+msgctxt "OUTPUT13"
+msgid "Fetched <number> barrages."
+msgstr "获取了<number>条弹幕。"
+
+msgctxt "OUTPUT14"
+msgid "Filtered <number> barrages."
+msgstr "过滤了<number>条弹幕。"
+
+msgctxt "OUTPUT15"
+msgid "Output <number> barrages."
+msgstr "实际输出了<number>条弹幕。"
+
+msgctxt "OUTPUT16"
+msgid "Processing the newest barrage..."
+msgstr "开始处理最新的弹幕……"
+
+msgctxt "OUTPUT17"
+msgid "Get <number> new barrages from the newest barrage."
+msgstr "在最新弹幕中获取到<number>条新弹幕。"
+
+msgctxt "OUTPUT18"
+msgid "Fetched <number> barrages in total."
+msgstr "总共获取了<number>条弹幕。"
+
+msgctxt "INPUT5"
+msgid ""
+"Please enter the number of days between crawls (Possible Values: <value>. "
+"You can use \"a\" to enable automatic mode (Recommend). Use 'b' to modify "
+"crawl start date (Now: <date>).):"
+msgstr "请输入两次抓取之间的天数（有效值为<value>，输入a会启用自动模式（推荐），输入b可手动输入开始抓取的日期，日期目前为<date>）："
+
+msgctxt "ERROR8"
+msgid "Please use \"--jts <date>\" to modify crawl start date."
+msgstr "请使用\"--jts <date>\"来修改抓取开始时间。"
+
+msgctxt "INPUT6"
+msgid ""
+"Please enter the date (The format is Year-Month-Day, for example "
+"1989-02-25.):"
+msgstr "请输入日期（格式为年-月-日，例如1989-02-25）："
+
+msgctxt "ERROR9"
+msgid "The input format is incorrect or the date does not exist."
+msgstr "输入格式有误或者该日期不存在。"
+
+msgctxt "OUTPUT19"
+msgid ""
+"Parsing complete. Fetched <number> barrages in total.\n"
+"Converting JSON to XML..."
+msgstr ""
+"解析完毕，共获得<number>条弹幕。\n"
+"正在将JSON转换为XML……"
+
+msgctxt "OUTPUT20"
+msgid "Download completed."
+msgstr "下载完毕！"

@@ -1,0 +1,181 @@
+# bili - videodownload.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 12:54:00+0000\n"
+"PO-Revision-Date: 2020-07-11 13:31+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "OUTPUT1"
+msgid "Start downloading file <i> of <count> files."
+msgstr "正在开始下载第<i>个文件，共<count>个文件。"
+
+msgctxt "OUTPUT2"
+msgid "Start downloading."
+msgstr "正在开始下载。"
+
+msgctxt "OUTPUT3"
+msgid ""
+"The maximum number of connections for a file: <value1>, The maximum number "
+"of connections to one server: <value2>, The minimum split file size: "
+"<value3>M, The file allocation method: <value4><maxspeed>"
+msgstr ""
+"单文件最大<value1>个连接，单个服务器最大<value2>个连接，文件分片大小<value3>M，预分配方式为<value4><maxspeed>"
+
+msgctxt "OUTPUT4"
+msgid ", The maximum overall download speed in bytes/s: <value>"
+msgstr "，限速为<value>"
+
+msgctxt "OUTPUT5"
+msgid "(Because the aria2 file is found, it is recommended to overwrite.)"
+msgstr "（发现aria2文件，建议覆盖）"
+
+msgctxt "OUTPUT6"
+msgid "The aria2 file is not found, skip download."
+msgstr "未找到aria2文件，跳过下载。"
+
+msgctxt "INPUT1"
+msgid "The file \"<filename>\" already exists, do you want to overwrite it?"
+msgstr "文件\"<filename>\"已存在，是否覆盖？"
+
+msgctxt "OUTPUT7"
+msgid "Failed to delete the original file, skip download."
+msgstr "删除原有文件失败，跳过下载。"
+
+msgctxt "ERROR1"
+msgid "Unable to create folder \"<dirname>\"."
+msgstr "创建文件夹\"<dirname>\"失败。"
+
+msgctxt "ERROR2"
+msgid "An error occurred when reading the file: \"cookies.json\"."
+msgstr "读取cookies.json出现错误"
+
+msgctxt "OUTPUT8"
+msgid "Part <number> :"
+msgstr "第<number>P："
+
+msgctxt "OUTPUT9"
+msgid "Video quality:"
+msgstr "画质："
+
+msgctxt "OUTPUT10"
+msgid "File size:"
+msgstr "文件大小："
+
+msgctxt "INPUT2"
+msgid "Please select video quality :"
+msgstr "请选择画质："
+
+msgctxt "ERROR3"
+msgid "Please use \"-v <id>\" to select the video quality."
+msgstr "请使用\"-v <id>\"选择画质。"
+
+msgctxt "OUTPUT11"
+msgid "You have selected the video quality: <videoquality>"
+msgstr "已选择<videoquality>画质。"
+
+msgctxt "OUTPUT12"
+msgid "<number> files in total."
+msgstr "共有<number>个文件。"
+
+msgctxt "ERROR4"
+msgid ""
+"Bad/unrecognized option was given or unexpected option argument was given "
+"when calling aria2c."
+msgstr "调用aria2c时的命令行出现错误。"
+
+msgctxt "ERROR5"
+msgid ""
+"Please create an issue on <https://github.com/lifegpc/bili/issues> to "
+"describe the problem.(Please use English or Chinese.)"
+msgstr ""
+"请在<https://github.com/lifegpc/bili/issues>上新建一个issue描述您碰到的问题。（请使用英语或中文）"
+
+msgctxt "INPUT3"
+msgid "Failed to download the file. Do you want to download again?"
+msgstr "文件下载失败，是否重新下载？"
+
+msgctxt "OUTPUT13"
+msgid "Use ffmpeg to merge files."
+msgstr "使用ffmpeg合并文件。"
+
+msgctxt "OUTPUT14"
+msgid "Merge complete."
+msgstr "合并完成！"
+
+msgctxt "INPUT4"
+msgid "Do you want to delete useless files?"
+msgstr "是否删除无用文件？"
+
+msgctxt "OUTPUT15"
+msgid "Video track:"
+msgstr "视频轨："
+
+msgctxt "OUTPUT16"
+msgid "Audio track:"
+msgstr "音频轨："
+
+msgctxt "INPUT5"
+msgid "Please select audio quality :"
+msgstr "请选择音质："
+
+msgctxt "ERROR6"
+msgid "Please use \"-a <id>\" to select the audio quality."
+msgstr "请使用-a <id>选择音质"
+
+msgctxt "OUTPUT17"
+msgid "You have selected the audio quality: <audioquality>"
+msgstr "已选择<audioquality>音质"
+
+msgctxt "OUTPUT18"
+msgid "There are no subtitles in Part <number>."
+msgstr "第<number>P没有字幕。"
+
+msgctxt "ERROR7"
+msgid "This video has regional restrictions. Please use proxy."
+msgstr "视频有区域限制，请使用代理。"
+
+msgctxt "ERROR8"
+msgid ""
+"This video has multiple video quality but this program not support it. You "
+"can continue to download with default video quality."
+msgstr "该直播回放有多种画质但程序不支持选择。你可以继续下载默认画质。"
+
+msgctxt "INPUT6"
+msgid "Please press \"Enter\" to continue downloading."
+msgstr "请按回车键继续下载。"
+
+msgctxt "OUTPUT19"
+msgid ""
+"(Because the file size is not equal to the estimated size, it is recommended"
+" to overwrite.)"
+msgstr "（文件大小不一致，建议覆盖）"
+
+msgctxt "OUTPUT20"
+msgid "The file size is equal to the estimated size, skip download."
+msgstr "文件大小一致，跳过下载。"
+
+msgctxt "ERROR9"
+msgid "The file size is not equal to the estimated size."
+msgstr "文件大小不一致。"
+
+msgctxt "OUTPUT21"
+msgid "Unable to get file size. Try to get again ……"
+msgstr "获取文件大小失败。尝试重新获取……"
+
+msgctxt "OUTPUT22"
+msgid "Please use \"start.py\"."
+msgstr "请使用start.py"

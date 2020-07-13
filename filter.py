@@ -22,14 +22,22 @@ import biliDanmuXmlFilter
 import biliDanmuCreate
 from PrintInfo import pr
 from JSONParser import loadset,getset
+import sys
+from lang import getdict,getlan
+lan=None
+se=loadset()
+if se==-1 or se==-2 :
+    se={}
+ip={}
+lan=getdict('filter',getlan(se,ip))
 if __name__!="__main__" :
-    print('请直接运行filter.py')
+    print(lan['OUTPUT1'])#请运行"filter.py"。
 else :
     pr()
     read=biliPlayerXmlParser.loadXML()
     xml=read#弹幕过滤列表
     if read==-1 :
-        print('没有tv.bilibili.plater.xml文件')
+        print(lan['OUTPUT2'].replace('<filename>','tv.bilibili.plater.xml'))#找不到文件"<filename>"。
         exit(-1)
     se=loadset()
     if not isinstance(se,dict) :
@@ -40,7 +48,7 @@ else :
         o=read
     bs=True
     while bs :
-        inp=input('请输入要过滤的文件数量：')
+        inp=input(lan['INPUT1'])#请输入要过滤的文件数量：
         if len(inp)>0 :
             if inp.isnumeric() :
                 g=int(inp)
@@ -51,10 +59,10 @@ else :
             try :
                 read=biliDanmuXmlParser.loadXML(i['a'])
             except :
-                print('此文件不是弹幕文件。')
+                print(lan['INPUT2'])#此文件不是弹幕文件。
                 continue
             r=read
-            input('按Enter开始选择保存文件名')
+            input(lan['INPUT3'])#按Enter开始选择输出文件。
             read=file.getfilen(l=o,save=True)
             if read==-1 :
                 read=file.getfilen('.',save=True)
@@ -74,12 +82,12 @@ else :
                         try :
                             f.write(biliDanmuCreate.objtoxml(j))
                         except :
-                            print('保存到文件失败：'+fn['f'])
+                            print(lan['ERROR1'].replace('<filename>',fn['f']))#保存"<filename>"失败！
                             continue
                 m=z-g
-                print('该文件中共有%s条弹幕，过滤了%s条，剩余%s条' %(z,g,m))
+                print(lan['OUTPUT3'].replace('<all>',str(z)).replace('<fn>',str(g)).replace('<sn>',str(m)))#该文件中有<all>条弹幕，过滤了<fn>条，剩余<sn>条。
             except :
-                print('保存到文件失败：'+fn['f'])
+                print(lan['ERROR1'].replace('<filename>',fn['f']))#保存"<filename>"失败！
                 continue
         else :
-            print('\"%s\"文件不存在' %(i['f']))
+            print(lan['OUTPUT2'].replace('<filename>',i['f']))#找不到文件"<filename>"。

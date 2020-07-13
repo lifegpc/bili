@@ -1,0 +1,168 @@
+# bili - setsettings.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 08:17:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+msgctxt "INPUT1"
+msgid "Please input the number before \".\" to select the setting."
+msgstr ""
+
+msgctxt "OUTPUT1"
+msgid "The \"x\" before the option indicates the currently selected setting. If nothing is entered, the current settings will be maintained."
+msgstr ""
+
+msgctxt "OUTPUT2"
+msgid "Delete the \"setting.json\" in the current folder can reset the settings."
+msgstr ""
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr ""
+
+msgctxt "OUTPUT3"
+msgid "Please select a language for program (Now is <languagename>):"
+msgstr ""
+
+msgctxt "INPUT2"
+msgid "Please input the language code before \":\" :"
+msgstr ""
+
+msgctxt "INPUT3"
+msgid "Do you want filter barrage by default?"
+msgstr ""
+
+msgctxt "DE"
+msgid "(Default)"
+msgstr ""
+
+msgctxt "YES"
+msgid "Yes"
+msgstr ""
+
+msgctxt "NO"
+msgid "No"
+msgstr ""
+
+msgctxt "INPUT4"
+msgid "Do you want download with maximum quality by default(this will not ask for specific quality)?"
+msgstr ""
+
+msgctxt "INPUT5"
+msgid "Do you want delete useless files after merge is complete?"
+msgstr ""
+
+msgctxt "INPUT6"
+msgid "Do you want to enable \"Continue Download\" function by default?"
+msgstr ""
+
+msgctxt "INPUT7"
+msgid "Do you want to download again automatically after the download failed."
+msgstr ""
+
+msgctxt "INPUT8"
+msgid "Do you want disable the use of ffmpeg to merge videos?"
+msgstr ""
+
+msgctxt "NTN"
+msgid "(Not set equals no in this setting.)"
+msgstr ""
+
+msgctxt "INPUT9"
+msgid "The preferred video coding when downloading with maximum quality :"
+msgstr ""
+
+msgctxt "INPUT10"
+msgid "Do you want to download with aria2c?"
+msgstr ""
+
+msgctxt "NTY"
+msgid "(Not set equals yes in this setting.)"
+msgstr ""
+
+msgctxt "INPUT11"
+msgid "The maximum number of connections to one server for each download while using aria2c (Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr ""
+
+msgctxt "INPUT12"
+msgid "Please enter a number between <min> and <max>:"
+msgstr ""
+
+msgctxt "INPUT13"
+msgid "The maximum number of connections while downloading a file with aria2c (Possible Values:<value1>, Default:<value2>, Now:<value3>):"
+msgstr ""
+
+msgctxt "INPUT14"
+msgid "Please enter a number greater than or equal to <min>:"
+msgstr ""
+
+msgctxt "INPUT15"
+msgid "The minimum split file size while using aria2c (Unit: <value1>, Possible Values:<value2>, Default:<value3>, Now:<value4>):"
+msgstr ""
+
+msgctxt "INPUT16"
+msgid "Do you want to use the backup download links when using aria2c?"
+msgstr ""
+
+msgctxt "INPUT17"
+msgid "The file allocation method while using aria2c (Default:<value1>, Now:<value2>):"
+msgstr ""
+
+msgctxt "INPUT18"
+msgid "Do you want to put video/audio quailty information in the file name?"
+msgstr ""
+
+msgctxt "INPUT19"
+msgid "Do you want to add video information to file forcibly (This will transcode the video and transcoding will not affect the video/audio quality.)?"
+msgstr ""
+
+msgctxt "INPUT20"
+msgid "The maximum overall download speed in bytes/s when using aria2c (0 means unrestricted. You can append K or M (1K = 1024, 1M = 1024K). Default:<value1>, Now:<value2>):"
+msgstr ""
+
+msgctxt "INPUT21"
+msgid "Do you want to enable \"download all parts of each video automatically\" when you input Favorites, Channels, Uploaded Video page link?"
+msgstr ""
+
+msgctxt "INPUT22"
+msgid "Do you want to set the number of days between crawls to automatic by default when downloading all barrage?"
+msgstr ""
+
+msgctxt "INPUT23"
+msgid "Download folder location (Default:<value1>, Now:<value2>):"
+msgstr ""
+
+msgctxt "INPUT24"
+msgid "If the Favorites page link does not specify the Favorite ID, return to the list of Favorites to select an ID instead of using default Favorite ID."
+msgstr ""
+
+msgctxt "INPUT25"
+msgid "Do you want to disable the 20-character limit of description in file name while downloading Small Video?"
+msgstr ""
+
+msgctxt "INPUT26"
+msgid "Do you want to trust environment variables when using \"requests\" package."
+msgstr ""
+
+msgctxt "INPUT27"
+msgid "Do you want to keep subtitle files when deleting useless files after merging?"
+msgstr ""
+
+msgctxt "INPUT28"
+msgid "Do you want to disable asynchronous DNS when using aria2c (Disabling it can solve the \"Timeout while contacting DNS servers\" problem on Windows system.)?"
+msgstr ""
+
+msgctxt "INPUT29"
+msgid "Do you want to convert HTML to normal text while writing description of live record into file metadata?"
+msgstr ""

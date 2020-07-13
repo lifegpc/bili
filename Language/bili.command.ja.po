@@ -1,0 +1,337 @@
+# bili - command.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-12 10:37:00+0000\n"
+"PO-Revision-Date: 2020-07-12 11:00+0000\n"
+"Last-Translator: Kum4423, 2020\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "O1"
+msgid "Command line help:"
+msgstr "コマンドラインヘルプ:"
+
+msgctxt "O2"
+msgid "Display command line help information."
+msgstr "コマンドラインのヘルプ情報を表示します。"
+
+msgctxt "O3"
+msgid "Display LICENSE."
+msgstr "ライセンス情報を表示します。"
+
+msgctxt "O4"
+msgid "AV/SS/EP/MD/BV number or link"
+msgstr "AV/SS/EP/MD/BV 番号もしくはURLリンク"
+
+msgctxt "O5"
+msgid ""
+"Download method: 1.barrage 2.all barrage from historical records 3.video "
+"4.barrage and video 5.all barrage from historical records and video "
+"6.subtitles only"
+msgstr ""
+"ダウンロード方法。\n"
+"1.弾幕 2.過去の履歴からの全弾幕 3.ビデオ 4.弾幕とビデオ 5.ビデオと過去の履歴からの全弾幕 6.字幕のみ"
+
+msgctxt "O6"
+msgid "Live record download method: 1.video 2.barrage 3.video and barrage"
+msgstr ""
+"ライブレコードのダウンロード方法。\n"
+"1.ビデオ 2.弾幕 3.ビデオと弾幕"
+
+msgctxt "O7"
+msgid ""
+"The number of videos/parts you want to download. (You can use \",\" to "
+"separate each two numbers. Use \"a\" to select all videos/parts. Use \"b\" "
+"to select video which match the EP number you entered. Use \"l\" to select "
+"the last viewed EP video.)"
+msgstr ""
+"ダウンロードしたい動画・パートの数です。\n"
+"（2つの数字の間は\", \"で区切ることができます。 \"a\" で全ての動画・パートを選択します。 \"b\" で入力したエピソード番号と一致する動画を選択します。最後に視聴したエピソードの動画を選択するには \"l\" を使用します。）"
+
+msgctxt "O8"
+msgid "Enable/Disable download with maximum quality."
+msgstr "最高画質でのダウンロードを有効/無効にする。"
+
+msgctxt "AL"
+msgid "Alias of <value>."
+msgstr "<value> のエイリアス。"
+
+msgctxt "O9"
+msgid "Enable/Disable \"Continue Download\" function."
+msgstr "「ダウンロードを続ける」機能を有効/無効にする。"
+
+msgctxt "O10"
+msgid "Enable/Disable filter barrage."
+msgstr "弾幕フィルターを有効/無効にする。"
+
+msgctxt "O11"
+msgid "Enable/Disable delete useless files after merge is complete."
+msgstr "マージ完了後に無駄なファイルを削除するのを有効/無効にする。"
+
+msgctxt "O12"
+msgid "Enable/Disable download again automatically after the download failed."
+msgstr "ダウンロードに失敗した後、自動的に再ダウンロードを有効/無効にする。"
+
+msgctxt "O13"
+msgid "Overwrite existing files."
+msgstr "既存のファイルを上書きする。"
+
+msgctxt "O14"
+msgid "Do not overwrite existing files."
+msgstr "既存のファイルを上書きしない。"
+
+msgctxt "O15"
+msgid "Use ffmpeg."
+msgstr "ffmpegを使用する。"
+
+msgctxt "O16"
+msgid "Do not use ffmpeg."
+msgstr "ffmpegを使用しない。"
+
+msgctxt "O17"
+msgid "The preferred video coding when downloading with maximum quality."
+msgstr "最高画質でダウンロードするときに好ましいビデオコーディング。"
+
+msgctxt "O18"
+msgid "Download with aria2c."
+msgstr "aria2cでダウンロードする。"
+
+msgctxt "O19"
+msgid "Download without aria2c."
+msgstr "aria2cを使用しないでダウンロードする。"
+
+msgctxt "O20"
+msgid ""
+"The maximum number of connections to one server for each download while "
+"using aria2c. Possible Values: <value>."
+msgstr "aria2cを使用している間の各ダウンロードのための1つのサーバーへの最大接続数。可能数: <value>。"
+
+msgctxt "O21"
+msgid ""
+"The maximum number of connections while downloading a file with aria2c. "
+"Possible Values: <value>."
+msgstr "aria2cでファイルをダウンロードしている間の最大接続数。可能数: <value>。"
+
+msgctxt "O22"
+msgid ""
+"The minimum split file size while using aria2c. Unit: <value1>, Possible "
+"Values: <value2>"
+msgstr "aria2c使用時の最小分割ファイルサイズ。単位: <value1>, 可能値: <value2>"
+
+msgctxt "O23"
+msgid "Use the backup download links when using aria2c."
+msgstr "aria2cを使用する際にバックアップダウンロードリンクを使用する。"
+
+msgctxt "O24"
+msgid "Do not use the backup download links when using aria2c."
+msgstr "aria2cを使用する際にバックアップダウンロードリンクを使用しない。"
+
+msgctxt "O25"
+msgid "The file allocation method while using aria2c."
+msgstr "aria2cを使用しているときのファイルの割り当て方法。"
+
+msgctxt "O26"
+msgid "Put or not put video/audio quality information in the file name."
+msgstr "ファイル名に動画・音声の品質情報を入れるか入れないか。"
+
+msgctxt "O27"
+msgid ""
+"Add or not add video information to file forcibly. (This will transcode the "
+"video and transcoding will not affect the video/audio quality.)"
+msgstr ""
+"動画情報を強制的にファイルに追加するかしないか。（これは動画をトランスコードしますので、トランスコードしても動画/音声の品質には影響しません）"
+
+msgctxt "O28"
+msgid ""
+"The maximum overall download speed in bytes/s when using aria2c. (0 means "
+"unrestricted. You can append K or M (1K = 1024, 1M = 1024K)"
+msgstr ""
+"aria2cを使用した場合の全体的なダウンロード速度の最大値をbytes/sで指定します。(0は無制限を意味します。KまたはM（1K = 1024、1M"
+" = 1024K）を追加することができます。"
+
+msgctxt "O29"
+msgid ""
+"Enable/Disable \"download all parts of each video automatically\" when you "
+"input Favorites, Channels, Uploaded Video page link."
+msgstr "お気に入り、チャンネル、アップロードした動画ページのリンクを入力すると、「各動画の全部分を自動的にダウンロードする」を有効/無効にする。"
+
+msgctxt "O30"
+msgid "Use http proxy."
+msgstr "httpプロキシを使用する。"
+
+msgctxt "O31"
+msgid "(This setting will not affect aria2c.)"
+msgstr "（この設定はaria2cには影響しません）"
+
+msgctxt "O32"
+msgid "Use https proxy."
+msgstr "httpsプロキシを使用する。"
+
+msgctxt "O33"
+msgid ""
+"The number of days between crawls when downloading all barrage (Possible "
+"Values: <value>). You can use \"a\" to enable automatic mode (Recommend). "
+"Use \"b\" to modify crawl start date (This will be effective when "
+"downloading SS/EP video)."
+msgstr ""
+"すべてのバラージをダウンロードするときのクロール間の日数（可能な値： <value> ）。自動モードを有効にするには \"a\" "
+"を使用することができます（推奨）。クロール開始日を変更するには \"b\" "
+"を使用してください。（これはSS/EPビデオをダウンロードするときに有効になります）"
+
+msgctxt "O34"
+msgid ""
+"The default crawl start date when downloading all barrage. (This will be "
+"effective when downloading SS/EP video. The default value is upload time. "
+"The format is Year-Month-Day, for example 1989-02-25.)"
+msgstr ""
+"全ての弾幕をダウンロードする時のデフォルトのクロール開始日。（SS/EP動画ダウンロード時に有効になります。デフォルト値はアップロード時間。形式は年-月-日、例：1989-02-25）"
+
+msgctxt "O35"
+msgid ""
+"Only display video/audio quality and exit when downloading videos. (This is "
+"not affected by silent mode.)"
+msgstr "動画ダウンロード時には、動画/音声品質のみ表示して終了します。(サイレントモードの場合は影響ありません)"
+
+msgctxt "O36"
+msgid "Choose video quality while downloading videos."
+msgstr "動画をダウンロードしながら動画の画質を選択します。"
+
+msgctxt "O37"
+msgid "Choose audio quality while downloading videos."
+msgstr "動画をダウンロードしながら音質を選択します。"
+
+msgctxt "O38"
+msgid "Set the download folder location."
+msgstr "ダウンロードフォルダの場所を設定します。"
+
+msgctxt "O39"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, the default "
+"Favorite ID will be used."
+msgstr "お気に入りページのリンクでお気に入りIDが指定されていない場合は、デフォルトのお気に入りIDが使用されます。"
+
+msgctxt "O40"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, return to the "
+"list of Favorites to select an ID."
+msgstr "お気に入りページのリンクでお気に入りIDが指定されていない場合は、お気に入りリストに戻ってIDを選択します。"
+
+msgctxt "O41"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, specify the "
+"Favorite ID by selecting an number from list of Favorites. (You can use "
+"\",\" to separate each two numbers. Use \"a\" to select all Favorites.)"
+msgstr ""
+"お気に入りページのリンクでお気に入りIDが指定されていない場合は、お気に入りリストから数字を選択してお気に入りIDを指定してください。（2つの数字の間は"
+" \",\" で区切ることができます。全てのお気に入りを選択する場合は \"a\" を使用してください）"
+
+msgctxt "O42"
+msgid ""
+"Enable Silent Mode. Only display Copyright notice, error messages and "
+"progress information (Contains output from downloader.). If you don't "
+"specify, this will overwrite existing files by default."
+msgstr ""
+"サイレントモードを有効にします。著作権表示、エラーメッセージ、進捗情報のみを表示します。（ダウンローダーからの出力を含みます）指定しない場合はデフォルトで既存のファイルを上書きします。"
+
+msgctxt "O43"
+msgid ""
+"Disable the 20-character limit of description in file name while downloading"
+" Small Video."
+msgstr "小さい動画のダウンロード中に、ファイル名の説明文の20文字制限を無効にします。"
+
+msgctxt "O44"
+msgid ""
+"Enable the 20-character limit of description in file name while downloading "
+"Small Video. The excess will be discarded."
+msgstr "小さい動画のダウンロード中にファイル名の説明文の20文字制限を有効にします。余った分は破棄されます。"
+
+msgctxt "O45"
+msgid "Trust environment variables when using \"requests\" package."
+msgstr "\"requests\" パッケージを使用する際に環境変数を信頼するようにします。"
+
+msgctxt "O46"
+msgid "Do not trust environment variables when using \"requests\" package."
+msgstr "\"requests\" パッケージを使用する際に環境変数を信頼するようにしません。"
+
+msgctxt "O47"
+msgid "Keep subtitle files when deleting useless files after merging."
+msgstr "マージ後に無駄なファイルを削除する際に字幕ファイルを保持する。"
+
+msgctxt "O48"
+msgid "Delete subtitle files when deleting useless files after merging."
+msgstr "マージ後に無駄なファイルを削除する際に字幕ファイルを削除する。"
+
+msgctxt "O49"
+msgid ""
+"Disable asynchronous DNS when using aria2c. (Disabling it can solve the "
+"\"Timeout while contacting DNS servers\" problem on Windows system.)"
+msgstr ""
+"aria2c使用時に非同期DNSを無効にします。（これを無効にすることで、Windowsシステム上での "
+"\"DNSサーバへの連絡中にタイムアウトが発生する\" 問題を解決することができます）"
+
+msgctxt "O50"
+msgid "Enable asynchronous DNS when using aria2c."
+msgstr "aria2cを使用している時に非同期DNSを有効にします。"
+
+msgctxt "O51"
+msgid ""
+"Convert HTML to normal text while writing description of live record into "
+"file metadata."
+msgstr "ライブレコードの説明をファイルのメタデータに書き込みながら、HTMLを通常のテキストに変換します。"
+
+msgctxt "O52"
+msgid ""
+"Do not convert HTML to normal text while writing description of live record "
+"into file metadata."
+msgstr "ライブレコードの説明をファイルのメタデータに書き込んでいる間は、HTMLを通常のテキストに変換しないでください。"
+
+msgctxt "O53"
+msgid "Use a proxy server for HTTP when calling aria2c."
+msgstr "aria2cを呼び出す際には、HTTP用のプロキシサーバを使用します。"
+
+msgctxt "O54"
+msgid "Use a proxy server for HTTPS when calling aria2c."
+msgstr "aria2cを呼び出す際には、HTTPS用のプロキシサーバを使用します。"
+
+msgctxt "O55"
+msgid "Set the program language."
+msgstr "プログラムの言語を設定します。"
+
+msgctxt "O56"
+msgid "PS1. If the same option appears, only the first one will take effect."
+msgstr "追伸1。同じオプションが表示された場合は、最初のオプションのみが有効になります。"
+
+msgctxt "O57"
+msgid ""
+"PS2. Command line parameter will override the settings in \"settings.json\"."
+msgstr "追伸2。コマンドラインパラメータは、\"settings.json \"の設定を上書きします。"
+
+msgctxt "O58"
+msgid ""
+"PS3. You need download ffmpeg and aria2c. Make sure they are placed in the "
+"current folder or in the directory specified by the environment variable "
+"\"PATH\"."
+msgstr ""
+"追伸3。 ffmpegとaria2cをダウンロードする必要があります。カレントフォルダか、環境変数 \"PATH "
+"\"で指定されたディレクトリにあることを確認してください。"
+
+msgctxt "O59"
+msgid ""
+"PS4. When you input Favorites, Channels, Uploaded Video links, in addition "
+"to the \"-i <input>\" and \"-p <number>\" parameters, other parameters will "
+"be used while downloading video."
+msgstr ""
+"追伸4。お気に入り、チャンネル、アップロードした動画のリンクを入力すると、 \"-i <input>\" と \"-p <number>\" "
+"のパラメータ以外にも、動画のダウンロード中に他のパラメータが使用されます。"

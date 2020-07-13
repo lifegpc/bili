@@ -1,0 +1,44 @@
+# bili - filter.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-13 09:24:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: \n"
+
+msgctxt "OUTPUT1"
+msgid "Please run \"filter.py\"."
+msgstr ""
+
+msgctxt "OUTPUT2"
+msgid "Can not find the file \"<filename>\"."
+msgstr ""
+
+msgctxt "INPUT1"
+msgid "Please enter the number of files you want to filter:"
+msgstr ""
+
+msgctxt "INPUT2"
+msgid "This file is not a barrage file."
+msgstr ""
+
+msgctxt "INPUT3"
+msgid "Press Enter to start choosing output file."
+msgstr ""
+
+msgctxt "ERROR1"
+msgid "Failed to save \"<filename>\"."
+msgstr ""
+
+msgctxt "OUTPUT3"
+msgid "There are <all> barrages in this file. Filtered <fn> barrages, <sn> barrages left."
+msgstr ""

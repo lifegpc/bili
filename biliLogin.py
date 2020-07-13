@@ -23,8 +23,20 @@ import rsa
 from getpass import getpass
 from urllib import parse
 import base64
+from lang import getlan,getdict
+import sys
+from command import gopt
+lan=None
+se=JSONParser.loadset()
+if se==-1 or se==-2 :
+    se={}
+ip={}
+if len(sys.argv)>1 :
+    ip=gopt(sys.argv[1:])
+lan=getdict('biliLogin',getlan(se,ip))
 def login(r,ud:dict,ip:dict):
     '登录至B站'
+    global lan
     try :
         driver=webdriver.Chrome()
         driver.get('https://passport.bilibili.com/ajax/miniLogin/minilogin')
@@ -41,23 +53,23 @@ def login(r,ud:dict,ip:dict):
         driver.close()
     except Exception:
         print(traceback.format_exc())
-        print('使用ChromeDriver登录发生错误，尝试采用用户名、密码登录')
+        print(lan['ERROR1'])#使用ChromeDriver登录发生错误，尝试采用用户名、密码登录
         read=login2(r)
         if read==-1 :
-            print('登录失败！')
+            print(lan['ERROR2'])#登录失败！
             return 2
         sa=read
     rr=tryok(r,ud)
     if rr==True :
         if not 's' in ip:
-            print('登录成功')
+            print(lan['OUTPUT1'])#登录成功！
         JSONParser.savecookie(sa)
         return 0
     elif rr==False :
-        print('网络错误')
+        print(lan['ERROR3'])#网络错误！
         return 1
     else :
-        print("登录失败："+str(rr['code'])+","+str(rr['message']))
+        print(lan['ERROR4']+str(rr['code'])+","+str(rr['message']))#登录失败：
         return 2
 def tryok(r,ud:dict) :
     '验证是否登录成功'
@@ -76,8 +88,8 @@ def tryok(r,ud:dict) :
         return re.text
 def login2(r:requests.Session):
     "使用用户名密码登录"
-    username=input('请输入用户名：')
-    password=getpass('请输入密码：')
+    username=input(lan['INPUT1'])#请输入用户名：
+    password=getpass(lan['INPUT2'])#请输入密码：
     appkey="bca7e84c2d947ac6"
     def getk():
         re=r.post('https://passport.bilibili.com/api/oauth2/getKey',{'appkey':appkey,'sign':cal_sign("appkey=%s"%(appkey))})
@@ -104,7 +116,7 @@ def login2(r:requests.Session):
                 re=r.get('https://passport.bilibili.com/captcha',headers={'Host': "passport.bilibili.com"},decode_level=1)
                 cp=scap(r,re)
                 if cp:
-                    print('登录验证码识别结果:%s'%(cp))
+                    print(lan['OUTPUT2'].replace('<result>',str(cp)))#登录验证码识别结果：<result>
                     keyhash,pubkey=getk()
                     if keyhash==-1:
                         return -1
@@ -112,10 +124,10 @@ def login2(r:requests.Session):
                     re=r.post('https://passport.bilibili.com/api/v2/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
                     re=re.json()
                 else :
-                    print('登录验证码识别服务暂时不可用，请稍后再试')
+                    print(lan['ERROR5'])#登录验证码识别服务暂时不可用，请稍后再试
                     return -1
             elif re['code']==-449:
-                print('服务繁忙, 尝试使用V3接口登录')
+                print(lan['ERROR6'])#服务繁忙, 尝试使用V3接口登录
                 pm=f"access_key=&actionKey=appkey&appkey={appkey}&build=6040500&captcha=&challenge=&channel=bili&cookies=&device=phone&mobi_app=android&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(),pubkey)))}&permission=ALL&platform=android&seccode=&subid=1&ts={int(time.time())}&username={parse.quote_plus(username)}&validate="
                 re=r.post('https://passport.bilibili.com/api/v3/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
                 re=re.json()
