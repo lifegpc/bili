@@ -125,8 +125,16 @@ def main(ip={}):
                     s="https://www.bilibili.com/bangumi/play/"+inp
                     ep=True
                 else :
-                    print(f'{lan["ERROR2"]}')
-                    exit()
+                    re=search(r"[^:]+://",inp)
+                    if re==None :
+                        inp="https://"+inp
+                    re=requests.head(inp)
+                    if 'Location' in re.headers :
+                        ip['i']=re.headers['Location']
+                        return main(ip)
+                    else :
+                        print(f'{lan["ERROR2"]}')#输入有误
+                        return -1
         else :
             re=re.groups()
             if re[7] :
