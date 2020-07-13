@@ -31,7 +31,7 @@
 识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。
 ### 其他
 程序目录下需要有相应系统版本的ChromeDriver。   
-没有ChromeDriver将无法进行登录操作（同理，由于手机平台没有ChromeDriver，也无法进行登录，但可以用[其他方法](#a)绕过）
+~~没有ChromeDriver将无法进行登录操作（同理，由于手机平台没有ChromeDriver，也无法进行登录，但可以用[其他方法](#a)绕过）~~
 ## 配置文件
 ### cookies.json
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用以及下载720P及以上视频使用）   
