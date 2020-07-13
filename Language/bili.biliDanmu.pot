@@ -146,3 +146,11 @@ msgstr ""
 msgctxt "ERROR9"
 msgid "The input format is incorrect or the date does not exist."
 msgstr ""
+
+msgctxt "OUTPUT19"
+msgid "Parsing complete. Fetched <number> barrages in total.\nConverting JSON to XML..."
+msgstr ""
+
+msgctxt "OUTPUT20"
+msgid "Download completed."
+msgstr ""

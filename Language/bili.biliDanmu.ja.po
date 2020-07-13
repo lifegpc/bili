@@ -161,3 +161,15 @@ msgstr "日付を入力してください（形式は年-月-日、例：1989-02
 msgctxt "ERROR9"
 msgid "The input format is incorrect or the date does not exist."
 msgstr "入力形式が正しくないか、日付が存在しません。"
+
+msgctxt "OUTPUT19"
+msgid ""
+"Parsing complete. Fetched <number> barrages in total.\n"
+"Converting JSON to XML..."
+msgstr ""
+"解析が完了しました。 合計 <number> の弾幕を取得しました。\n"
+"JSONをXMLに変換しています..."
+
+msgctxt "OUTPUT20"
+msgid "Download completed."
+msgstr "ダウンロードが完了しました。 "
