@@ -1,0 +1,58 @@
+[main]
+host = https://www.transifex.com
+
+[bili.bilibililoginpot]
+file_filter = bili.biliLogin.<lang>.po
+minimum_perc = 0
+source_file = bili.biliLogin.pot
+source_lang = en
+type = PO
+
+[bili.bilibilisubpot]
+file_filter = bili.biliSub.<lang>.po
+minimum_perc = 0
+source_file = bili.biliSub.pot
+source_lang = en
+type = PO
+
+[bili.bilicommandpot]
+file_filter = bili.command.<lang>.po
+minimum_perc = 0
+source_file = bili.command.pot
+source_lang = en
+type = PO
+
+[bili.bilijsonparser2pot]
+file_filter = bili.JSONParser2.<lang>.po
+minimum_perc = 0
+source_file = bili.JSONParser2.pot
+source_lang = en
+type = PO
+
+[bili.biliprintinfopot]
+file_filter = bili.PrintInfo.<lang>.po
+minimum_perc = 0
+source_file = bili.PrintInfo.pot
+source_lang = en
+type = PO
+
+[bili.bilisetsettingspot]
+file_filter = bili.setsettings.<lang>.po
+minimum_perc = 0
+source_file = bili.setsettings.pot
+source_lang = en
+type = PO
+
+[bili.bilistartpot]
+file_filter = bili.start.<lang>.po
+minimum_perc = 0
+source_file = bili.start.pot
+source_lang = en
+type = PO
+
+[bili.bilivideodownloadpot]
+file_filter = bili.videodownload.<lang>.po
+minimum_perc = 0
+source_file = bili.videodownload.pot
+source_lang = en
+type = PO

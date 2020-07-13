@@ -3,11 +3,15 @@
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-12 04:24:00+0000\n"
 "PO-Revision-Date: 2020-07-12 05:16+0000\n"
+"Last-Translator: Kum4423, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,173 +21,173 @@ msgstr ""
 
 msgctxt "O1"
 msgid "AV number :"
-msgstr ""
+msgstr "AV 番号 :"
 
 msgctxt "O2"
 msgid "BV number :"
-msgstr ""
+msgstr "BV 番号 :"
 
 msgctxt "O3"
 msgid "Total parts :"
-msgstr ""
+msgstr "合計 :"
 
 msgctxt "O4"
 msgid "Title :"
-msgstr ""
+msgstr "タイトル :"
 
 msgctxt "O5"
 msgid "Publish time :"
-msgstr ""
+msgstr "公開日時 :"
 
 msgctxt "O6"
 msgid "Last modified time :"
-msgstr ""
+msgstr "最終更新時刻 :"
 
 msgctxt "O7"
 msgid "Description :"
-msgstr ""
+msgstr "概要 :"
 
 msgctxt "O8"
 msgid "Uploader's info :"
-msgstr ""
+msgstr "投稿者情報 :"
 
 msgctxt "O9"
 msgid "Name :"
-msgstr ""
+msgstr "名前 :"
 
 msgctxt "O10"
 msgid "Information of each part :"
-msgstr ""
+msgstr "各パートの情報 :"
 
 msgctxt "O11"
 msgid "Part <number> :"
-msgstr ""
+msgstr "Part <number> :"
 
 msgctxt "O12"
 msgid "Part name :"
-msgstr ""
+msgstr "Part 名 :"
 
 msgctxt "O13"
 msgid "Japanese name :"
-msgstr ""
+msgstr "日本語名 :"
 
 msgctxt "O14"
 msgid "Series name :"
-msgstr ""
+msgstr "シリーズ名 :"
 
 msgctxt "O15"
 msgid "Alias :"
-msgstr ""
+msgstr "通称・別名 :"
 
 msgctxt "O16"
 msgid "Type name :"
-msgstr ""
+msgstr "タイプ名 :"
 
 msgctxt "O17"
 msgid "Content :"
-msgstr ""
+msgstr "コンテンツ :"
 
 msgctxt "O18"
 msgid "Favorites ID:"
-msgstr ""
+msgstr "お気に入りのID :"
 
 msgctxt "O19"
 msgid "Favorites title :"
-msgstr ""
+msgstr "お気に入りのタイトル :"
 
 msgctxt "O20"
 msgid "Creator's name :"
-msgstr ""
+msgstr "作成者名 :"
 
 msgctxt "O21"
 msgid "Create time :"
-msgstr ""
+msgstr "作成時間 :"
 
 msgctxt "O22"
 msgid "Video count :"
-msgstr ""
+msgstr "ビデオ数 :"
 
 msgctxt "O23"
 msgid "Video <number> :"
-msgstr ""
+msgstr "ビデオ <number> :"
 
 msgctxt "O24"
 msgid "Uploader's name :"
-msgstr ""
+msgstr "投稿者名 :"
 
 msgctxt "O25"
 msgid "Favorites time :"
-msgstr ""
+msgstr "お気に入りの時間 :"
 
 msgctxt "O26"
 msgid "Channel ID :"
-msgstr ""
+msgstr "チャンネルID :"
 
 msgctxt "O27"
 msgid "Uploader's gender :"
-msgstr ""
+msgstr "投稿者の性別 :"
 
 msgctxt "O28"
 msgid "Uploader's level :"
-msgstr ""
+msgstr "投稿者のレベル :"
 
 msgctxt "O29"
 msgid "Personalized signature :"
-msgstr ""
+msgstr "パーソナライズされた署名 :"
 
 msgctxt "O30"
 msgid "Birthday :"
-msgstr ""
+msgstr "誕生日 :"
 
 msgctxt "O31"
 msgid "Favorites <number> :"
-msgstr ""
+msgstr "お気に入り <number> :"
 
 msgctxt "O32"
 msgid "Small Video ID :"
-msgstr ""
+msgstr "小さいビデオID :"
 
 msgctxt "O33"
 msgid "Tags :"
-msgstr ""
+msgstr "タグ :"
 
 msgctxt "O34"
 msgid "Upload time :"
-msgstr ""
+msgstr "投稿時間 :"
 
 msgctxt "O35"
 msgid "You selected :"
-msgstr ""
+msgstr "選択しました :"
 
 msgctxt "O36"
 msgid "Live Record ID :"
-msgstr ""
+msgstr "ライブレコードID :"
 
 msgctxt "O37"
 msgid "Room ID :"
-msgstr ""
+msgstr "ルームID :"
 
 msgctxt "O38"
 msgid "Start time :"
-msgstr ""
+msgstr "開始時間 :"
 
 msgctxt "O39"
 msgid "End time :"
-msgstr ""
+msgstr "終了時間 :"
 
 msgctxt "O40"
 msgid "Area name :"
-msgstr ""
+msgstr "エリア名 :"
 
 msgctxt "O41"
 msgid "Room hot words :"
-msgstr ""
+msgstr "ホットワード :"
 
 msgctxt "O42"
 msgid "You can find the source code on <https://github.com/lifegpc/bili>."
-msgstr ""
+msgstr "ソースコードは<https://github.com/lifegpc/bili>にあります。"
 
 msgctxt "O43"
 msgid ""
 "Can't find GNU GPL3 LICENSE file, please see <http://www.gnu.org/licenses/>."
-msgstr ""
+msgstr "GNU GPL3 LICENSEファイルが見つからない場合は、<http://www.gnu.org/licenses/>をご覧ください。"
