@@ -76,27 +76,27 @@ def ph() :
     -v <id>     {la['O36']}
     -a <id>     {la['O37']}
     -o <dir>    {la['O38']}
-    --af    解析收藏夹时若未指定收藏夹，自动解析为默认收藏夹
-    --naf   解析收藏夹时若未指定收藏夹，不自动解析为默认收藏夹而是返回列表以选择
-    --afp <number>  解析收藏夹时若未指定收藏夹，解析列表中指定序号的收藏夹，支持多个序号（中间用,隔开），可使用a全选
-    -s      启用静默模式，关闭除版权声明和错误信息和进度信息（即内置下载器和aria2输出的信息，以及下载完成的信息）外的所有输出（若有重复文件，在不手动设置的情况下默认为覆盖）
-    --slt   下载小视频时，放入文件名中的描述长度可以超过20字
-    --nslt  下载小视频时，放入文件名中的描述长度无法超过20字，超出部分将被舍弃
-    --te    requests使用环境变量中的代理设置
-    --nte   requests不使用环境变量中的代理设置
-    --bd    合并完成后删除文件时保留字幕文件
-    --nbd   合并完成后删除文件时删除字幕文件
-    --cad   使用aria2c时关闭异步DNS（关闭后在Windows系统下可以解决Timeout while contacting DNS servers问题）
-    --ncad  使用aria2c时启用异步DNS
-    --lrh   直播回放简介写入元数据时进行去HTML化
-    --nlrh  直播回放简介写入元数据时不进行去HTML化
-    --ahttpproxy <PROXY>    指定aria2c使用的http代理，即aria2c的--http-proxy参数
-    --ahttpsproxy <PROXY>   指定aria2c使用的https代理，即aria2c的--https-proxy参数
-    --lan <LANGUAGECODE>    设置UI语言
-    注1：如出现相同的选项，只有第一个会生效
-    注2：命令行参数的优先级高于settings.json里的设置
-    注3：ffmpeg和aria2c需要自行下载并确保放入当前文件夹或者放入环境变量PATH指定的目录中
-    注4：当下载收藏夹/频道，除了-i和-p参数外，其他参数将被沿用至收藏夹/频道视频的下载设置，-i和-p参数只对收藏夹/频道起作用'''
+    --af    {la['O39']}
+    --naf   {la['O40']}
+    --afp <number>  {la['O41']}
+    -s      {la['O42']}
+    --slt   {la['O43']}
+    --nslt  {la['O44']}
+    --te    {la['O45']}
+    --nte   {la['O46']}
+    --bd    {la['O47']}
+    --nbd   {la['O48']}
+    --cad   {la['O49']}
+    --ncad  {la['O50']}
+    --lrh   {la['O51']}
+    --nlrh  {la['O52']}
+    --ahttpproxy <PROXY>    {la['O53']}
+    --ahttpsproxy <PROXY>   {la['O54']}
+    --lan <LANGUAGECODE>    {la['O55']}
+    {la['O56']}
+    {la['O57']}
+    {la['O58']}
+    {la['O59']}'''
     print(h)
 def gopt(args,d:bool=False) :
     re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt','te','nte','bd','nbd','cad','ncad','lrh','nlrh','ym','nm','yac','nac','ydm','ndm','yad','nad','yr','nr','ysv','nsv','yma','nma','yda','nda','ahttpproxy=','ahttpsproxy=','lan='])

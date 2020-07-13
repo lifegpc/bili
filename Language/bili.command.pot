@@ -170,3 +170,87 @@ msgstr ""
 msgctxt "O38"
 msgid "Set the download folder location."
 msgstr ""
+
+msgctxt "O39"
+msgid "If the Favorites page link does not specify the Favorite ID, the default Favorite ID will be used."
+msgstr ""
+
+msgctxt "O40"
+msgid "If the Favorites page link does not specify the Favorite ID, return to the list of Favorites to select an ID."
+msgstr ""
+
+msgctxt "O41"
+msgid "If the Favorites page link does not specify the Favorite ID, specify the Favorite ID by selecting an number from list of Favorites. (You can use \",\" to separate each two numbers. Use \"a\" to select all Favorites.)"
+msgstr ""
+
+msgctxt "O42"
+msgid "Enable Silent Mode. Only display Copyright notice, error messages and progress information (Contains output from downloader.). If you don't specify, this will overwrite existing files by default."
+msgstr ""
+
+msgctxt "O43"
+msgid "Disable the 20-character limit of description in file name while downloading Small Video."
+msgstr ""
+
+msgctxt "O44"
+msgid "Enable the 20-character limit of description in file name while downloading Small Video. The excess will be discarded."
+msgstr ""
+
+msgctxt "O45"
+msgid "Trust environment variables when using \"requests\" package."
+msgstr ""
+
+msgctxt "O46"
+msgid "Do not trust environment variables when using \"requests\" package."
+msgstr ""
+
+msgctxt "O47"
+msgid "Keep subtitle files when deleting useless files after merging."
+msgstr ""
+
+msgctxt "O48"
+msgid "Delete subtitle files when deleting useless files after merging."
+msgstr ""
+
+msgctxt "O49"
+msgid "Disable asynchronous DNS when using aria2c. (Disabling it can solve the \"Timeout while contacting DNS servers\" problem on Windows system.)"
+msgstr ""
+
+msgctxt "O50"
+msgid "Enable asynchronous DNS when using aria2c."
+msgstr ""
+
+msgctxt "O51"
+msgid "Convert HTML to normal text while writing description of live record into file metadata."
+msgstr ""
+
+msgctxt "O52"
+msgid "Do not convert HTML to normal text while writing description of live record into file metadata."
+msgstr ""
+
+msgctxt "O53"
+msgid "Use a proxy server for HTTP when calling aria2c."
+msgstr ""
+
+msgctxt "O54"
+msgid "Use a proxy server for HTTPS when calling aria2c."
+msgstr ""
+
+msgctxt "O55"
+msgid "Set the program language."
+msgstr ""
+
+msgctxt "O56"
+msgid "PS1. If the same option appears, only the first one will take effect."
+msgstr ""
+
+msgctxt "O57"
+msgid "PS2. Command line parameter will override the settings in \"settings.json\"."
+msgstr ""
+
+msgctxt "O58"
+msgid "PS3. You need download ffmpeg and aria2c. Make sure they are placed in the current folder or in the directory specified by the environment variable \"PATH\"."
+msgstr ""
+
+msgctxt "O59"
+msgid "PS4. When you input Favorites, Channels, Uploaded Video links, in addition to the \"-i <input>\" and \"-p <number>\" parameters, other parameters will be used while downloading video."
+msgstr ""
