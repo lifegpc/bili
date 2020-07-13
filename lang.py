@@ -42,7 +42,7 @@ def getdict(sn:str,lan:str,sn2:str="bili") -> dict:
     return r
 def getsyslan(d:bool=False) :
     """获取系统语言信息
-    语言代码：https://docs.microsoft.com/zh-cn/previous-versions/system-center/system-center-2012-R2/dn281927(v=sc.12)
+    语言代码：https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/a29e5c28-9fb9-4c49-8e43-4b9b8e733a05
     d 是否为调试模式"""
     s=platform.system()
     if s=="Windows" :
@@ -52,9 +52,9 @@ def getsyslan(d:bool=False) :
         l=dll.GetSystemDefaultUILanguage()
         if d:
             print(f"SystemDefaultUILanguage:{hex(l)}")
-        if l==2052:
+        if l==0x804 or l==0x4 or l==0x404 or l==0xc04 or l==0x1004 or l==0x1404 or l==0x7c04:
             r="zh_CN"
-        elif l==1041 :
+        elif l==0x411 :
             r="ja"
         else :
             r="en"
