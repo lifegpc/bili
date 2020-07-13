@@ -1,6 +1,13 @@
 [main]
 host = https://www.transifex.com
 
+[bili.bilibilidanmupot]
+file_filter = bili.biliDanmu.<lang>.po
+minimum_perc = 0
+source_file = bili.biliDanmu.pot
+source_lang = en
+type = PO
+
 [bili.bilibililoginpot]
 file_filter = bili.biliLogin.<lang>.po
 minimum_perc = 0
