@@ -29,6 +29,13 @@ source_file = bili.command.pot
 source_lang = en
 type = PO
 
+[bili.bilifilterpot]
+file_filter = bili.filter.<lang>.po
+minimum_perc = 0
+source_file = bili.filter.pot
+source_lang = en
+type = PO
+
 [bili.bilijsonparser2pot]
 file_filter = bili.JSONParser2.<lang>.po
 minimum_perc = 0
