@@ -1,0 +1,112 @@
+# bili - file packages Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-13 10:30:00+0000\n"
+"PO-Revision-Date: 2020-07-13 11:08+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "OUTPUT1"
+msgid "NO.\tFile name\t"
+msgstr "序号\t文件名\t"
+
+msgctxt "OUTPUT2"
+msgid "Type\tLast access time\tCreate time\t\tLast modify time\tFile size"
+msgstr "类型\t上次访问时间\t\t创建时间\t\t上次修改时间\t\t文件大小"
+
+msgctxt "DIR"
+msgid "DIR"
+msgstr "目录"
+
+msgctxt "FILE"
+msgid "FILE"
+msgstr "文件"
+
+msgctxt "OUTPUT3"
+msgid "Page <num> of <count>"
+msgstr "第<num>页，共<count>页"
+
+msgctxt "O1"
+msgid "Previous page"
+msgstr "上一页"
+
+msgctxt "O2"
+msgid "Next page"
+msgstr "下一页"
+
+msgctxt "O3"
+msgid "Parent folder"
+msgstr "上一文件夹"
+
+msgctxt "O4"
+msgid "Do not display files with no file extensions"
+msgstr "不显示无后缀名文件"
+
+msgctxt "O5"
+msgid "Display files with no file extensions"
+msgstr "显示无后缀名文件"
+
+msgctxt "O6"
+msgid "Display all files"
+msgstr "显示所有文件"
+
+msgctxt "O7"
+msgid "Display files which pass the filter"
+msgstr "显示过滤后文件"
+
+msgctxt "O8"
+msgid "Enter folder name"
+msgstr "输入文件夹名称"
+
+msgctxt "O9"
+msgid "Enter file name"
+msgstr "输入文件名"
+
+msgctxt "OUTPUT4"
+msgid ""
+"Please enter the number before file/directory name to select/enter the "
+"file/directory or the letter to do that operation:"
+msgstr "请输入文件名之前的序号选中文件，或输入文件夹名之前的序号进入文件夹，或输入操作之前的字母进行该操作："
+
+msgctxt "ERROR1"
+msgid "There is no parent folder."
+msgstr "上一层文件夹不存在。"
+
+msgctxt "INPUT1"
+msgid ""
+"Please enter the location of folder (Support absolute and relative "
+"location):"
+msgstr "请输入文件夹位置（支持绝对和相对位置）："
+
+msgctxt "ERROR2"
+msgid "This folder does not exist."
+msgstr "该文件夹不存在。"
+
+msgctxt "INPUT2"
+msgid "Please enter the file name:"
+msgstr "请输入文件名称："
+
+msgctxt "ERROR3"
+msgid "This file has been selected before."
+msgstr "之前已选择此文件。"
+
+msgctxt "INPUT3"
+msgid "This file already exists, do you want to overwrite it?"
+msgstr "该文件已存在，是否覆盖？"
+
+msgctxt "INPUT4"
+msgid "Do you want to select the file \"<filename>\"?"
+msgstr "是否选中文件\"<filename>\"？"

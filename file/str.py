@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from unicodedata import east_asian_width
+from file import lan
 def width(s) :
     '获取字符串宽度'
     t=0
@@ -38,9 +39,9 @@ def size(i) :
 def ftts(i) :
     '转换'
     if i=='d' :
-        return '目录'
+        return lan['DIR']
     elif i=='f' :
-        return '文件'
+        return lan['FILE']
 def cml(s,t):
     '计算码率,s 大小B,t 时间ms'
     s=s*8/t

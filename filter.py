@@ -23,15 +23,12 @@ import biliDanmuCreate
 from PrintInfo import pr
 from JSONParser import loadset,getset
 import sys
-from command import gopt
 from lang import getdict,getlan
 lan=None
 se=loadset()
 if se==-1 or se==-2 :
     se={}
 ip={}
-if len(sys.argv)>1 :
-    ip=gopt(sys.argv[1:])
 lan=getdict('filter',getlan(se,ip))
 if __name__!="__main__" :
     print(lan['OUTPUT1'])#请运行"filter.py"。

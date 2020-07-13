@@ -70,3 +70,10 @@ minimum_perc = 0
 source_file = bili.videodownload.pot
 source_lang = en
 type = PO
+
+[bili.fileallpot]
+file_filter = file.all.<lang>.po
+minimum_perc = 0
+source_file = file.all.pot
+source_lang = en
+type = PO

@@ -19,17 +19,17 @@ import platform
 import ctypes
 dll=None
 lan={'en':'English','ja':'日本語','zh_CN':'中文（中国）'}
-def getdict(sn:str,lan:str) -> dict:
+def getdict(sn:str,lan:str,sn2:str="bili") -> dict:
     """获取翻译词典
     sn 资源名称
     lan 语言代码"""
     if lan=="en" :
-        fn=f"Language/bili.{sn}.pot"
+        fn=f"Language/{sn2}.{sn}.pot"
     else :
-        fn=f"Language/bili.{sn}.{lan}.po"
+        fn=f"Language/{sn2}.{sn}.{lan}.po"
     if not exists(fn) :
         print(f'Can not find the language resource file:"{fn}"')
-        fn=f'Language/bili.{sn}.pot'
+        fn=f'Language/{sn2}.{sn}.pot'
         if not exists(fn) :
             print(f'Can not find the language resource file:"{fn}"')
             return -1
@@ -64,7 +64,7 @@ def getsyslan(d:bool=False) :
         return r
     else :
         return "en" #非Windows系统默认英文
-def getlan(se:dict,ip:dict) :
+def getlan(se:dict,ip:dict)-> str:
     try:
         l=getsyslan()
     except :

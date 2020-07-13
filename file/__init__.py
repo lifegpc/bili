@@ -13,6 +13,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from JSONParser import loadset
+import sys
+from lang import getdict,getlan
+lan=None
+se=loadset()
+if se==-1 or se==-2 :
+    se={}
+ip={}
+la=getlan(se,ip)
+lan=getdict('all',la,'file')
 from file.info import getinfo,getinfox,printinfo,spfn,spfln
 from file.dir import getinfod,printinfod,listd
 from file.filter import listf,listfd,listff,filtern,filterd
