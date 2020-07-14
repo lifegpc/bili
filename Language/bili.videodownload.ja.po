@@ -186,8 +186,8 @@ msgstr "\"start.py\" を使用してください。"
 
 msgctxt "OUTPUT23"
 msgid "Cover image \"<filename>\" was downloaded complete."
-msgstr ""
+msgstr "カバー画像 \"<filename>\" のダウンロードが完了しました。"
 
 msgctxt "OUTPUT24"
 msgid "An error occurred when downloading cover image:"
-msgstr ""
+msgstr "カバー画像のダウンロード時にエラーが発生しました。"

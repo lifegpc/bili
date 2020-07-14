@@ -219,4 +219,4 @@ msgstr "ライブレコードの説明文をファイルのメタデータに書
 msgctxt "INPUT30"
 msgid ""
 "Do you want to keep cover images when deleting useless files after merging?"
-msgstr ""
+msgstr "マージ後に無駄なファイルを削除するときにカバー画像を残しておきますか？"
