@@ -183,3 +183,11 @@ msgstr "ファイルサイズを取得できません。もう一度お試しく
 msgctxt "OUTPUT22"
 msgid "Please use \"start.py\"."
 msgstr "\"start.py\" を使用してください。"
+
+msgctxt "OUTPUT23"
+msgid "Cover image \"<filename>\" was downloaded complete."
+msgstr ""
+
+msgctxt "OUTPUT24"
+msgid "An error occurred when downloading cover image:"
+msgstr ""

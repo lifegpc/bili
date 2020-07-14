@@ -30,6 +30,7 @@ def Myparser(s) :
     data['desc']=obj['videoData']['desc']
     data['uid']=obj['videoData']['owner']['mid']
     data['name']=obj['videoData']['owner']['name']
+    data['pic']=obj['videoData']['pic']
     page=[]
     for i in obj['videoData']['pages'] :
     	t={}
@@ -54,6 +55,10 @@ def Myparser2(s) :
         mediaInfo['evaluate']=obj['mediaInfo']['evaluate']
         mediaInfo['type']=obj['mediaInfo']['ssTypeFormat']['name']
         mediaInfo['time']=obj['mediaInfo']['pub']['time']
+        t=obj['mediaInfo']['cover']
+        if t.startswith('//'):
+            t="https:"+t
+        mediaInfo['cover']=t
         data['mediaInfo']=mediaInfo
     if 'epList' in obj :
         epList=[]
@@ -67,6 +72,10 @@ def Myparser2(s) :
             t['longTitle']=i['longTitle']
             t['i']=i['i']
             t['loaded']=i['loaded']
+            p=i['cover']
+            if str(p).startswith('//'):
+                p="https:"+p
+            t['cover']=p
             epList.append(t)
         data['epList']=epList
     if 'sections' in obj :
@@ -88,6 +97,10 @@ def Myparser2(s) :
                     t2['i']=j['i']
                     t2['loaded']=j['loaded']
                     t2['title']=i['title']
+                    p=j['cover']
+                    if str(p).startswith('//'):
+                        p="https:"+p
+                    t2['cover']=p
                     epList.append(t2)
                 t['epList']=epList
             sections.append(t)

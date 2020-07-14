@@ -24,7 +24,7 @@ import sys
 def ph() :
     h=f'''{la['O1']}
     start.py -h/-?/--help   {la['O2']}
-    start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>]
+    start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>] [--bp/--nbp]
     start.py show c/w   {la['O3']}
     -i <input>   {la['O4']}
     -d <method>   {la['O5']}
@@ -93,13 +93,15 @@ def ph() :
     --ahttpproxy <PROXY>    {la['O53']}
     --ahttpsproxy <PROXY>   {la['O54']}
     --lan <LANGUAGECODE>    {la['O55']}
+    --bp    {la['O60']}
+    --nbp   {la['O61']}
     {la['O56']}
     {la['O57']}
     {la['O58']}
     {la['O59']}'''
     print(h)
 def gopt(args,d:bool=False) :
-    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt','te','nte','bd','nbd','cad','ncad','lrh','nlrh','ym','nm','yac','nac','ydm','ndm','yad','nad','yr','nr','ysv','nsv','yma','nma','yda','nda','ahttpproxy=','ahttpsproxy=','lan='])
+    re=getopt(args,'h?i:d:p:m:r:ynFv:a:o:s',['help','ac=','dm=','ad=','yf','nf','mc=','ar','nar','ax=','as=','ak=','ab','nab','fa=','sv=','ma=','ms=','da=','httpproxy=','httpsproxy=','jt=','jts=','af','naf','afp=','slt','nslt','te','nte','bd','nbd','cad','ncad','lrh','nlrh','ym','nm','yac','nac','ydm','ndm','yad','nad','yr','nr','ysv','nsv','yma','nma','yda','nda','ahttpproxy=','ahttpsproxy=','lan=','bp','nbp'])
     if d:
         print(re)
     rr=re[0]
@@ -110,7 +112,7 @@ def gopt(args,d:bool=False) :
             exit()
         if i[0]=='-i' and not 'i' in r:
             r['i']=i[1]
-        if i[0]=='-d' and not 'd' in r and i[1].isnumeric() and int(i[1])>0 and int(i[1])<7 :
+        if i[0]=='-d' and not 'd' in r and i[1].isnumeric() and int(i[1])>0 and int(i[1])<8 :
             r['d']=int(i[1])
         if i[0]=='-p' and not 'p' in r :
             r['p']=i[1]
@@ -285,6 +287,10 @@ def gopt(args,d:bool=False) :
             r['ahttpsproxy']=i[1]
         if i[0]=='--lan' and not 'lan' in r and (i[1]=='null' or i[1] in lan) :
             r['lan']=i[1]
+        if i[0]=='--bp' and not 'bp' in r:
+            r['bp']=True
+        if i[0]=='--nbp' and not 'bp' in r:
+            r['bp']=False
     for i in re[1] :
         if i.lower()=="show":
             prc()

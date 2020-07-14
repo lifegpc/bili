@@ -232,6 +232,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     ns=True
     if 's' in ip:
         ns=False
+    bp=False #删除无用文件时是否保留封面图片
+    if JSONParser.getset(se,'bp')==True :
+        bp=True
+    if 'bp' in ip:
+        bp=ip['bp']
     nte=False
     if JSONParser.getset(se,'te')==False :
         nte=True
@@ -578,16 +583,21 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2,filen+".mkv",s,ip,se,ns,i)
+        imgf=file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
+        imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt=int(time.time())
             sa=""
             sb=""
             nss=""
+            imga=""
             if not ns:
                 nss=getnul()
             if 'sub' in data:
                 sa,sb=ffinputstr(data['sub'],1)
+            if imgs==0 :
+                imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             if len(durl) > 1:
                 te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt),'wt',encoding='utf8')
                 j=1
@@ -595,9 +605,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
                     j=j+1
                 te.close()
-                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt"%s -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s"%s -c copy "%s.mkv"%s' %(file.filtern('%s'%(data['aid'])),tt,sa,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),tostr2(data['pubdate']),data['uid'],bstr.f(data['name']),data['page'][i-1]['cid'],bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),vqs,sb,filen,nss)
+                ml=f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(data['aid']))}_{tt}.txt\"{sa} -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata title=\"{bstr.f(data['title'])}-{bstr.f(data['page'][i-1]['part'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs}\"{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
             else :
-                ml='ffmpeg -i "%s.%s"%s -metadata aid="%s" -metadata bvid="%s" -metadata ctime="%s" -metadata description="%s" -metadata p="%sP/%sP" -metadata title="%s-%s" -metadata pubdate="%s" -metadata uid="%s" -metadata author="%s" -metadata cid="%s" -metadata atitle="%s" -metadata part="%s" -metadata vq="%s"%s -c copy "%s.mkv"%s'%(filen,hzm,sa,data['aid'],data['bvid'],tostr2(data['ctime']),bstr.f(data['desc']),i,data['videos'],bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),tostr2(data['pubdate']),data['uid'],bstr.f(data['name']),data['page'][i-1]['cid'],bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),vqs,sb,filen,nss)
+                ml=f"ffmpeg -i \"{filen}.{hzm}\"{sa} -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata title=\"{bstr.f(data['title'])}-{bstr.f(data['page'][i-1]['part'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs}\"{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
             re=os.system(ml)
             if re==0:
                 print(lan['OUTPUT14'])#合并完成！
@@ -637,6 +647,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if 'sub' in data and nbd:
                     for j in data['sub'] :
                         os.remove(j['fn'])
+                if imgs==0 and not bp :
+                    os.remove(imgf)
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
     elif "data" in re and "dash" in re['data'] :
@@ -976,16 +988,21 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2,filen,s,ip,se,ns,i)
+        imgf=file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
+        imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             sa=""
             sb=""
             nss=""
+            imga=""
             if not ns:
                 nss=getnul()
             if 'sub' in data:
                 sa,sb=ffinputstr(data['sub'],2)
-            re=os.system('ffmpeg -i "%s" -i "%s"%s -metadata title="%s-%s" -metadata description="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata atitle="%s" -metadata pubdate="%s" -metadata ctime="%s" -metadata uid="%s" -metadata author="%s" -metadata p="%sP/%sP" -metadata part="%s" -metadata vq="%s" -metadata aq="%s"%s -c:s copy -c copy "%s"%s'%(getfn(0,i,data,vqs,hzm,o),getfn(1,i,data,vqs,hzm,o),sa,bstr.f(data['title']),bstr.f(data['page'][i-1]['part']),bstr.f(data['desc']),data['aid'],data['bvid'],data['page'][i-1]['cid'],bstr.f(data['title']),tostr2(data['pubdate']),tostr2(data['ctime']),data['uid'],bstr.f(data['name']),i,data['videos'],bstr.f(data['page'][i-1]['part']),vqs[0],vqs[1],sb,filen,nss))
+            if imgs==0:
+                imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
+            re=os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o)}\" -i \"{getfn(1,i,data,vqs,hzm,o)}\"{sa} -metadata title=\"{bstr.f(data['title'])}-{bstr.f(data['page'][i-1]['part'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs[0]}\" -metadata aq=\"{vqs[1]}\"{sb}{imga} -c:s copy -c copy \"{filen}\"{nss}")
             de=False
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
@@ -1019,6 +1036,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if 'sub' in data and nbd:
                     for j in data['sub'] :
                         os.remove(j['fn'])
+                if imgs==0 and not bp :
+                    os.remove(imgf)
 def avsubdownload(i,url,data,r,se,ip,ud) :
     '''下载普通类视频字幕
     -1 文件夹创建失败'''
@@ -1078,11 +1097,78 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
         if ns:
             print(lan['OUTPUT18'].replace('<number>',str(i)))#第%sP没有可以下载的字幕。
     return 0
+def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
+    """下载封面图片
+    fn 指定文件名
+    -1 文件夹创建失败
+    -2 封面文件下载失败
+    -3 覆盖文件失败"""
+    ns=True
+    if 's' in ip:
+        ns=False
+    o="Download/"
+    read=JSONParser.getset(se,'o')
+    if read!=None :
+        o=read
+    if 'o' in ip:
+        o=ip['o']
+    try :
+        if not os.path.exists(o) :
+            mkdir(o)
+    except :
+        print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
+        return -1
+    if fn==None :
+        te=file.filtern(f'{data["title"]}(AV{data["aid"]},{data["bvid"]}).{file.geturlfe(data["pic"])}')
+        fn=f"{o}{te}"
+    if os.path.exists(fn) :
+        fg=False
+        bs=True
+        if not ns:
+            fg=True
+            bs=False
+        if 'y' in ip:
+            if ip['y'] :
+                fg=True
+                bs=False
+            else :
+                fg=False
+                bs=False
+        while bs:
+            inp=input(f"{lan['INPUT1'].replace('<filename>',fn)}(y/n)")#"%s"文件已存在，是否覆盖？
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    fg=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        if fg :
+            try :
+                os.remove(fn)
+            except :
+                print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
+                return -3
+    re=r.get(data['pic'])
+    if re.status_code==200 :
+        f=open(fn,'wb')
+        f.write(re.content)
+        f.close()
+        if ns:
+            print(lan['OUTPUT23'].replace('<filename>',fn))#封面图片下载完成。
+        return 0
+    else :
+        print(f"{lan['OUTPUT24']}HTTP {re.status_code}")#下载封面图片时发生错误：
+        return -2
 def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     """下载番剧等视频"""
     ns=True
     if 's' in ip:
         ns=False
+    bp=False #删除无用文件时是否保留封面图片
+    if JSONParser.getset(se,'bp')==True :
+        bp=True
+    if 'bp' in ip:
+        bp=ip['bp']
     nte=False
     if JSONParser.getset(se,'te')==False :
         nte=True
@@ -1473,12 +1559,17 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     bs2=True
                 else :
                     return -3
+        imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
+        imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             nss=""
+            imga=""
             if not ns:
                 nss=getnul()
-            re=os.system('ffmpeg -i "%s" -i "%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata aq="%s" -metadata vq="%s" -c copy "%s"%s'%(getfn2(i,0,fdir,vqs,hzm),getfn2(i,1,fdir,vqs,hzm),data['mediaInfo']['id'],data['mediaInfo']['ssId'],bstr.f(data['mediaInfo']['title']),bstr.f(i['titleFormat']),bstr.f(i['longTitle']),bstr.f(data['mediaInfo']['series']),bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],bstr.f(data['mediaInfo']['title']),bstr.f(i['longTitle']),bstr.f(i['titleFormat']),i['id'],i['aid'],i['bvid'],i['cid'],vqs[1],vqs[0],filen,nss))
+            if imgs==0:
+                imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
+            re=os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm)}\" -i \"{getfn2(i,1,fdir,vqs,hzm)}\" -metadata id=\"{data['mediaInfo']['id']}\" -metadata ssid=\"{data['mediaInfo']['ssId']}\" -metadata title=\"{bstr.f(data['mediaInfo']['title'])}-{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata series=\"{bstr.f(data['mediaInfo']['series'])}\" -metadata description=\"{bstr.f(data['mediaInfo']['evaluate'])}\" -metadata pubtime=\"{data['mediaInfo']['time']}\" -metadata atitle=\"{bstr.f(data['mediaInfo']['title'])}\" -metadata eptitle=\"{bstr.f(i['longTitle'])}\" -metadata titleformat=\"{bstr.f(i['titleFormat'])}\" -metadata epid=\"{i['id']}\" -metadata aid=\"{i['aid']}\" -metadata bvid=\"{i['bvid']}\" -metadata cid=\"{i['cid']}\" -metadata aq=\"{vqs[1]}\" -metadata vq=\"{vqs[0]}\"{imga} -c copy \"{filen}\"{nss}")
             de=False
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
@@ -1509,6 +1600,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if re==0 and de:
                 for j in[0,1]:
                     os.remove(getfn2(i,j,fdir,vqs,hzm))
+                if imgs==0 and not bp:
+                    os.remove(imgf)
     elif 'data' in re and 'durl' in re['data'] :
         vq=re["data"]["quality"]
         vqd=re["data"]["accept_description"]
@@ -1777,12 +1870,17 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             return -3
                 com=com+k['size']
             j=j+1
+        imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
+        imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt=int(time.time())
             nss=""
+            imga=""
             if not ns:
                 nss=getnul()
+            if imgs==0:
+                imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             if len(durl)>1 :
                 te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt),'wt',encoding='utf8')
                 j=1
@@ -1790,9 +1888,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
                     j=j+1
                 te.close()
-                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(file.filtern('%s'%(i['id'])),tt,data['mediaInfo']['id'],data['mediaInfo']['ssId'],bstr.f(data['mediaInfo']['title']),bstr.f(i['titleFormat']),bstr.f(i['longTitle']),bstr.f(data['mediaInfo']['series']),bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],bstr.f(data['mediaInfo']['title']),bstr.f(i['longTitle']),bstr.f(i['titleFormat']),i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
+                ml=f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(i['id']))}_{tt}.txt\" -metadata id=\"{data['mediaInfo']['id']}\" -metadata ssid=\"{data['mediaInfo']['ssId']}\" -metadata title=\"{bstr.f(data['mediaInfo']['title'])}-{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata series=\"{bstr.f(data['mediaInfo']['series'])}\" -metadata description=\"{bstr.f(data['mediaInfo']['evaluate'])}\" -metadata pubtime=\"{data['mediaInfo']['time']}\" -metadata atitle=\"{bstr.f(data['mediaInfo']['title'])}\" -metadata eptitle=\"{bstr.f(i['longTitle'])}\" -metadata titleformat=\"{bstr.f(i['titleFormat'])}\" -metadata epid=\"{i['id']}\" -metadata aid=\"{i['aid']}\" -metadata bvid=\"{i['bvid']}\" -metadata cid=\"{i['cid']}\" -metadata vq=\"{vqs}\"{imga} -c copy \"{filen}.mkv\"{nss}"
             else :
-                ml='ffmpeg -i "%s.%s" -metadata id="%s" -metadata ssid="%s" -metadata title="%s-%s %s" -metadata series="%s" -metadata description="%s" -metadata pubtime="%s" -metadata atitle="%s" -metadata eptitle="%s" -metadata titleformat="%s" -metadata epid="%s" -metadata aid="%s" -metadata bvid="%s" -metadata cid="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(filen,hzm,data['mediaInfo']['id'],data['mediaInfo']['ssId'],bstr.f(data['mediaInfo']['title']),bstr.f(i['titleFormat']),bstr.f(i['longTitle']),bstr.f(data['mediaInfo']['series']),bstr.f(data['mediaInfo']['evaluate']),data['mediaInfo']['time'],bstr.f(data['mediaInfo']['title']),bstr.f(i['longTitle']),bstr.f(i['titleFormat']),i['id'],i['aid'],i['bvid'],i['cid'],vqs,filen,nss)
+                ml=f"ffmpeg -i \"{filen}.{hzm}\" -metadata id=\"{data['mediaInfo']['id']}\" -metadata ssid=\"{data['mediaInfo']['ssId']}\" -metadata title=\"{bstr.f(data['mediaInfo']['title'])}-{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata series=\"{bstr.f(data['mediaInfo']['series'])}\" -metadata description=\"{bstr.f(data['mediaInfo']['evaluate'])}\" -metadata pubtime=\"{data['mediaInfo']['time']}\" -metadata atitle=\"{bstr.f(data['mediaInfo']['title'])}\" -metadata eptitle=\"{bstr.f(i['longTitle'])}\" -metadata titleformat=\"{bstr.f(i['titleFormat'])}\" -metadata epid=\"{i['id']}\" -metadata aid=\"{i['aid']}\" -metadata bvid=\"{i['bvid']}\" -metadata cid=\"{i['cid']}\" -metadata vq=\"{vqs}\"{imga} -c copy \"{filen}.mkv\"{nss}"
             re=os.system(ml)
             if re==0:
                 print(lan['OUTPUT14'])#合并完成！
@@ -1829,8 +1927,85 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         j=j+1
                 else :
                     os.remove('%s.%s'%(filen,hzm))
+                if imgs==0 and not bp :
+                    os.remove(imgf)
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt))
+def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
+    """下载封面图片
+    fn 指定文件名
+    -1 文件夹创建失败
+    -2 封面文件下载失败
+    -3 覆盖文件失败"""
+    ns=True
+    if 's' in ip:
+        ns=False
+    o="Download/"
+    read=JSONParser.getset(se,'o')
+    if read!=None :
+        o=read
+    if 'o' in ip:
+        o=ip['o']
+    try :
+        if not os.path.exists(o) :
+            mkdir(o)
+    except :
+        print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
+        return -1
+    fdir=f"{o}{file.filtern('%s(SS%s)'%(data['mediaInfo']['title'],data['mediaInfo']['ssId']))}"#SS文件夹
+    cf2=data['mediaInfo']['cover']
+    fn2=f"{fdir}/cover.{file.geturlfe(cf2)}"
+    if not os.path.exists(fn2) :
+        re=r.get(cf2)
+        if re.status_code==200 :
+            f=open(fn2,'wb')
+            f.write(re.content)
+            f.close()
+            if ns:
+                print(lan['OUTPUT23'].replace('<filename>',fn2))#封面图片下载完成。
+        else :
+            print(f"{lan['OUTPUT24']}HTTP {re.status_code}")#下载封面图片时发生错误：
+    cf=i['cover']
+    if fn==None :
+        fn=f"{fdir}/{file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],file.geturlfe(cf)))}"
+    if os.path.exists(fn) :
+        fg=False
+        bs=True
+        if not ns:
+            fg=True
+            bs=False
+        if 'y' in ip:
+            if ip['y'] :
+                fg=True
+                bs=False
+            else :
+                fg=False
+                bs=False
+        while bs:
+            inp=input(f"{lan['INPUT1'].replace('<filename>',fn)}(y/n)")#"%s"文件已存在，是否覆盖？
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    fg=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        if fg :
+            try :
+                os.remove(fn)
+            except :
+                print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
+                return -3
+    re=r.get(cf)
+    if re.status_code==200 :
+        f=open(fn,'wb')
+        f.write(re.content)
+        f.close()
+        if ns:
+            print(lan['OUTPUT23'].replace('<filename>',fn))#封面图片下载完成。
+        return 0
+    else :
+        print(f"{lan['OUTPUT24']}HTTP {re.status_code}")#下载封面图片时发生错误：
+        return -2
 def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     """下载小视频
     c 继续下载"""

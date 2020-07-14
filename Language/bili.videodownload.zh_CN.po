@@ -179,3 +179,11 @@ msgstr "获取文件大小失败。尝试重新获取……"
 msgctxt "OUTPUT22"
 msgid "Please use \"start.py\"."
 msgstr "请使用start.py"
+
+msgctxt "OUTPUT23"
+msgid "Cover image \"<filename>\" was downloaded complete."
+msgstr "封面图片\"<filename>\"下载完成。"
+
+msgctxt "OUTPUT24"
+msgid "An error occurred when downloading cover image:"
+msgstr "下载封面图片时发生错误："
