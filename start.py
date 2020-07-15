@@ -1172,7 +1172,7 @@ def main(ip={}):
                     exit()
         if cho2==2 or cho2==5 :
             for i in cho :
-                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se)
+                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se,che)
                 if read==0 :
                     print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
                 else :
