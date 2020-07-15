@@ -73,6 +73,7 @@ def main(ip={}):
     sm=False #小视频
     lr=False #直播回放
     che=False #B站课程
+    chel=False #B站课程已购列表
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
@@ -103,7 +104,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -216,6 +217,8 @@ def main(ip={}):
                 ep=True
                 che=True
                 epid=int(re[38])
+            elif re[39]:
+                chel=True
             else :
                 print(f'{lan["ERROR2"]}')
                 exit()
@@ -823,6 +826,86 @@ def main(ip={}):
             read=videodownload.lrvideodownload(ri,section,cho3,cho5,se,ip)
             if read==-5 :
                 return -1
+        return 0
+    if chel :
+        r=requests.Session()
+        r.headers=copydict(section.headers)
+        r.proxies=section.proxies
+        if nte:
+            r.trust_env=False
+        read=JSONParser.loadcookie(r)
+        if read!=0 :
+            print(lan['ERROR10'])#读取cookies.json出现错误
+            return -1
+        r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+        r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
+        r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+        r.headers.update({'referer':'https://www.bilibili.com/v/cheese/mine/list'})
+        chep=JSONParser2.getchel(r)
+        if chep==-1:
+            return -1
+        if ns:
+            PrintInfo.printInfo10(chep)
+        vn=len(chep)
+        bs=True
+        f=True
+        while bs:
+            if f and 'p' in ip:
+                f=False
+                inp=ip['p']
+            elif ns:
+                inp=input(lan['OUTPUT4'])#请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
+            else :
+                print(lan['ERROR9'])#请使用-p <number>选择视频编号
+                return -1
+            cho=[]
+            if inp[0]=='a' :
+                if 'ns':
+                    print(lan['OUTPUT5'])#您全选了所有视频
+                for i in range(1,vn+1) :
+                    cho.append(i)
+                bs=False
+            else :
+                inp=inp.split(',')
+                bb=True
+                for i in inp :
+                    if i.isnumeric() and int(i)>0 and int(i)<=vn and (not (int(i) in cho)) :
+                        cho.append(int(i))
+                    else :
+                        bb=False
+                if bb :
+                    bs=False
+                    for i in cho :
+                        if ns:
+                            print(lan['OUTPUT6']+str(i)+','+chep[i-1]['title'])#您选中了视频：
+        bs=True
+        c1=False
+        if not ns:
+            bs=False
+        read=JSONParser.getset(se,'da')
+        if read!=None :
+            c1=read
+            bs=False
+        if 'da' in ip :
+            c1=ip['da']
+            bs=False
+        while bs :
+            inp=input(f"{lan['INPUT4']}(y/n)")#是否自动下载每一个视频的所有分P？
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    c1=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        for i in cho:
+            ip2=copyip(ip)
+            ip2['i']=f"https://www.bilibili.com/cheese/play/ss{chep[i-1]['id']}"
+            if c1:
+                ip2['p']='a'
+            read=main(ip2)
+            if read!=0 :
+                return read
         return 0
     if che:
         if ssid==-1:#输入为ep号时的处理

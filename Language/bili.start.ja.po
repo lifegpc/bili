@@ -32,6 +32,7 @@ msgid ""
 "user page. Also support live records video and purchased courses' video "
 "link.):"
 msgstr ""
+"av/ss/ep/md/bv番号（bv番号はbvで始まる必要があります）またはリンクを入力してください（ユーザーページからお気に入り、チャンネル、アップロードされたビデオと小さなビデオページをサポートしています。また、ライブ記録動画や購入したコースの動画リンクにも対応しています)"
 
 msgctxt "ERROR1"
 msgid "Please use \"-i <input>\"."
@@ -232,4 +233,4 @@ msgstr "\"start.py\" を実行してください。"
 
 msgctxt "OUTPUT12"
 msgid "Try to redirect to \"<link>\"."
-msgstr ""
+msgstr "\"<link>\" にリダイレクトしてみてください。"

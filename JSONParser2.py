@@ -226,3 +226,33 @@ def getlr3(d:dict,r:dict):
     r['name']=t['name']
     r['sex']=t['sex']
     r['sign']=t['sign']
+def getchel(r:Session) -> list:
+    """获得已购课程列表
+    -1 获取出错"""
+    re=r.get("https://api.bilibili.com/pugv/pay/web/my/paid?ps=10&pn=1")
+    re.encoding='utf8'
+    re=re.json()
+    if re['code']!=0:
+        print(f"{re['code']} {re['message']}")
+        return -1
+    re=re['data']
+    n=re['total']
+    l:list=re['data']
+    i=2
+    while i<=n :
+        bs=True
+        while bs:
+            try :
+                re=r.get(f"https://api.bilibili.com/pugv/pay/web/my/paid?ps=10&pn={i}")
+                bs=False
+            except :
+                print(lan['OUTPUT3'].replace('<number>',str(i)))#获取第%s页失败，正在重试……
+            re.encoding='utf8'
+            re=re.json()
+            if re['code']!=0:
+                print(f"{re['code']} {re['message']}")
+                return -1
+            for j in re['data']['data'] :
+                l.append(j)
+        i=i+1
+    return l

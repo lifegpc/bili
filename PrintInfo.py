@@ -152,6 +152,14 @@ def printInfo9(d:dict) :
 	print(f"{lan['O34']}{d['upload_time']}")#上传时间：
 	print(f"{lan['O24']}{d['name']}")#UP主名字：
 	print('UID：%s'%(d['uid']))
+def printInfo10(l:list) :
+	t=1
+	for i in l:
+		print(f"{t}.{lan['O4']}{i['title']}")#标题：
+		print(f"{lan['O7']}{i['sub_title']}")#描述：
+		print(f"UID：{i['up_id']}")
+		print(f"SSID：{i['id']}")
+		t=t+1
 def printcho(cho) :
 	if len(cho)==0 :
 		return
