@@ -108,8 +108,16 @@ def main(ip={}):
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
-                print(f'{lan["ERROR2"]}')
-                exit()
+                re=search(r"[^:]+://",inp)
+                if re==None :
+                    inp="https://"+inp
+                re=requests.head(inp)
+                if 'Location' in re.headers :
+                    ip['i']=re.headers['Location']
+                    return main(ip)
+                else :
+                    print(f'{lan["ERROR2"]}')#输入有误
+                    return -1
             else :
                 re=re.groups()
                 if re[3] :
