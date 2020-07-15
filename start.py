@@ -72,6 +72,8 @@ def main(ip={}):
     md=False #番剧信息页
     sm=False #小视频
     lr=False #直播回放
+    che=False #B站课程
+    chel=False #B站课程已购列表
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
@@ -80,6 +82,8 @@ def main(ip={}):
     mid=-1 #md号
     sid=-1 #小视频id
     rid="" #直播回放id
+    ssid=-1 #B站课程SS号
+    epid=-1 #B站课程EP号
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -100,7 +104,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -125,8 +129,16 @@ def main(ip={}):
                     s="https://www.bilibili.com/bangumi/play/"+inp
                     ep=True
                 else :
-                    print(f'{lan["ERROR2"]}')
-                    exit()
+                    re=search(r"[^:]+://",inp)
+                    if re==None :
+                        inp="https://"+inp
+                    re=requests.head(inp)
+                    if 'Location' in re.headers :
+                        ip['i']=re.headers['Location']
+                        return main(ip)
+                    else :
+                        print(f'{lan["ERROR2"]}')#输入有误
+                        return -1
         else :
             re=re.groups()
             if re[7] :
@@ -197,6 +209,16 @@ def main(ip={}):
             elif re[33] :
                 lr=True
                 rid=re[34]
+            elif re[35] :
+                ss=True
+                che=True
+                ssid=int(re[36])
+            elif re[37]:
+                ep=True
+                che=True
+                epid=int(re[38])
+            elif re[39]:
+                chel=True
             else :
                 print(f'{lan["ERROR2"]}')
                 exit()
@@ -805,43 +827,137 @@ def main(ip={}):
             if read==-5 :
                 return -1
         return 0
-    re=section.get(s)
-    parser=HTMLParser.Myparser()
-    parser.feed(re.text)
-    try :
-        vd=json.loads(parser.videodata)
-    except Exception:
-        if av:
-            re=search(r"av([0-9]+)",s,I).groups()[0]
-            re=section.get("https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid=%s&jsonp=jsonp"%(re))
-            re.encoding='utf8'
-            re=re.json()
-            if re['code']!=0 :
-                print('%s %s'%(re['code'],re['message']))
+    if chel :
+        r=requests.Session()
+        r.headers=copydict(section.headers)
+        r.proxies=section.proxies
+        if nte:
+            r.trust_env=False
+        read=JSONParser.loadcookie(r)
+        if read!=0 :
+            print(lan['ERROR10'])#读取cookies.json出现错误
+            return -1
+        r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+        r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
+        r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+        r.headers.update({'referer':'https://www.bilibili.com/v/cheese/mine/list'})
+        chep=JSONParser2.getchel(r)
+        if chep==-1:
+            return -1
+        if ns:
+            PrintInfo.printInfo10(chep)
+        vn=len(chep)
+        bs=True
+        f=True
+        while bs:
+            if f and 'p' in ip:
+                f=False
+                inp=ip['p']
+            elif ns:
+                inp=input(lan['OUTPUT4'])#请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
+            else :
+                print(lan['ERROR9'])#请使用-p <number>选择视频编号
                 return -1
-            if 'data' in re and 'View' in re['data'] and 'redirect_url' in re['data']['View'] :
-                ip2=copyip(ip)
-                ip2['i']=re['data']['View']['redirect_url']
-                if 'p' in ip :
-                    ip2['p']=ip['p']
-                read=main(ip2)
-                if read!= 0 :
-                    return read
-                return 0
-            print(traceback.format_exc())
-            return -1
-        elif ss:
-            if re.status_code==404 :
-                print('404 Not Found')
-                return 0
-            print(traceback.format_exc())
-            return -1
+            cho=[]
+            if inp[0]=='a' :
+                if 'ns':
+                    print(lan['OUTPUT5'])#您全选了所有视频
+                for i in range(1,vn+1) :
+                    cho.append(i)
+                bs=False
+            else :
+                inp=inp.split(',')
+                bb=True
+                for i in inp :
+                    if i.isnumeric() and int(i)>0 and int(i)<=vn and (not (int(i) in cho)) :
+                        cho.append(int(i))
+                    else :
+                        bb=False
+                if bb :
+                    bs=False
+                    for i in cho :
+                        if ns:
+                            print(lan['OUTPUT6']+str(i)+','+chep[i-1]['title'])#您选中了视频：
+        bs=True
+        c1=False
+        if not ns:
+            bs=False
+        read=JSONParser.getset(se,'da')
+        if read!=None :
+            c1=read
+            bs=False
+        if 'da' in ip :
+            c1=ip['da']
+            bs=False
+        while bs :
+            inp=input(f"{lan['INPUT4']}(y/n)")#是否自动下载每一个视频的所有分P？
+            if len(inp)>0 :
+                if inp[0].lower()=='y' :
+                    c1=True
+                    bs=False
+                elif inp[0].lower()=='n' :
+                    bs=False
+        for i in cho:
+            ip2=copyip(ip)
+            ip2['i']=f"https://www.bilibili.com/cheese/play/ss{chep[i-1]['id']}"
+            if c1:
+                ip2['p']='a'
+            read=main(ip2)
+            if read!=0 :
+                return read
+        return 0
+    if che:
+        if ssid==-1:#输入为ep号时的处理
+            uri=f"https://api.bilibili.com/pugv/view/web/season?ep_id={epid}"
         else :
-            print(traceback.format_exc())
+            uri=f"https://api.bilibili.com/pugv/view/web/season?season_id={ssid}"
+        re=section.get(uri)
+        re=re.json()
+        if re['code']!=0:
+            print(f"{re['code']} {re['message']}")
+        vd=JSONParser.parseche(re)
+    if not che:
+        re=section.get(s)
+        parser=HTMLParser.Myparser()
+        parser.feed(re.text)
+        try :
+            vd=json.loads(parser.videodata)
+        except Exception:
+            if av:
+                re=search(r"av([0-9]+)",s,I).groups()[0]
+                re=section.get("https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid=%s&jsonp=jsonp"%(re))
+                re.encoding='utf8'
+                re=re.json()
+                if re['code']!=0 :
+                    print('%s %s'%(re['code'],re['message']))
+                    return -1
+                if 'data' in re and 'View' in re['data'] and 'redirect_url' in re['data']['View'] :
+                    ip2=copyip(ip)
+                    ip2['i']=re['data']['View']['redirect_url']
+                    if 'p' in ip :
+                        ip2['p']=ip['p']
+                    read=main(ip2)
+                    if read!= 0 :
+                        return read
+                    return 0
+                print(traceback.format_exc())
+                return -1
+            elif ss or ep:
+                if re.status_code==404 :
+                    print('404 Not Found')
+                    s=s.replace('bangumi','cheese')
+                    print(lan['OUTPUT12'].replace('<link>',s))#尝试重定向至"<link>"。
+                    ip['i']=s
+                    return main(ip)
+                print(traceback.format_exc())
+                return -1
+            else :
+                print(traceback.format_exc())
+                return -1
+        if 'error' in vd and 'code' in vd['error'] and 'message' in vd['error'] :
+            print('%s %s'%(vd['error']['code'],vd['error']['message']))
             return -1
-    if 'error' in vd and 'code' in vd['error'] and 'message' in vd['error'] :
-        print('%s %s'%(vd['error']['code'],vd['error']['message']))
-        return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
         if data['videos']!=len(data['page']) :
@@ -918,8 +1034,8 @@ def main(ip={}):
             if not ns:
                 print(lan['ERROR11'])#请使用-d <method>选择下载方式
                 return -1
-            inp=input(lan['INPUT9'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n6.仅字幕下载
-            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<7 :
+            inp=input(lan['INPUT9'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n6.仅字幕下载\n7.仅封面图片下载
+            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<8 :
             	cho2=int(inp[0])
             	bs=False
         if cho2==1 or cho2==4 :
@@ -1002,21 +1118,29 @@ def main(ip={}):
         if cho2==6:
             for i in cho:
                 videodownload.avsubdownload(i,s,data,section,se,ip,ud)
+        if cho2==7:
+            videodownload.avpicdownload(data,section,ip,se)
     if ss or ep :
         if ep :
             epl=lan['INPUT10']#，仅下载输入的ep号可输入b
         else :
             epl=''
-        data=JSONParser.Myparser2(parser.videodata)
-        le=PrintInfo.printInfo2(data,ns)
-        rs=search(r'__PGC_USERSTATE__=([^<]+)',re.text)
         led=-1#上一次播放epid
-        if rs!=None:
-            rs=rs.groups()[0]
-            pgc=json.loads(rs)
-            if 'progress' in pgc and pgc['progress']!=None :
-                if 'last_ep_id' in pgc['progress'] and pgc['progress']['last_ep_id']>-1:
-                    led=pgc['progress']['last_ep_id']
+        if che :
+            le=PrintInfo.printInfo2(vd,ns)
+            if 'led' in vd :
+                led=vd['led']
+            data=vd
+        else :
+            data=JSONParser.Myparser2(parser.videodata)
+            le=PrintInfo.printInfo2(data,ns)
+            rs=search(r'__PGC_USERSTATE__=([^<]+)',re.text)
+            if rs!=None:
+                rs=rs.groups()[0]
+                pgc=json.loads(rs)
+                if 'progress' in pgc and pgc['progress']!=None :
+                    if 'last_ep_id' in pgc['progress'] and pgc['progress']['last_ep_id']>-1:
+                        led=pgc['progress']['last_ep_id']
         epr=""
         if led>-1 :
             epr=lan['INPUT11'].replace('<number>',str(led))#，下载上次观看的EP<number>可输入l
@@ -1048,24 +1172,36 @@ def main(ip={}):
                             cho.append(j)
                         bs=False
                     elif ep and inp[0]=='b':
-                        iii=1
-                        co=True
-                        if 'epList' in data:
+                        if che :
+                            iii=1
+                            co=True
                             for i in data['epList'] :
-                                if i['loaded']:
+                                if epid==i['id'] :
                                     co=False
                                     break
                                 iii=iii+1
-                        if co and 'sections' in data :
-                            for i in data['sections'] :
-                                for j in i['epList'] :
-                                    if j['loaded']:
+                            if not co :
+                                cho.append(iii)
+                                bs=False
+                        else :
+                            iii=1
+                            co=True
+                            if 'epList' in data:
+                                for i in data['epList'] :
+                                    if i['loaded']:
                                         co=False
                                         break
                                     iii=iii+1
-                        if not co:
-                            cho.append(iii)
-                            bs=False
+                            if co and 'sections' in data :
+                                for i in data['sections'] :
+                                    for j in i['epList'] :
+                                        if j['loaded']:
+                                            co=False
+                                            break
+                                        iii=iii+1
+                            if not co:
+                                cho.append(iii)
+                                bs=False
                     elif led>-1 and inp[0]=='l':
                         iii=1
                         co=True
@@ -1107,8 +1243,8 @@ def main(ip={}):
             if not ns:
                 print(lan['ERROR11'])#请使用-d <method>选择下载方式
                 return -1
-            inp=input(lan['INPUT12'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载
-            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<6:
+            inp=input(lan['INPUT12'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n7.仅封面图片下载
+            if inp[0].isnumeric() and ((int(inp[0])>0 and int(inp[0])<6) or int(inp[0])==7):
             	cho2=int(inp[0])
             	bs=False
         if cho2==1 or cho2==4 :
@@ -1122,12 +1258,12 @@ def main(ip={}):
                     exit()
         if cho2==2 or cho2==5 :
             for i in cho :
-                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se)
+                read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se,che)
                 if read==0 :
                     print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
                 else :
                     return -1
-        if cho2>2 :
+        if cho2>2 and cho2<6 :
             bs=True
             cho3=False
             if not ns:
@@ -1182,6 +1318,9 @@ def main(ip={}):
                 read=videodownload.epvideodownload(i,"https://www.bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip,ud)
                 if read==-5 or read==-6 :
                     return -1
+        if cho2==7 :
+            for i in cho:
+                videodownload.eppicdownload(i,data,section,ip,se)
     return 0
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])

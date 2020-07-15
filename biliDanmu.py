@@ -276,7 +276,7 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
                 print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
                 return -2
             return 0
-def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
+def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
     "全弹幕处理"
     ns=True
     if 's' in ip:
@@ -651,7 +651,10 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     elif t=='ss' :
         bs=True
         at2=False
-        pubt=data['mediaInfo']['time'][0:10]
+        if not che :
+            pubt=data['mediaInfo']['time'][0:10]
+        else :
+            pubt=biliTime.tostr2(c['time'])[0:10]
         fi=True
         jt=False
         if getset(se,'jt')==True :

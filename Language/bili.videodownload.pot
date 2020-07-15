@@ -162,3 +162,11 @@ msgstr ""
 msgctxt "OUTPUT22"
 msgid "Please use \"start.py\"."
 msgstr ""
+
+msgctxt "OUTPUT23"
+msgid "Cover image \"<filename>\" was downloaded complete."
+msgstr ""
+
+msgctxt "OUTPUT24"
+msgid "An error occurred when downloading cover image:"
+msgstr ""

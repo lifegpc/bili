@@ -32,7 +32,7 @@ msgid "AV/SS/EP/MD/BV number or link"
 msgstr ""
 
 msgctxt "O5"
-msgid "Download method: 1.barrage 2.all barrage from historical records 3.video 4.barrage and video 5.all barrage from historical records and video 6.subtitles only"
+msgid "Download method: 1.barrage 2.all barrage from historical records 3.video 4.barrage and video 5.all barrage from historical records and video 6.subtitles only 7.cover image only"
 msgstr ""
 
 msgctxt "O6"
@@ -253,4 +253,12 @@ msgstr ""
 
 msgctxt "O59"
 msgid "PS4. When you input Favorites, Channels, Uploaded Video links, in addition to the \"-i <input>\" and \"-p <number>\" parameters, other parameters will be used while downloading video."
+msgstr ""
+
+msgctxt "O60"
+msgid "Keep cover images when deleting useless files after merging."
+msgstr ""
+
+msgctxt "O61"
+msgid "Do not keep cover images when deleting useless files after merging."
 msgstr ""

@@ -215,3 +215,8 @@ msgid ""
 "Do you want to convert HTML to normal text while writing description of live"
 " record into file metadata?"
 msgstr "ライブレコードの説明文をファイルのメタデータに書きながら、HTMLを通常のテキストに変換したいですか？"
+
+msgctxt "INPUT30"
+msgid ""
+"Do you want to keep cover images when deleting useless files after merging?"
+msgstr "マージ後に無駄なファイルを削除するときにカバー画像を残しておきますか？"

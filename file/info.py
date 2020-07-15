@@ -74,7 +74,7 @@ def printinfo(o,m) :
         print('\t',end='')
         t=t+8
     print('%s\t%s\t%s\t%s\t%s' %(ftts(o['i']),ttos(o['a']),ttos(o['c']),ttos(o['m']),size(o['s'])))
-def geturlfe(uri):
+def geturlfe(uri) ->str:
     "获取网址中的文件扩展名"
     r=str(uri).split('?')
     r=r[0]
@@ -82,7 +82,7 @@ def geturlfe(uri):
     r=r[len(r)-1]
     return r
 def spfn(fn:str) -> (str,str):
-    "分离文件名"
+    "分离文件名为文件名和扩展名"
     r=fn.split('.')
     h=r[-1]
     s=""
@@ -95,7 +95,7 @@ def spfn(fn:str) -> (str,str):
             s=s+"."+i
     return s,h
 def spfln(f:str)->(str,str):
-    "分离完整文件名"
+    "分离完整文件名为路径和文件名"
     r=split(r'[\\/]',f)
     n=r[-1]
     s=""

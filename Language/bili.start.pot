@@ -20,7 +20,7 @@ msgid "It is recommended to setup program by runing \"settings.py\" in order to 
 msgstr ""
 
 msgctxt "INPUT1"
-msgid "Please enter the av/ss/ep/md/bv number (bv number needs start with BV) or link (Support Favorites, Channels, Uploaded Video and Small Video page from user page. Also support live records video link.):"
+msgid "Please enter the av/ss/ep/md/bv number (bv number needs start with BV) or link (Support Favorites, Channels, Uploaded Video and Small Video page from user page. Also support live records video and purchased courses' video link.):"
 msgstr ""
 
 msgctxt "ERROR1"
@@ -132,7 +132,7 @@ msgid "Do you want download with maximum quality (this will not ask for specific
 msgstr ""
 
 msgctxt "INPUT9"
-msgid "Please input the number before \".\" to choose download method:\n1.download barrage\n2.download all barrage from historical records (may needs lots of time)\n3.download video\n4.download barrage and video\n5.download all barrage from historical records and video\n6.download subtitles only"
+msgid "Please input the number before \".\" to choose download method:\n1.download barrage\n2.download all barrage from historical records (may needs lots of time)\n3.download video\n4.download barrage and video\n5.download all barrage from historical records and video\n6.download subtitles only\n7.download cover image only"
 msgstr ""
 
 msgctxt "OUTPUT9"
@@ -152,7 +152,7 @@ msgid "If you want to download the last viewed \"EP<number>\", please enter \"l\
 msgstr ""
 
 msgctxt "INPUT12"
-msgid "Please input the number before \".\" to choose download method:\n1.download barrage\n2.download all barrage from historical records (may needs lots of time)\n3.download video\n4.download barrage and video\n5.download all barrage from historical records and video"
+msgid "Please input the number before \".\" to choose download method:\n1.download barrage\n2.download all barrage from historical records (may needs lots of time)\n3.download video\n4.download barrage and video\n5.download all barrage from historical records and video\n7.download cover image only"
 msgstr ""
 
 msgctxt "OUTPUT10"
@@ -161,4 +161,8 @@ msgstr ""
 
 msgctxt "OUTPUT11"
 msgid "Please run \"start.py\"."
+msgstr ""
+
+msgctxt "OUTPUT12"
+msgid "Try to redirect to \"<link>\"."
 msgstr ""

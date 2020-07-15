@@ -241,4 +241,8 @@ if __name__=='__main__' :
     r=gk(se,'lrh')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'lrh',se)
+    print(f"{la['INPUT30']}{la['NTN']}")#合并完成后删除无用文件时是否保留封面图片？（不设置情况下为否）
+    r=gk(se,'bp')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
+    sk(ne,'bp',se)
     saveset(ne)
