@@ -860,10 +860,13 @@ def main(ip={}):
                     return 0
                 print(traceback.format_exc())
                 return -1
-            elif ss:
+            elif ss or ep:
                 if re.status_code==404 :
                     print('404 Not Found')
-                    return 0
+                    s=s.replace('bangumi','cheese')
+                    print(lan['OUTPUT12'].replace('<link>',s))#尝试重定向至"<link>"。
+                    ip['i']=s
+                    return main(ip)
                 print(traceback.format_exc())
                 return -1
             else :
