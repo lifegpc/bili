@@ -17,6 +17,9 @@ from json import loads,dumps
 from os.path import exists
 from os import remove
 from requests import Session
+from biliBv import enbv
+import sys
+from biliTime import tostr2
 def Myparser(s) :
     "解析普通AV视频信息"
     obj=loads(s)
@@ -166,3 +169,44 @@ def getset(d:dict,key:str) :
         return d[key]
     else :
         return None
+def parseche(d:dict) :
+    "解析下载课程"
+    r={}
+    r['che']=True #标识为下载课程
+    t=d['data']
+    m={}
+    m['id']=t['season_id']
+    m['ssId']=t['season_id']
+    m['title']=t['title']
+    m['jpTitle']=''
+    m['series']=t['title']
+    m['alias']=''
+    m['evaluate']=t['subtitle']
+    m['type']=''
+    m['cover']=t['cover']
+    e=[]
+    b=sys.maxsize #最早的时间
+    for i in t['episodes'] :
+        a={}
+        a['id']=i['id']
+        a['aid']=i['aid']
+        a['bvid']=enbv(int(i['aid']))
+        a['cid']=i['cid']
+        a['titleFormat']=f"P{i['index']}"
+        a['longTitle']=i['title']
+        a['i']=i['index']-1
+        a['time']=i['release_date']
+        if a['time']<b:
+            b=a['time']
+        e.append(a)
+    m['time']=tostr2(b)
+    r['mediaInfo']=m
+    r['epList']=e
+    if 'brief' in t:
+        c=[]
+        for i in t['brief']['img'] :
+            c.append(i['url'])
+        r['brief']=c
+    if 'user_status' in t and 'progress' in t['user_status'] :
+        r['led']=t['user_status']['progress']['last_ep_id']
+    return r

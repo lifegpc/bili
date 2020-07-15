@@ -1161,6 +1161,9 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
         return -2
 def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     """下载番剧等视频"""
+    che=False
+    if 'che' in data :
+        che=True
     ns=True
     if 's' in ip:
         ns=False
@@ -1192,7 +1195,10 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     if F:
         print("%s:%s"%(i['titleFormat'],i['longTitle']))
     fdir='%s%s'%(o,file.filtern('%s(SS%s)'%(data['mediaInfo']['title'],data['mediaInfo']['ssId'])))
-    url2='https://www.bilibili.com/bangumi/play/ep'+str(i['id'])
+    if che :
+        url2=f"https://www.bilibili.com/cheese/play/ep{i['id']}"
+    else :
+        url2='https://www.bilibili.com/bangumi/play/ep'+str(i['id'])
     if not os.path.exists(fdir):
         os.mkdir(fdir)
     r2=requests.Session()
@@ -1209,21 +1215,26 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
-    re=r2.get(url2)
-    re.encoding='utf8'
-    rs=search('__playinfo__=([^<]+)',re.text)
-    rs2=search('__PGC_USERSTATE__=([^<]+)',re.text)
-    if rs!=None :
-        re=json.loads(rs.groups()[0])
-    elif rs2!=None :
-        rs2=json.loads(rs2.groups()[0])
-        if 'dialog' in rs2:
-            print(rs2['dialog']['title'])
-        if rs2['area_limit']:
-            print(lan['ERROR7'])#有区域限制，请尝试使用代理。
-        return -2
+    if not che :
+        re=r2.get(url2)
+        re.encoding='utf8'
+        rs=search('__playinfo__=([^<]+)',re.text)
+        rs2=search('__PGC_USERSTATE__=([^<]+)',re.text)
+        if rs!=None :
+            re=json.loads(rs.groups()[0])
+        elif rs2!=None :
+            rs2=json.loads(rs2.groups()[0])
+            if 'dialog' in rs2:
+                print(rs2['dialog']['title'])
+            if rs2['area_limit']:
+                print(lan['ERROR7'])#有区域限制，请尝试使用代理。
+            return -2
+        else :
+            return -2
     else :
-        return -2
+        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=120&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=16&session=")
+        re.encoding='utf8'
+        re=re.json()
     if 'data' in re and 'dash' in re['data']:
         dash={'video':{},'audio':{}}
         vqd=re["data"]["accept_description"]
@@ -1247,14 +1258,19 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         bs=True #防止非大会员进入无限死循环
                     elif ud['vip']>0 :
                         bs=True #大会员一旦强制获取所有
-                    r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
-                    re=r2.get(url2)
-                    re.encoding='utf8'
-                    rs=search('__playinfo__=([^<]+)',re.text)
-                    if rs!=None :
-                        re=json.loads(rs.groups()[0])
+                    if not che:
+                        r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
+                        re=r2.get(url2)
+                        re.encoding='utf8'
+                        rs=search('__playinfo__=([^<]+)',re.text)
+                        if rs!=None :
+                            re=json.loads(rs.groups()[0])
+                        else :
+                            return -2
                     else :
-                        return -2
+                        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=16&session=")
+                        re.encoding='utf8'
+                        re=re.json()
                     if "data" in re and "dash" in re['data'] :
                         for j in re['data']['dash']['video'] :
                             if (str(j['id'])+j['codecs']) not in dash['video'] :
@@ -1266,7 +1282,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         break
                     else :
                         return -2
-        r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+        if not che:
+            r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
         for j in re['data']['dash']['audio']:
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
@@ -1559,15 +1576,16 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     bs2=True
                 else :
                     return -3
-        imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
-        imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
+        if not che:
+            imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
+            imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             nss=""
             imga=""
             if not ns:
                 nss=getnul()
-            if imgs==0:
+            if not che and imgs==0:
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             re=os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm)}\" -i \"{getfn2(i,1,fdir,vqs,hzm)}\" -metadata id=\"{data['mediaInfo']['id']}\" -metadata ssid=\"{data['mediaInfo']['ssId']}\" -metadata title=\"{bstr.f(data['mediaInfo']['title'])}-{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata series=\"{bstr.f(data['mediaInfo']['series'])}\" -metadata description=\"{bstr.f(data['mediaInfo']['evaluate'])}\" -metadata pubtime=\"{data['mediaInfo']['time']}\" -metadata atitle=\"{bstr.f(data['mediaInfo']['title'])}\" -metadata eptitle=\"{bstr.f(i['longTitle'])}\" -metadata titleformat=\"{bstr.f(i['titleFormat'])}\" -metadata epid=\"{i['id']}\" -metadata aid=\"{i['aid']}\" -metadata bvid=\"{i['bvid']}\" -metadata cid=\"{i['cid']}\" -metadata aq=\"{vqs[1]}\" -metadata vq=\"{vqs[0]}\"{imga} -c copy \"{filen}\"{nss}")
             de=False
@@ -1600,7 +1618,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if re==0 and de:
                 for j in[0,1]:
                     os.remove(getfn2(i,j,fdir,vqs,hzm))
-                if imgs==0 and not bp:
+                if not che and imgs==0 and not bp:
                     os.remove(imgf)
     elif 'data' in re and 'durl' in re['data'] :
         vq=re["data"]["quality"]
@@ -1613,14 +1631,19 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             j=0
             for l in avq :
                 if not l in durl :
-                    r2.cookies.set('CURRENT_QUALITY',str(l),domain='.bilibili.com',path='/')
-                    re=r2.get(url2)
-                    re.encoding='utf8'
-                    rs=search('__playinfo__=([^<]+)',re.text)
-                    if rs!=None:
-                        re=json.loads(rs.groups()[0])
+                    if not che :
+                        r2.cookies.set('CURRENT_QUALITY',str(l),domain='.bilibili.com',path='/')
+                        re=r2.get(url2)
+                        re.encoding='utf8'
+                        rs=search('__playinfo__=([^<]+)',re.text)
+                        if rs!=None:
+                            re=json.loads(rs.groups()[0])
+                        else :
+                            return -2
                     else :
-                        return -2
+                        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=16&session=")
+                        re.encoding='utf8'
+                        re=re.json()
                     durl[re["data"]['quality']]=re['data']['durl']
                 if ud['vip']<1 and (l>80 or l==74) :
                     avq,ii=delli(avq,l)
@@ -1870,8 +1893,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             return -3
                 com=com+k['size']
             j=j+1
-        imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
-        imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
+        if not che:
+            imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
+            imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt=int(time.time())
@@ -1879,7 +1903,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             imga=""
             if not ns:
                 nss=getnul()
-            if imgs==0:
+            if not che and imgs==0:
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             if len(durl)>1 :
                 te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt),'wt',encoding='utf8')
@@ -1927,7 +1951,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         j=j+1
                 else :
                     os.remove('%s.%s'%(filen,hzm))
-                if imgs==0 and not bp :
+                if not che and imgs==0 and not bp :
                     os.remove(imgf)
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(i['id'])),tt))
@@ -1953,6 +1977,12 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -1
     fdir=f"{o}{file.filtern('%s(SS%s)'%(data['mediaInfo']['title'],data['mediaInfo']['ssId']))}"#SS文件夹
+    try :
+        if not os.path.exists(fdir) :
+            mkdir(fdir)
+    except :
+        print(lan['ERROR1'].replace('<dirname>',fdir))#创建文件夹"<dirname>"失败。
+        return -1
     cf2=data['mediaInfo']['cover']
     fn2=f"{fdir}/cover.{file.geturlfe(cf2)}"
     if not os.path.exists(fn2) :
@@ -1965,6 +1995,13 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
                 print(lan['OUTPUT23'].replace('<filename>',fn2))#封面图片下载完成。
         else :
             print(f"{lan['OUTPUT24']}HTTP {re.status_code}")#下载封面图片时发生错误：
+    if 'che' in  data :
+        if 'brief' in data :
+            ii=1
+            for uri in data['brief'] :
+                chepicdownload(uri,r,fdir,ii,ns)
+                ii=ii+1
+        return 0
     cf=i['cover']
     if fn==None :
         fn=f"{fdir}/{file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],file.geturlfe(cf)))}"
@@ -2006,6 +2043,18 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
     else :
         print(f"{lan['OUTPUT24']}HTTP {re.status_code}")#下载封面图片时发生错误：
         return -2
+def chepicdownload(url:str,r:requests.session,fdir:str,i:int,ns:bool) :
+    fn=f"{fdir}/des{i}.{file.geturlfe(url)}"
+    if not os.path.exists(fn) :
+        re=r.get(url)
+        if re.status_code==200 :
+            f=open(fn,'wb')
+            f.write(re.content)
+            f.close()
+            if ns:
+                print(lan['OUTPUT23'].replace('<filename>',fn))#封面图片下载完成。
+        else :
+            print(f"{lan['OUTPUT24']}HTTP {re.status_code}")#下载封面图片时发生错误：
 def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     """下载小视频
     c 继续下载"""
