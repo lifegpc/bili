@@ -2,7 +2,6 @@
 - [BiliBili 弹幕/视频下载软件](#bilibili-弹幕视频下载软件)
   * [简介](#简介)
   * [依赖库](#依赖库)
-    + [其他](#其他)
   * [配置文件](#配置文件)
     + [cookies.json](#cookiesjson)
     + [settings.json](#settingsjson)
@@ -30,14 +29,9 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
 用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。  
 识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。
-### 其他
-程序目录下需要有相应系统版本的ChromeDriver。   
-~~没有ChromeDriver将无法进行登录操作（同理，由于手机平台没有ChromeDriver，也无法进行登录，但可以用[其他方法](#a)绕过）~~
 ## 配置文件
 ### cookies.json
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用以及下载720P及以上视频使用）   
-<a name='a'></a>**~~当某些平台无法登录时，可以在其他平台先登录，再将cookies.json复制到程序目录下。~~**  
-现在已经支持用户名和密码登录。
 
 ### settings.json
 该文件保存了一些默认操作的设置，可以运行**setsettings.py**来设置。
@@ -79,4 +73,5 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 ### 登录时发生错误（使用ChromeDriver时）
 这是由于你的电脑未安装Chrome或者Chrome版本与Chrome Driver版本不一致导致的，请安装Chrome或下载匹配Chrome版本的Chrome Driver。  
 **可以到这里[下载](https://chromedriver.chromium.org/downloads)Chrome Driver的其他版本**  
-具体的错误提示可以参考[#9](https://github.com/lifegpc/bili/issues/9)和[#11](https://github.com/lifegpc/bili/issues/11)。
+具体的错误提示可以参考[#9](https://github.com/lifegpc/bili/issues/9)和[#11](https://github.com/lifegpc/bili/issues/11)。  
+现在已经支持用户名和密码登录。
