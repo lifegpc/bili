@@ -930,7 +930,7 @@ def main(ip={}):
         parser=HTMLParser.Myparser()
         parser.feed(re.text)
         try :
-            vd=json.loads(parser.videodata)
+            vd=json.loads(parser.videodata,strict=False)
         except Exception:
             if av:
                 re=search(r"av([0-9]+)",s,I).groups()[0]
