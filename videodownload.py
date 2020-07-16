@@ -395,9 +395,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
         else :
             if sv:
-                filen='%s%s'%(o,file.filtern('%s-%s(AV%s,%s,P%s,%s,%s)'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs)))
+                filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']},{vqs})"))
             else :
-                filen='%s%s'%(o,file.filtern('%s-%s(AV%s,%s,P%s,%s)'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
+                filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']})"))
         ff=True
         if JSONParser.getset(se,'nf')==True :
             ff=False
@@ -815,9 +815,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s).mkv'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
         else :
             if sv:
-                filen='%s%s'%(o,file.filtern('%s-%s(AV%s,%s,P%s,%s,%s,%s).mkv'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs[0],vqs[1])))
+                filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']},{vqs[0]},{vqs[1]}).mkv"))
             else :
-                filen='%s%s'%(o,file.filtern('%s-%s(AV%s,%s,P%s,%s).mkv'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
+                filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']}).mkv"))
         hzm=[file.geturlfe(dash['video']['base_url']),file.geturlfe(dash['audio']['base_url'])]
         ff=True
         if JSONParser.getset(se,'nf')==True :
@@ -2662,7 +2662,7 @@ def getfn(i,i2,data,vqs,hzm,o):
     if data['videos']==1 :
         return '%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s,%s).%s'%(data['title'],data['aid'],data['bvid'],i2,data['page'][i2-1]['cid'],vqs[i],hzm[i])))
     else :
-        return '%s%s'%(o,file.filtern('%s-%s(AV%s,%s,P%s,%s,%s).%s'%(data['title'],data['page'][i2-1]['part'],data['aid'],data['bvid'],i2,data['page'][i2-1]['cid'],vqs[i],hzm[i])))
+        return '%s%s'%(o,file.filtern(f"{data['title']}-{i2}.{data['page'][i2-1]['part']}(AV{data['aid']},{data['bvid']},P{i2},{data['page'][i2-1]['cid']},{vqs[i]}).{hzm[i]}"))
 def getfn2(i,i2,f,vqs,hzm) :
     if i['s']=='e' :
         return '%s/%s'%(f,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
