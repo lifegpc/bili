@@ -106,10 +106,10 @@ def gopt(args,d:bool=False) :
         print(re)
     rr=re[0]
     r={}
+    h=False
     for i in rr:
         if i[0]=='-h' or i[0]=='-?' or i[0]=='--help':
-            ph()
-            exit()
+            h=True
         if i[0]=='-i' and not 'i' in r:
             r['i']=i[1]
         if i[0]=='-d' and not 'd' in r and i[1].isnumeric() and int(i[1])>0 and int(i[1])<8 :
@@ -291,6 +291,11 @@ def gopt(args,d:bool=False) :
             r['bp']=True
         if i[0]=='--nbp' and not 'bp' in r:
             r['bp']=False
+    if h:
+        global la
+        la=getdict('command',getlan(se,r))
+        ph()
+        exit()
     for i in re[1] :
         if i.lower()=="show":
             prc()
