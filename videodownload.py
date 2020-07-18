@@ -2577,23 +2577,22 @@ def lrvideodownload(data,r,c,c3,se,ip):
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['rid'])),tt))
 def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
-    s=0
     if d :
         print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件
     else :
         print(lan['OUTPUT2'])#正在开始下载
     if os.path.exists(fn) :
         fsize=file.getinfo({'a':fn,'f':''})['s']
-        if fsize!=size :
+        if fsize!=size and size!=-1:
             s=lan['OUTPUT19']#(文件大小不一致，建议覆盖)
         else :
             s=""
         bs=True
         fg=False
-        if d2 and fsize==size :
+        if d2 and fsize==size and size!=-1 :
             print(lan['OUTPUT20'])#文件大小一致，跳过下载
             return 0
-        if d2 and fsize!=size :
+        if d2 and fsize!=size and size!=-1 :
             re.close()
             r2=requests.session()
             r2.headers=copydict(r.headers)
@@ -2618,6 +2617,9 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                 else :
                     fg=False
                     bs=False
+        if size==-1 :
+            fg=True
+            bs=False
         while bs and not d2 :
             inp=input(f"{lan['INPUT1'].replace('<filename>',fn)}{s}(y/n)")#"%s"文件已存在，是否覆盖？
             if len(inp)>0 :
@@ -2626,7 +2628,7 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
-        if not d2 and fg :
+        if (not d2 or size==-1 )and fg :
             try :
                 os.remove(fn)
             except :
@@ -2638,6 +2640,7 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             return 0
     t1=time.time()
     t2=time.time()
+    s=0
     with open(fn,'ab') as f :
         for c in re.iter_content(chunk_size=1024) :
             if c :
@@ -2653,7 +2656,7 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                     print('\r (%s/%s)%s(%sB)/%s(%sB)\t%.2f%%\t%s(%sB)/%s(%sB)\t%.2f%%'%(i,n,file.info.size(s),s,file.info.size(size),size,s/size*100,file.info.size(s+pre),s+pre,file.info.size(durz),durz,(s+pre)/durz*100),end='',flush=True)
                     t2=t1
     print()
-    if s!= size :
+    if s!= size and size!=-1 :
         print(lan['ERROR9'])#文件大小不匹配
         return -2
     f.close()
@@ -2674,7 +2677,10 @@ def streamgetlength(r:requests.Session,uri):
         bs=False
         try :
             re=r.get(uri,stream=True)
-            a=int(re.headers.get('Content-Length'))
+            if re.headers.get('Content-Length')!=None :
+                a=int(re.headers.get('Content-Length'))
+            else :
+                a=-1#无法获取长度，什么神必服务器
             re.close()
             return a
         except :
