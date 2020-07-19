@@ -58,6 +58,9 @@ msgid ""
 "select video which match the EP number you entered. Use \"l\" to select the "
 "last viewed EP video.)"
 msgstr ""
+"ダウンロードしたい動画・パーツの数です。(2つの数字の間は \",\" で区切ることができます。2つの数字を区切って \"-\" "
+"で範囲を選択します。（例：1-25）  \"a\" ですべての動画・パーツを選択します。 \"b\" で入力したEP番号と一致する動画を選択します。 "
+"\"l\" で最後に見たエピソードビデオを選択します。)"
 
 msgctxt "O8"
 msgid "Enable/Disable download with maximum quality."
@@ -345,8 +348,8 @@ msgstr "マージ後に無駄なファイルを削除する際にカバー画像
 
 msgctxt "O62"
 msgid "Add av/bv number etc. to the file name."
-msgstr ""
+msgstr "ファイル名にav/bv番号などを追加する。"
 
 msgctxt "O63"
 msgid "Do not add av/bv number etc. to the file name."
-msgstr ""
+msgstr "ファイル名にav/bv番号などを追加しない。"
