@@ -262,6 +262,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         nbd=False
     if 'bd' in ip:
         nbd=not ip['bd']
+    fin=True
+    if JSONParser.getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
@@ -389,12 +394,16 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sv' in ip:
             sv=ip['sv']
         if data['videos']==1 :
-            if sv:
+            if not fin:
+                filen=f"{o}{file.filtern(data['title'])}"
+            elif sv:
                 filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs)))
             else :
                 filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
         else :
-            if sv:
+            if not fin :
+                filen=f"{o}{file.filtern(data['title'])}-{i}.{file.filtern(data['page'][i-1]['part'])}"
+            elif sv:
                 filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']},{vqs})"))
             else :
                 filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']})"))
@@ -809,12 +818,16 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sv' in ip:
             sv=ip['sv']
         if data['videos']==1 :
-            if sv:
+            if not fin:
+                filen=f"{o}{file.filtern(data['title'])}.mkv"
+            elif sv:
                 filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s,%s,%s).mkv'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'],vqs[0],vqs[1])))
             else :
                 filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s).mkv'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
         else :
-            if sv:
+            if not fin:
+                filen=f"{o}{file.filtern(data['title'])}-{i}.{file.filtern(data['page'][i-1]['part'])}.mkv"
+            elif sv:
                 filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']},{vqs[0]},{vqs[1]}).mkv"))
             else :
                 filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']}).mkv"))
@@ -878,15 +891,15 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     else :
                         ab=False
                 if ab:
-                    read=dwaria2(r2,getfn(0,i,data,vqs,hzm,o),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
+                    read=dwaria2(r2,getfn(0,i,data,vqs,hzm,o,fin),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
                 else :
-                    read=dwaria2(r2,getfn(0,i,data,vqs,hzm,o),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
+                    read=dwaria2(r2,getfn(0,i,data,vqs,hzm,o,fin),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
                 if read==-3 :
                     print(lan['ERROR4'])#aria2c 参数错误
                     return -4
             else :
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm,o),dash['video']['size'],c3,1,2,True,durz,0)
+                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn(0,i,data,vqs,hzm,o,fin),dash['video']['size'],c3,1,2,True,durz,0)
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -916,8 +929,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    if os.path.exists(getfn(0,i,data,vqs,hzm,o)):
-                        os.remove(getfn(0,i,data,vqs,hzm,o))
+                    if os.path.exists(getfn(0,i,data,vqs,hzm,o,fin)):
+                        os.remove(getfn(0,i,data,vqs,hzm,o,fin))
                     bs2=True
                 else :
                     return -3
@@ -942,15 +955,15 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     else :
                         ab=False
                 if ab:
-                    read=dwaria2(r2,getfn(1,i,data,vqs,hzm,o),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
+                    read=dwaria2(r2,getfn(1,i,data,vqs,hzm,o,fin),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
                 else :
-                    read=dwaria2(r2,getfn(1,i,data,vqs,hzm,o),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
+                    read=dwaria2(r2,getfn(1,i,data,vqs,hzm,o,fin),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
                 if read==-3 :
                     print(lan['ERROR4'])#aria2c 参数错误
                     return -4
             else :
                 re=r2.get(dash['audio']['base_url'],stream=True)
-                read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm,o),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+                read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn(1,i,data,vqs,hzm,o,fin),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
             if read==-1:
                 return -1
             elif read==-2 :
@@ -980,8 +993,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    if os.path.exists(getfn(1,i,data,vqs,hzm,o)):
-                        os.remove(getfn(1,i,data,vqs,hzm,o))
+                    if os.path.exists(getfn(1,i,data,vqs,hzm,o,fin)):
+                        os.remove(getfn(1,i,data,vqs,hzm,o,fin))
                     bs2=True
                 else :
                     return -3
@@ -1002,7 +1015,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 sa,sb=ffinputstr(data['sub'],2)
             if imgs==0:
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
-            re=os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o)}\" -i \"{getfn(1,i,data,vqs,hzm,o)}\"{sa} -metadata title=\"{bstr.f(data['title'])}-{bstr.f(data['page'][i-1]['part'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs[0]}\" -metadata aq=\"{vqs[1]}\"{sb}{imga} -c:s copy -c copy \"{filen}\"{nss}")
+            re=os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin)}\"{sa} -metadata title=\"{bstr.f(data['title'])}-{bstr.f(data['page'][i-1]['part'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs[0]}\" -metadata aq=\"{vqs[1]}\"{sb}{imga} -c:s copy -c copy \"{filen}\"{nss}")
             de=False
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
@@ -1032,7 +1045,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             bs=False
             if re==0 and de:
                 for j in[0,1]:
-                    os.remove(getfn(j,i,data,vqs,hzm,o))
+                    os.remove(getfn(j,i,data,vqs,hzm,o,fin))
                 if 'sub' in data and nbd:
                     for j in data['sub'] :
                         os.remove(j['fn'])
@@ -1061,6 +1074,11 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
     except :
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -1
+    fin=True
+    if JSONParser.getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
@@ -1084,9 +1102,15 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
         rs2=json.loads(rs2.groups()[0])
         JSONParser2.getsub(rs2,data)
         if data['videos']==1 :
-            filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
+            if fin:
+                filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
+            else :
+                filen=f"{o}{file.filtern(data['title'])}"
         else :
-            filen='%s%s'%(o,file.filtern('%s-%s(AV%s,%s,P%s,%s)'%(data['title'],data['page'][i-1]['part'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
+            if fin:
+                filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']})"))
+            else :
+                filen=f"{o}{file.filtern(data['title'])}-{i}.{file.filtern(data['page'][i-1]['part'])}"
         if 'sub' in data and len(data['sub'])>0:
             for s in data['sub'] :
                 downsub(r2,filen+".mkv",s,ip,se,True,i)
@@ -1118,8 +1142,16 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
     except :
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -1
+    fin=True
+    if JSONParser.getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     if fn==None :
-        te=file.filtern(f'{data["title"]}(AV{data["aid"]},{data["bvid"]}).{file.geturlfe(data["pic"])}')
+        if fin:
+            te=file.filtern(f'{data["title"]}(AV{data["aid"]},{data["bvid"]}).{file.geturlfe(data["pic"])}')
+        else :
+            te=file.filtern(f"{data['title']}.{file.geturlfe(data['pic'])}")
         fn=f"{o}{te}"
     if os.path.exists(fn) :
         fg=False
@@ -1201,6 +1233,11 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         url2='https://www.bilibili.com/bangumi/play/ep'+str(i['id'])
     if not os.path.exists(fdir):
         os.mkdir(fdir)
+    fin=True
+    if JSONParser.getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
@@ -1400,12 +1437,16 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         if 'sv' in ip:
             sv=ip['sv']
         if i['s']=='e' :
-            if sv:
+            if not fin:
+                filen='%s/%s'%(fdir,file.filtern(f"{i['i']+1}.{i['longTitle']}.mkv"))
+            elif sv:
                 filen='%s/%s'%(fdir,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s,%s).mkv'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[0],vqs[1])))
             else :
                 filen='%s/%s'%(fdir,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).mkv'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'])))
         else :
-            if sv:
+            if not fin:
+                filen='%s/%s'%(fdir,file.filtern(f"{i['title']}{i['i']+1}.{i['longTitle']}.mkv"))
+            elif sv:
                 filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s,%s,%s).mkv'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[0],vqs[1])))
             else :
                 filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).mkv'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'])))
@@ -1469,15 +1510,15 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     else :
                         ab=False
                 if ab:
-                    read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
+                    read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm,fin),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
                 else :
-                    read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
+                    read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm,fin),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
                 if read==-3 :
                     print(lan['ERROR4'])#aria2c 参数错误
                     return -4
             else :
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm),dash['video']['size'],c3,1,2,True,durz,0)
+                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm,fin),dash['video']['size'],c3,1,2,True,durz,0)
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -1507,8 +1548,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    if os.path.exists(getfn2(i,0,fdir,vqs,hzm)):
-                        os.remove(getfn2(i,0,fdir,vqs,hzm))
+                    if os.path.exists(getfn2(i,0,fdir,vqs,hzm,fin)):
+                        os.remove(getfn2(i,0,fdir,vqs,hzm,fin))
                     bs2=True
                 else :
                     return -3
@@ -1533,15 +1574,15 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     else :
                         ab=False
                 if ab:
-                    read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
+                    read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm,fin),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
                 else :
-                    read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
+                    read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm,fin),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
                 if read==-3 :
                     print(lan['ERROR4'])#aria2c 参数错误
                     return -4
             else :
                 re=r2.get(dash['audio']['base_url'],stream=True)
-                read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+                read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm,fin),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -1571,8 +1612,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         elif inp[0].lower()=='n' :
                             bs=False
                 if rc :
-                    if os.path.exists(getfn2(i,1,fdir,vqs,hzm)):
-                        os.remove(getfn2(i,1,fdir,vqs,hzm))
+                    if os.path.exists(getfn2(i,1,fdir,vqs,hzm,fin)):
+                        os.remove(getfn2(i,1,fdir,vqs,hzm,fin))
                     bs2=True
                 else :
                     return -3
@@ -1587,7 +1628,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 nss=getnul()
             if not che and imgs==0:
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
-            re=os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm)}\" -i \"{getfn2(i,1,fdir,vqs,hzm)}\" -metadata id=\"{data['mediaInfo']['id']}\" -metadata ssid=\"{data['mediaInfo']['ssId']}\" -metadata title=\"{bstr.f(data['mediaInfo']['title'])}-{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata series=\"{bstr.f(data['mediaInfo']['series'])}\" -metadata description=\"{bstr.f(data['mediaInfo']['evaluate'])}\" -metadata pubtime=\"{data['mediaInfo']['time']}\" -metadata atitle=\"{bstr.f(data['mediaInfo']['title'])}\" -metadata eptitle=\"{bstr.f(i['longTitle'])}\" -metadata titleformat=\"{bstr.f(i['titleFormat'])}\" -metadata epid=\"{i['id']}\" -metadata aid=\"{i['aid']}\" -metadata bvid=\"{i['bvid']}\" -metadata cid=\"{i['cid']}\" -metadata aq=\"{vqs[1]}\" -metadata vq=\"{vqs[0]}\"{imga} -c copy \"{filen}\"{nss}")
+            re=os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -metadata id=\"{data['mediaInfo']['id']}\" -metadata ssid=\"{data['mediaInfo']['ssId']}\" -metadata title=\"{bstr.f(data['mediaInfo']['title'])}-{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata series=\"{bstr.f(data['mediaInfo']['series'])}\" -metadata description=\"{bstr.f(data['mediaInfo']['evaluate'])}\" -metadata pubtime=\"{data['mediaInfo']['time']}\" -metadata atitle=\"{bstr.f(data['mediaInfo']['title'])}\" -metadata eptitle=\"{bstr.f(i['longTitle'])}\" -metadata titleformat=\"{bstr.f(i['titleFormat'])}\" -metadata epid=\"{i['id']}\" -metadata aid=\"{i['aid']}\" -metadata bvid=\"{i['bvid']}\" -metadata cid=\"{i['cid']}\" -metadata aq=\"{vqs[1]}\" -metadata vq=\"{vqs[0]}\"{imga} -c copy \"{filen}\"{nss}")
             de=False
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
@@ -1617,7 +1658,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             bs=False
             if re==0 and de:
                 for j in[0,1]:
-                    os.remove(getfn2(i,j,fdir,vqs,hzm))
+                    os.remove(getfn2(i,j,fdir,vqs,hzm,fin))
                 if not che and imgs==0 and not bp:
                     os.remove(imgf)
     elif 'data' in re and 'durl' in re['data'] :
@@ -1702,12 +1743,16 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         if 'sv' in ip:
             sv=ip['sv']
         if i['s']=='e' :
-            if sv:
+            if not fin:
+                filen='%s/%s'%(fdir,file.filtern(f"{i['i']+1}{i['longTitle']}"))
+            elif sv:
                 filen='%s/%s'%(fdir,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s)'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs)))
             else :
                 filen='%s/%s'%(fdir,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s)'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'])))
         else :
-            if sv:
+            if not fin:
+                filen='%s/%s'%(fdir,file.filtern(f"{i['title']}{i['i']+1}.{i['longTitle']}"))
+            elif sv:
                 filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s,%s)'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs)))
             else :
                 filen='%s/%s'%(fdir,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s)'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'])))
@@ -1983,6 +2028,11 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
     except :
         print(lan['ERROR1'].replace('<dirname>',fdir))#创建文件夹"<dirname>"失败。
         return -1
+    fin=True
+    if JSONParser.getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     cf2=data['mediaInfo']['cover']
     fn2=f"{fdir}/cover.{file.geturlfe(cf2)}"
     if not os.path.exists(fn2) :
@@ -2004,7 +2054,10 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
         return 0
     cf=i['cover']
     if fn==None :
-        fn=f"{fdir}/{file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],file.geturlfe(cf)))}"
+        if fin:
+            fn=f"{fdir}/{file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],file.geturlfe(cf)))}"
+        else :
+            fn=f"{fdir}/{file.filtern('%s.%s.%s'%(i['i']+1,i['longTitle'],file.geturlfe(cf)))}"
     if os.path.exists(fn) :
         fg=False
         bs=True
@@ -2081,6 +2134,11 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     F=False
     if 'F' in ip:
         F=True
+    fin=True
+    if JSONParser.getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     r2=requests.session()
     r2.headers=copydict(r.headers)
     r2.proxies=r.proxies
@@ -2110,7 +2168,9 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
             sn=i['description'][0:20]
         else :
             sn=i['description']
-    if sv:
+    if not fin:
+        filen=f"{o}{file.filtern(i['name'])}-{file.filtern(sn)}(小视频)"
+    elif sv:
         filen='%s%s'%(o,file.filtern('%s-%s(小视频,ID%s,UID%s,%sx%s)'%(i['name'],sn,i['id'],i['uid'],i['width'],i['height'])))
     else :
         filen='%s%s'%(o,file.filtern('%s-%s(小视频,ID%s,UID%s)'%(i['name'],sn,i['id'],i['uid'])))
@@ -2289,6 +2349,11 @@ def lrvideodownload(data,r,c,c3,se,ip):
     except :
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -5
+    fin=True
+    if JSONParser.getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
@@ -2329,7 +2394,9 @@ def lrvideodownload(data,r,c,c3,se,ip):
             sv=False
         if 'sv' in ip:
             sv=ip['sv']
-        if sv:
+        if not fin:
+            filen=f"{o}{file.filtern(data['title'])}"
+        elif sv:
             filen='%s%s'%(o,file.filtern('%s(%s,%s,%s)'%(data['title'],data['rid'],data['roomid'],vqs)))
         else :
             filen='%s%s'%(o,file.filtern('%s(%s,%s)'%(data['title'],data['rid'],data['roomid'])))
@@ -2577,23 +2644,22 @@ def lrvideodownload(data,r,c,c3,se,ip):
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['rid'])),tt))
 def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
-    s=0
     if d :
         print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件
     else :
         print(lan['OUTPUT2'])#正在开始下载
     if os.path.exists(fn) :
         fsize=file.getinfo({'a':fn,'f':''})['s']
-        if fsize!=size :
+        if fsize!=size and size!=-1:
             s=lan['OUTPUT19']#(文件大小不一致，建议覆盖)
         else :
             s=""
         bs=True
         fg=False
-        if d2 and fsize==size :
+        if d2 and fsize==size and size!=-1 :
             print(lan['OUTPUT20'])#文件大小一致，跳过下载
             return 0
-        if d2 and fsize!=size :
+        if d2 and fsize!=size and size!=-1 :
             re.close()
             r2=requests.session()
             r2.headers=copydict(r.headers)
@@ -2618,6 +2684,9 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                 else :
                     fg=False
                     bs=False
+        if size==-1 :
+            fg=True
+            bs=False
         while bs and not d2 :
             inp=input(f"{lan['INPUT1'].replace('<filename>',fn)}{s}(y/n)")#"%s"文件已存在，是否覆盖？
             if len(inp)>0 :
@@ -2626,7 +2695,7 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
-        if not d2 and fg :
+        if (not d2 or size==-1 )and fg :
             try :
                 os.remove(fn)
             except :
@@ -2638,6 +2707,7 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             return 0
     t1=time.time()
     t2=time.time()
+    s=0
     with open(fn,'ab') as f :
         for c in re.iter_content(chunk_size=1024) :
             if c :
@@ -2653,28 +2723,43 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                     print('\r (%s/%s)%s(%sB)/%s(%sB)\t%.2f%%\t%s(%sB)/%s(%sB)\t%.2f%%'%(i,n,file.info.size(s),s,file.info.size(size),size,s/size*100,file.info.size(s+pre),s+pre,file.info.size(durz),durz,(s+pre)/durz*100),end='',flush=True)
                     t2=t1
     print()
-    if s!= size :
+    if s!= size and size!=-1 :
         print(lan['ERROR9'])#文件大小不匹配
         return -2
     f.close()
     return 0
-def getfn(i,i2,data,vqs,hzm,o):
+def getfn(i,i2,data,vqs,hzm,o,fin):
     if data['videos']==1 :
-        return '%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s,%s).%s'%(data['title'],data['aid'],data['bvid'],i2,data['page'][i2-1]['cid'],vqs[i],hzm[i])))
+        if fin:
+            return '%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s,%s).%s'%(data['title'],data['aid'],data['bvid'],i2,data['page'][i2-1]['cid'],vqs[i],hzm[i])))
+        else :
+            return f"{o}{file.filtern(data['title'])}({file.filtern(vqs[i])}).{hzm[i]}"
     else :
-        return '%s%s'%(o,file.filtern(f"{data['title']}-{i2}.{data['page'][i2-1]['part']}(AV{data['aid']},{data['bvid']},P{i2},{data['page'][i2-1]['cid']},{vqs[i]}).{hzm[i]}"))
-def getfn2(i,i2,f,vqs,hzm) :
+        if fin:
+            return '%s%s'%(o,file.filtern(f"{data['title']}-{i2}.{data['page'][i2-1]['part']}(AV{data['aid']},{data['bvid']},P{i2},{data['page'][i2-1]['cid']},{vqs[i]}).{hzm[i]}"))
+        else :
+            return f"{o}{file.filtern(data['title'])}-{i2}.{file.filtern(data['page'][i2-1]['part'])}({file.filtern(vqs[i])}).{hzm[i]}"
+def getfn2(i,i2,f,vqs,hzm,fin) :
     if i['s']=='e' :
-        return '%s/%s'%(f,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
+        if fin:
+            return '%s/%s'%(f,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
+        else :
+            return f"{f}/{i['i']+1}.{file.filtern(i['longTitle'])}({file.filtern(vqs[i2])}).{hzm[i2]}"
     else :
-        return '%s/%s'%(f,file.filtern('%s.%s(%s%s,AV%s,%s,ID%s,%s,%s).%s'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
+        if fin:
+            return '%s/%s'%(f,file.filtern('%s.%s(%s%s,AV%s,%s,ID%s,%s,%s).%s'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
+        else :
+            return f"{f}/{file.filtern(i['title'])}{i['i']+1}.{file.filtern(i['longTitle'])}({file.filtern(vqs[i2])}).{hzm[i2]}"
 def streamgetlength(r:requests.Session,uri):
     bs=True
     while bs:
         bs=False
         try :
             re=r.get(uri,stream=True)
-            a=int(re.headers.get('Content-Length'))
+            if re.headers.get('Content-Length')!=None :
+                a=int(re.headers.get('Content-Length'))
+            else :
+                a=-1#无法获取长度，什么神必服务器
             re.close()
             return a
         except :

@@ -245,4 +245,8 @@ if __name__=='__main__' :
     r=gk(se,'bp')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'bp',se)
+    print(f"{la['INPUT31']}{la['NTY']}")#是否将AV/BV号等放入文件名？（不设置情况下为是）
+    r=gk(se,'in')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
+    sk(ne,'in',se)
     saveset(ne)

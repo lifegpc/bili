@@ -81,12 +81,23 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     except:
         print(lan['ERROR3'].replace('<dirname>',"Temp"))#创建Temp文件夹失败
         return -3
+    fin=True
+    if getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     if t=='av' :
         d=biliDanmuDown.downloadn(data['page'][c-1]['cid'],r)
         if data['videos'] ==1 :
-            filen=o+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            if fin:
+                filen=o+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            else :
+                filen=f"{o}{file.filtern(data['title'])}.xml"
         else :
-            filen=o+file.filtern(data['title']+'-'+f"{c}."+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            if fin:
+                filen=o+file.filtern(data['title']+'-'+f"{c}."+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            else :
+                filen=f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
         if d==-1 :
             print(lan['ERROR1'])#网络错误
             exit()
@@ -185,9 +196,15 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             print(lan['ERROR3'].replace('<dirname>',pat))#创建文件夹<dirname>失败。
             return -3
         if c['s']=='e' :
-            filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
+            if fin:
+                filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
+            else :
+                filen='%s/%s'%(pat,file.filtern(f"{c['i']+1}.{c['longTitle']}.xml"))
         else :
-            filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
+            if fin:
+                filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
+            else :
+                filen='%s/%s'%(pat,file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
         if d==-1 :
             print(lan['ERROR1'])#网络错误！
             exit()
@@ -299,6 +316,11 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
     except:
         print(lan['ERROR3'].replace('<dirname>',"Temp"))#创建Temp文件夹失败
         return -1
+    fin=True
+    if getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
     if t=='av' :
         bs=True
         at2=False
@@ -325,9 +347,15 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                 at=1
                 bs=False
         if data['videos'] ==1 :
-            filen=o+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            if fin:
+                filen=o+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            else :
+                filen=f"{o}{file.filtern(data['title'])}.xml"
         else :
-            filen=o+file.filtern(data['title']+'-'+f"{c}."+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            if fin:
+                filen=o+file.filtern(data['title']+'-'+f"{c}."+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+            else :
+                filen=f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
         if exists(filen) :
             fg=False
             bs=True
@@ -699,9 +727,15 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
             print(lan['ERROR3'].replace('<dirname>',pat))#创建文件夹<dirname>失败。
             return -1
         if c['s']=='e' :
-            filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
+            if fin :
+                filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
+            else :
+                filen='%s/%s'%(pat,file.filtern(f"{c['i']+1}.{c['longTitle']}.xml"))
         else :
-            filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
+            if fin:
+                filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
+            else :
+                filen='%s/%s'%(pat,file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
         if exists(filen) :
             fg=False
             bs=True

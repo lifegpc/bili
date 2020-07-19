@@ -56,7 +56,7 @@ msgid "An error occurred when parsing md number page."
 msgstr ""
 
 msgctxt "INPUT3"
-msgid "Please enter the number of the favorite you want to choose (You can use \",\" to separate each two numbers. If you want to select all favorites, please enter \"a\".):"
+msgid "Please enter the number of the favorite you want to choose (You can use \",\" to separate each two numbers. Use \"-\" to separate each two numbers to select a range.(e.g. 1-25) If you want to select all favorites, please enter \"a\".):"
 msgstr ""
 
 msgctxt "ERROR6"
@@ -80,7 +80,7 @@ msgid "The count of video in list is not equal to the estimated count which from
 msgstr ""
 
 msgctxt "OUTPUT4"
-msgid "Please enter the number of the video you want to choose (You can use \",\" to separate each two numbers. If you want to select all videos, please enter \"a\".):"
+msgid "Please enter the number of the video you want to choose (You can use \",\" to separate each two numbers. Use \"-\" to separate each two numbers to select a range.(e.g. 1-25) If you want to select all videos, please enter \"a\".):"
 msgstr ""
 
 msgctxt "ERROR9"
@@ -104,7 +104,7 @@ msgid "An error occurred when reading the file: \"cookies.json\"."
 msgstr ""
 
 msgctxt "INPUT5"
-msgid "Please enter the number of the channel you want to choose (You can use \",\" to separate each two numbers. If you want to select all channels, please enter \"a\".):"
+msgid "Please enter the number of the channel you want to choose (You can use \",\" to separate each two numbers. Use \"-\" to separate each two numbers to select a range.(e.g. 1-25) If you want to select all channels, please enter \"a\".):"
 msgstr ""
 
 msgctxt "OUTPUT7"

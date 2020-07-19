@@ -104,7 +104,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -225,7 +225,7 @@ def main(ip={}):
                 ep=True
                 che=True
                 epid=int(re[38])
-            elif re[39]:
+            elif re[39] or re[40]:
                 chel=True
             else :
                 print(f'{lan["ERROR2"]}')
@@ -373,7 +373,20 @@ def main(ip={}):
                                     if i.isnumeric() and int(i)>0 and int(i)<=dc and (not (int(i) in cho)) :
                                         cho.append(int(i))
                                     else :
-                                        bb=False
+                                        rrs=search(r"([0-9]+)-([0-9]+)",i)
+                                        if rrs!=None :
+                                            rrs=rrs.groups()
+                                            i1=int(rrs[0])
+                                            i2=int(rrs[1])
+                                            if i2<i1 :
+                                                tt=i1
+                                                i1=i2
+                                                i2=tt
+                                            for i in range(i1,i2+1) :
+                                                if i>0 and i<=dc and (not (i in cho)):
+                                                    cho.append(i)
+                                        else :
+                                            bb=False
                                 if bb :
                                     bs=False
                                     for i in cho :
@@ -437,7 +450,20 @@ def main(ip={}):
                     if i.isnumeric() and int(i)>0 and int(i)<=pli['count'] and (not (int(i) in cho)) :
                         cho.append(int(i))
                     else :
-                        bb=False
+                        rrs=search(r"([0-9]+)-([0-9]+)",i)
+                        if rrs!=None :
+                            rrs=rrs.groups()
+                            i1=int(rrs[0])
+                            i2=int(rrs[1])
+                            if i2<i1 :
+                                tt=i1
+                                i1=i2
+                                i2=tt
+                            for i in range(i1,i2+1) :
+                                if i>0 and i<=pli['count'] and (not (i in cho)):
+                                    cho.append(i)
+                        else :
+                            bb=False
                 if bb :
                     bs=False
                     for i in cho :
@@ -521,7 +547,20 @@ def main(ip={}):
                         if i.isnumeric() and int(i)>0 and int(i)<=len(chl) and (not (int(i) in cho)) :
                             cho.append(int(i))
                         else :
-                            bb=False
+                            rrs=search(r"([0-9]+)-([0-9]+)",i)
+                            if rrs!=None :
+                                rrs=rrs.groups()
+                                i1=int(rrs[0])
+                                i2=int(rrs[1])
+                                if i2<i1 :
+                                    tt=i1
+                                    i1=i2
+                                    i2=tt
+                                for i in range(i1,i2+1) :
+                                    if i>0 and i<=len(chl) and (not (i in cho)):
+                                        cho.append(i)
+                            else :
+                                bb=False
                     if bb :
                         bs=False
                         for i in cho :
@@ -579,7 +618,20 @@ def main(ip={}):
                     if i.isnumeric() and int(i)>0 and int(i)<=chi['count'] and (not (int(i) in cho)) :
                         cho.append(int(i))
                     else :
-                        bb=False
+                        rrs=search(r"([0-9]+)-([0-9]+)",i)
+                        if rrs!=None :
+                            rrs=rrs.groups()
+                            i1=int(rrs[0])
+                            i2=int(rrs[1])
+                            if i2<i1 :
+                                tt=i1
+                                i1=i2
+                                i2=tt
+                            for i in range(i1,i2+1) :
+                                if i>0 and i<=chi['count'] and (not (i in cho)):
+                                    cho.append(i)
+                        else :
+                            bb=False
                 if bb :
                     bs=False
                     for i in cho :
@@ -662,7 +714,20 @@ def main(ip={}):
                     if i.isnumeric() and int(i)>0 and int(i)<=vn and (not (int(i) in cho)) :
                         cho.append(int(i))
                     else :
-                        bb=False
+                        rrs=search(r"([0-9]+)-([0-9]+)",i)
+                        if rrs!=None :
+                            rrs=rrs.groups()
+                            i1=int(rrs[0])
+                            i2=int(rrs[1])
+                            if i2<i1 :
+                                tt=i1
+                                i1=i2
+                                i2=tt
+                            for i in range(i1,i2+1) :
+                                if i>0 and i<=vn and (not (i in cho)):
+                                    cho.append(i)
+                        else :
+                            bb=False
                 if bb :
                     bs=False
                     for i in cho :
@@ -881,7 +946,20 @@ def main(ip={}):
                     if i.isnumeric() and int(i)>0 and int(i)<=vn and (not (int(i) in cho)) :
                         cho.append(int(i))
                     else :
-                        bb=False
+                        rrs=search(r"([0-9]+)-([0-9]+)",i)
+                        if rrs!=None :
+                            rrs=rrs.groups()
+                            i1=int(rrs[0])
+                            i2=int(rrs[1])
+                            if i2<i1 :
+                                tt=i1
+                                i1=i2
+                                i2=tt
+                            for i in range(i1,i2+1) :
+                                if i>0 and i<=vn and (not (i in cho)):
+                                    cho.append(i)
+                        else :
+                            bb=False
                 if bb :
                     bs=False
                     for i in cho :
@@ -1027,7 +1105,20 @@ def main(ip={}):
                         if i.isnumeric() and int(i)>0 and int(i)<=data['videos'] and (not (int(i) in cho)) :
                             cho.append(int(i))
                         else :
-                            bb=False
+                            rrs=search(r"([0-9]+)-([0-9]+)",i)
+                            if rrs!=None :
+                                rrs=rrs.groups()
+                                i1=int(rrs[0])
+                                i2=int(rrs[1])
+                                if i2<i1 :
+                                    tt=i1
+                                    i1=i2
+                                    i2=tt
+                                for i in range(i1,i2+1) :
+                                    if i>0 and i<=data['videos'] and (not (i in cho)):
+                                        cho.append(i)
+                            else :
+                                bb=False
                     if bb :
                         bs=False
                         for i in cho :
@@ -1236,7 +1327,20 @@ def main(ip={}):
                             if i.isnumeric() and int(i)<=le and int(i)>0 and (not (int(i) in cho)) :
                                 cho.append(int(i))
                             else :
-                                bb=False
+                                rrs=search(r"([0-9]+)-([0-9]+)",i)
+                                if rrs!=None :
+                                    rrs=rrs.groups()
+                                    i1=int(rrs[0])
+                                    i2=int(rrs[1])
+                                    if i2<i1 :
+                                        tt=i1
+                                        i1=i2
+                                        i2=tt
+                                    for i in range(i1,i2+1) :
+                                        if i>0 and i<=data['videos'] and (not (i in cho)):
+                                            cho.append(i)
+                                else :  
+                                    bb=False
                         if bb:
                             bs=False
                 cho=chon.getcho(cho,data)

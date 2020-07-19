@@ -220,3 +220,7 @@ msgctxt "INPUT30"
 msgid ""
 "Do you want to keep cover images when deleting useless files after merging?"
 msgstr "マージ後に無駄なファイルを削除するときにカバー画像を残しておきますか？"
+
+msgctxt "INPUT31"
+msgid "Do you want to add av/bv number etc. to the file name?"
+msgstr "ファイル名にav/vv番号などを追加しますか？"
