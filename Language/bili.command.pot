@@ -262,3 +262,11 @@ msgstr ""
 msgctxt "O61"
 msgid "Do not keep cover images when deleting useless files after merging."
 msgstr ""
+
+msgctxt "O62"
+msgid "Add av/bv number etc. to the file name."
+msgstr ""
+
+msgctxt "O63"
+msgid "Do not add av/bv number etc. to the file name."
+msgstr ""

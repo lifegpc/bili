@@ -51,7 +51,15 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
     except :
         print(lan['ERROR3'].replace('<dirname>',o))#创建文件夹<dirname>失败。
         return -1
-    filen='%s%s.xml'%(o,file.filtern('%s(%s,%s)'%(data['title'],data['rid'],data['roomid'])))
+    fin=True
+    if getset(se,'in')==False :
+        fin=False
+    if 'in' in ip:
+        fin=ip['in']
+    if fin:
+        filen='%s%s.xml'%(o,file.filtern('%s(%s,%s)'%(data['title'],data['rid'],data['roomid'])))
+    else :
+        filen=f"{o}{file.filtern(data['title'])}.xml"
     if os.path.exists(filen) :
         fg=False
         bs=True

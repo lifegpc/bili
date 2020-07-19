@@ -211,3 +211,7 @@ msgctxt "INPUT30"
 msgid ""
 "Do you want to keep cover images when deleting useless files after merging?"
 msgstr "合并完成后删除无用文件时是否保留封面图片？"
+
+msgctxt "INPUT31"
+msgid "Do you want to add av/bv number etc. to the file name?"
+msgstr "是否将AV/BV号等放入文件名？"

@@ -322,3 +322,11 @@ msgstr "合并完成后删除无用文件时保留封面图片"
 msgctxt "O61"
 msgid "Do not keep cover images when deleting useless files after merging."
 msgstr "合并完成后删除无用文件时删除封面图片"
+
+msgctxt "O62"
+msgid "Add av/bv number etc. to the file name."
+msgstr "将AV/BV号等放入文件名"
+
+msgctxt "O63"
+msgid "Do not add av/bv number etc. to the file name."
+msgstr "不将AV/BV号等放入文件名"
