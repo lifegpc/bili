@@ -40,7 +40,7 @@ msgid "Live record download method: 1.video 2.barrage 3.video and barrage"
 msgstr ""
 
 msgctxt "O7"
-msgid "The number of videos/parts you want to download. (You can use \",\" to separate each two numbers. Use \"a\" to select all videos/parts. Use \"b\" to select video which match the EP number you entered. Use \"l\" to select the last viewed EP video.)"
+msgid "The number of videos/parts you want to download. (You can use \",\" to separate each two numbers. Use \"-\" to separate each two numbers to select a range.(e.g. 1-25) Use \"a\" to select all videos/parts. Use \"b\" to select video which match the EP number you entered. Use \"l\" to select the last viewed EP video.)"
 msgstr ""
 
 msgctxt "O8"
