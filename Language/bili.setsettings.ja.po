@@ -224,3 +224,9 @@ msgstr "マージ後に無駄なファイルを削除するときにカバー画
 msgctxt "INPUT31"
 msgid "Do you want to add av/bv number etc. to the file name?"
 msgstr "ファイル名にav/vv番号などを追加しますか？"
+
+msgctxt "INPUT32"
+msgid ""
+"Do you want to enable multiple threadings when entering multiple numbers or "
+"links (This will make the output become a mess.)?"
+msgstr ""
