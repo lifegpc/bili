@@ -113,7 +113,7 @@ def login2(r:requests.Session):
                     sa.append({'name':i['name'],'value':i['value'],'domain':'.bilibili.com','path':'/'})
                 return sa
             elif re['code']==-105 :
-                re=r.get('https://passport.bilibili.com/captcha',headers={'Host': "passport.bilibili.com"},decode_level=1)
+                re=r.get('https://passport.bilibili.com/captcha',headers={'Host': "passport.bilibili.com"}).content
                 cp=scap(r,re)
                 if cp:
                     print(lan['OUTPUT2'].replace('<result>',str(cp)))#登录验证码识别结果：<result>
