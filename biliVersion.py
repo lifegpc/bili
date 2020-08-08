@@ -104,11 +104,13 @@ def checkver():
         git = True
     if exists('.git/') and git:  # 优先从git仓库获取当前版本
         f = popen('git describe --long --dirty --tags', 'r', 10)
-        ver = f.readline()
+        ver = f.read()
+        ver = ver.split('\n')[0]
         f.close()
     elif exists('version.txt'):
         f = open('version.txt', 'r', encoding='utf8')
-        ver = f.readline()
+        ver = f.read()
+        ver = ver.split('\n')[0]
         f.close()
     try:
         if ver is not None:
@@ -120,7 +122,7 @@ def checkver():
                 print(lan['NETWORK_ERROR'])  # 网络错误：无法获取最新稳定版本字符串
                 return
             if re.ok:
-                v2 = version(re.text)
+                v2 = version(re.text.split('\n')[0])
                 print(f"{lan['LATEST_STABLE_VER']}{v2.tostr()}")  # 最新稳定版本
                 if v.compare(v2) == -1:
                     print(lan['GET_NEW_VER'])
