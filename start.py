@@ -36,6 +36,8 @@ import traceback
 import biliLiveDanmu
 from lang import getlan,getdict
 import JSONParser2
+from threading import Thread
+from biliVersion import checkver
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -44,6 +46,7 @@ ip={}
 def main(ip={}):
     global se
     global lan
+    checkver()
     ns=True
     if 's' in ip :
         ns=False
@@ -58,10 +61,28 @@ def main(ip={}):
     if 'i' in ip :
         inp=ip['i']
     elif ns:
-        inp=input(f"{lan['INPUT1']}")
+        inp=input(f"{lan['INPUT1']}{lan['OUTPUT13']}")
     else :
         print(f'{lan["ERROR1"]}')
         return -1
+    inpl=inp.split(',')
+    mt=False
+    if JSONParser.getset(se,'mt') == True :
+        mt=True
+    if 'mt' in ip :
+        mt=ip['mt']
+    if len(inpl) !=1 :
+        for inp2 in inpl :
+            ip2=copydict(ip)
+            ip2['i']=inp2
+            if mt:
+                ru=mains(ip2)
+                ru.start()
+            else :
+                read=main(ip2)
+                if read!=0 :
+                    return read
+        return 0
     av=False
     ss=False
     ep=False
@@ -1436,7 +1457,16 @@ def main(ip={}):
     return 0
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
+    if 'SHOW' in ip:
+        PrintInfo.prc()
+        exit()
 lan=getdict('start',getlan(se,ip))
+class mains(Thread) :
+    def __init__(self,ip:dict) :
+        Thread.__init__(self)
+        self.ip=ip
+    def run(self) :
+        main(self.ip)
 if __name__=="__main__" :
     PrintInfo.pr()
     main(ip)

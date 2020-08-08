@@ -240,3 +240,7 @@ msgstr "\"start.py\" を実行してください。"
 msgctxt "OUTPUT12"
 msgid "Try to redirect to \"<link>\"."
 msgstr "\"<link>\" にリダイレクトしてみてください。"
+
+msgctxt "OUTPUT13"
+msgid "(You can use \",\" to separate multiple numbers or links.)"
+msgstr ""

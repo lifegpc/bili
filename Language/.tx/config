@@ -22,6 +22,13 @@ source_file = bili.biliSub.pot
 source_lang = en
 type = PO
 
+[bili.bilibiliversionpot]
+file_filter = bili.biliVersion.<lang>.po
+minimum_perc = 0
+source_file = bili.biliVersion.pot
+source_lang = en
+type = PO
+
 [bili.bilicommandpot]
 file_filter = bili.command.<lang>.po
 minimum_perc = 0

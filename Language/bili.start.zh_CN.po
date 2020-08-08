@@ -234,3 +234,7 @@ msgstr "请运行start.py"
 msgctxt "OUTPUT12"
 msgid "Try to redirect to \"<link>\"."
 msgstr "尝试重定向至\"<link>\"。"
+
+msgctxt "OUTPUT13"
+msgid "(You can use \",\" to separate multiple numbers or links.)"
+msgstr "（你可以使用\",\"来分隔多个输入。）"

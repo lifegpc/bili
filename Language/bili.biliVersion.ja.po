@@ -1,0 +1,42 @@
+# bili - biliVersion.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-08-08 03:19:00+0000\n"
+"PO-Revision-Date: 2020-08-08 04:18+0000\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "UNKNOWN_VER_STR"
+msgid "Unknown version string:"
+msgstr ""
+
+msgctxt "CUR_VER"
+msgid "Current version:"
+msgstr ""
+
+msgctxt "LATEST_STABLE_VER"
+msgid "Latest stable version:"
+msgstr ""
+
+msgctxt "NETWORK_ERROR"
+msgid "Network Error: Can not get latest stable version."
+msgstr ""
+
+msgctxt "HTTP_STATUS_ERROR"
+msgid "An unexpected HTTP status return from the server:"
+msgstr ""
+
+msgctxt "GET_NEW_VER"
+msgid ""
+"You can get the latest stable version on "
+"<https://github.com/lifegpc/bili/releases>."
+msgstr ""

@@ -166,3 +166,7 @@ msgstr ""
 msgctxt "OUTPUT12"
 msgid "Try to redirect to \"<link>\"."
 msgstr ""
+
+msgctxt "OUTPUT13"
+msgid "(You can use \",\" to separate multiple numbers or links.)"
+msgstr ""

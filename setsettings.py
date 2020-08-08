@@ -249,4 +249,8 @@ if __name__=='__main__' :
     r=gk(se,'in')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'in',se)
+    print(f"{la['INPUT32']}{la['NTN']}")#是否在有多个输入的时候启用多线程（这会是输出变得一团糟）？（不设置情况下为否）
+    r=gk(se,'mt')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
+    sk(ne,'mt',se)
     saveset(ne)
