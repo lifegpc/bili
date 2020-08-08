@@ -37,6 +37,7 @@ import biliLiveDanmu
 from lang import getlan,getdict
 import JSONParser2
 from threading import Thread
+from biliVersion import checkver
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -45,6 +46,7 @@ ip={}
 def main(ip={}):
     global se
     global lan
+    checkver()
     ns=True
     if 's' in ip :
         ns=False
@@ -1455,6 +1457,9 @@ def main(ip={}):
     return 0
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
+    if 'SHOW' in ip:
+        PrintInfo.prc()
+        exit()
 lan=getdict('start',getlan(se,ip))
 class mains(Thread) :
     def __init__(self,ip:dict) :

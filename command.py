@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from getopt import getopt
 from re import search
-from PrintInfo import pr,prc
 from biliTime import checktime
 from file import filterd
 from lang import lan,getlan,getdict
@@ -310,8 +309,7 @@ def gopt(args,d:bool=False) :
         exit()
     for i in re[1] :
         if i.lower()=="show":
-            prc()
-            exit()
+            r['SHOW'] = True
     return r
 la=None
 se=loadset()
@@ -319,7 +317,6 @@ if se==-1 or se==-2 :
     se={}
 la=getdict('command',getlan(se,{}))
 if __name__ == "__main__":
-    pr()
     import sys
     print(sys.argv)
     if len(sys.argv)==1 :
