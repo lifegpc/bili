@@ -105,7 +105,6 @@ def login2(r:requests.Session):
     re=r.post('https://passport.bilibili.com/api/v2/oauth2/login',pm2,headers={'Content-type': "application/x-www-form-urlencoded"})
     re=re.json()
     sa=[]
-    v3=False
     while True:
         if re and re["code"]!=None:
             if re['code']==0 :
@@ -121,20 +120,14 @@ def login2(r:requests.Session):
                     keyhash,pubkey=getk()
                     if keyhash==-1:
                         return -1
-                    if not v3 :
-                        pm=f"appkey={appkey}&captcha={cp}&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(),pubkey)))}&username={parse.quote_plus(username)}"
-                        re=r.post('https://passport.bilibili.com/api/v2/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
-                        re=re.json()
-                    else :
-                        pm=f"access_key=&actionKey=appkey&appkey={appkey}&build=6040500&captcha={cp}&challenge=&channel=bili&cookies=&device=phone&mobi_app=android&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(),pubkey)))}&permission=ALL&platform=android&seccode=&subid=1&ts={int(time.time())}&username={parse.quote_plus(username)}&validate="
-                        re=r.post('https://passport.bilibili.com/api/v3/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
-                        re=re.json()
+                    pm=f"appkey={appkey}&captcha={cp}&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(),pubkey)))}&username={parse.quote_plus(username)}"
+                    re=r.post('https://passport.bilibili.com/api/v2/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
+                    re=re.json()
                 else :
                     print(lan['ERROR5'])#登录验证码识别服务暂时不可用，请稍后再试
                     return -1
             elif re['code']==-449:
                 print(lan['ERROR6'])#服务繁忙, 尝试使用V3接口登录
-                v3=True
                 pm=f"access_key=&actionKey=appkey&appkey={appkey}&build=6040500&captcha=&challenge=&channel=bili&cookies=&device=phone&mobi_app=android&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(),pubkey)))}&permission=ALL&platform=android&seccode=&subid=1&ts={int(time.time())}&username={parse.quote_plus(username)}&validate="
                 re=r.post('https://passport.bilibili.com/api/v3/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
                 re=re.json()
