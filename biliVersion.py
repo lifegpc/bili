@@ -104,11 +104,11 @@ def checkver():
         git = True
     if exists('.git/') and git:  # 优先从git仓库获取当前版本
         f = popen('git describe --long --dirty --tags', 'r', 10)
-        ver = f.read()
+        ver = f.readline()
         f.close()
     elif exists('version.txt'):
         f = open('version.txt', 'r', encoding='utf8')
-        ver = f.read()
+        ver = f.readline()
         f.close()
     try:
         if ver is not None:
