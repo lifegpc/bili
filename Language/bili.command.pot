@@ -282,3 +282,11 @@ msgstr ""
 msgctxt "O66"
 msgid "The index of URL when downloading the live video. (The index starts with 0.)"
 msgstr ""
+
+msgctxt "O67"
+msgid "Enable checking for new versions."
+msgstr ""
+
+msgctxt "O68"
+msgid "Disable checking for new versions."
+msgstr ""

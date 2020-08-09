@@ -47,7 +47,13 @@ ip={}
 def main(ip={}):
     global se
     global lan
-    checkver()
+    uc = True  # 是否检测更新
+    if JSONParser.getset(se, 'uc') == True:
+        uc = False
+    if 'uc' in ip:
+        uc = ip['uc']
+    if uc:
+        checkver()
     ns=True
     if 's' in ip :
         ns=False
