@@ -2767,7 +2767,9 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
             bs = True
             first = True
             while bs:
-                if first and 'v' in ip:
+                if len(accept_quality_list) == 1:
+                    inp = '1'
+                elif first and 'v' in ip:
                     first = False
                     inp = ip['v']
                 elif ns:
