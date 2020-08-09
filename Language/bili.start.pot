@@ -20,7 +20,7 @@ msgid "It is recommended to setup program by runing \"settings.py\" in order to 
 msgstr ""
 
 msgctxt "INPUT1"
-msgid "Please enter the av/ss/ep/md/bv number (bv number needs start with BV) or link (Support Favorites, Channels, Uploaded Video and Small Video page from user page. Also support live records video and purchased courses' video link.):"
+msgid "Please enter the av/ss/ep/md/bv number (bv number needs start with BV) or link (Support Favorites, Channels, Uploaded Video and Small Video page from user page. Also support live, live records video and purchased courses' video link.):"
 msgstr ""
 
 msgctxt "ERROR1"
@@ -169,4 +169,8 @@ msgstr ""
 
 msgctxt "OUTPUT13"
 msgid "(You can use \",\" to separate multiple numbers or links.)"
+msgstr ""
+
+msgctxt "LIVE_NOT_START"
+msgid "The live has not started. The program will check the live status after 30 seconds."
 msgstr ""

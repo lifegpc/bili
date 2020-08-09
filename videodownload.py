@@ -2682,6 +2682,7 @@ def lrvideodownload(data,r,c,c3,se,ip):
 def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se: dict, ip: dict):
     """下载直播视频
     -2 API Error
+    -4 aria2c 参数错误
     -5 文件夹创建失败
     -6 缺少必要参数"""
     ns = True
@@ -2702,6 +2703,11 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
     except:
         print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
         return -5
+    nte = False  # requests是否信任环境变量
+    if JSONParser.getset(se, 'te') == False:
+        nte = True
+    if 'te' in ip:
+        nte = not ip['te']
     fin = True  # 是否把AV号等信息放入文件名
     if JSONParser.getset(se, 'in') == False:
         fin = False
@@ -2837,6 +2843,14 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
                 nss = getnul()
             cm = f"{cml}{fileo}{nss}"
             os.system(cm)
+        elif aria2c:
+            read = dwaria2(r, filen, url, -1, False, ip, se)
+            if read == -3:
+                print(f"{lan['ERROR4']}{lan['ERROR5']}")  # aria2c 参数错误
+                return -4
+        else:
+            re = r.get(url, stream=True)
+            read = downloadstream(nte, ip, url, r, re, filen, -1, False)
     return 0
 
 

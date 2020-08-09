@@ -38,6 +38,7 @@ from lang import getlan,getdict
 import JSONParser2
 from threading import Thread
 from biliVersion import checkver
+from time import sleep
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -1097,7 +1098,30 @@ def main(ip={}):
                 elif inp[0].lower() == 'n':
                     bs = False
         if info['livestatus'] > 0:
-            videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            read = videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            if read != 0:
+                return -1
+        else:
+            print(lan['LIVE_NOT_START'])
+            bs = True
+            while bs:
+                sleep(30)  # 30秒后继续检测
+                uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+                re = r.get(uri)
+                re.encoding = 'utf8'
+                re = re.json()
+                if re['code'] != 0:
+                    print(f"{re['code']} {re['message']}")
+                    return -1
+                room_info = re['data']
+                if room_info['live_status'] > 0:
+                    info['livestatus'] = room_info['live_status']
+                    bs = False
+                elif ns:
+                    print(lan['LIVE_NOT_START'])
+            read = videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            if read != 0:
+                return -1
         return 0
     if not che:
         re=section.get(s)
