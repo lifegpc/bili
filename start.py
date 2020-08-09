@@ -82,6 +82,7 @@ def main(ip={}):
         for inp2 in inpl :
             ip2=copydict(ip)
             ip2['i']=inp2
+            ip2['uc'] = False  # 禁用重复检测
             if mt:
                 ru=mains(ip2)
                 ru.start()
@@ -144,6 +145,7 @@ def main(ip={}):
                 re=requests.head(inp)
                 if 'Location' in re.headers :
                     ip['i']=re.headers['Location']
+                    ip['uc'] = False
                     return main(ip)
                 else :
                     print(f'{lan["ERROR2"]}')#输入有误
@@ -173,6 +175,7 @@ def main(ip={}):
                     re=requests.head(inp)
                     if 'Location' in re.headers :
                         ip['i']=re.headers['Location']
+                        ip['uc'] = False
                         return main(ip)
                     else :
                         print(f'{lan["ERROR2"]}')#输入有误
@@ -355,6 +358,7 @@ def main(ip={}):
             if 'p' in ip :
                 ip2['p']=ip['p']
             ip2['i']='ss%s'%(re['mediaInfo']['season_id'])
+            ip2['uc'] = False
             read=main(ip2)
             if read!=0 :
                 return read
@@ -428,6 +432,7 @@ def main(ip={}):
                         for i in cho:
                             ip2=copyip(ip)
                             ip2['i']="https://space.bilibili.com/%s/favlist?fid=%s"%(uid,re['data']['list'][i-1]['id'])
+                            ip2['uc'] = False
                             read=main(ip2)
                             if read!=0 :
                                 return read
@@ -524,6 +529,7 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(plv[i-1]['id'])
+            ip2['uc'] = False
             if c1:
                 ip2['p']='a'
             read=main(ip2)
@@ -602,6 +608,7 @@ def main(ip={}):
                 for i in cho :
                     ip2=copyip(ip)
                     ip2['i']='https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,chl[i-1]['cid'])
+                    ip2['uc'] = False
                     read=main(ip2)
                     if read!=0 :
                         return read
@@ -692,6 +699,7 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(chv[i-1]['aid'])
+            ip2['uc'] = False
             if c1:
                 ip2['p']='a'
             read=main(ip2)
@@ -788,6 +796,7 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(vl[i-1]['aid'])
+            ip2['uc'] = False
             if c1:
                 ip2['p']='a'
             read=main(ip2)
@@ -1020,6 +1029,7 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=f"https://www.bilibili.com/cheese/play/ss{chep[i-1]['id']}"
+            ip2['uc'] = False
             if c1:
                 ip2['p']='a'
             read=main(ip2)
@@ -1147,6 +1157,7 @@ def main(ip={}):
                 if 'data' in re and 'View' in re['data'] and 'redirect_url' in re['data']['View'] :
                     ip2=copyip(ip)
                     ip2['i']=re['data']['View']['redirect_url']
+                    ip2['uc'] = False
                     if 'p' in ip :
                         ip2['p']=ip['p']
                     read=main(ip2)
@@ -1161,6 +1172,7 @@ def main(ip={}):
                     s=s.replace('bangumi','cheese')
                     print(lan['OUTPUT12'].replace('<link>',s))#尝试重定向至"<link>"。
                     ip['i']=s
+                    ip['uc'] = False
                     return main(ip)
                 print(traceback.format_exc())
                 return -1
