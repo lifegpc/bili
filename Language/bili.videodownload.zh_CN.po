@@ -187,3 +187,11 @@ msgstr "封面图片\"<filename>\"下载完成。"
 msgctxt "OUTPUT24"
 msgid "An error occurred when downloading cover image:"
 msgstr "下载封面图片时发生错误："
+
+msgctxt "NOT_GET_QUA"
+msgid "Unable to get play URL for quality <quality>."
+msgstr "无法获取画质为<quality>的播放地址。"
+
+msgctxt "ALL_URL_COUNT"
+msgid "(<number> URLs are available.)"
+msgstr "（<number>个URL可用。）"

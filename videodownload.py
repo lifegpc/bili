@@ -2677,6 +2677,169 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     os.remove('%s.%s'%(filen,hzm))
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['rid'])),tt))
+
+
+def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se: dict, ip: dict):
+    """下载直播视频
+    -2 API Error
+    -5 文件夹创建失败
+    -6 缺少必要参数"""
+    ns = True
+    if 's' in ip:
+        ns = False
+    o = 'Download/'
+    read = JSONParser.getset(se, 'o')
+    if read is not None:
+        o = read
+    if 'o' in ip:
+        o = ip['o']
+    F = False  # 仅输出视频信息
+    if 'F' in ip:
+        F = True
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
+        return -5
+    fin = True  # 是否把AV号等信息放入文件名
+    if JSONParser.getset(se, 'in') == False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    sv = True  # 是否将画质信息写入文件
+    if JSONParser.getset(se, 'sv') == False:
+        sv = False
+    if 'sv' in ip:
+        sv = ip['sv']
+    if 'play_url' in data2 and data2['play_url'] is not None:
+        play_url = data2['play_url']
+    else:
+        uri = f"https://api.live.bilibili.com/xlive/web-room/v1/playUrl/playUrl?cid={data['roomid']}&qn=10000&platform=web&https_url_req=1&ptype=16"
+        re = r.get(uri)
+        re.encoding = 'utf8'
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']} {re['message']}")
+            return -2
+        play_url = re['data']
+    quality_description = play_url['quality_description']
+    accept_quality_list = []
+    quality_des_dict = {}
+    for i in quality_description:
+        accept_quality_list.append(i['qn'])
+        quality_des_dict[i['qn']] = i['desc']
+    current_qn = play_url['current_qn']
+    if 'durl' in play_url:
+        durl = {}
+        durl[current_qn] = play_url['durl']
+        if not c or F:
+            for quality in accept_quality_list:
+                if quality not in durl:
+                    uri = f"https://api.live.bilibili.com/xlive/web-room/v1/playUrl/playUrl?cid={data['roomid']}&qn={quality}&platform=web&https_url_req=1&ptype=16"
+                    re = r.get(uri)
+                    re.encoding = 'utf8'
+                    re = re.json()
+                    if re['code'] != 0:
+                        print(f"{re['code']} {re['message']}")
+                        return -2
+                    play_url = re['data']
+                    current_qn = play_url['current_qn']
+                    if quality == current_qn:
+                        if 'durl' in play_url:
+                            durl[quality] = play_url['durl']
+                    else:
+                        accept_quality_list.remove(quality)
+                        print(lan['NOT_GET_QUA'].replace('<quality>', str(quality)))  # 无法获取画质为<quality>的播放地址。
+            if ns or (not ns and F):
+                ii = 1
+                for quality in accept_quality_list:
+                    print(f"{ii}.{lan['OUTPUT9']}{quality},{quality_des_dict[quality]}{lan['ALL_URL_COUNT'].replace('<number>', str(len(durl[quality])))}")
+                    ii = ii + 1
+            if F:
+                return 0
+            bs = True
+            first = True
+            while bs:
+                if first and 'v' in ip:
+                    first = False
+                    inp = ip['v']
+                elif ns:
+                    inp = input(lan['INPUT2'])  # 请选择画质：
+                else:
+                    print(lan['ERROR3'])  # 请使用"-v <id>"选择画质
+                    return -6
+                if len(inp) > 0 and inp.isnumeric() and int(inp) > 0 and int(inp) < len(accept_quality_list) + 1:
+                    video_quality = accept_quality_list[int(inp) - 1]
+                    durl = durl[video_quality]
+                    bs = False
+            if ns:
+                print(lan['OUTPUT11'].replace('<videoquality>', f"{video_quality},{quality_des_dict[video_quality]}"))#已选择<videoquality>画质
+        else:
+            quality = accept_quality_list[0]
+            if quality != current_qn:
+                uri = f"https://api.live.bilibili.com/xlive/web-room/v1/playUrl/playUrl?cid={data['roomid']}&qn={quality}&platform=web&https_url_req=1&ptype=16"
+                re = r.get(uri)
+                re.encoding = 'utf8'
+                re = re.json()
+                if re['code'] != 0:
+                    print(f"{re['code']} {re['message']}")
+                    return -2
+                play_url = re['data']
+                if play_url['current_qn'] == quality and 'durl' in play_url:
+                    durl[quality] = play_url['durl']
+            durl = durl[quality]
+            if ns:
+                print(f"{lan['OUTPUT9']}{quality},{quality_des_dict[quality]}{lan['ALL_URL_COUNT'].replace('<number>', str(len(durl)))}")
+            video_quality = quality
+        link_index = 0
+        link = durl[link_index]
+        url = link['url']
+        ffmpeg = True  # 是否使用ffmpeg
+        if JSONParser.getset(se, 'nf') == True:
+            ffmpeg = False
+        if 'yf' in ip:
+            ffmpeg = ip['yf']
+        if ffmpeg and os.system(f'ffmpeg -h{getnul()}') == 0:
+            pass
+        else:
+            ffmpeg = False
+        aria2c = True  # 是否使用aria2c
+        if JSONParser.getset(se, 'a') == False:
+            aria2c = False
+        if 'ar' in ip:
+            aria2c = ip['ar']
+        if aria2c and os.system(f"aria2c -h{getnul()}") == 0:
+            pass
+        else:
+            aria2c = False
+        now = int(time.time())
+        if not fin:
+            fn = file.filtern(f"{data['title']}({tostr2(now)})")
+        elif sv:
+            fn = file.filtern(f"{data['title']}({data['roomid']},UID{data['uid']},{tostr2(now)},{quality_des_dict[video_quality]}).flv")
+        else:
+            fn = file.filtern(f"{data['title']}({data['roomid']},UID{data['uid']},{tostr2(now)}).flv")
+        filen = f"{o}{fn}"
+        if ffmpeg:
+            lrh = True  # 是否进行去HTML化
+            if JSONParser.getset(se, 'lrh') == False:
+                lrh = False
+            if 'lrh' in ip:
+                lrh = ip['lrh']
+            if lrh:
+                data['des'] = bstr.rhtml(data['des'])
+            cml = f"ffmpeg -user_agent \"{r.headers['User-Agent']}\" -referer \"{r.headers['referer']}\" -i \"{url}\""
+            metadata = f" -metadata roomid=\"{data['roomid']}\" -metadata livetime=\"{data['livetime']}\" -metadata description=\"{bstr.f(data['des'])}\" -metadata title=\"{bstr.f(data['title'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata authorsex=\"{data['sex']}\" -metadata sign=\"{bstr.f(data['sign'])}\" -metadata areaid=\"{data['areaid']}\" -metadata areaname=\"{bstr.f(data['areaname'])}\" -metadata pareaid=\"{data['pareaid']}\" -metadata pareaname=\"{bstr.f(data['pareaname'])}\" -metadata tags=\"{bstr.f(data['tags'])}\" -metadata hotwords=\"{bstr.f(bstr.gettags(data['hotwords']))}\""
+            fileo = f"{metadata} -c copy \"{filen}\""
+            nss = ""
+            if not ns:
+                nss = getnul()
+            cm = f"{cml}{fileo}{nss}"
+            os.system(cm)
+    return 0
+
+
 def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
     if d :
         print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件

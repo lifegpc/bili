@@ -181,6 +181,22 @@ def printlr(d:dict):
 	print(f"{lan['O40']}{d['parean']}-{d['arean']}")#区域：
 	print(f"{lan['O33']}{d['tags']}")#房间标签：
 	print(f"{lan['O41']}{gettags(d['hotwords'])}")#房间热词：
+
+
+def printliveInfo(d: dict):
+	print(f"{lan['O37']}{d['roomid']}")  # 房间ID：
+	print(f"{lan['O4']}{d['title']}")  # 标题：
+	print(f"{lan['O24']}{d['name']}")  # UP主名称：
+	print(f"UID：{d['uid']}")
+	print(f"{lan['O27']}{d['sex']}")  # UP主性别：
+	print(f"{lan['O29']}{d['sign']}")  # 个性签名：
+	print(f"{lan['O38']}{d['livetime']}")  # 开始时间：
+	print(f"{lan['O7']}{rhtml(d['des'])}")  # 简介：
+	print(f"{lan['O40']}{d['pareaname']}-{d['areaname']}")  # 区域：
+	print(f"{lan['O33']}{d['tags']}")  # 标签：
+	print(f"{lan['O41']}{gettags(d['hotwords'])}")  # 房间热词
+
+
 def pr() :
 	print(f"""    bili  Copyright (C) 2019-2020  lifegpc
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.

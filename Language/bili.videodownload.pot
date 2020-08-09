@@ -170,3 +170,11 @@ msgstr ""
 msgctxt "OUTPUT24"
 msgid "An error occurred when downloading cover image:"
 msgstr ""
+
+msgctxt "NOT_GET_QUA"
+msgid "Unable to get play URL for quality <quality>."
+msgstr ""
+
+msgctxt "ALL_URL_COUNT"
+msgid "(<number> URLs are available.)"
+msgstr ""
