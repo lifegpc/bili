@@ -195,3 +195,13 @@ msgstr "无法获取画质为<quality>的播放地址。"
 msgctxt "ALL_URL_COUNT"
 msgid "(<number> URLs are available.)"
 msgstr "（<number>个URL可用。）"
+
+msgctxt "URL_SELECTED"
+msgid "You have selected the URL<index>."
+msgstr "您选择了URL<index>。"
+
+msgctxt "INDEX_OUT_OF_RANGE"
+msgid ""
+"The index you specified is out of range. The index should be between 0 and "
+"<max>."
+msgstr "您指定的索引超出范围。索引应该在0到<max>之间。"

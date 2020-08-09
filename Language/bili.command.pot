@@ -278,3 +278,7 @@ msgstr ""
 msgctxt "O65"
 msgid "Disable multiple threadings when entering multiple numbers or links."
 msgstr ""
+
+msgctxt "O66"
+msgid "The index of URL when downloading the live video. (The index starts with 0.)"
+msgstr ""

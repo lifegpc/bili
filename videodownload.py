@@ -2684,7 +2684,8 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
     -2 API Error
     -4 aria2c 参数错误
     -5 文件夹创建失败
-    -6 缺少必要参数"""
+    -6 缺少必要参数
+    -7 参数错误"""
     ns = True
     if 's' in ip:
         ns = False
@@ -2801,6 +2802,13 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
                 print(f"{lan['OUTPUT9']}{quality},{quality_des_dict[quality]}{lan['ALL_URL_COUNT'].replace('<number>', str(len(durl)))}")
             video_quality = quality
         link_index = 0
+        if 'vi' in ip:
+            if ip['vi'] < len(durl):
+                link_index = ip['vi']
+                print(lan['URL_SELECTED'].replace('<index>', str(ip['vi'])))
+            else:
+                print(lan['INDEX_OUT_OF_RANGE'].replace('<max>', str(len(durl)-1)))
+                return -7
         link = durl[link_index]
         url = link['url']
         ffmpeg = True  # 是否使用ffmpeg
