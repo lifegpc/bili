@@ -2934,7 +2934,10 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             if c :
                 s=s+f.write(c)
                 t1=time.time()
-                if t1-t2>1 and durz==-1 :
+                if t1 - t2 > 1 and size == -1:
+                    print(f"\r {file.info.size(s)}({s}B)", end = '', flush = True)
+                    t2 = t1
+                elif t1 - t2 > 1 and durz == -1:
                     if d :
                         print('\r (%s/%s)%s(%sB)/%s(%sB)\t%.2f%%'%(i,n,file.info.size(s),s,file.info.size(size),size,s/size*100),end='',flush=True)
                     else :
