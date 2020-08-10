@@ -591,7 +591,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             j=j+1
         if 'sub' in data :
             for s in data['sub']:
-                downsub(r2,filen+".mkv",s,ip,se,ns,i)
+                downsub(r2, filen + ".mkv", s, ip, se, data, ns, i)
         imgf=file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
         imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
@@ -1025,7 +1025,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     return -3
         if 'sub' in data :
             for s in data['sub']:
-                downsub(r2,filen,s,ip,se,ns,i)
+                downsub(r2, filen, s, ip, se, data, ns, i, dash['video']['width'], dash['video']['height'])
         imgf=file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
         imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
@@ -1147,7 +1147,7 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
                 filen=f"{o}{file.filtern(data['title'])}-{i}.{file.filtern(data['page'][i-1]['part'])}"
         if 'sub' in data and len(data['sub'])>0:
             for s in data['sub'] :
-                downsub(r2,filen+".mkv",s,ip,se,True,i)
+                downsub(r2, filen + ".mkv", s, ip, se, data, True, i)
         else :
             if ns:
                 print(lan['OUTPUT18'].replace('<number>',str(i)))#第%sP没有可以下载的字幕。

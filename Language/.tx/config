@@ -1,6 +1,13 @@
 [main]
 host = https://www.transifex.com
 
+[bili.biliasswriterpot]
+file_filter = bili.ASSWriter.<lang>.po
+minimum_perc = 0
+source_file = bili.ASSWriter.pot
+source_lang = en
+type = PO
+
 [bili.bilibilidanmupot]
 file_filter = bili.biliDanmu.<lang>.po
 minimum_perc = 0

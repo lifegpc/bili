@@ -290,3 +290,11 @@ msgstr ""
 msgctxt "O68"
 msgid "Disable checking for new versions."
 msgstr ""
+
+msgctxt "O69"
+msgid "Save the subtitles file as an ASS(Advanced SubStation Alpha) file."
+msgstr ""
+
+msgctxt "O70"
+msgid "Do not save the subtitles file as an ASS(Advanced SubStation Alpha) file."
+msgstr ""

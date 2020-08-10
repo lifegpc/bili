@@ -260,4 +260,8 @@ if __name__=='__main__' :
     r = gk(se, 'uc')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'uc', se)
+    print(f"{la['INPUT34']}{la['NTN']}")  # 是否要将字幕文件保存为ASS(Advanced SubStation Alpha)文件？（不设置情况下为否）
+    r = gk(se, 'ass')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'ass', se)
     saveset(ne)
