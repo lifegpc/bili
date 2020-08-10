@@ -170,3 +170,19 @@ msgstr ""
 msgctxt "OUTPUT24"
 msgid "An error occurred when downloading cover image:"
 msgstr ""
+
+msgctxt "NOT_GET_QUA"
+msgid "Unable to get play URL for quality <quality>."
+msgstr ""
+
+msgctxt "ALL_URL_COUNT"
+msgid "(<number> URLs are available.)"
+msgstr ""
+
+msgctxt "URL_SELECTED"
+msgid "You have selected the URL<index>."
+msgstr ""
+
+msgctxt "INDEX_OUT_OF_RANGE"
+msgid "The index you specified is out of range. The index should be between 0 and <max>."
+msgstr ""

@@ -96,6 +96,9 @@ if __name__=='__main__' :
         p=r
     if p!="null" :
         ne['lan']=p
+        la = getdict('setsettings', p)
+    else:
+        la = getdict('setsettings', getlan({},{}))
     print(la['INPUT3'])#是否默认启用弹幕过滤？
     r=gk(se,'dmgl')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
@@ -253,4 +256,8 @@ if __name__=='__main__' :
     r=gk(se,'mt')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'mt',se)
+    print(f"{la['INPUT33']}{la['NTN']}")  # 是否要禁用检查新版本？（不设置情况下为否）
+    r = gk(se, 'uc')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'uc', se)
     saveset(ne)

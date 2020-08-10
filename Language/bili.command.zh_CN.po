@@ -345,3 +345,16 @@ msgstr "在有多个输入的时候启用多线程（这会是输出变得一团
 msgctxt "O65"
 msgid "Disable multiple threadings when entering multiple numbers or links."
 msgstr "在有多个输入的时候禁用多线程"
+
+msgctxt "O66"
+msgid ""
+"The index of URL when downloading the live video. (The index starts with 0.)"
+msgstr "当下载直播视频时的URL的索引。（索引从0开始。）"
+
+msgctxt "O67"
+msgid "Enable checking for new versions."
+msgstr "启用检查新版本。"
+
+msgctxt "O68"
+msgid "Disable checking for new versions."
+msgstr "禁用检查新版本。"

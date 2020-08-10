@@ -256,3 +256,23 @@ def getchel(r:Session) -> list:
                 l.append(j)
         i=i+1
     return l
+def getliveinfo1(d:dict) -> dict:
+    r = {}
+    r['roomid'] = d['room_id']
+    r['uid'] = d['uid']
+    r['online'] = d['online']
+    r['des'] = d['description']
+    r['title'] = d['title']
+    r['areaid'] = d['area_id']
+    r['areaname'] = d['area_name']
+    r['pareaid'] = d['parent_area_id']
+    r['pareaname'] = d['parent_area_name']
+    r['livestatus'] = d['live_status']
+    r['livetime'] = d['live_time']
+    r['tags'] = d['tags']
+    r['hotwords'] = d['hot_words']
+    return r
+def getliveinfo2(d: dict, r: dict):
+    r['name'] = d['name']
+    r['sex'] = d['sex']
+    r['sign'] = d['sign']

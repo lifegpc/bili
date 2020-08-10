@@ -229,4 +229,8 @@ msgctxt "INPUT32"
 msgid ""
 "Do you want to enable multiple threadings when entering multiple numbers or "
 "links (This will make the output become a mess.)?"
+msgstr "複数の数字やリンクを入力する際に複数のスレッドを有効にしますか？（これにより出力がぐちゃぐちゃになる）"
+
+msgctxt "INPUT33"
+msgid "Do you want to disable checking for new versions?"
 msgstr ""

@@ -38,6 +38,7 @@ from lang import getlan,getdict
 import JSONParser2
 from threading import Thread
 from biliVersion import checkver
+from time import sleep
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -46,7 +47,13 @@ ip={}
 def main(ip={}):
     global se
     global lan
-    checkver()
+    uc = True  # 是否检测更新
+    if JSONParser.getset(se, 'uc') == True:
+        uc = False
+    if 'uc' in ip:
+        uc = ip['uc']
+    if uc:
+        checkver()
     ns=True
     if 's' in ip :
         ns=False
@@ -75,6 +82,7 @@ def main(ip={}):
         for inp2 in inpl :
             ip2=copydict(ip)
             ip2['i']=inp2
+            ip2['uc'] = False  # 禁用重复检测
             if mt:
                 ru=mains(ip2)
                 ru.start()
@@ -95,6 +103,7 @@ def main(ip={}):
     lr=False #直播回放
     che=False #B站课程
     chel=False #B站课程已购列表
+    live = False  # 直播
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
@@ -105,6 +114,7 @@ def main(ip={}):
     rid="" #直播回放id
     ssid=-1 #B站课程SS号
     epid=-1 #B站课程EP号
+    roomid = -1  # 直播房间ID
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -125,7 +135,7 @@ def main(ip={}):
         s="https://www.bilibili.com/video/av"+inp
         av=True
     else :
-        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?',inp,I)
+        re=search(r'([^:]+://)?(www.)?(space.)?(vc.)?(m.)?(live.)?bilibili.com/(video/av([0-9]+))?(video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www.)?b23.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
             if re==None :
@@ -135,6 +145,7 @@ def main(ip={}):
                 re=requests.head(inp)
                 if 'Location' in re.headers :
                     ip['i']=re.headers['Location']
+                    ip['uc'] = False
                     return main(ip)
                 else :
                     print(f'{lan["ERROR2"]}')#输入有误
@@ -164,6 +175,7 @@ def main(ip={}):
                     re=requests.head(inp)
                     if 'Location' in re.headers :
                         ip['i']=re.headers['Location']
+                        ip['uc'] = False
                         return main(ip)
                     else :
                         print(f'{lan["ERROR2"]}')#输入有误
@@ -248,6 +260,9 @@ def main(ip={}):
                 epid=int(re[38])
             elif re[39] or re[40]:
                 chel=True
+            elif re[5] and re[41]:
+                live = True
+                roomid = int(re[41])
             else :
                 print(f'{lan["ERROR2"]}')
                 exit()
@@ -343,6 +358,7 @@ def main(ip={}):
             if 'p' in ip :
                 ip2['p']=ip['p']
             ip2['i']='ss%s'%(re['mediaInfo']['season_id'])
+            ip2['uc'] = False
             read=main(ip2)
             if read!=0 :
                 return read
@@ -416,6 +432,7 @@ def main(ip={}):
                         for i in cho:
                             ip2=copyip(ip)
                             ip2['i']="https://space.bilibili.com/%s/favlist?fid=%s"%(uid,re['data']['list'][i-1]['id'])
+                            ip2['uc'] = False
                             read=main(ip2)
                             if read!=0 :
                                 return read
@@ -512,6 +529,7 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(plv[i-1]['id'])
+            ip2['uc'] = False
             if c1:
                 ip2['p']='a'
             read=main(ip2)
@@ -590,6 +608,7 @@ def main(ip={}):
                 for i in cho :
                     ip2=copyip(ip)
                     ip2['i']='https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,chl[i-1]['cid'])
+                    ip2['uc'] = False
                     read=main(ip2)
                     if read!=0 :
                         return read
@@ -680,6 +699,7 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(chv[i-1]['aid'])
+            ip2['uc'] = False
             if c1:
                 ip2['p']='a'
             read=main(ip2)
@@ -776,6 +796,7 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(vl[i-1]['aid'])
+            ip2['uc'] = False
             if c1:
                 ip2['p']='a'
             read=main(ip2)
@@ -1008,6 +1029,7 @@ def main(ip={}):
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=f"https://www.bilibili.com/cheese/play/ss{chep[i-1]['id']}"
+            ip2['uc'] = False
             if c1:
                 ip2['p']='a'
             read=main(ip2)
@@ -1024,6 +1046,99 @@ def main(ip={}):
         if re['code']!=0:
             print(f"{re['code']} {re['message']}")
         vd=JSONParser.parseche(re)
+    if live:
+        r = requests.Session()
+        r.headers = copydict(section.headers)
+        r.proxies = section.proxies
+        if nte:
+            r.trust_env = False
+        read = JSONParser.loadcookie(r)
+        if read != 0:
+            print(lan['ERROR10'])  # 读取cookies.json出现错误
+            return -1
+        r.cookies.set('CURRENT_QUALITY', '120', domain='.bilibili.com', path='/')
+        r.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
+        r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
+        r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
+        uri = f"https://live.bilibili.com/{roomid}"
+        re = r.get(uri)
+        re.encoding = 'utf8'
+        r.headers.update({'referer': uri})
+        rs = search(r'window\.__NEPTUNE_IS_MY_WAIFU__=({[^<]+})', re.text, I)
+        if rs is not None:
+            live_info = json.loads(rs.groups()[0])
+            room_info = live_info['baseInfoRes']['data']
+        else:
+            live_info = None
+            uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+            re = r.get(uri)
+            re.encoding = 'utf8'
+            re = re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+                return -1
+            room_info = re['data']
+        info = JSONParser2.getliveinfo1(room_info)
+        uri = f"https://api.bilibili.com/x/space/acc/info?mid={info['uid']}&jsonp=jsonp"
+        re = r.get(uri)
+        re.encoding = 'utf8'
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']} {re['message']}")
+        uploader_info = re['data']
+        JSONParser2.getliveinfo2(uploader_info, info)
+        if ns:
+            PrintInfo.printliveInfo(info)
+        roomInitRes = None
+        if live_info is not None:
+            roomInitRes = live_info['roomInitRes']['data']
+        bs = True
+        cho = False
+        if not ns:
+            bs = False
+        read = JSONParser.getset(se, 'mp')
+        if read == True:
+            bs = False
+            cho = True
+        elif read == False:
+            bs = False
+        if 'm' in ip:
+            bs = False
+            cho = ip['m']
+        while bs:
+            inp = input(f"{lan['INPUT8']}(y/n)")  # 是否要默认下载最高画质（这样将不会询问具体画质）？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    cho = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if info['livestatus'] > 0:
+            read = videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            if read != 0:
+                return -1
+        else:
+            print(lan['LIVE_NOT_START'])
+            bs = True
+            while bs:
+                sleep(30)  # 30秒后继续检测
+                uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+                re = r.get(uri)
+                re.encoding = 'utf8'
+                re = re.json()
+                if re['code'] != 0:
+                    print(f"{re['code']} {re['message']}")
+                    return -1
+                room_info = re['data']
+                if room_info['live_status'] > 0:
+                    info['livestatus'] = room_info['live_status']
+                    bs = False
+                elif ns:
+                    print(lan['LIVE_NOT_START'])
+            read = videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            if read != 0:
+                return -1
+        return 0
     if not che:
         re=section.get(s)
         parser=HTMLParser.Myparser()
@@ -1042,6 +1157,7 @@ def main(ip={}):
                 if 'data' in re and 'View' in re['data'] and 'redirect_url' in re['data']['View'] :
                     ip2=copyip(ip)
                     ip2['i']=re['data']['View']['redirect_url']
+                    ip2['uc'] = False
                     if 'p' in ip :
                         ip2['p']=ip['p']
                     read=main(ip2)
@@ -1056,6 +1172,7 @@ def main(ip={}):
                     s=s.replace('bangumi','cheese')
                     print(lan['OUTPUT12'].replace('<link>',s))#尝试重定向至"<link>"。
                     ip['i']=s
+                    ip['uc'] = False
                     return main(ip)
                 print(traceback.format_exc())
                 return -1
