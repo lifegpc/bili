@@ -45,6 +45,23 @@ ip={}
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
 lan=getdict('videodownload',getlan(se,ip))
+
+
+def getqualitytrans(t: str) -> str:
+    "返回画质的翻译"
+    if t in lan:
+        return lan[t]
+    print(lan['NO_QUA_TRANS'].replace('<value>', t))
+    return t
+
+
+def getqualitytransl(l: list) -> list:
+    r = []
+    for i in l:
+        r.append(getqualitytrans(i))
+    return r
+
+
 def getfps(s:str)->str:
     "解析B站API返回的fps"
     if s.isnumeric() :
@@ -310,7 +327,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         JSONParser2.getsub(rs2,data)
     if "data" in re and "durl" in re['data']:
         vq=re["data"]["quality"]
-        vqd=re["data"]["accept_description"]
+        vqd = getqualitytransl(re["data"]["accept_description"])
         avq=re["data"]["accept_quality"]
         durl={vq:re["data"]['durl']}
         durz={}
@@ -662,7 +679,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
     elif "data" in re and "dash" in re['data'] :
         vq=re["data"]["quality"]
-        vqd=re["data"]["accept_description"]
+        vqd = getqualitytransl(re["data"]["accept_description"])
         avq2=re['data']["accept_quality"]
         avq3={}
         avq=[]
@@ -1308,7 +1325,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         re=re.json()
     if 'data' in re and 'dash' in re['data']:
         dash={'video':{},'audio':{}}
-        vqd=re["data"]["accept_description"]
+        vqd = getqualitytransl(re["data"]["accept_description"])
         avq=[]
         avq2=re["data"]["accept_quality"]
         avq3={}
@@ -1697,7 +1714,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     os.remove(imgf)
     elif 'data' in re and 'durl' in re['data'] :
         vq=re["data"]["quality"]
-        vqd=re["data"]["accept_description"]
+        vqd = getqualitytransl(re["data"]["accept_description"])
         avq=re["data"]["accept_quality"]
         durl={vq:re["data"]['durl']}
         durz={}
@@ -2410,6 +2427,7 @@ def lrvideodownload(data,r,c,c3,se,ip):
     if 'data' in re and 'list' in re['data'] :
         #vq=re['data']['current_qn'] #暂时不需要
         avq,vqd=bstr.getv(re['data']['qn_desc'])
+        vqd = getqualitytransl(vqd)
         if len(avq) >1 :
             print(f"{lan['ERROR8']}\n{lan['ERROR5']}")#不支持画质选择
             input(lan['INPUT6'])#请按回车键继续下载
@@ -2735,7 +2753,7 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
     quality_des_dict = {}
     for i in quality_description:
         accept_quality_list.append(i['qn'])
-        quality_des_dict[i['qn']] = i['desc']
+        quality_des_dict[i['qn']] = getqualitytrans(i['desc'])
     current_qn = play_url['current_qn']
     if 'durl' in play_url:
         durl = {}

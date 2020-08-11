@@ -4,15 +4,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# 1 q <g1710431395@gmail.com>, 2020
 # Kum4423, 2020
+# 1 q <g1710431395@gmail.com>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-11 12:54:00+0000\n"
 "PO-Revision-Date: 2020-07-11 13:31+0000\n"
-"Last-Translator: Kum4423, 2020\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -180,7 +180,7 @@ msgid "The file size is not equal to the estimated size."
 msgstr "ファイルサイズが推定サイズと一致しません。"
 
 msgctxt "OUTPUT21"
-msgid "Unable to get file size. Try to get again ……"
+msgid "Unable to get file size. Try to get again ..."
 msgstr "ファイルサイズを取得できません。もう一度お試しください。"
 
 msgctxt "OUTPUT22"
@@ -212,3 +212,59 @@ msgid ""
 "The index you specified is out of range. The index should be between 0 and "
 "<max>."
 msgstr "指定したインデックスは範囲外です。インデックスは 0 と<max>から。"
+
+msgctxt "NO_QUA_TRANS"
+msgid "There is no translated text for \"<value>\"."
+msgstr ""
+
+msgctxt "超清 4K"
+msgid "UHD 4K"
+msgstr ""
+
+msgctxt "高清 1080P60"
+msgid "HD 1080P60"
+msgstr ""
+
+msgctxt "高清 720P60"
+msgid "HD 720P60"
+msgstr ""
+
+msgctxt "高清 1080P"
+msgid "HD 1080P"
+msgstr ""
+
+msgctxt "高清 720P"
+msgid "HD 720P"
+msgstr ""
+
+msgctxt "清晰 480P"
+msgid "SD 480P"
+msgstr ""
+
+msgctxt "流畅 360P"
+msgid "SD 360P"
+msgstr ""
+
+msgctxt "高清 1080P+"
+msgid "HD 1080P+"
+msgstr ""
+
+msgctxt "原画"
+msgid "Origin Quality"
+msgstr ""
+
+msgctxt "蓝光"
+msgid "Blu-ray"
+msgstr ""
+
+msgctxt "超清"
+msgid "UHD"
+msgstr ""
+
+msgctxt "高清"
+msgid "HD"
+msgstr ""
+
+msgctxt "流畅"
+msgid "SD"
+msgstr ""
