@@ -3,11 +3,15 @@
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-08-10 05:08:00+0000\n"
 "PO-Revision-Date: 2020-08-10 11:42+0000\n"
+"Last-Translator: Kum4423, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,36 +21,36 @@ msgstr ""
 
 msgctxt "COM_MUST_STR"
 msgid "The comment must be a string."
-msgstr ""
+msgstr "コメントは文字列である必要があります。"
 
 msgctxt "COLOR_MUST_INT"
 msgid "The color value must be a integer."
-msgstr ""
+msgstr "色の値は整数である必要があります。"
 
 msgctxt "COLOR_OUT_OF_RANGE"
 msgid "The color value must between 0 and 255."
-msgstr ""
+msgstr "色の値は0～255の間でなければなりません。"
 
 msgctxt "INVALID_ASS_COLOR"
 msgid "\"<value>\" is a invalid color in ASS script."
-msgstr ""
+msgstr "\"<value>\" は ASS スクリプトの無効な色です。"
 
 msgctxt "INVALID_CSS_COLOR"
 msgid "\"<value>\" is a invalid color."
-msgstr ""
+msgstr "\"<value>\" は 無効な色です。"
 
 msgctxt "OUT_OF_RANGE"
 msgid "This value must be greater than 0 or equal to 0."
-msgstr ""
+msgstr "この値は0より大きいか、0に等しいものでなければなりません。"
 
 msgctxt "MUST_NUM"
 msgid "This value must be a number."
-msgstr ""
+msgstr "この値は数値でなければなりません。"
 
 msgctxt "MUST_BOOL"
 msgid "This value must be a boolean."
-msgstr ""
+msgstr "この値はブール値でなければなりません。"
 
 msgctxt "ALIGN_OUT_OF_RANGE"
 msgid "This value must between 1 and 9."
-msgstr ""
+msgstr "この値は1から9の間でなければなりません。"

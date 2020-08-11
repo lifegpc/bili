@@ -4,15 +4,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# Kum4423, 2020
 # 1 q <g1710431395@gmail.com>, 2020
+# Kum4423, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-11 12:54:00+0000\n"
 "PO-Revision-Date: 2020-07-11 13:31+0000\n"
-"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Last-Translator: Kum4423, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -197,18 +197,18 @@ msgstr "カバー画像のダウンロード時にエラーが発生しました
 
 msgctxt "NOT_GET_QUA"
 msgid "Unable to get play URL for quality <quality>."
-msgstr ""
+msgstr "<quality>品質のための再生URLを取得することができません。"
 
 msgctxt "ALL_URL_COUNT"
 msgid "(<number> URLs are available.)"
-msgstr ""
+msgstr "(<number> URLが利用可能です。)"
 
 msgctxt "URL_SELECTED"
 msgid "You have selected the URL<index>."
-msgstr ""
+msgstr "URL<index>を選択しました。"
 
 msgctxt "INDEX_OUT_OF_RANGE"
 msgid ""
 "The index you specified is out of range. The index should be between 0 and "
 "<max>."
-msgstr ""
+msgstr "指定したインデックスは範囲外です。インデックスは 0 と<max>から。"

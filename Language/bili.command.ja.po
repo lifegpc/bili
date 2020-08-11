@@ -369,21 +369,21 @@ msgstr "複数の数字やリンクを入力する際に、複数のスレッド
 msgctxt "O66"
 msgid ""
 "The index of URL when downloading the live video. (The index starts with 0.)"
-msgstr ""
+msgstr "ライブ動画をダウンロードする際のURLのインデックスです。(インデックスは0から始まります)"
 
 msgctxt "O67"
 msgid "Enable checking for new versions."
-msgstr ""
+msgstr "新しいバージョンのチェックを有効にします。"
 
 msgctxt "O68"
 msgid "Disable checking for new versions."
-msgstr ""
+msgstr "新しいバージョンのチェックを無効にします。"
 
 msgctxt "O69"
 msgid "Save the subtitles file as an ASS(Advanced SubStation Alpha) file."
-msgstr ""
+msgstr "字幕ファイルをASS(Advanced SubStation Alpha)ファイルとして保存します。"
 
 msgctxt "O70"
 msgid ""
 "Do not save the subtitles file as an ASS(Advanced SubStation Alpha) file."
-msgstr ""
+msgstr "字幕ファイルをASS(Advanced SubStation Alpha)ファイルとして保存しない。"
