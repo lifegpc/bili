@@ -118,10 +118,10 @@ def checkver():
             v = version(ver)
             print(f"{lan['CUR_VER']}{v.tostr()}")  # 当前版本：
             try:
-                re = requests.get(uri)
+                re = requests.get(uri, timeout=5)
             except:
                 try:
-                    re = requests.get(backup_uri)
+                    re = requests.get(backup_uri, timeout=5)
                 except:
                     print(lan['NETWORK_ERROR'])  # 网络错误：无法获取最新稳定版本字符串
                     return
