@@ -54,6 +54,7 @@ def listff(filelist) :
     return r
 def filtern(filen:str) :
     "对文件名进行去除不应该字符"
+    filen = str(filen)
     filen=filen.replace('/','_')
     filen=filen.replace('\\','_')
     filen=filen.replace(':','_')

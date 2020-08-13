@@ -21,6 +21,8 @@ from lang import getlan,getdict
 import sys
 from command import gopt
 import JSONParser
+from ASSWriter import ASSScript, parsefromCSSHex, ASSScriptEvent
+import traceback
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -29,11 +31,21 @@ ip={}
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
 lan=getdict('biliSub',getlan(se,ip))
-def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict,pr:bool=False,pi:int=1) :
+
+
+def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = False,pi: int = 1, width: int = None, height: int = None):
     "下载字幕"
+    ass = False
+    if JSONParser.getset(se, 'ass') == True:
+        ass = True
+    if 'ass' in ip:
+        ass = ip['ass']
     global lan
     fq=spfn(fn)[0]
-    fn="%s.%s.srt"%(fq,i['lan'])
+    if not ass:
+        fn = f"{fq}.{i['lan']}.srt"
+    else:
+        fn = f"{fq}.{i['lan']}.ass"
     i['fn']=fn
     if os.path.exists(fn) :
         fg=False
@@ -65,8 +77,16 @@ def downsub(r:Session,fn:str,i:dict,ip:dict,se:dict,pr:bool=False,pi:int=1) :
     re=r.get(i['url'])
     re.encoding='utf8'
     re=re.json()
-    if assrt(fn,re['body'])==0 and pr :
-        print(lan['OUTPUT2'].replace('<number>',str(pi)).replace('<languagename>',i['land']))#第<number>P<languagename>字幕下载完毕！
+    if not ass:
+        if assrt(fn, re['body']) == 0 and pr :
+            print(lan['OUTPUT2'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>字幕下载完毕！
+    else:
+        if width is None:
+            width = 1920
+        if height is None:
+            height = 1080
+        if asass(fn, re, width, height) == 0 and pr :
+            print(lan['OUTPUT2'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>字幕下载完毕！
     return 0
 def assrt(fn:str,b:list):
     "保存至srt格式"
@@ -101,3 +121,36 @@ def ffinputstr(i:list,n:int) ->(str,str):
         r=r+' -map %s'%(i)
     return s,r
 
+
+def asass(fn: str, b: dict, width: int, height: int):
+    d = ASSScript()
+    d.Script_Info.Title = fn
+    d.Script_Info.PlayResX = width
+    d.Script_Info.PlayResY = height
+    d.V4_Styles[0].Fontname = '微软雅黑'
+    d.V4_Styles[0].set_Fontsize(28 * width / 1139)
+    try:
+        d.V4_Styles[0].PrimaryColour = parsefromCSSHex(b['font_color'])
+    except:
+        print(traceback.format_exc())
+    d.Events = []
+    loc = 2
+    for i in b['body']:
+        if loc != i['location']:
+            t = "{\\an%s}%s" % (i['location'], i['content'])
+        else:
+            t = i['content']
+        d.Events.append(ASSScriptEvent(i['from'] * 1000, i['to'] * 1000, t))
+    try:
+        f = open(fn, 'w', encoding = "utf8")
+    except:
+        print(lan['ERROR1'].replace('<filename>' ,fn))  # 保存"<filename>"失败！
+        return -1
+    try:
+        f.write(d.dump())
+    except:
+        print(lan['ERROR2'].replace('<filename>', fn))  # 写入到文件"<filename>"时失败！
+        f.close()
+        return -1
+    f.close()
+    return 0

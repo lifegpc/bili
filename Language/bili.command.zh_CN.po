@@ -358,3 +358,20 @@ msgstr "启用检查新版本。"
 msgctxt "O68"
 msgid "Disable checking for new versions."
 msgstr "禁用检查新版本。"
+
+msgctxt "O69"
+msgid "Save the subtitles file as an ASS(Advanced SubStation Alpha) file."
+msgstr "将字幕文件保存为ASS(Advanced SubStation Alpha)文件。"
+
+msgctxt "O70"
+msgid ""
+"Do not save the subtitles file as an ASS(Advanced SubStation Alpha) file."
+msgstr "不要将字幕文件保存为ASS(Advanced SubStation Alpha)文件。"
+
+msgctxt "O71"
+msgid "Create a separate directory for videos with multiply parts."
+msgstr "为多P视频创建单独的文件夹。"
+
+msgctxt "O72"
+msgid "Do not create a separate directory for videos with multiply parts."
+msgstr "不要为多P视频创建单独的文件夹。"

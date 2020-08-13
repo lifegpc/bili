@@ -182,3 +182,11 @@ msgstr ""
 msgctxt "INPUT33"
 msgid "Do you want to disable checking for new versions?"
 msgstr ""
+
+msgctxt "INPUT34"
+msgid "Do you want to save the subtitles file as an ASS(Advanced SubStation Alpha) file?"
+msgstr ""
+
+msgctxt "INPUT35"
+msgid "Do you want to create a separate directory for videos with multiply parts?"
+msgstr ""

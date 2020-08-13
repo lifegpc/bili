@@ -180,7 +180,7 @@ msgid "The file size is not equal to the estimated size."
 msgstr "ファイルサイズが推定サイズと一致しません。"
 
 msgctxt "OUTPUT21"
-msgid "Unable to get file size. Try to get again ……"
+msgid "Unable to get file size. Try to get again ..."
 msgstr "ファイルサイズを取得できません。もう一度お試しください。"
 
 msgctxt "OUTPUT22"
@@ -197,18 +197,74 @@ msgstr "カバー画像のダウンロード時にエラーが発生しました
 
 msgctxt "NOT_GET_QUA"
 msgid "Unable to get play URL for quality <quality>."
-msgstr ""
+msgstr "<quality>品質のための再生URLを取得することができません。"
 
 msgctxt "ALL_URL_COUNT"
 msgid "(<number> URLs are available.)"
-msgstr ""
+msgstr "(<number> URLが利用可能です。)"
 
 msgctxt "URL_SELECTED"
 msgid "You have selected the URL<index>."
-msgstr ""
+msgstr "URL<index>を選択しました。"
 
 msgctxt "INDEX_OUT_OF_RANGE"
 msgid ""
 "The index you specified is out of range. The index should be between 0 and "
 "<max>."
+msgstr "指定したインデックスは範囲外です。インデックスは 0 と<max>から。"
+
+msgctxt "NO_QUA_TRANS"
+msgid "There is no translated text for \"<value>\"."
+msgstr ""
+
+msgctxt "超清 4K"
+msgid "UHD 4K"
+msgstr ""
+
+msgctxt "高清 1080P60"
+msgid "HD 1080P60"
+msgstr ""
+
+msgctxt "高清 720P60"
+msgid "HD 720P60"
+msgstr ""
+
+msgctxt "高清 1080P"
+msgid "HD 1080P"
+msgstr ""
+
+msgctxt "高清 720P"
+msgid "HD 720P"
+msgstr ""
+
+msgctxt "清晰 480P"
+msgid "SD 480P"
+msgstr ""
+
+msgctxt "流畅 360P"
+msgid "SD 360P"
+msgstr ""
+
+msgctxt "高清 1080P+"
+msgid "HD 1080P+"
+msgstr ""
+
+msgctxt "原画"
+msgid "Origin Quality"
+msgstr ""
+
+msgctxt "蓝光"
+msgid "Blu-ray"
+msgstr ""
+
+msgctxt "超清"
+msgid "UHD"
+msgstr ""
+
+msgctxt "高清"
+msgid "HD"
+msgstr ""
+
+msgctxt "流畅"
+msgid "SD"
 msgstr ""

@@ -69,6 +69,23 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
         o=read
     if 'o' in ip:
         o=ip['o']
+    fin = True
+    if getset(se, 'in') == False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    dmp = False
+    if getset(se, 'dmp') == True:
+        dmp = True
+    if 'dmp' in ip:
+        dmp = ip['dmp']
+    if t != 'av' or data['videos'] == 1:
+        dmp = False
+    if dmp:
+        if not fin:
+            o = f"{o}{file.filtern(data['title'])}/"
+        else:
+            o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
     try :
         if not exists(o) :
             mkdir(o)
@@ -81,11 +98,6 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
     except:
         print(lan['ERROR3'].replace('<dirname>',"Temp"))#创建Temp文件夹失败
         return -3
-    fin=True
-    if getset(se,'in')==False :
-        fin=False
-    if 'in' in ip:
-        fin=ip['in']
     if t=='av' :
         d=biliDanmuDown.downloadn(data['page'][c-1]['cid'],r)
         if data['videos'] ==1 :
@@ -94,10 +106,14 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             else :
                 filen=f"{o}{file.filtern(data['title'])}.xml"
         else :
-            if fin:
+            if fin and not dmp:
                 filen=o+file.filtern(data['title']+'-'+f"{c}."+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
-            else :
+            elif not dmp:
                 filen=f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
+            elif fin:
+                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}(P{c},{data['page'][c - 1]['cid']}).xml")
+            else:
+                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}.xml")
         if d==-1 :
             print(lan['ERROR1'])#网络错误
             exit()
@@ -304,6 +320,23 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
         o=read
     if 'o' in ip:
         o=ip['o']
+    fin = True
+    if getset(se, 'in') == False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    dmp = False
+    if getset(se, 'dmp') == True:
+        dmp = True
+    if 'dmp' in ip:
+        dmp = ip['dmp']
+    if t != 'av' or data['videos'] == 1:
+        dmp = False
+    if dmp:
+        if not fin:
+            o = f"{o}{file.filtern(data['title'])}/"
+        else:
+            o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
     try :
         if not exists(o) :
             mkdir(o)
@@ -316,11 +349,6 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
     except:
         print(lan['ERROR3'].replace('<dirname>',"Temp"))#创建Temp文件夹失败
         return -1
-    fin=True
-    if getset(se,'in')==False :
-        fin=False
-    if 'in' in ip:
-        fin=ip['in']
     if t=='av' :
         bs=True
         at2=False
@@ -352,10 +380,14 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
             else :
                 filen=f"{o}{file.filtern(data['title'])}.xml"
         else :
-            if fin:
+            if fin and not dmp:
                 filen=o+file.filtern(data['title']+'-'+f"{c}."+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
-            else :
+            elif not dmp:
                 filen=f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
+            elif fin:
+                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}(P{c},{data['page'][c - 1]['cid']}).xml")
+            else:
+                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}.xml")
         if exists(filen) :
             fg=False
             bs=True

@@ -173,7 +173,7 @@ msgid "The file size is not equal to the estimated size."
 msgstr "文件大小不一致。"
 
 msgctxt "OUTPUT21"
-msgid "Unable to get file size. Try to get again ……"
+msgid "Unable to get file size. Try to get again ..."
 msgstr "获取文件大小失败。尝试重新获取……"
 
 msgctxt "OUTPUT22"
@@ -205,3 +205,59 @@ msgid ""
 "The index you specified is out of range. The index should be between 0 and "
 "<max>."
 msgstr "您指定的索引超出范围。索引应该在0到<max>之间。"
+
+msgctxt "NO_QUA_TRANS"
+msgid "There is no translated text for \"<value>\"."
+msgstr "没有\"<value>\"的翻译。"
+
+msgctxt "超清 4K"
+msgid "UHD 4K"
+msgstr "超清 4K"
+
+msgctxt "高清 1080P60"
+msgid "HD 1080P60"
+msgstr "高清 1080P60"
+
+msgctxt "高清 720P60"
+msgid "HD 720P60"
+msgstr "高清 720P60"
+
+msgctxt "高清 1080P"
+msgid "HD 1080P"
+msgstr "高清 1080P"
+
+msgctxt "高清 720P"
+msgid "HD 720P"
+msgstr "高清 720P"
+
+msgctxt "清晰 480P"
+msgid "SD 480P"
+msgstr "清晰 480P"
+
+msgctxt "流畅 360P"
+msgid "SD 360P"
+msgstr "流畅 360P"
+
+msgctxt "高清 1080P+"
+msgid "HD 1080P+"
+msgstr "高清 1080P+"
+
+msgctxt "原画"
+msgid "Origin Quality"
+msgstr "原画"
+
+msgctxt "蓝光"
+msgid "Blu-ray"
+msgstr "蓝光"
+
+msgctxt "超清"
+msgid "UHD"
+msgstr "超清"
+
+msgctxt "高清"
+msgid "HD"
+msgstr "高清"
+
+msgctxt "流畅"
+msgid "SD"
+msgstr "流畅"
