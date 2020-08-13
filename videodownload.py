@@ -625,7 +625,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2, filen + ".mkv", s, ip, se, data, ns, i)
-        imgf=file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
+        imgf = file.spfn(filen + ".mkv")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
         imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
@@ -2042,7 +2042,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 com=com+k['size']
             j=j+1
         if not che:
-            imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
+            imgf = f"{file.spfn(filen + '.mkv')[0]}.{file.geturlfe(i['cover'])}"#图片文件名
             imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
