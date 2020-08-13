@@ -20,3 +20,8 @@ dist/
 build/
 *.bat
 v.py
+# README.md Convert file
+node_modules/
+converttohtml.js
+README.html
+easyuse.html
