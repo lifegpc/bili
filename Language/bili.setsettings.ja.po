@@ -243,5 +243,5 @@ msgstr "字幕ファイルをASS(Advanced SubStation Alpha)ファイルとして
 
 msgctxt "INPUT35"
 msgid ""
-"Do you want to create a separate directory for videos with multipy parts?"
+"Do you want to create a separate directory for videos with multiply parts?"
 msgstr ""

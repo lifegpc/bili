@@ -300,9 +300,9 @@ msgid "Do not save the subtitles file as an ASS(Advanced SubStation Alpha) file.
 msgstr ""
 
 msgctxt "O71"
-msgid "Create a separate directory for videos with multipy parts."
+msgid "Create a separate directory for videos with multiply parts."
 msgstr ""
 
 msgctxt "O72"
-msgid "Do not create a separate directory for videos with multipy parts."
+msgid "Do not create a separate directory for videos with multiply parts."
 msgstr ""

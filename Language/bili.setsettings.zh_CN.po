@@ -234,5 +234,5 @@ msgstr "是否要将字幕文件保存为ASS(Advanced SubStation Alpha)文件�
 
 msgctxt "INPUT35"
 msgid ""
-"Do you want to create a separate directory for videos with multipy parts?"
+"Do you want to create a separate directory for videos with multiply parts?"
 msgstr "是否要为多P视频创建单独的文件夹？"
