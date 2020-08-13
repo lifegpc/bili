@@ -32,6 +32,7 @@ if len(sys.argv) > 1:
 lan = getdict('biliVersion', getlan(se, ip))
 
 uri = "https://raw.githubusercontent.com/lifegpc/bili/master/version.txt"  # 检测更新用URI
+backup_uri = "https://kanahanazawa.com/bili.version.php"  # 备用URI
 
 
 class UnknownVersionString(Exception):
@@ -119,8 +120,11 @@ def checkver():
             try:
                 re = requests.get(uri)
             except:
-                print(lan['NETWORK_ERROR'])  # 网络错误：无法获取最新稳定版本字符串
-                return
+                try:
+                    re = requests.get(backup_uri)
+                except:
+                    print(lan['NETWORK_ERROR'])  # 网络错误：无法获取最新稳定版本字符串
+                    return
             if re.ok:
                 v2 = version(re.text.split('\n')[0])
                 print(f"{lan['LATEST_STABLE_VER']}{v2.tostr()}")  # 最新稳定版本
