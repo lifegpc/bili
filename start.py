@@ -1475,7 +1475,7 @@ def main(ip={}):
                                         i1=i2
                                         i2=tt
                                     for i in range(i1,i2+1) :
-                                        if i>0 and i<=data['videos'] and (not (i in cho)):
+                                        if i > 0 and i <= le and (not (i in cho)):
                                             cho.append(i)
                                 else :  
                                     bb=False
