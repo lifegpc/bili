@@ -387,3 +387,11 @@ msgctxt "O70"
 msgid ""
 "Do not save the subtitles file as an ASS(Advanced SubStation Alpha) file."
 msgstr "字幕ファイルをASS(Advanced SubStation Alpha)ファイルとして保存しない。"
+
+msgctxt "O71"
+msgid "Create a separate directory for videos with multipy parts."
+msgstr ""
+
+msgctxt "O72"
+msgid "Do not create a separate directory for videos with multipy parts."
+msgstr ""

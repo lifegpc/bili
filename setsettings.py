@@ -264,4 +264,8 @@ if __name__=='__main__' :
     r = gk(se, 'ass')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'ass', se)
+    print(f"{la['INPUT35']}{la['NTN']}")  # 是否要为多P视频创建单独的文件夹？（不设置情况下为否）
+    r = gk(se, 'dmp')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'dmp', se)
     saveset(ne)
