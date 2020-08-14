@@ -39,6 +39,13 @@ import JSONParser2
 from threading import Thread
 from biliVersion import checkver
 from time import sleep
+
+# 远程调试用代码
+# import ptvsd
+# ptvsd.enable_attach(("0.0.0.0", 44123))
+# ptvsd.wait_for_attach()
+
+
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
