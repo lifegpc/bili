@@ -14,6 +14,8 @@
   * [已知BUG](#已知bug)
     + [一直出现保存内容至文件失败或显示cgi库escape出错](#一直出现保存内容至文件失败或显示cgi库escape出错)
     + [登录时发生错误（使用ChromeDriver时）](#登录时发生错误使用chromedriver时)
+  * [FAQ](#faq)
+    + [无法输入密码](#无法输入密码)
 ## 简介
 程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver。   
 软件只有控制台界面，萌新不会可以看[这里](easyuse.md)   
@@ -75,3 +77,9 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 **可以到这里[下载](https://chromedriver.chromium.org/downloads)Chrome Driver的其他版本**  
 具体的错误提示可以参考[#9](https://github.com/lifegpc/bili/issues/9)和[#11](https://github.com/lifegpc/bili/issues/11)。  
 现在已经支持用户名和密码登录。
+
+## FAQ
+
+### 无法输入密码
+这是由于输入密码时关闭了输入内容在屏幕上输出（回显）导致的。  
+解决方法是直接正常输入密码后按回车键即可。
