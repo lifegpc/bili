@@ -430,8 +430,10 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             else :
                 filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s)'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
         else :
-            if not fin :
+            if not fin and not dmp:
                 filen=f"{o}{file.filtern(data['title'])}-{i}.{file.filtern(data['page'][i-1]['part'])}"
+            elif not fin and dmp:
+                filen = f"{o}{i}.{file.filtern(data['page'][i - 1]['part'])}"
             elif sv and not dmp:
                 filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']},{vqs})"))
             elif not dmp:
@@ -874,8 +876,10 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             else :
                 filen='%s%s'%(o,file.filtern('%s(AV%s,%s,P%s,%s).mkv'%(data['title'],data['aid'],data['bvid'],i,data['page'][i-1]['cid'])))
         else :
-            if not fin:
+            if not fin and not dmp:
                 filen=f"{o}{file.filtern(data['title'])}-{i}.{file.filtern(data['page'][i-1]['part'])}.mkv"
+            elif not fin and dmp:
+                filen = f"{o}{i}.{file.filtern(data['page'][i - 1]['part'])}.mkv"
             elif sv and not dmp:
                 if not nau:
                     filen='%s%s'%(o,file.filtern(f"{data['title']}-{i}.{data['page'][i-1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i-1]['cid']},{vqs[0]},{vqs[1]}).mkv"))
