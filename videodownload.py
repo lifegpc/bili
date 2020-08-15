@@ -1298,6 +1298,295 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
     else :
         print(f"{lan['OUTPUT24']}HTTP {re.status_code}")#下载封面图片时发生错误：
         return -2
+
+
+def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict, url: str, c: bool, c3: bool, ud: dict) -> int:
+    """仅下载音频
+    -1 读取cookies出现错误
+    -2 API解析错误
+    -3 下载错误
+    -4 aria2c参数错误
+    -5 创建文件夹失败
+    -6 缺少必要参数
+    -7 不支持durl
+    -8 不存在音频流"""
+    ns = True
+    if 's' in ip:
+        ns = False
+    nte = False
+    if JSONParser.getset(se, 'te') == False:
+        nte = True
+    if 'te' in ip:
+        nte = not ip['te']
+    o = 'Download/'
+    read = JSONParser.getset(se, 'o')
+    if read is not None:
+        o = read
+    if 'o' in ip:
+        o = ip['o']
+    dmp = False  # 是否为多P视频创建单独文件夹
+    if JSONParser.getset(se, 'dmp') == True:
+        dmp = True
+    if 'dmp' in ip:
+        dmp = ip['dmp']
+    if data['videos'] == 1:
+        dmp = False
+    F = False  # 进输出音频信息
+    if 'F' in ip:
+        F = True
+    fin = True
+    if JSONParser.getset(se, 'in') == False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    if dmp:
+        if not fin:
+            o = f"{o}{file.filtern(data['title'])}/"
+        else:
+            o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败
+        return -5
+    r2 = requests.Session()
+    r2.headers = copydict(r.headers)
+    if nte:
+        r2.trust_env = False
+    r2.proxies = r.proxies
+    read = JSONParser.loadcookie(r2)
+    if read != 0:
+        print(lan['ERROR2'])  # 读取cookies.json出现错误
+        return -1
+    if i>1:
+        url = f"{url}?p={i}"
+    r2.headers.update({'referer': url})
+    r2.cookies.set('CURRENT_QUALITY', '120', domain='.bilibili.com', path='/')
+    r2.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
+    r2.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
+    r2.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
+    re = r2.get(url)
+    re.encoding = 'utf8'
+    rs = search(r'__playinfo__=([^<]+)', re.text)
+    if rs is not None:
+        re = json.loads(rs.groups()[0])
+    elif data['videos'] >= 1:
+        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i - 1]['cid']}&qn=120&otype=json&bvid={data['bvid']}&fnver=0&fnval=16"
+        re = r2.get(uri)
+        re.encoding = "utf8"
+        re = re.json()
+        if re["code"] != 0:
+            print({"code": re["code"], "message": re["message"]})
+            return -2
+        napi = False
+    else:
+        return -2
+    if 'data' in re and 'durl' in re['data']:
+        print(lan['NOT_SUP_DURL'])  # 不支持durl流
+    elif 'data' in re and 'dash' in re['data']:
+        if not 'audio' in re['data']['dash'] or re['data']['dash']['audio'] is None:
+            print(lan['NO_AUDIO'])
+            return -8
+        accept_audio_quality = []
+        dash = {}
+        for j in re['data']['dash']['audio']:
+            dash[j['id']] = j
+            accept_audio_quality.append(j['id'])
+        accept_audio_quality.sort(reverse=True)
+        if c and not F:
+            dash = dash[accept_audio_quality[0]]
+            if ns:
+                print(lan['OUTPUT16'])  # 音频轨
+                print(f"ID:{dash['id']}")
+            dash['size'] = streamgetlength(r2, dash['base_url'])
+            if ns:
+                print(f"{lan['OUTPUT10']}{file.info.size(dash['size'])}({dash['size']}B,{file.cml(dash['size'], re['data']['timelength'])})")  # 大小：
+            vqs = accept_audio_quality[0]
+        else:
+            if ns or (not ns and F):
+                print(lan['OUTPUT16'])  # 音频轨：
+            k = 0
+            for j in accept_audio_quality:
+                if ns or (not ns and F):
+                    print(f"{k + 1}.ID:{j}")
+                dash[j]['size'] = streamgetlength(r2, dash[j]['base_url'])
+                if ns or (not ns and F):
+                    print(f"{lan['OUTPUT10']}{file.info.size(dash[j]['size'])}({dash[j]['size']}B,{file.cml(dash[j]['size'], re['data']['timelength'])})")  # 大小：
+                k = k + 1
+            if F:
+                return 0
+            if len(accept_audio_quality) > 1:
+                bs = True
+                fi = True
+                while bs:
+                    if fi and 'a' in ip:
+                        fi = False
+                        inp = ip['a']
+                    elif ns:
+                        inp = input(lan['INPUT5'])  # 请选择音质：
+                    else:
+                        print(lan['ERROR6'])  # 请使用-a <id>选择音质
+                        return -6
+                    if len(inp) > 0 and inp.isnumeric():
+                        if int(inp) > 0 and int(inp) < len(accept_audio_quality) + 1:
+                            bs = False
+                            dash = dash[accept_audio_quality[int(inp) - 1]]
+                            if ns:
+                                print(lan['OUTPUT17'].replace('<audioquality>', str(accept_audio_quality[int(inp) - 1])))  # 已选择%s音质
+                            vqs = accept_audio_quality[int(inp) - 1]
+            else:
+                dash = dash[accept_audio_quality[0]]
+                vqs = accept_audio_quality[0]
+        sv = True
+        if JSONParser.getset(se, 'sv') == False:
+            sv = False
+        if 'sv' in ip:
+            sv = ip['sv']
+        if data['videos'] == 1:
+            if not fin:
+                filen = f"{o}{file.filtern(data['title'])}"
+            elif sv:
+                filen = '%s%s' %(o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i - 1]['cid']},{vqs})"))
+            else:
+                filen = '%s%s' %(o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i - 1]['cid']})"))
+        else:
+            if not fin and not dmp:
+                filen = f"{o}{file.filtern(data['title'])}-{i}.{file.filtern(data['page'][i - 1]['part'])}"
+            elif not fin and dmp:
+                filen = f"{o}{i}.{file.filtern(data['page'][i - 1]['part'])}"
+            elif sv and not dmp:
+                filen = '%s%s' % (o, file.filtern(f"{data['title']}-{i}.{data['page'][i - 1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i - 1]['cid']},{vqs})"))
+            elif not dmp:
+                filen = '%s%s' % (o, file.filtern(f"{data['title']}-{i}.{data['page'][i - 1]['part']}(AV{data['aid']},{data['bvid']},P{i},{data['page'][i - 1]['cid']})"))
+            elif sv:
+                filen = '%s%s' % (o, file.filtern(f"{i}.{data['page'][i - 1]['part']}(P{i},{data['page'][i - 1]['cid']},{vqs})"))
+            else:
+                filen = '%s%s' % (o, file.filtern(f"{i}.{data['page'][i - 1]['part']}(P{i},{data['page'][i - 1]['cid']})"))
+        hzm = file.geturlfe(dash['base_url'])
+        ffmpeg = True
+        if JSONParser.getset(se, 'nf') == True:
+            ffmpeg = False
+        if 'yf' in ip:
+            ffmpeg = ip['yf']
+        if ffmpeg and os.system(f'ffmpeg -h{getnul()}') != 0:
+            ffmpeg = False
+        if ffmpeg and os.path.exists(f"{filen}.aac"):
+            overwrite = False
+            bs = True
+            if not ns:
+                overwrite = True
+                bs = False
+            if 'y' in ip:
+                overwrite = ip['y']
+                bs = False
+            while bs:
+                inp = input(f"{lan['INPUT1'].replace('<filename>', filen + '.aac')}(y/n)")  # "%s"文件已存在，是否覆盖？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        overwrite = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if overwrite:
+                try:
+                    os.remove(f"{filen}.aac")
+                except:
+                    print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                    return 0
+            else:
+                return 0
+        bs2 = True
+        aria2c = True
+        if JSONParser.getset(se, 'a') == False:
+            aria2c = False
+        if 'ar' in ip:
+            aria2c = ip['ar']
+        if aria2c and os.system(f'aria2c -h{getnul()}') != 0:
+            aria2c = False
+        if aria2c:
+            ab = True  # 是否使用备用地址
+            if JSONParser.getset(se, 'ab') == False:
+                ab = False
+            if 'ab' in ip:
+                ab = ip['ab']
+        while bs2:
+            bs2 = False
+            if aria2c:
+                if ab:
+                    read = dwaria2(r2, f"{filen}.{hzm}", geturll(dash), dash['size'], c3, ip, se)
+                else:
+                    read = dwaria2(r2, f"{filen}.{hzm}", dash['base_url'], dash['size'], c3, ip, se)
+                if read == -3:
+                    print(lan['ERROR4'])  # aria2c 参数错误
+                    return -4
+            else:
+                re = r2.get(dash['base_url'], stream=True)
+                read = downloadstream(nte, ip, dash['base_url'], r2, re, f"{filen}.{hzm}", dash['size'], c3)
+            if read == -1:
+                return -1
+            elif read == -2:
+                bs = True
+                rc = False
+                if not ns:
+                    bs = False
+                read = JSONParser.getset(se, 'rd')
+                if read == True:
+                    bs = False
+                    rc = True
+                elif read == False:
+                    bs = False
+                if 'r' in ip:
+                    rc = ip['r']
+                    bs = False
+                while bs:
+                    inp = input(f"{lan['INPUT3']}(y/n)")  # 文件下载失败，是否重新下载？
+                    if len(inp) > 0:
+                        if inp[0].lower() == 'y':
+                            bs = False
+                            rc = True
+                        elif inp[0].lower() == 'n':
+                            bs = False
+                if rc:
+                    if os.path.exists(f"{filen}.aac"):
+                        os.remove(f"{filen}.aac")
+                    bs2 = True
+                else:
+                    return -3
+        if ffmpeg:
+            print(lan['CONV_M4S_TO_AAC'])
+            nss = ""
+            if not ns:
+                nss = getnul()
+            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -write_apetag 1 -metadata title=\"{bstr.f(data['page'][i - 1]['part'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata track={i} -metadata totaltracks={data['videos']} -metadata date=\"{tostr2(data['pubdate'])}\" -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata uid=\"{data['uid']}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata aq=\"{vqs}\" -c copy \"{filen}.aac\"{nss}")
+            if re == 0:
+                print(lan['COM_CONV'])
+                delete = False
+                bs = True
+                if not ns:
+                    bs = False
+                read = JSONParser.getset(se, 'ad')
+                if read == True:
+                    delete = True
+                    bs = False
+                elif read == False:
+                    bs = False
+                if 'ad' in ip:
+                    delete = ip['ad']
+                    bs = False
+                while bs:
+                    inp = input(f"{lan['INPUT4']}(y/n)")  # 是否删除中间文件？
+                    if len(inp) > 0:
+                        if inp[0].lower() == 'y':
+                            delete = True
+                            bs = False
+                        elif inp[0].lower() == 'n':
+                            bs = False
+                if delete:
+                    os.remove(f"{filen}.{hzm}")
+    return 0
+
+
 def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     """下载番剧等视频"""
     che=False

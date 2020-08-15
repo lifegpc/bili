@@ -242,3 +242,19 @@ msgstr ""
 msgctxt "流畅"
 msgid "SD"
 msgstr ""
+
+msgctxt "NOT_SUP_DURL"
+msgid "Do not support to download audio only for durl streams."
+msgstr ""
+
+msgctxt "NO_AUDIO"
+msgid "There is no audio in this video."
+msgstr ""
+
+msgctxt "CONV_M4S_TO_AAC"
+msgid "Use ffmpeg to convert the m4s file to the aac file."
+msgstr ""
+
+msgctxt "COM_CONV"
+msgid "Convert completed."
+msgstr ""
