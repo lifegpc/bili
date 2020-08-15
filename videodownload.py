@@ -1382,6 +1382,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
         napi = False
     else:
         return -2
+    if F:
+        print(f"{lan['OUTPUT8'].replace('<number>', str(i))}{data['page'][i - 1]['part']}")#第<number>P
     if 'data' in re and 'durl' in re['data']:
         print(lan['NOT_SUP_DURL'])  # 不支持durl流
     elif 'data' in re and 'dash' in re['data']:
