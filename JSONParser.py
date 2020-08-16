@@ -187,6 +187,7 @@ def parseche(d:dict) :
     m['evaluate']=t['subtitle']
     m['type']=''
     m['cover']=t['cover']
+    m['up_info'] = t['up_info']
     e=[]
     b=sys.maxsize #最早的时间
     for i in t['episodes'] :

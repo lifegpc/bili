@@ -2789,7 +2789,12 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                         le2 = len(section['epList'])
                         break
             mediaInfo = data['mediaInfo']
-            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\"{imga} -metadata title=\"{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata comment=\"{bstr.f(mediaInfo['evaluate'])}\" -metadata album=\"{bstr.f(mediaInfo['title'])}\" -metadata artist=bilibili -metadata album_artist=bilibili -metadata track={i['i'] + 1}/{le2} -metadata disc={sectionType + 1}/{le} -metadata episode_id=\"AV{i['aid']},EP{i['id']}\" -metadata date={mediaInfo['time'][:10]} -metadata description=\"{vqs},SS{mediaInfo['ssId']}\" -c copy{imga2} \"{filen}.m4a\"{nss}")
+            author = "bilibili"
+            uid = ""
+            if che:
+                author = bstr.f(mediaInfo['up_info']['uname'])
+                uid = f",UID{mediaInfo['up_info']['mid']}"
+            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\"{imga} -metadata title=\"{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata comment=\"{bstr.f(mediaInfo['evaluate'])}\" -metadata album=\"{bstr.f(mediaInfo['title'])}\" -metadata artist={author} -metadata album_artist={author} -metadata track={i['i'] + 1}/{le2} -metadata disc={sectionType + 1}/{le} -metadata episode_id=\"AV{i['aid']},EP{i['id']}\" -metadata date={mediaInfo['time'][:10]} -metadata description=\"{vqs}{uid},SS{mediaInfo['ssId']}\" -c copy{imga2} \"{filen}.m4a\"{nss}")
             if re == 0:
                 print(lan['COM_CONV'])
                 delete = False
