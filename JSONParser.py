@@ -75,6 +75,7 @@ def Myparser2(s) :
             t['longTitle']=i['longTitle']
             t['i']=i['i']
             t['loaded']=i['loaded']
+            t['sectionType'] = i['sectionType']
             p=i['cover']
             if str(p).startswith('//'):
                 p="https:"+p
@@ -87,6 +88,7 @@ def Myparser2(s) :
             t={}
             t['id']=i['id']
             t['title']=i['title']
+            t['type'] = i['type']
             if 'epList' in i :
                 epList=[]
                 for j in i['epList'] :
@@ -100,6 +102,7 @@ def Myparser2(s) :
                     t2['i']=j['i']
                     t2['loaded']=j['loaded']
                     t2['title']=i['title']
+                    t2['sectionType'] = j['sectionType']
                     p=j['cover']
                     if str(p).startswith('//'):
                         p="https:"+p
@@ -184,6 +187,7 @@ def parseche(d:dict) :
     m['evaluate']=t['subtitle']
     m['type']=''
     m['cover']=t['cover']
+    m['up_info'] = t['up_info']
     e=[]
     b=sys.maxsize #最早的时间
     for i in t['episodes'] :
@@ -196,6 +200,7 @@ def parseche(d:dict) :
         a['longTitle']=i['title']
         a['i']=i['index']-1
         a['time']=i['release_date']
+        a['sectionType'] = 0
         if a['time']<b:
             b=a['time']
         e.append(a)

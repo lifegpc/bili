@@ -261,3 +261,19 @@ msgstr "高清"
 msgctxt "流畅"
 msgid "SD"
 msgstr "流畅"
+
+msgctxt "NOT_SUP_DURL"
+msgid "Do not support to download audio only for durl streams."
+msgstr "durl流不支持仅下载音频。"
+
+msgctxt "NO_AUDIO"
+msgid "There is no audio in this video."
+msgstr "该视频没有音频。"
+
+msgctxt "CONV_M4S_TO_M4A"
+msgid "Use ffmpeg to convert the m4s file to the m4a file."
+msgstr "使用ffmpeg将m4s文件转换为m4a文件。"
+
+msgctxt "COM_CONV"
+msgid "Convert completed."
+msgstr "转换完成！"

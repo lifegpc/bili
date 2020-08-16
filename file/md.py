@@ -21,10 +21,12 @@ def mkdir(dir:str) :
     dl=dir.split('/')[:-1]
     if len(dl) :
         s=""
+        f = True
         for i in dl:
-            if s=="" :
+            if f:
+                f = False
                 s=i
             else :
                 s=s+"/"+i
-            if not exists(s) :
+            if s != "" and not exists(s):
                 os.mkdir(s)

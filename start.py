@@ -39,6 +39,13 @@ import JSONParser2
 from threading import Thread
 from biliVersion import checkver
 from time import sleep
+
+# 远程调试用代码
+# import ptvsd
+# ptvsd.enable_attach(("0.0.0.0", 44123))
+# ptvsd.wait_for_attach()
+
+
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -1272,7 +1279,7 @@ def main(ip={}):
                 print(lan['ERROR11'])#请使用-d <method>选择下载方式
                 return -1
             inp=input(lan['INPUT9'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n6.仅字幕下载\n7.仅封面图片下载
-            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<8 :
+            if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<9 :
             	cho2=int(inp[0])
             	bs=False
         if cho2==1 or cho2==4 :
@@ -1297,7 +1304,7 @@ def main(ip={}):
                     print(lan['OUTPUT9'].replace('<number>',str(i)))#<number>P下载完成
                 else :
                     exit()
-        if cho2>2 and cho2<6:
+        if (cho2 > 2 and cho2 < 6) or cho2 == 8:
             bs=True
             cho3=False
             if not ns:
@@ -1348,10 +1355,14 @@ def main(ip={}):
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
-            for i in cho :
-                read=videodownload.avvideodownload(i,s,data,section,cho3,cho5,se,ip,ud)
-                if read==-5 or read==-6 :
-                    return -1
+            if cho2 == 8:
+                for i in cho:
+                    read = videodownload.avaudiodownload(data, section, i, ip, se, s, cho3, cho5, ud)
+            else:
+                for i in cho:
+                    read = videodownload.avvideodownload(i, s, data, section, cho3, cho5, se, ip, ud)
+            if read == -5 or read == -6:
+                return -1
         if cho2==6:
             for i in cho:
                 videodownload.avsubdownload(i,s,data,section,se,ip,ud)
@@ -1494,7 +1505,7 @@ def main(ip={}):
                 print(lan['ERROR11'])#请使用-d <method>选择下载方式
                 return -1
             inp=input(lan['INPUT12'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n7.仅封面图片下载
-            if inp[0].isnumeric() and ((int(inp[0])>0 and int(inp[0])<6) or int(inp[0])==7):
+            if inp[0].isnumeric() and ((int(inp[0]) > 0 and int(inp[0]) < 6) or int(inp[0]) == 7 or int(inp[0]) == 8):
             	cho2=int(inp[0])
             	bs=False
         if cho2==1 or cho2==4 :
@@ -1513,7 +1524,7 @@ def main(ip={}):
                     print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
                 else :
                     return -1
-        if cho2>2 and cho2<6 :
+        if (cho2>2 and cho2<6) or cho2 == 8:
             bs=True
             cho3=False
             if not ns:
@@ -1564,10 +1575,14 @@ def main(ip={}):
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
-            for i in cho:
-                read=videodownload.epvideodownload(i,"https://www.bilibili.com/bangumi/play/ss%s"%(data['mediaInfo']['ssId']),data,section,cho3,cho5,se,ip,ud)
-                if read==-5 or read==-6 :
-                    return -1
+            if cho2 == 8:
+                for i in cho:
+                    read = videodownload.epaudiodownload(i, f"https://www.bilibili.com/bangumi/play/ss{data['mediaInfo']['ssId']}", data, section, cho3, cho5, se, ip, ud)
+            else:
+                for i in cho:
+                    read = videodownload.epvideodownload(i, f"https://www.bilibili.com/bangumi/play/ss{data['mediaInfo']['ssId']}", data, section, cho3, cho5, se, ip, ud)
+            if read == -5 or read == -6:
+                return -1
         if cho2==7 :
             for i in cho:
                 videodownload.eppicdownload(i,data,section,ip,se)

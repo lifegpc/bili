@@ -122,7 +122,7 @@ def gopt(args,d:bool=False) :
             h=True
         if i[0]=='-i' and not 'i' in r:
             r['i']=i[1]
-        if i[0]=='-d' and not 'd' in r and i[1].isnumeric() and int(i[1])>0 and int(i[1])<8 :
+        if i[0]=='-d' and not 'd' in r and i[1].isnumeric() and int(i[1])>0 and int(i[1])<9 :
             r['d']=int(i[1])
         if i[0]=='-p' and not 'p' in r :
             r['p']=i[1]
