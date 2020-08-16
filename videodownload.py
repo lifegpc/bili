@@ -1572,7 +1572,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             if imgs == 0:
                 imga = f" -i \"{imgf}\""
                 imga2 = " -map 0 -map 1 -disposition:v:0 attached_pic"
-            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\"{imga} -metadata title=\"{bstr.f(data['page'][i - 1]['part'])}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i} -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs},{data['uid']}\" -c copy{imga2} \"{filen}.m4a\"{nss}")
+            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\"{imga} -metadata title=\"{bstr.f(data['page'][i - 1]['part'])}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i}/{data['videos']} -metadata disc=1/1 -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs},{data['uid']}\" -c copy{imga2} \"{filen}.m4a\"{nss}")
             if re == 0:
                 print(lan['COM_CONV'])
                 delete = False
