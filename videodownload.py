@@ -22,7 +22,7 @@ import os
 from dictcopy import copydict,copylist
 from re import search
 from requests.structures import CaseInsensitiveDict
-from biliTime import tostr2
+from biliTime import tostr2, tostr4
 import bstr
 from biliSub import downsub,ffinputstr
 from file import mkdir
@@ -1473,7 +1473,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             ffmpeg = ip['yf']
         if ffmpeg and os.system(f'ffmpeg -h{getnul()}') != 0:
             ffmpeg = False
-        if ffmpeg and os.path.exists(f"{filen}.aac"):
+        if ffmpeg and os.path.exists(f"{filen}.m4a"):
             overwrite = False
             bs = True
             if not ns:
@@ -1483,7 +1483,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 overwrite = ip['y']
                 bs = False
             while bs:
-                inp = input(f"{lan['INPUT1'].replace('<filename>', filen + '.aac')}(y/n)")  # "%s"文件已存在，是否覆盖？
+                inp = input(f"{lan['INPUT1'].replace('<filename>', filen + '.m4a')}(y/n)")  # "%s"文件已存在，是否覆盖？
                 if len(inp) > 0:
                     if inp[0].lower() == 'y':
                         overwrite = True
@@ -1492,7 +1492,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                         bs = False
             if overwrite:
                 try:
-                    os.remove(f"{filen}.aac")
+                    os.remove(f"{filen}.m4a")
                 except:
                     print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                     return 0
@@ -1550,17 +1550,17 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                         elif inp[0].lower() == 'n':
                             bs = False
                 if rc:
-                    if os.path.exists(f"{filen}.aac"):
-                        os.remove(f"{filen}.aac")
+                    if os.path.exists(f"{filen}.m4a"):
+                        os.remove(f"{filen}.m4a")
                     bs2 = True
                 else:
                     return -3
         if ffmpeg:
-            print(lan['CONV_M4S_TO_AAC'])
+            print(lan['CONV_M4S_TO_M4A'])
             nss = ""
             if not ns:
                 nss = getnul()
-            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -write_apetag 1 -metadata title=\"{bstr.f(data['page'][i - 1]['part'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata track={i} -metadata totaltracks={data['videos']} -metadata date=\"{tostr2(data['pubdate'])}\" -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata uid=\"{data['uid']}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata aq=\"{vqs}\" -c copy \"{filen}.aac\"{nss}")
+            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -metadata title=\"{bstr.f(data['page'][i - 1]['part'])}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i} -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs},{data['uid']}\" -c copy \"{filen}.m4a\"{nss}")
             if re == 0:
                 print(lan['COM_CONV'])
                 delete = False

@@ -270,9 +270,9 @@ msgctxt "NO_AUDIO"
 msgid "There is no audio in this video."
 msgstr "该视频没有音频。"
 
-msgctxt "CONV_M4S_TO_AAC"
-msgid "Use ffmpeg to convert the m4s file to the aac file."
-msgstr "使用ffmpeg将m4s文件转换为aac文件。"
+msgctxt "CONV_M4S_TO_M4A"
+msgid "Use ffmpeg to convert the m4s file to the m4a file."
+msgstr "使用ffmpeg将m4s文件转换为m4a文件。"
 
 msgctxt "COM_CONV"
 msgid "Convert completed."

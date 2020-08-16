@@ -251,8 +251,8 @@ msgctxt "NO_AUDIO"
 msgid "There is no audio in this video."
 msgstr ""
 
-msgctxt "CONV_M4S_TO_AAC"
-msgid "Use ffmpeg to convert the m4s file to the aac file."
+msgctxt "CONV_M4S_TO_M4A"
+msgid "Use ffmpeg to convert the m4s file to the m4a file."
 msgstr ""
 
 msgctxt "COM_CONV"

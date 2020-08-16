@@ -63,5 +63,14 @@ def tostr2(s):
 def tostr3(i:int):
     "转换为适合srt的时间"
     return "%02d:%02d:%02d,%03d"%(floor(i/3600),floor(i%3600/60),floor(i%60),floor(i*1000%1000))
+
+
+def tostr4(s):
+    if isinstance(s,struct_time) :
+        return strftime('%Y-%m-%d',s)
+    else :
+        return strftime('%Y-%m-%d',getDate(s))
+
+
 if __name__=='__main__' :
     print(getNowDate())
