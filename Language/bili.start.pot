@@ -152,7 +152,7 @@ msgid "If you want to download the last viewed \"EP<number>\", please enter \"l\
 msgstr ""
 
 msgctxt "INPUT12"
-msgid "Please input the number before \".\" to choose download method:\n1.download barrage\n2.download all barrage from historical records (may needs lots of time)\n3.download video\n4.download barrage and video\n5.download all barrage from historical records and video\n7.download cover image only"
+msgid "Please input the number before \".\" to choose download method:\n1.download barrage\n2.download all barrage from historical records (may needs lots of time)\n3.download video\n4.download barrage and video\n5.download all barrage from historical records and video\n7.download cover image only\n8.download audio only"
 msgstr ""
 
 msgctxt "OUTPUT10"

@@ -2508,6 +2508,318 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
     else :
         print(f"{lan['OUTPUT24']}HTTP {re.status_code}")#下载封面图片时发生错误：
         return -2
+
+
+def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool, c3: bool, se:dict, ip:dict, ud:dict):
+    """仅下载音频
+    -1 读取cookies出现错误
+    -2 API解析错误
+    -3 下载错误
+    -4 aria2c参数错误
+    -5 创建文件夹失败
+    -6 缺少必要参数
+    -7 不支持durl
+    -8 不存在音频流"""
+    che = False
+    if 'che' in data:
+        che = True
+    ns = True
+    if 's' in ip:
+        ns = False
+    nte = False
+    if JSONParser.getset(se, 'te') == False:
+        nte = True
+    if 'te' in ip:
+        nte = not ip['te']
+    bp = False  # 删除无用文件时是否保留封面图片
+    if JSONParser.getset(se, 'bp') == True:
+        bp = True
+    if 'bp' in ip:
+        bp = ip['bp']
+    o = 'Download/'
+    read = JSONParser.getset(se, 'o')
+    if read is not None:
+        o = read
+    if 'o' in ip:
+        o = ip['o']
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建%s文件夹失败
+        return -5
+    F = False  # 仅输出音频信息
+    if 'F' in ip:
+        F = True
+    if F:
+        print(f"{i['titleFormat']}:{i['longTitle']}")
+    fdir = '%s%s' % (o, file.filtern(f"{data['mediaInfo']['title']}(SS{data['mediaInfo']['ssId']})"))
+    if che:
+        url2 = f"https://www.bilibili.com/cheese/play/ep{i['id']}"
+    else:
+        url2 = f"https://www.bilibili.com/bangumi/play/ep{i['id']}"
+    if not os.path.exists(fdir):
+        os.mkdir(fdir)
+    fin = True
+    if JSONParser.getset(se, 'in') == False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    r2 = requests.Session()
+    r2.headers = copydict(r.headers)
+    if nte:
+        r2.trust_env = False
+    r2.proxies = r.proxies
+    read = JSONParser.loadcookie(r2)
+    if read != 0:
+        print(lan['ERROR2'])  # 读取cookies.json出现错误
+        return -1
+    r2.headers.update({'referer': url2})
+    r2.cookies.set('CURRENT_QUALITY', '120', domain='.bilibili.com', path='/')
+    r2.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
+    r2.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
+    r2.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
+    if not che:
+        re = r2.get(url2)
+        re.encoding = 'utf8'
+        rs = search(r'__playinfo__=([^<]+)', re.text)
+        rs2 = search(r'__PGC_USERSTATE__=([^<]+)', re.text)
+        if rs != None:
+            re = json.loads(rs.groups()[0])
+        elif rs2 != None:
+            rs2 = json.loads(rs2.groups()[0])
+            if 'dialog' in rs2:
+                print(rs2['dialog']['title'])
+            if rs2['area_limit']:
+                print(lan['ERROR7'])  # 有区域限制，请尝试使用代理。
+            return -2
+        else:
+            return -2
+    else:
+        re = r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=120&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=16&session=")
+        re.encoding = 'utf8'
+        re = re.json()
+    if 'data' in re and 'durl' in re['data']:
+        print(lan['NOT_SUP_DURL'])  # 不支持durl流
+        return -7
+    elif 'data' in re and 'dash' in re['data']:
+        if not 'audio' in re['data']['dash'] or re['data']['dash']['audio'] is None:
+            print(lan['NO_AUDIO'])
+            return -8
+        accept_audio_quality = []
+        dash = {}
+        for j in re['data']['dash']['audio']:
+            dash[j['id']] = j
+            accept_audio_quality.append(j['id'])
+        accept_audio_quality.sort(reverse=True)
+        if c and not F:
+            dash = dash[accept_audio_quality[0]]
+            if ns:
+                print(lan['OUTPUT16'])  # 音频轨
+                print(f"ID:{dash['id']}")
+            dash['size'] = streamgetlength(r2, dash['base_url'])
+            if ns:
+                print(f"{lan['OUTPUT10']}{file.info.size(dash['size'])}({dash['size']}B,{file.cml(dash['size'], re['data']['timelength'])})")  # 大小：
+            vqs = accept_audio_quality[0]
+        else:
+            if ns or (not ns and F):
+                print(lan['OUTPUT16'])  # 音频轨：
+            k = 0
+            for j in accept_audio_quality:
+                if ns or (not ns and F):
+                    print(f"{k + 1}.ID:{j}")
+                dash[j]['size'] = streamgetlength(r2, dash[j]['base_url'])
+                if ns or (not ns and F):
+                    print(f"{lan['OUTPUT10']}{file.info.size(dash[j]['size'])}({dash[j]['size']}B,{file.cml(dash[j]['size'], re['data']['timelength'])})")  # 大小：
+                k = k + 1
+            if F:
+                return 0
+            if len(accept_audio_quality) > 1:
+                bs = True
+                fi = True
+                while bs:
+                    if fi and 'a' in ip:
+                        fi = False
+                        inp = ip['a']
+                    elif ns:
+                        inp = input(lan['INPUT5'])  # 请选择音质：
+                    else:
+                        print(lan['ERROR6'])  # 请使用-a <id>选择音质
+                        return -6
+                    if len(inp) > 0 and inp.isnumeric():
+                        if int(inp) > 0 and int(inp) < len(accept_audio_quality) + 1:
+                            bs = False
+                            dash = dash[accept_audio_quality[int(inp) - 1]]
+                            if ns:
+                                print(lan['OUTPUT17'].replace('<audioquality>', str(accept_audio_quality[int(inp) - 1])))  # 已选择%s音质
+                            vqs = accept_audio_quality[int(inp) - 1]
+            else:
+                dash = dash[accept_audio_quality[0]]
+                vqs = accept_audio_quality[0]
+        sv = True
+        if JSONParser.getset(se, 'sv') == False:
+            sv = False
+        if 'sv' in ip:
+            sv = ip['sv']
+        if i['s'] == 'e':
+            if not fin:
+                filen = '%s/%s' % (fdir, file.filtern(f"{i['i'] + 1}.{i['longTitle']}"))
+            elif sv:
+                filen = '%s/%s' % (fdir, file.filtern(f"{i['i'] + 1}.{i['longTitle']}({i['titleFormat']},AV{i['aid']},{i['bvid']},ID{i['id']},{i['cid']},{vqs})"))
+            else:
+                filen = '%s/%s' % (fdir, file.filtern(f"{i['i'] + 1}.{i['longTitle']}({i['titleFormat']},AV{i['aid']},{i['bvid']},ID{i['id']},{i['cid']})"))
+        else:
+            if not fin:
+                filen = '%s/%s' % (fdir, file.filtern(f"{i['title']}{i['i'] + 1}.{i['longTitle']}"))
+            elif sv:
+                filen = '%s/%s' % (fdir, file.filtern(f"{i['title']}{i['i'] + 1}.{i['longTitle']}({i['titleFormat']},AV{i['aid']},{i['bvid']},ID{i['id']},{i['cid']},{vqs})"))
+            else:
+                filen = '%s/%s' % (fdir, file.filtern(f"{i['title']}{i['i'] + 1}.{i['longTitle']}({i['titleFormat']},AV{i['aid']},{i['bvid']},ID{i['id']},{i['cid']})"))
+        hzm = file.geturlfe(dash['base_url'])
+        ffmpeg = True
+        if JSONParser.getset(se, 'nf') == True:
+            ffmpeg = False
+        if 'yf' in ip:
+            ffmpeg = ip['yf']
+        if ffmpeg and os.system(f'ffmpeg -h{getnul()}') != 0:
+            ffmpeg = False
+        if ffmpeg and os.path.exists(f"{filen}.m4a"):
+            overwrite = False
+            bs = True
+            if not ns:
+                overwrite = True
+                bs = False
+            if 'y' in ip:
+                overwrite = ip['y']
+                bs = False
+            while bs:
+                inp = input(f"{lan['INPUT1'].replace('<filename>', filen + '.m4a')}(y/n)")  # "%s"文件已存在，是否覆盖？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        overwrite = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if overwrite:
+                try:
+                    os.remove(f"{filen}.m4a")
+                except:
+                    print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                    return 0
+            else:
+                return 0
+        bs2 = True
+        aria2c = True
+        if JSONParser.getset(se, 'a') == False:
+            aria2c = False
+        if 'ar' in ip:
+            aria2c = ip['ar']
+        if aria2c and os.system(f'aria2c -h{getnul()}') != 0:
+            aria2c = False
+        if aria2c:
+            ab = True  # 是否使用备用地址
+            if JSONParser.getset(se, 'ab') == False:
+                ab = False
+            if 'ab' in ip:
+                ab = ip['ab']
+        while bs2:
+            bs2 = False
+            if aria2c:
+                if ab:
+                    read = dwaria2(r2, f"{filen}.{hzm}", geturll(dash), dash['size'], c3, ip, se)
+                else:
+                    read = dwaria2(r2, f"{filen}.{hzm}", dash['base_url'], dash['size'], c3, ip, se)
+                if read == -3:
+                    print(lan['ERROR4'])  # aria2c 参数错误
+                    return -4
+            else:
+                re = r2.get(dash['base_url'], stream=True)
+                read = downloadstream(nte, ip, dash['base_url'], r2, re, f"{filen}.{hzm}", dash['size'], c3)
+            if read == -1:
+                return -1
+            elif read == -2:
+                bs = True
+                rc = False
+                if not ns:
+                    bs = False
+                read = JSONParser.getset(se, 'rd')
+                if read == True:
+                    bs = False
+                    rc = True
+                elif read == False:
+                    bs = False
+                if 'r' in ip:
+                    rc = ip['r']
+                    bs = False
+                while bs:
+                    inp = input(f"{lan['INPUT3']}(y/n)")  # 文件下载失败，是否重新下载？
+                    if len(inp) > 0:
+                        if inp[0].lower() == 'y':
+                            bs = False
+                            rc = True
+                        elif inp[0].lower() == 'n':
+                            bs = False
+                if rc:
+                    if os.path.exists(f"{filen}.m4a"):
+                        os.remove(f"{filen}.m4a")
+                    bs2 = True
+                else:
+                    return -3
+        if not che:
+            imgf = f"{file.spfn(filen + '.m4a')[0]}.{file.geturlfe(i['cover'])}"
+            imgs = eppicdownload(i, data, r, ip, se, imgf)
+        if ffmpeg:
+            print(lan['CONV_M4S_TO_M4A'])
+            nss = ""
+            imga = ""
+            imga2 = ""
+            if not ns:
+                nss = getnul()
+            if not che and imgs == 0:
+                imga = f" -i \"{imgf}\""
+                imga2 = " -map 0 -map 1 -disposition:v:0 attached_pic"
+            le = 1
+            if 'sections' in data and len(data['sections']) > 1:
+                le = len(data['sections']) + 1
+            sectionType = i['sectionType']
+            le2 = len(data['epList'])
+            if sectionType > 0:
+                for section in data['sections']:
+                    if section['type'] == sectionType:
+                        le2 = len(section['epList'])
+                        break
+            mediaInfo = data['mediaInfo']
+            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\"{imga} -metadata title=\"{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata comment=\"{bstr.f(mediaInfo['evaluate'])}\" -metadata album=\"{bstr.f(mediaInfo['title'])}\" -metadata artist=bilibili -metadata album_artist=bilibili -metadata track={i['i'] + 1}/{le2} -metadata disc={sectionType + 1}/{le} -metadata episode_id=\"AV{i['aid']},EP{i['id']}\" -metadata date={mediaInfo['time'][:10]} -metadata description=\"{vqs},SS{mediaInfo['ssId']}\" -c copy{imga2} \"{filen}.m4a\"{nss}")
+            if re == 0:
+                print(lan['COM_CONV'])
+                delete = False
+                bs = True
+                if not ns:
+                    bs = False
+                read = JSONParser.getset(se, 'ad')
+                if read == True:
+                    delete = True
+                    bs = False
+                elif read == False:
+                    bs = False
+                if 'ad' in ip:
+                    delete = ip['ad']
+                    bs = False
+                while bs:
+                    inp = input(f"{lan['INPUT4']}(y/n)")  # 是否删除中间文件？
+                    if len(inp) > 0:
+                        if inp[0].lower() == 'y':
+                            delete = True
+                            bs = False
+                        elif inp[0].lower() == 'n':
+                            bs = False
+                if delete:
+                    os.remove(f"{filen}.{hzm}")
+                    if not che and imgs == 0 and not bp:
+                        os.remove(imgf)
+    return 0
+
+
 def chepicdownload(url:str,r:requests.session,fdir:str,i:int,ns:bool) :
     fn=f"{fdir}/des{i}.{file.geturlfe(url)}"
     if not os.path.exists(fn) :
