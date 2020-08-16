@@ -1318,6 +1318,11 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
         nte = True
     if 'te' in ip:
         nte = not ip['te']
+    bp = False  # 删除无用文件时是否保留封面图片
+    if JSONParser.getset(se, 'bp') == True:
+        bp = True
+    if 'bp' in ip:
+        bp = ip['bp']
     o = 'Download/'
     read = JSONParser.getset(se, 'o')
     if read is not None:
@@ -1555,12 +1560,19 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                     bs2 = True
                 else:
                     return -3
+        imgf = file.spfn(filen + ".m4a")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
+        imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
         if ffmpeg:
             print(lan['CONV_M4S_TO_M4A'])
             nss = ""
+            imga = ""
+            imga2 = ""
             if not ns:
                 nss = getnul()
-            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -metadata title=\"{bstr.f(data['page'][i - 1]['part'])}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i} -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs},{data['uid']}\" -c copy \"{filen}.m4a\"{nss}")
+            if imgs == 0:
+                imga = f" -i \"{imgf}\""
+                imga2 = " -map 0 -map 1 -disposition:v:0 attached_pic"
+            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\"{imga} -metadata title=\"{bstr.f(data['page'][i - 1]['part'])}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i} -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs},{data['uid']}\" -c copy{imga2} \"{filen}.m4a\"{nss}")
             if re == 0:
                 print(lan['COM_CONV'])
                 delete = False
@@ -1586,6 +1598,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                             bs = False
                 if delete:
                     os.remove(f"{filen}.{hzm}")
+                    if imgs == 0 and not bp:
+                        os.remove(imgf)
     return 0
 
 
