@@ -43,6 +43,8 @@ msgid ""
 "4.barrage and video 5.all barrage from historical records and video "
 "6.subtitles only 7.cover image only 8.audio only"
 msgstr ""
+"ダウンロード方法 1.弾幕 2.過去の履歴からの全ての弾幕 3.ビデオ 4.ビデオと弾幕 5.ビデオと過去の履歴からの全ての弾幕 6.字幕のみ "
+"7.カバー画像のみ 8.音声のみ"
 
 msgctxt "O6"
 msgid "Live record download method: 1.video 2.barrage 3.video and barrage"
@@ -388,8 +390,8 @@ msgstr "字幕ファイルをASS(Advanced SubStation Alpha)ファイルとして
 
 msgctxt "O71"
 msgid "Create a separate directory for videos with multiply parts."
-msgstr ""
+msgstr "乗算部分のある動画用に別のディレクトリを作成します。"
 
 msgctxt "O72"
 msgid "Do not create a separate directory for videos with multiply parts."
-msgstr ""
+msgstr "乗算部分のある動画用に別のディレクトリを作成しません。"

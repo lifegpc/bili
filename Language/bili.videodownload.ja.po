@@ -4,15 +4,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# Kum4423, 2020
 # 1 q <g1710431395@gmail.com>, 2020
+# Kum4423, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-11 12:54:00+0000\n"
 "PO-Revision-Date: 2020-07-11 13:31+0000\n"
-"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Last-Translator: Kum4423, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -215,72 +215,72 @@ msgstr "指定したインデックスは範囲外です。インデックスは
 
 msgctxt "NO_QUA_TRANS"
 msgid "There is no translated text for \"<value>\"."
-msgstr ""
+msgstr "\"<value>\" の訳文はありません。"
 
 msgctxt "超清 4K"
 msgid "UHD 4K"
-msgstr ""
+msgstr "UHD 4K"
 
 msgctxt "高清 1080P60"
 msgid "HD 1080P60"
-msgstr ""
+msgstr "HD 1080P60"
 
 msgctxt "高清 720P60"
 msgid "HD 720P60"
-msgstr ""
+msgstr "HD 720P60"
 
 msgctxt "高清 1080P"
 msgid "HD 1080P"
-msgstr ""
+msgstr "HD 1080P"
 
 msgctxt "高清 720P"
 msgid "HD 720P"
-msgstr ""
+msgstr "HD 720P"
 
 msgctxt "清晰 480P"
 msgid "SD 480P"
-msgstr ""
+msgstr "SD 480P"
 
 msgctxt "流畅 360P"
 msgid "SD 360P"
-msgstr ""
+msgstr "SD 360P"
 
 msgctxt "高清 1080P+"
 msgid "HD 1080P+"
-msgstr ""
+msgstr "HD 1080P+"
 
 msgctxt "原画"
 msgid "Origin Quality"
-msgstr ""
+msgstr "オリジナル品質"
 
 msgctxt "蓝光"
 msgid "Blu-ray"
-msgstr ""
+msgstr "Blu-ray"
 
 msgctxt "超清"
 msgid "UHD"
-msgstr ""
+msgstr "UHD"
 
 msgctxt "高清"
 msgid "HD"
-msgstr ""
+msgstr "HD"
 
 msgctxt "流畅"
 msgid "SD"
-msgstr ""
+msgstr "SD"
 
 msgctxt "NOT_SUP_DURL"
 msgid "Do not support to download audio only for durl streams."
-msgstr ""
+msgstr "durlストリームの音声のみのダウンロードには対応していません。"
 
 msgctxt "NO_AUDIO"
 msgid "There is no audio in this video."
-msgstr ""
+msgstr "この動画には音声はありません。"
 
 msgctxt "CONV_M4S_TO_M4A"
 msgid "Use ffmpeg to convert the m4s file to the m4a file."
-msgstr ""
+msgstr "ffmpegを使ってm4sファイルをm4aファイルに変換します。"
 
 msgctxt "COM_CONV"
 msgid "Convert completed."
-msgstr ""
+msgstr "変換が完了しました。"
