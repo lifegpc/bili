@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from .loadsettings import loadset
+from .loadsettings import loadset, getdfset, saveset
 from .command import gopt
 import web
 render = web.template.render('webuihtml')
@@ -21,3 +21,4 @@ from .index import index
 from .translate import translate
 from .js import js
 from .css import css
+from .settings import setting

@@ -17,14 +17,15 @@ import web
 from cheroot.server import HTTPServer
 from cheroot.ssl.builtin import BuiltinSSLAdapter
 import os
-from webui import index, gopt, translate, js, render, css
+from webui import index, gopt, translate, js, render, css, setting, loadset
 import sys
 
 urls = (
-    r"/(index)?(.html)?", "index",
+    r"/(index)?(\.html)?", "index",
     r"/translate/(.+)", "translate",
     r"/js/(.+)", "js",
-    r"/css/(.+)", "css"
+    r"/css/(.+)", "css",
+    r"/settings(\.html)?(/.+)?", "setting"
 )
 
 
@@ -42,19 +43,38 @@ class mywebapp(web.application):
 def main(ip: dict):
     app = mywebapp(urls, globals())
     app.notfound = notfound
+    se = loadset()
+    if se == -1 or se == -2:
+        se = {}
     port = 8080
+    if 'p' in se:
+        port = int(se['p'])
     if 'p' in ip:
         port = ip['p']
     host = '127.0.0.1'
+    if 's' in se:
+        host = se['s']
     if 's' in ip:
         host = ip['s']
+    sslc = None
+    sslp = None
+    sslcc = None
+    if 'sslc' in se and 'sslp' in se:
+        sslc = se['sslc']
+        sslp = se['sslp']
+        if 'sslcc' in se:
+            sslcc = se['sslcc']
     if 'sslc' in ip:
-        if 'sslcc' in ip:
-            HTTPServer.ssl_adapter = BuiltinSSLAdapter(
-                certificate=ip['sslc'], private_key=ip['sslp'], certificate_chain=ip['sslcc'])
-        else:
-            HTTPServer.ssl_adapter = BuiltinSSLAdapter(
-                certificate=ip['sslc'], private_key=ip['sslp'])
+        sslc = ip['sslc']
+        sslp = ip['sslp']
+    if (sslcc is not None or 'sslc' in ip) and 'sslcc' in ip:
+        sslcc = se['sslcc']
+    if sslc is not None and sslcc is not None:
+        HTTPServer.ssl_adapter = BuiltinSSLAdapter(
+            certificate=sslc, private_key=sslp, certificate_chain=sslcc)
+    elif sslc is not None:
+        HTTPServer.ssl_adapter = BuiltinSSLAdapter(
+            certificate=sslc, private_key=sslp)
     app.run(host, port)
 
 

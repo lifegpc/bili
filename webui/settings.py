@@ -13,37 +13,27 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt
-from lang import getlan, getdict
-import sys
+from . import web, render, loadset, translate, getdfset, saveset
+from lang import lan
 from json import dumps
 
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
 
-
-class translate:
-    def GET(self, n: str):
-        web.header('Content-Type', 'text/json; charset=utf-8')
-        l = n.split('.', 1)
-        r = {}
-        if len(l) == 1:
-            la = getdict(l[0], getlan(se, ip))
-        else:
-            la = getdict(l[1], getlan(se, ip), l[0])
-        if la == -1:
-            r['code'] = -1
-        else:
-            r['code'] = 0
-            r['dict'] = la
-        return dumps(r)
-
-    def resetse(self):
-        global se
+class setting:
+    def GET(self, *t):
         se = loadset()
         if se == -1 or se == -2:
             se = {}
+        return render.settings(t[1], lan, se, getdfset())
+
+    def POST(self, *t):
+        web.header('Content-Type', 'text/json; charset=utf-8')
+        r = {}
+        i = web.input()
+        if int(i['type']) == 1:
+            i2 = i.copy()
+            del i2['type']
+            re = saveset(i2)
+            r['code'] = re
+        else:
+            r['code'] = '-404'
+        return dumps(r)

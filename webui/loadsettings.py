@@ -13,7 +13,9 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from json import loads
+from json import loads, dumps
+from os.path import exists
+from os import remove
 
 
 def loadset():
@@ -31,3 +33,28 @@ def loadset():
     except:
         return -2
     return o
+
+
+def getdfset():
+    "获取默认设置"
+    o = {}
+    o['lan'] = 'en'
+    o['s'] = '127.0.0.1'
+    o['p'] = '8080'
+    return o
+
+
+def saveset(d: dict):
+    "保存设置到webui.json"
+    try:
+        if exists('webui.json'):
+            remove('webui.json')
+        obj = open('webui.json', mode='w')
+    except:
+        return -1
+    try:
+        obj.write(dumps(d))
+        obj.close()
+    except:
+        return -2
+    return 0

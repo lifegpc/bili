@@ -3,11 +3,15 @@
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-08-24 05:17:00+0000\n"
 "PO-Revision-Date: 2020-08-24 10:08+0000\n"
+"Last-Translator: Kum4423, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,36 +21,36 @@ msgstr ""
 
 msgctxt "O1"
 msgid "Command line help:"
-msgstr ""
+msgstr "コマンドラインヘルプ:"
 
 msgctxt "O2"
 msgid "Display command line help information."
-msgstr ""
+msgstr "コマンドラインのヘルプ情報を表示します。"
 
 msgctxt "O3"
 msgid "Set the program language."
-msgstr ""
+msgstr "プログラムの言語を設定します。"
 
 msgctxt "O4"
 msgid "The IP address you want to bind."
-msgstr ""
+msgstr "結束したいIPアドレス。"
 
 msgctxt "O5"
 msgid "The port of IP address you want to bind."
-msgstr ""
+msgstr "結束したいIPアドレスのポート。"
 
 msgctxt "O6"
 msgid "The path to SSL certificate."
-msgstr ""
+msgstr "SSL証明書のパスです。"
 
 msgctxt "O7"
 msgid "The path to SSL private key."
-msgstr ""
+msgstr "SSL秘密鍵のパスです。"
 
 msgctxt "O8"
 msgid "You need to give both the SSL certificate and the SSL private key."
-msgstr ""
+msgstr "SSL証明書とSSL秘密鍵の両方を渡す必要があります。"
 
 msgctxt "O9"
 msgid "The path to SSL certificate chain."
-msgstr ""
+msgstr "SSL証明書チェーンへのパス。"

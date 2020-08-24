@@ -1,0 +1,58 @@
+$def with (name, lan, se, dfse)
+$def getse(s, p='value'):
+    $if not s in se and s in dfse:$ se[s]=dfse[s]
+    $if s in se:$p="$se[s]"
+<html>
+
+<head>
+    <title class="trans" trans="webui.index TITLE">bili WEB用户界面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="js/jquery.js"></script>
+    <script src="js/translatie.js"></script>
+    <script src="js/settings.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/topmenu.css">
+    <link rel="stylesheet" type="text/css" href="css/display.css">
+    <link rel="stylesheet" type="text/css" href="css/form.css">
+</head>
+
+<body>
+    <div class="topmenu first">
+        <div><a href="/" class="trans" trans="webui.index MAINPAGE">主页</a></div>
+        <div><a href="/downloadlist" class="trans" trans="webui.index DOWNLIST">下载任务列表</a></div>
+        <div class="select"><a href="/settings" class="trans" trans="webui.index SETTING">设置</a></div>
+    </div>
+    <div class="topmenu">
+        <div class="select"><a href="/settings" class="trans" trans="webui.settings WEBUISET">WEB用户界面设置</a></div>
+    </div>
+    <form class="form" id="form">
+    $if name == None:
+        <input value="1" id="type" class="form hide">
+        <label class="trans" trans="webui.settings WEBUILAN">WEB用户界面语言：</label>
+        <select class="form" id="lan">
+        $if not 'lan' in se and 'lan' in dfse:$ se['lan']=dfse['lan']
+        $for i in lan.keys():
+            $if 'lan' in se and se['lan'] == i:<option value="$i" selected>$lan[i]</option>
+            $else:<option value="$i">$lan[i]</option>
+        </select>
+        <br/>
+        <label class="trans" trans="webui.settings IPADDR">IP地址：</label>
+        <input class="form" id="s"$:getse('s')>
+        <br/>
+        <label class="trans" trans="webui.settings IPPORT">IP地址端口：</label>
+        <input class="form" id="p"$:getse('p')>
+        <br/>
+        <label class="trans" trans="webui.settings SSLCPATH">SSL证书路径：</label>
+        <input class="form" id="sslc"$:getse('sslc')>
+        <br/>
+        <label class="trans" trans="webui.settings SSLPPATH">SSL私钥路径：</label>
+        <input class="form" id="sslp"$:getse('sslp')>
+        <br/>
+        <label class="trans" trans="webui.settings SSLCCPATH">SSL证书链路径：</label>
+        <input class="form" id="sslcc"$:getse('sslcc')>
+    </form>
+    <button class="form trans" id="submit" trans="webui.settings SUBMIT">提交</button>
+</body>
+
+</html>

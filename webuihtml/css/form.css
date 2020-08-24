@@ -1,0 +1,17 @@
+form.form {
+    margin-top: 10px;
+}
+
+input.form {
+    width: max-content;
+    min-width: 300px;
+    position: absolute;
+    right: 10%;
+    direction: rtl;
+}
+
+button.form#submit {
+    margin-top: 10px;
+    position: absolute;
+    right: 10%;
+}
