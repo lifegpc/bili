@@ -53,6 +53,7 @@ def gopt(args):
         if i[0] == '--sslcc' and not 'sslcc' in r:
             r['sslcc'] = i[1]
     if h:
+        global la
         la = getdict('command', getlan(se, r), 'webui')
         ph()
         exit()
