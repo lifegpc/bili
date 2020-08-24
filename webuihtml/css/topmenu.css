@@ -1,0 +1,26 @@
+.topmenu * {
+    display: inline-block;
+    width: max-content;
+    min-width: 15%;
+    height: min-content;
+    text-align: center;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.topmenu div {
+    background-color: #00000022;
+}
+
+.topmenu div:hover {
+    background-color: #00000044;
+}
+
+.topmenu * a {
+    width: 100%;
+    color: black;
+}
+
+.topmenu * a:hover {
+    color: red;
+}

@@ -91,3 +91,17 @@ minimum_perc = 0
 source_file = file.all.pot
 source_lang = en
 type = PO
+
+[bili.webuicommandpot]
+file_filter = webui.command.<lang>.po
+minimum_perc = 0
+source_file = webui.command.pot
+source_lang = en
+type = PO
+
+[bili.webuiindexpot]
+file_filter = webui.index.<lang>.po
+minimum_perc = 0
+source_file = webui.index.pot
+source_lang = en
+type = PO
