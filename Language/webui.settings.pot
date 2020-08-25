@@ -54,3 +54,15 @@ msgstr ""
 msgctxt "SUBFA"
 msgid "Failed to save settings."
 msgstr ""
+
+msgctxt "INVALIP"
+msgid "\"<value>\" is not an invalid IP address."
+msgstr ""
+
+msgctxt "ENPASS"
+msgid "Enable password verification"
+msgstr ""
+
+msgctxt "PASS"
+msgid "Password:"
+msgstr ""

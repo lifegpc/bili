@@ -17,8 +17,10 @@ import web
 from cheroot.server import HTTPServer
 from cheroot.ssl.builtin import BuiltinSSLAdapter
 import os
-from webui import index, gopt, translate, js, render, css, setting, loadset
+from webui import index, gopt, translate, js, render, css, setting, loadset, pa
 import sys
+from lang import getdict, getlan
+lan = None
 
 urls = (
     r"/(index)?(\.html)?", "index",
@@ -43,9 +45,7 @@ class mywebapp(web.application):
 def main(ip: dict):
     app = mywebapp(urls, globals())
     app.notfound = notfound
-    se = loadset()
-    if se == -1 or se == -2:
-        se = {}
+    global se
     port = 8080
     if 'p' in se:
         port = int(se['p'])
@@ -75,6 +75,18 @@ def main(ip: dict):
     elif sslc is not None:
         HTTPServer.ssl_adapter = BuiltinSSLAdapter(
             certificate=sslc, private_key=sslp)
+    if 'pas' in se:
+        pa.pas = True
+        re = pa.setpassword(se['pas'])
+        if re == -1:
+            print(lan['INVALPAS'])
+            return -1
+    if 'pas' in ip:
+        pa.pas = True
+        re = pa.setpassword(ip['pas'])
+        if re == -1:
+            print(lan['INVALPAS'])
+            return -1
     app.run(host, port)
 
 
@@ -82,4 +94,8 @@ if __name__ == "__main__":
     ip = {}
     if len(sys.argv) > 1:
         ip = gopt(sys.argv[1:])
+    se = loadset()
+    if se == -1 or se == -2:
+        se = {}
+    lan = getdict('startwebui', getlan(se, ip), "webui")
     main(ip)

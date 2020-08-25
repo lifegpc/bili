@@ -1,7 +1,12 @@
-$def with (name, lan, se, dfse)
+$def with (type, lan, se, dfse)
 $def getse(s, p='value'):
     $if not s in se and s in dfse:$ se[s]=dfse[s]
     $if s in se:$p="$se[s]"
+$def getch2(s):
+    $if not s in se and s in dfse:$ se[s]=dfse[s]
+    $if s in se:checked
+$def gesel(s = None):
+    $if type == s:class="select"
 <html>
 
 <head>
@@ -9,12 +14,13 @@ $def getse(s, p='value'):
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <script src="js/jquery.js"></script>
-    <script src="js/translatie.js"></script>
-    <script src="js/settings.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/topmenu.css">
-    <link rel="stylesheet" type="text/css" href="css/display.css">
-    <link rel="stylesheet" type="text/css" href="css/form.css">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/sha256.min.js"></script>
+    <script src="/js/translatie.js"></script>
+    <script src="/js/settings.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/topmenu.css">
+    <link rel="stylesheet" type="text/css" href="/css/display.css">
+    <link rel="stylesheet" type="text/css" href="/css/form.css">
 </head>
 
 <body>
@@ -24,10 +30,10 @@ $def getse(s, p='value'):
         <div class="select"><a href="/settings" class="trans" trans="webui.index SETTING">设置</a></div>
     </div>
     <div class="topmenu">
-        <div class="select"><a href="/settings" class="trans" trans="webui.settings WEBUISET">WEB用户界面设置</a></div>
+        <div $:gesel()><a href="/settings" class="trans" trans="webui.settings WEBUISET">WEB用户界面设置</a></div>
     </div>
     <form class="form" id="form">
-    $if name == None:
+    $if type == None:
         <input value="1" id="type" class="form hide">
         <label class="trans" trans="webui.settings WEBUILAN">WEB用户界面语言：</label>
         <select class="form" id="lan">
@@ -38,10 +44,10 @@ $def getse(s, p='value'):
         </select>
         <br/>
         <label class="trans" trans="webui.settings IPADDR">IP地址：</label>
-        <input class="form" id="s"$:getse('s')>
+        <input class="form" id="s" regex="ip" itrans="webui.settings INVALIP"$:getse('s')>
         <br/>
         <label class="trans" trans="webui.settings IPPORT">IP地址端口：</label>
-        <input class="form" id="p"$:getse('p')>
+        <input class="form" id="p" type="number" min="0" max="65535"$:getse('p')>
         <br/>
         <label class="trans" trans="webui.settings SSLCPATH">SSL证书路径：</label>
         <input class="form" id="sslc"$:getse('sslc')>
@@ -51,6 +57,12 @@ $def getse(s, p='value'):
         <br/>
         <label class="trans" trans="webui.settings SSLCCPATH">SSL证书链路径：</label>
         <input class="form" id="sslcc"$:getse('sslcc')>
+        <br/>
+        <input class="form checkt" type="checkbox" targetid="pas"$:getch2('pas')></input>
+        <label class="trans" trans="webui.settings ENPASS">启用密码验证</label>
+        <br/>
+        <label class="trans" trans="webui.settings PASS">密码：</label>
+        <input class="form2" type="password" id="pas" minlength="8" maxlength="20">
     </form>
     <button class="form trans" id="submit" trans="webui.settings SUBMIT">提交</button>
 </body>

@@ -112,3 +112,10 @@ minimum_perc = 0
 source_file = webui.settings.pot
 source_lang = en
 type = PO
+
+[bili.webuistartwebuipot]
+file_filter = webui.startwebui.<lang>.po
+minimum_perc = 0
+source_file = webui.startwebui.pot
+source_lang = en
+type = PO

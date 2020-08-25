@@ -54,3 +54,11 @@ msgstr "SSL証明書とSSL秘密鍵の両方を渡す必要があります。"
 msgctxt "O9"
 msgid "The path to SSL certificate chain."
 msgstr "SSL証明書チェーンへのパス。"
+
+msgctxt "O10"
+msgid "Enable password verification and set the password."
+msgstr ""
+
+msgctxt "O11"
+msgid "The length of the password needs to be between <min> and <max>."
+msgstr ""

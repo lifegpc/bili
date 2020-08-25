@@ -58,3 +58,15 @@ msgstr "保存成功。"
 msgctxt "SUBFA"
 msgid "Failed to save settings."
 msgstr "保存设置失败。"
+
+msgctxt "INVALIP"
+msgid "\"<value>\" is not an invalid IP address."
+msgstr "\"<value>\"不是一个有效的IP地址。"
+
+msgctxt "ENPASS"
+msgid "Enable password verification"
+msgstr "启用密码验证"
+
+msgctxt "PASS"
+msgid "Password:"
+msgstr "密码："

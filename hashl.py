@@ -13,14 +13,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from .loadsettings import loadset, getdfset, saveset
-from .command import gopt
-import web
-render = web.template.render('webuihtml')
-from .pas import passw
-pa = passw()
-from .index import index
-from .translate import translate
-from .js import js
-from .css import css
-from .settings import setting
+import hashlib
+
+
+def sha256(s):
+    t = str(s)
+    h = hashlib.sha256()
+    h.update(t.encode('utf8'))
+    return h.hexdigest()

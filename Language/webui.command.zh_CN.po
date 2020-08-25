@@ -54,3 +54,11 @@ msgstr "你需要同时给出SSL证书和SSL私钥。"
 msgctxt "O9"
 msgid "The path to SSL certificate chain."
 msgstr "SSL证书链路径。"
+
+msgctxt "O10"
+msgid "Enable password verification and set the password."
+msgstr "启用密码验证并设置密码。"
+
+msgctxt "O11"
+msgid "The length of the password needs to be between <min> and <max>."
+msgstr "密码的长度必须在<min>-<max>之间。"

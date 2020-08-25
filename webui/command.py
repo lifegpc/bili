@@ -16,24 +16,26 @@
 from getopt import getopt
 from lang import getdict, getlan, lan
 from . import loadset
+from hashl import sha256
 
 
 def ph():
     h = f'''{la['O1']}
     startwebui.py -h/-?/--help   {la['O2']}
-    startwebui.py [--lan <LANGUAGECODE>] [-s/--host <IP>] [-p/--port <PORT>] [--sslc <PATH> --sslp <PATH>] [--sslcc <PATH>]
+    startwebui.py [--lan <LANGUAGECODE>] [-s/--host <IP>] [-p/--port <PORT>] [--sslc <PATH> --sslp <PATH>] [--sslcc <PATH>] [--pas <PASSWORD>]
     --lan <LANGUAGECODE>    {la['O3']}
     -s/--host <IP>      {la['O4']}
     -p/--port <PORT>    {la['O5']}
     --sslc <PATH>       {la['O6']}
     --sslp <PATH>       {la['O7']}
-    --sslcc <PATH>      {la['O9']}'''
+    --sslcc <PATH>      {la['O9']}
+    --pas <PASSWORD>    {la['O10']}'''
     print(h)
 
 
 def gopt(args):
     re = getopt(args, 'h?s:p:', ['help', 'lan=',
-                                 'host=', 'port=', 'sslc=', 'sslp='])
+                                 'host=', 'port=', 'sslc=', 'sslp=', 'pas='])
     rr = re[0]
     r = {}
     h = False
@@ -52,8 +54,10 @@ def gopt(args):
             r['sslp'] = i[1]
         if i[0] == '--sslcc' and not 'sslcc' in r:
             r['sslcc'] = i[1]
+        if i[0] == '--pas' and not 'pas' in r:
+            r['pas'] = i[1]
+    global la
     if h:
-        global la
         la = getdict('command', getlan(se, r), 'webui')
         ph()
         exit()
@@ -63,6 +67,13 @@ def gopt(args):
         else:
             la = getdict('command', getlan(se, r), 'webui')
             print(la['O8'])
+            exit()
+    if 'pas' in r:
+        if len(r['pas']) >= 8 and len(r['pas']) <= 20:
+            r['pas'] = sha256(r['pas'])
+        else:
+            la = getdict('command', getlan(se, r), 'webui')
+            print(la['O11'].replace('<min>', '8').replace('<max>', '20'))
             exit()
     return r
 

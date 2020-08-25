@@ -13,14 +13,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from .loadsettings import loadset, getdfset, saveset
-from .command import gopt
-import web
-render = web.template.render('webuihtml')
-from .pas import passw
-pa = passw()
-from .index import index
-from .translate import translate
-from .js import js
-from .css import css
-from .settings import setting
+from re import search, I
+
+
+class passw():
+    pas = False
+    __password = ""
+
+    def setpassword(self, s: str):
+        if search(r'[0-9A-F]{64}', s, I) is not None:
+            self.__password = s
+            return 0
+        else:
+            return -1
+
+    def password(self):
+        return self.__password

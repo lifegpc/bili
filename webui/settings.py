@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from . import web, render, loadset, translate, getdfset, saveset
 from lang import lan
-from json import dumps
+from json import dumps, loads
 
 
 class setting:
@@ -29,9 +29,13 @@ class setting:
         web.header('Content-Type', 'text/json; charset=utf-8')
         r = {}
         i = web.input()
-        if int(i['type']) == 1:
-            i2 = i.copy()
-            del i2['type']
+        if 'type' in i and 'data' in i and int(i['type']) == 1:
+            i2 = loads(i['data'])
+            se = loadset()
+            if se == -1 or se == -2:
+                se = {}
+            if 'pas' in se and 'pas' in i2 and i2['pas'] == 'c':
+                i2['pas'] = se['pas']
             re = saveset(i2)
             r['code'] = re
         else:
