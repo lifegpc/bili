@@ -66,3 +66,7 @@ msgstr ""
 msgctxt "PASS"
 msgid "Password:"
 msgstr ""
+
+msgctxt "UIFONT"
+msgid "User interface font name:"
+msgstr ""

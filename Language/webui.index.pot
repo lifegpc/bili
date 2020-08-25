@@ -30,3 +30,11 @@ msgstr ""
 msgctxt "SETTING"
 msgid "Settings"
 msgstr ""
+
+msgctxt "NELOGIN"
+msgid "You need to login in to access."
+msgstr ""
+
+msgctxt "NONELOG"
+msgid "You have disabled password verification, so you don't need to login in."
+msgstr ""

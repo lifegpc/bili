@@ -34,3 +34,12 @@ msgstr "下载任务列表"
 msgctxt "SETTING"
 msgid "Settings"
 msgstr "设置"
+
+msgctxt "NELOGIN"
+msgid "You need to login in to access."
+msgstr "您需要登录才能访问。"
+
+msgctxt "NONELOG"
+msgid ""
+"You have disabled password verification, so you don't need to login in."
+msgstr "您禁用了密码验证，因此无需进行登录。"

@@ -13,20 +13,19 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from .loadsettings import loadset, getdfset, saveset
-from .command import gopt
-from urllib.parse import urlencode
-import web
-render = web.template.render('webuihtml')
-from .pas import passw
-pa = passw()
-from .section import sectionlist
-sect = sectionlist()
-from .section2 import logincheck
-from .index import index
-from .translate import translate
-from .js import js
-from .css import css
-from .settings import setting
-from .json import jsong
-from .login import login
+from . import web
+from os.path import exists
+from json import dumps, loads
+
+
+class jsong:
+    def GET(self, n):
+        web.header('Content-Type', 'text/json; charset=utf-8')
+        if exists(f'webuihtml/json/{n}'):
+            f = open(f'webuihtml/json/{n}', 'r', encoding='utf8')
+            t = f.read()
+            f.close()
+            t = loads(t)
+            return dumps({'code': 0, 'result': t})
+        else:
+            return dumps({'code': -404})

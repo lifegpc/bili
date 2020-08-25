@@ -13,9 +13,21 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import render, web
+from . import render, web, loadset, gopt, logincheck
+import sys
+
+
+ip = {}
+if len(sys.argv) > 1:
+    ip = gopt(sys.argv[1:])
+se = loadset()
+if se == -1 or se == -2:
+    se = {}
 
 
 class index:
     def GET(self, *t):
-        return render.index()
+        h = web.cookies().get('section')
+        if logincheck(h):
+            return ''
+        return render.index(ip, se)

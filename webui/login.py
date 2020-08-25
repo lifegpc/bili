@@ -13,40 +13,38 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, render, loadset, translate, getdfset, saveset, gopt, pa, logincheck
-from lang import lan
-from json import dumps, loads
+from . import render, web, loadset, gopt, sect, pa
 import sys
+from json import dumps
 
 
 ip = {}
 if len(sys.argv) > 1:
     ip = gopt(sys.argv[1:])
+se = loadset()
+if se == -1 or se == -2:
+    se = {}
 
 
-class setting:
+class login:
     def GET(self, *t):
-        h = web.cookies().get('section')
-        if logincheck(h):
-            return ''
-        se = loadset()
-        if se == -1 or se == -2:
-            se = {}
-        return render.settings(t[1], lan, se, getdfset(), ip)
+        return render.login(ip, se)
 
     def POST(self, *t):
         web.header('Content-Type', 'text/json; charset=utf-8')
         r = {}
         i = web.input()
-        if 'type' in i and 'data' in i and int(i['type']) == 1:
-            i2 = loads(i['data'])
-            se = loadset()
-            if se == -1 or se == -2:
-                se = {}
-            if 'pas' in se and 'pas' in i2 and i2['pas'] == 'c':
-                i2['pas'] = se['pas']
-            re = saveset(i2)
-            r['code'] = re
+        ip = web.ctx.get('ip')
+        if 'p' in i and pa.pas:
+            h = sect.login(i['p'], ip)
+            if h is not None:
+                web.setcookie('section', h, 3600 * 24 * 30,
+                              httponly=True, path='/', samesite="Strict")
+                r['code'] = 0
+            else:
+                r['code'] = -1
+        elif not pa.pas:
+            r['code'] = -2
         else:
-            r['code'] = '-404'
+            r['code'] = -1
         return dumps(r)

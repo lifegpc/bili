@@ -13,18 +13,21 @@ $code:
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="js/jquery.js"></script>
+    <script src="js/sha256.min.js"></script>
     <script src="js/translatie.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/topmenu.css">
+    <script src="js/login.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/login.css">
 $ fontname=gets('uifont')
 $if fontname is not None:
-    <style>body {font-family: "$fontname";}</style>
+    <style>body, .form {font-family: "$fontname";}</style>
 </head>
 
 <body>
-    <div class="topmenu first">
-        <div class="select"><a href="/" class="trans" trans="webui.index MAINPAGE">主页</a></div>
-        <div><a href="/downloadlist" class="trans" trans="webui.index DOWNLIST">下载任务列表</a></div>
-        <div><a href="/settings" class="trans" trans="webui.index SETTING">设置</a></div>
+    <div class="trans" style="display: none;" trans="bili.biliLogin OUTPUT1"></div>
+    <h1 class="trans" trans="webui.index NELOGIN">您需要登录才能访问。</h1>
+    <div>
+        <label class="trans" trans="webui.settings PASS">密码：</label>
+        <input id="password" type="password" minlength="8" maxlength="20">
     </div>
 </body>
 

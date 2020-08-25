@@ -30,3 +30,5 @@ html.css
 webuihtml/js/
 webuihtml/jso/
 compiler.jar
+# JSON use for webUI
+!webuihtml/json/*.json

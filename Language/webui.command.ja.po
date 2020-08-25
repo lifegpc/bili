@@ -57,8 +57,8 @@ msgstr "SSL証明書チェーンへのパス。"
 
 msgctxt "O10"
 msgid "Enable password verification and set the password."
-msgstr ""
+msgstr "パスワード認証を有効にし、パスワードを設定します。"
 
 msgctxt "O11"
 msgid "The length of the password needs to be between <min> and <max>."
-msgstr ""
+msgstr "パスワードの長さは、 <min>と <max> の間の長さにする必要があります。"

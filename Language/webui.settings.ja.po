@@ -61,12 +61,16 @@ msgstr "設定の保存に失敗しました。"
 
 msgctxt "INVALIP"
 msgid "\"<value>\" is not an invalid IP address."
-msgstr ""
+msgstr "\"<value>\" は無効なIPアドレスではありません。"
 
 msgctxt "ENPASS"
 msgid "Enable password verification"
-msgstr ""
+msgstr "パスワード認証を有効にする"
 
 msgctxt "PASS"
 msgid "Password:"
+msgstr "パスワード"
+
+msgctxt "UIFONT"
+msgid "User interface font name:"
 msgstr ""

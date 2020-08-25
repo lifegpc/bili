@@ -1,4 +1,4 @@
-$def with (type, lan, se, dfse)
+$def with (type, lan, se, dfse, ip)
 $def getse(s, p='value'):
     $if not s in se and s in dfse:$ se[s]=dfse[s]
     $if s in se:$p="$se[s]"
@@ -7,6 +7,13 @@ $def getch2(s):
     $if s in se:checked
 $def gesel(s = None):
     $if type == s:class="select"
+$code:
+    def gets(s):
+        t=None
+        if s in dfse:t=dfse[s]
+        if s in se:t=se[s]
+        if s in ip:t=ip[s]
+        return t
 <html>
 
 <head>
@@ -21,6 +28,9 @@ $def gesel(s = None):
     <link rel="stylesheet" type="text/css" href="/css/topmenu.css">
     <link rel="stylesheet" type="text/css" href="/css/display.css">
     <link rel="stylesheet" type="text/css" href="/css/form.css">
+$ fontname=gets('uifont')
+$if fontname is not None:
+    <style>.form, body {font-family: "$fontname";}</style>
 </head>
 
 <body>
@@ -58,11 +68,15 @@ $def gesel(s = None):
         <label class="trans" trans="webui.settings SSLCCPATH">SSL证书链路径：</label>
         <input class="form" id="sslcc"$:getse('sslcc')>
         <br/>
-        <input class="form checkt" type="checkbox" targetid="pas"$:getch2('pas')></input>
+        <input class="form checkt" type="checkbox" targetid="pas"$:getch2('pas')>
         <label class="trans" trans="webui.settings ENPASS">启用密码验证</label>
         <br/>
         <label class="trans" trans="webui.settings PASS">密码：</label>
         <input class="form2" type="password" id="pas" minlength="8" maxlength="20">
+        <br/>
+        <label class="trans" trans="webui.settings UIFONT">用户界面字体名称：</label>
+        <input class="form" list="uifont-list" id="uifont"$:getse('uifont')>
+        <datalist class="needdata" id="uifont-list" loc="/json/fontlist.json" targetid="uifont"></datalist>
     </form>
     <button class="form trans" id="submit" trans="webui.settings SUBMIT">提交</button>
 </body>

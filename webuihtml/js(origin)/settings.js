@@ -183,4 +183,58 @@ window.addEventListener('load', () => {
             console.warn('This object\'s type is not checkbox.');
         }
     }
+    var datalist = document.getElementsByClassName('needdata');
+    for (var i = 0; i < datalist.length; i++) {
+        /**@type {HTMLDataListElement}*/
+        var t = datalist[i];
+        if (t.hasAttribute('loc')) {
+            var uri = t.getAttribute('loc');
+            ((t) => {
+                $.getJSON(uri, (data, s) => {
+                    if (s == "success") {
+                        if (data.code == 0) {
+                            da = data.result;
+                            for (var j = 0; j < da.length; j++) {
+                                var op = document.createElement('option')
+                                op.value = da[j];
+                                t.append(op);
+                            }
+                            if (t.hasAttribute('targetid')) {
+                                var targetid = t.getAttribute('targetid');
+                                /**@type {HTMLInputElement}*/
+                                var t2 = document.getElementById(targetid);
+                                if (t2 == null) {
+                                    console.warn(t);
+                                    console.warn('Can not find targetid "' + targetid + '".');
+                                }
+                                else {
+                                    t2.addEventListener('click', () => {
+                                        t2.setAttribute('val', t2.value);
+                                        t2.value = "";
+                                    })
+                                    t2.addEventListener('mouseleave', () => {
+                                        if (t2.value == "") {
+                                            t2.value = t2.getAttribute('val');
+                                        }
+                                    })
+                                }
+                            }
+                            else {
+                                console.warn(t)
+                                console.warn('This object do not cotains targetid attribute.')
+                            }
+                        }
+                        else {
+                            console.warn(t)
+                            console.warn('get list failed.')
+                        }
+                    }
+                })
+            })(t);
+        }
+        else {
+            console.warn(t)
+            console.warn('This Object do not contains loc attribute.')
+        }
+    }
 })

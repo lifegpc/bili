@@ -70,3 +70,7 @@ msgstr "启用密码验证"
 msgctxt "PASS"
 msgid "Password:"
 msgstr "密码："
+
+msgctxt "UIFONT"
+msgid "User interface font name:"
+msgstr "用户界面字体名称："
