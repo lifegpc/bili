@@ -76,7 +76,7 @@ $if fontname is not None:
         <br/>
         <label class="trans" trans="webui.settings UIFONT">用户界面字体名称：</label>
         <input class="form" list="uifont-list" id="uifont"$:getse('uifont')>
-        <datalist class="needdata" id="uifont-list" loc="/json/fontlist.json" targetid="uifont"></datalist>
+        <datalist class="needdata" id="uifont-list" loc="/json/fontlist.json" loc2="font" targetid="uifont"></datalist>
     </form>
     <button class="form trans" id="submit" trans="webui.settings SUBMIT">提交</button>
 </body>

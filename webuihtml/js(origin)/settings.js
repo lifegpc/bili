@@ -193,7 +193,8 @@ window.addEventListener('load', () => {
                 $.getJSON(uri, (data, s) => {
                     if (s == "success") {
                         if (data.code == 0) {
-                            da = data.result;
+                            var da = data.result;
+                            var loc2 = t.getAttribute('loc2');
                             for (var j = 0; j < da.length; j++) {
                                 var op = document.createElement('option')
                                 op.value = da[j];
@@ -217,6 +218,11 @@ window.addEventListener('load', () => {
                                             t2.value = t2.getAttribute('val');
                                         }
                                     })
+                                    if (loc2 == "font") {
+                                        t2.addEventListener('input', () => {
+                                            t2.style.fontFamily = t2.value;
+                                        })
+                                    }
                                 }
                             }
                             else {
