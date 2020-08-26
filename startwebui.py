@@ -74,9 +74,11 @@ def main(ip: dict):
     if sslc is not None and sslcc is not None:
         HTTPServer.ssl_adapter = BuiltinSSLAdapter(
             certificate=sslc, private_key=sslp, certificate_chain=sslcc)
+        pa.https = True
     elif sslc is not None:
         HTTPServer.ssl_adapter = BuiltinSSLAdapter(
             certificate=sslc, private_key=sslp)
+        pa.https = True
     if 'pas' in se:
         pa.pas = True
         re = pa.setpassword(se['pas'])

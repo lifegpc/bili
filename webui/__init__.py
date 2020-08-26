@@ -23,7 +23,7 @@ from .pas import passw
 pa = passw()
 from .section import sectionlist
 sect = sectionlist()
-from .section2 import logincheck
+from .section2 import logincheck, apilogincheck
 from .index import index
 from .translate import translate
 from .js import js

@@ -1,12 +1,23 @@
-$def with (type, lan, se, dfse, ip)
+$def with (type, lan, se, dfse, ip, se2, dfse2)
 $def getse(s, p='value'):
     $if not s in se and s in dfse:$ se[s]=dfse[s]
     $if s in se:$p="$se[s]"
+$def getse2(s, p='value'):
+    $if not s in se2 and s in dfse2:$ se2[s]=dfse2[s]
+    $if s in se2:$p="$se2[s]"
+$def getch(s):$#nty需要增加默认设置
+    $if s in se2 and se2[s]:checked
+    $elif not s in se2 and s in dfse2 and dfse2[s]:checked
 $def getch2(s):
     $if not s in se and s in dfse:$ se[s]=dfse[s]
     $if s in se:checked
 $def gesel(s = None):
     $if type == s:class="select"
+$def getlannull():
+    $if not 'lan' in se2:selected
+$def getsel(s, t=None):
+    $if s in se2 and se2[s] == t:selected
+    $elif not s in se2 and t == None:selected
 $code:
     def gets(s):
         t=None
@@ -23,6 +34,7 @@ $code:
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="/js/jquery.js"></script>
     <script src="/js/sha256.min.js"></script>
+    <script src="/js/prototype.js"></script>
     <script src="/js/translatie.js"></script>
     <script src="/js/settings.js"></script>
     <link rel="stylesheet" type="text/css" href="/css/topmenu.css">
@@ -41,6 +53,7 @@ $if fontname is not None:
     </div>
     <div class="topmenu">
         <div $:gesel()><a href="/settings" class="trans" trans="webui.settings WEBUISET">WEB用户界面设置</a></div>
+        <div $:gesel('/main')><a href="/settings/main" class="trans" trans="webui.settings MAIN">主程序设置</a></div>
     </div>
     <form class="form" id="form">
     $if type == None:
@@ -77,6 +90,119 @@ $if fontname is not None:
         <label class="trans" trans="webui.settings UIFONT">用户界面字体名称：</label>
         <input class="form" list="uifont-list" id="uifont"$:getse('uifont')>
         <datalist class="needdata" id="uifont-list" loc="/json/fontlist.json" loc2="font" targetid="uifont"></datalist>
+    $if type == '/main':
+        <input value="2" id="type" class="form hide">
+        <label class="trans" trans="webui.settings MAINLAN">程序语言：</label>
+        <select class="form" id="lan">
+            <option value="null" class="trans" trans="webui.settings NOTSET" $:getlannull()>不设置</option>
+        $for i in lan.keys():
+            $if 'lan' in se2 and se2['lan'] == i:<option value="$i" selected>$lan[i]</option>
+            $else:<option value="$i">$lan[i]</option>
+        </select>
+        <br/>
+        <label class="trans" trans="webui.settings MAINFB">默认过滤弹幕：</label>
+        <select class="form ynd" id="dmgl"$:getse2('dmgl')></select>
+        <br/>
+        <label class="trans" trans="webui.settings MAINMP">默认下载最高画质（这样将不会询问具体画质）：</label>
+        <select class="form ynd" id="mp"$:getse2('mp')></select>
+        <br/>
+        <label class="trans" trans="webui.settings MAINAD">合并完成后删除无用文件：</label>
+        <select class="form ynd" id="ad"$:getse2('ad')></select>
+        <br/>
+        <label class="trans" trans="webui.settings MAINCD">默认启用继续下载功能：</label>
+        <select class="form ynd" id="cd"$:getse2('cd')></select>
+        <br/>
+        <label class="trans" trans="webui.settings MAINRD">下载失败后自动重新下载</label>
+        <select class="form ynd" id="rd"$:getse2('rd')></select>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="nf"$:getch('nf')>
+        <label class="trans" trans="bili.command O16">不使用ffmpeg</label>
+        <br/>
+        <label class="trans" trans="bili.setsettings INPUT9">默认下载最高画质时偏好的视频编码：</label>
+        <select class="form ynd" id="mpc"$:getse2('mpc')>
+            <option value="" class="trans" trans="webui.settings NOTSET">不设置</option>
+            <option value="true">avc(h.264)</option>
+            <option value="false">hevc(h.265)</option>
+        </select>
+        <br/>
+        <input class="form nty check" type="checkbox" id="a"$:getch('a')>
+        <label class="trans" trans="bili.command O18">使用aria2c下载</label>
+        <br/>
+        <label class="trans" trans="bili.command O20" value="1-16">使用aria2c时单个服务器最大连接数。有效值：&lt;value&gt;</label>
+        <input class="form df" type="number" id="ax" min="1" max="16" df="3"$:getse2('ax')>
+        <br/>
+        <label class="trans" trans="bili.command O21" value="1-*">使用aria2c时单个文件最大连接数。有效值：&lt;value&gt;</label>
+        <input class="form df" type="number" id="as" min="1" df="5"$:getse2('as')>
+        <br/>
+        <label class="trans" trans="bili.command O22" value1="M" value2="5">使用aria2c时文件分片大小。单位：&lt;value1&gt;，有效值：&lt;value2&gt;</label>
+        <input class="form df" type="number" id="ak" min="1" max="1024" df="5"$:getse2('ak')>
+        <br/>
+        <input class="form nty check" type="checkbox" id="ab"$:getch('ab')>
+        <label class="trans" trans="bili.command O23">在使用aria2c下载时使用备用网址</label>
+        <br/>
+        <label class="trans" trans="bili.command O25">使用aria2c下载时文件预分配方式</label>
+        <select class="form" id="fa">
+            <option value="none"$:getsel('fa','none')>none</option>
+            <option value=""$:getsel('fa')>prealloc</option>
+            <option value="trunc"$:getsel('fa','trunc')>trunc</option>
+            <option value="falloc"$:getsel('fa','falloc')>falloc</option>
+        </select>
+        <br/>
+        <input class="form nty check" type="checkbox" id="sv"$:getch('sv')>
+        <label class="trans" trans="webui.settings MAINSV">在文件名中输出视频画质信息。</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="ma"$:getch('ma')>
+        <label class="trans" trans="webui.settings MAINMA">强制增加视频元数据。（这会使视频被转码，转码不会影响画质）</label>
+        <br/>
+        <label class="trans" trans="bili.command O28">在使用aria2c时最大总体速度(B/s)（0代表无限制，可以使用K和M为单位（1K=1024，1M=1024K））</label>
+        <input class="form df" pattern="[0-9]+[KM]?" id="ms" df="0"$:getse2('ms')>
+        <br/>
+        <label class="trans" trans="webui.settings MAINDA">当输入收藏夹/频道/投稿链接时是否自动下载每一个视频的所有分P：</label>
+        <select class="form ynd" id="da"$:getse2('da')></select>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="jt"$:getch('jt')>
+        <label class="trans" trans="webui.settings MAINJT">下载全弹幕时两次抓取之间的天数默认设置为自动。</label>
+        <br/>
+        <label class="trans" trans="webui.settings MAINO">下载文件夹位置：</label>
+        <input class="form df" df="Download/" id="o"$:getse2('o')>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="af"$:getch('af')>
+        <label class="trans" trans="bili.command O40">解析收藏夹时若未指定收藏夹ID，返回收藏夹列表以选择一个ID</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="slt"$:getch('slt')>
+        <label class="trans" trans="bili.command O43">下载小视频时，放入文件名中的描述长度可以超过20字</label>
+        <br/>
+        <input class="form nty check" type="checkbox" id="te"$:getch('te')>
+        <label class="trans" trans="bili.command O45">requests使用环境变量中的代理设置</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="bd"$:getch('bd')>
+        <label class="trans" trans="bili.command O47">合并完成后删除无用文件时保留字幕文件</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="cad"$:getch('cad')>
+        <label class="trans" trans="bili.command O49">使用aria2c时关闭异步DNS（关闭后在Windows系统下可以解决Timeout while contacting DNS servers问题）</label>
+        <br/>
+        <input class="form nty check" type="checkbox" id="lrh"$:getch('lrh')>
+        <label class="trans" trans="bili.command O51">直播回放简介写入元数据时将HTML转换为普通文本</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="bp"$:getch('bp')>
+        <label class="trans" trans="bili.command O60">合并完成后删除无用文件时保留封面图片</label>
+        <br/>
+        <input class="form nty check" type="checkbox" id="in"$:getch('in')>
+        <label class="trans" trans="bili.command O62">将AV/BV号等放入文件名</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="mt"$:getch('mt')>
+        <label class="trans" trans="bili.command O64">在有多个输入的时候启用多线程（这会是输出变得一团糟）</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="uc"$:getch('uc')>
+        <label class="trans" trans="bili.command O68">禁用检查新版本。</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="ass"$:getch('ass')>
+        <label class="trans" trans="bili.command O69">将字幕文件保存为ASS(Advanced SubStation Alpha)文件。</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="dmp"$:getch('dmp')>
+        <label class="trans" trans="bili.command O71">为多P视频创建单独的文件夹。</label>
+        <br/>
+        <label class="trans" trans="webui.settings MAINPS">注：这里的设置保存后将覆盖原有的settings.json。</label>
     </form>
     <button class="form trans" id="submit" trans="webui.settings SUBMIT">提交</button>
 </body>

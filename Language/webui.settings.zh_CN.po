@@ -74,3 +74,77 @@ msgstr "密码："
 msgctxt "UIFONT"
 msgid "User interface font name:"
 msgstr "用户界面字体名称："
+
+msgctxt "MAIN"
+msgid "Main Program Settings"
+msgstr "主程序设置"
+
+msgctxt "MAINPS"
+msgid ""
+"PS. If the settings on this page are successfully saved, the origin file "
+"\"settings.json\" will be overwriten."
+msgstr "注：这里的设置保存后将覆盖原有的settings.json。"
+
+msgctxt "MAINLAN"
+msgid "Program language:"
+msgstr "程序语言："
+
+msgctxt "MAINFB"
+msgid "Filter barrage by default:"
+msgstr "默认过滤弹幕："
+
+msgctxt "MAINMP"
+msgid ""
+"Download with maximum quality (Enable this will not ask for specific "
+"quality):"
+msgstr "默认下载最高画质（这样将不会询问具体画质）："
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr "不设置"
+
+msgctxt "ENABLE"
+msgid "Enable"
+msgstr "启用"
+
+msgctxt "DISABLE"
+msgid "Disable"
+msgstr "禁用"
+
+msgctxt "MAINAD"
+msgid "Delete useless files after merge is complete:"
+msgstr "合并完成后删除无用文件："
+
+msgctxt "MAINCD"
+msgid "Enable \"Continue Download\" function by default:"
+msgstr "默认启用继续下载功能："
+
+msgctxt "MAINRD"
+msgid "Download again automatically after the download failed:"
+msgstr "下载失败后自动重新下载："
+
+msgctxt "MAINSV"
+msgid "Put video/audio quality information in the file name."
+msgstr "在文件名中输出视频画质信息。"
+
+msgctxt "MAINMA"
+msgid ""
+"Add video information to file forcibly. (This will transcode the video and "
+"transcoding will not affect the video/audio quality.)"
+msgstr "强制增加视频元数据。（这会使视频被转码，转码不会影响画质。）"
+
+msgctxt "MAINDA"
+msgid ""
+"\"Download all parts of each video automatically\" when you input Favorites,"
+" Channels, Uploaded Video page link:"
+msgstr "当输入收藏夹/频道/投稿链接时是否自动下载每一个视频的所有分P："
+
+msgctxt "MAINJT"
+msgid ""
+"Set the number of days between crawls to automatic by default when "
+"downloading all barrage."
+msgstr "下载全弹幕时两次抓取之间的天数默认设置为自动。"
+
+msgctxt "MAINO"
+msgid "Download folder location:"
+msgstr "下载文件夹位置："

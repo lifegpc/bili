@@ -73,4 +73,78 @@ msgstr "パスワード"
 
 msgctxt "UIFONT"
 msgid "User interface font name:"
+msgstr "ユーザーインターフェイスのフォント名:"
+
+msgctxt "MAIN"
+msgid "Main Program Settings"
+msgstr ""
+
+msgctxt "MAINPS"
+msgid ""
+"PS. If the settings on this page are successfully saved, the origin file "
+"\"settings.json\" will be overwriten."
+msgstr ""
+
+msgctxt "MAINLAN"
+msgid "Program language:"
+msgstr ""
+
+msgctxt "MAINFB"
+msgid "Filter barrage by default:"
+msgstr ""
+
+msgctxt "MAINMP"
+msgid ""
+"Download with maximum quality (Enable this will not ask for specific "
+"quality):"
+msgstr ""
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr ""
+
+msgctxt "ENABLE"
+msgid "Enable"
+msgstr ""
+
+msgctxt "DISABLE"
+msgid "Disable"
+msgstr ""
+
+msgctxt "MAINAD"
+msgid "Delete useless files after merge is complete:"
+msgstr ""
+
+msgctxt "MAINCD"
+msgid "Enable \"Continue Download\" function by default:"
+msgstr ""
+
+msgctxt "MAINRD"
+msgid "Download again automatically after the download failed:"
+msgstr ""
+
+msgctxt "MAINSV"
+msgid "Put video/audio quality information in the file name."
+msgstr ""
+
+msgctxt "MAINMA"
+msgid ""
+"Add video information to file forcibly. (This will transcode the video and "
+"transcoding will not affect the video/audio quality.)"
+msgstr ""
+
+msgctxt "MAINDA"
+msgid ""
+"\"Download all parts of each video automatically\" when you input Favorites,"
+" Channels, Uploaded Video page link:"
+msgstr ""
+
+msgctxt "MAINJT"
+msgid ""
+"Set the number of days between crawls to automatic by default when "
+"downloading all barrage."
+msgstr ""
+
+msgctxt "MAINO"
+msgid "Download folder location:"
 msgstr ""

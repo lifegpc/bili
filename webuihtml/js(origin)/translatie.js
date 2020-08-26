@@ -52,7 +52,25 @@ window.addEventListener('load', () => {
                 /**@type {Object} 翻译词典*/
                 var obj2 = transobj[l[0]];
                 if (obj2.hasOwnProperty(l[1])) {
-                    o.innerText = obj2[l[1]]
+                    /**@type {string}*/
+                    var t = obj2[l[1]]
+                    /**@type {Array} */
+                    var t_list = [...t.matchAll(/<([^>]+)>/g)]
+                    if (t_list.length == 0) o.innerText = t;
+                    else {
+                        for (var j = 0; j < t_list.length; j++) {
+                            var key1 = t_list[j][0];
+                            var key2 = t_list[j][1];
+                            if (o.hasAttribute(key2)) {
+                                t = t.replace(key1, o.getAttribute(key2));
+                            }
+                            else {
+                                console.warn(o);
+                                console.warn('This object do not contain ' + key2 + ' attributes.')
+                            }
+                        }
+                        o.innerText = t;
+                    }
                     if (i < le - 1) {
                         setTimeout(() => { dealwith(list[i + 1], i + 1); }, 10);
                     }

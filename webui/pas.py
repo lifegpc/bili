@@ -19,6 +19,7 @@ from re import search, I
 class passw():
     pas = False
     __password = ""
+    https = False
 
     def setpassword(self, s: str):
         if search(r'[0-9A-F]{64}', s, I) is not None:

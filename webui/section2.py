@@ -25,3 +25,12 @@ def logincheck(h: str):
                 {"p": web.ctx.get('homepath') + web.ctx.get('fullpath')})})
             return True
     return False
+
+
+def apilogincheck(h: str):
+    "检查是否登录"
+    if pa.pas:
+        read = sect.check(h)
+        if not read:
+            return True
+    return False

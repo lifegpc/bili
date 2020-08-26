@@ -37,9 +37,9 @@ msgstr "設定"
 
 msgctxt "NELOGIN"
 msgid "You need to login in to access."
-msgstr ""
+msgstr "アクセスするにはログインが必要です。"
 
 msgctxt "NONELOG"
 msgid ""
 "You have disabled password verification, so you don't need to login in."
-msgstr ""
+msgstr "パスワード認証を無効にしているので、ログインしなくても大丈夫です。"

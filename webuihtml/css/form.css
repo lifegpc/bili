@@ -5,15 +5,9 @@ form.form {
 input.form, input.form2 {
     width: max-content;
     min-width: 300px;
-    position: absolute;
-    right: 10%;
-    direction: rtl;
 }
 
 input.form.checkt, input.form.check {
-    position: inherit;
-    right: unset;
-    direction: unset;
     min-width: unset;
 }
 

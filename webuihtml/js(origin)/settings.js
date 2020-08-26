@@ -29,6 +29,13 @@ window.addEventListener('load', () => {
         i.style.backgroundColor = "red";
         ((i, oldstyle) => { setTimeout(() => { i.style.backgroundColor = oldstyle }, 3000) })(i, oldstyle);
     }
+    /**将字符串转换为布尔型
+     * @param {string} s
+    */
+    function tobool(s) {
+        if (s.toLowerCase() == "true") return true;
+        else return false;
+    }
     submit.addEventListener('click', () => {
         var data = {}
         var type = 0
@@ -75,6 +82,9 @@ window.addEventListener('load', () => {
                                 console.warn('This object contains unknown regex value.')
                             }
                         }
+                        else if (t.hasAttribute('df')) {
+                            if (t.value != t.getAttribute('df')) data[t.id] = t.value;
+                        }
                         else {
                             data[t.id] = t.value;
                         }
@@ -86,11 +96,19 @@ window.addEventListener('load', () => {
                             return;
                         }
                         else {
-                            data[t.id] = t.valueAsNumber;
+                            if (t.hasAttribute('df')) {
+                                if (t.value != t.getAttribute('df')) {
+                                    data[t.id] = t.valueAsNumber;
+                                }
+                            }
+                            else data[t.id] = t.valueAsNumber;
                         }
                     }
                     else if (t.type == "select-one") {
-                        data[t.id] = t.value;
+                        if (t.classList.has('ynd')) {
+                            data[t.id] = tobool(t.value);
+                        }
+                        else data[t.id] = t.value;
                     }
                     else if (t.type == "checkbox") {
                         if (t.hasAttribute('targetid')) {
@@ -117,6 +135,12 @@ window.addEventListener('load', () => {
                                 }
                             }
                         }
+                        else if (t.classList.has('ntn')) {
+                            if (t.checked) data[t.id] = t.checked;
+                        }
+                        else if (t.classList.has('nty')) {
+                            if (!t.checked) data[t.id] = t.checked;
+                        }
                         else {
                             data[t.id] = t.checked;
                         }
@@ -128,6 +152,9 @@ window.addEventListener('load', () => {
             if (stat == "success") {
                 if (data.code == 0) {
                     alert(transobj['webui.settings']['SUBOK'])//保存成功。
+                }
+                else if (data.code == -403) {
+                    window.location.href = "/login?p=" + encodeURIComponent(window.location.href);
                 }
                 else {
                     alert(transobj['webui.settings']['SUBFA'])//保存设置失败。
@@ -241,6 +268,54 @@ window.addEventListener('load', () => {
         else {
             console.warn(t)
             console.warn('This Object do not contains loc attribute.')
+        }
+    }
+    function checkyndlist() {
+        if (!transobj.hasOwnProperty('webui.settings')) {
+            setTimeout(checkyndlist, 1000);
+            return;
+        }
+        var yndlist = document.getElementsByClassName('ynd');
+        for (var i = 0; i < yndlist.length; i++) {
+            /**@type {HTMLSelectElement}*/
+            var ynd = yndlist[i];
+            var list = ['NOTSET', 'ENABLE', 'DISABLE'];
+            var value = ['', 'true', 'false']
+            if (ynd.childElementCount == 0) {
+                for (var j = 0; j < 3; j++) {
+                    var op = document.createElement('option');
+                    op.value = value[j];
+                    op.innerText = transobj['webui.settings'][list[j]];
+                    if (ynd.hasAttribute('value') && op.value == ynd.getAttribute('value').toLowerCase()) op.selected = true;
+                    ynd.append(op);
+                }
+            }
+            else if (ynd.childElementCount == 3) {
+                if (ynd.hasAttribute('value')) {
+                    for (var j = 0; j < 3; j++) {
+                        /**@type {HTMLOptionElement}*/
+                        var op = ynd.children[j];
+                        if (op.value == ynd.getAttribute('value').toLowerCase()) op.selected = true;
+                    }
+                }
+            }
+            else {
+                console.warn(ynd);
+                console.warn('This object have ' + ynd.childElementCount + ' childElemnt.')
+            }
+        }
+    }
+    checkyndlist()
+    var df_list = document.getElementsByClassName('df');
+    for (var i = 0; i < df_list.length; i++) {
+        /**@type {HTMLInputElement}*/
+        var t = df_list[i];
+        if (t.hasAttribute('df')) {
+            if (t.value == "") t.value = t.getAttribute('df');
+        }
+        else {
+            console.warn(t);
+            console.warn('This object do not contain df attributes.')
         }
     }
 })

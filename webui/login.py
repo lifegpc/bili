@@ -38,7 +38,7 @@ class login:
         if 'p' in i and pa.pas:
             h = sect.login(i['p'], ip)
             if h is not None:
-                web.setcookie('section', h, 3600 * 24 * 30,
+                web.setcookie('section', h, 3600 * 24 * 30, secure=pa.https,
                               httponly=True, path='/', samesite="Strict")
                 r['code'] = 0
             else:
