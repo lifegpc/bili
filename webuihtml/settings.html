@@ -19,12 +19,19 @@ $def getsel(s, t=None):
     $if s in se2 and se2[s] == t:selected
     $elif not s in se2 and t == None:selected
 $code:
+    urlencode = __import__('webui').urlencode
+    match = __import__('re').match
     def gets(s):
         t=None
         if s in dfse:t=dfse[s]
         if s in se:t=se[s]
         if s in ip:t=ip[s]
         return t
+    def getfonturl(s):
+        if match(r'^https?:/{2}\w.+$', s):
+            return s
+        else:
+            return '/font?' + urlencode({'l':s})
 <html>
 
 <head>
@@ -43,6 +50,8 @@ $code:
 $ fontname=gets('uifont')
 $if fontname is not None:
     <style>.form, body {font-family: "$fontname";}</style>
+    $if 'uifontloc' in se:
+        <style>@font-face{font-family: "$fontname";src: local("$fontname"),url("$:getfonturl(se['uifontloc'])")}</style>
 </head>
 
 <body>
@@ -90,6 +99,9 @@ $if fontname is not None:
         <label class="trans" trans="webui.settings UIFONT">用户界面字体名称：</label>
         <input class="form" list="uifont-list" id="uifont"$:getse('uifont')>
         <datalist class="needdata" id="uifont-list" loc="/json/fontlist.json" loc2="font" targetid="uifont"></datalist>
+        <br/>
+        <label class="trans" trans="webui.settings FONTPATH">字体文件路径（字体格式需要是TTF/OTF/WOFF/WOFF2之一）：</label>
+        <input class="form" pattern=".+\.([wW][oO][fF]{2}|[wW][oO][fF]{2}2|[tT]{2}[Ff]|[oO][tT][Ff])" id="uifontloc"$:getse('uifontloc')>
     $if type == '/main':
         <input value="2" id="type" class="form hide">
         <label class="trans" trans="webui.settings MAINLAN">程序语言：</label>

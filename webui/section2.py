@@ -17,7 +17,7 @@ from . import pa, sect, web, urlencode
 
 
 def logincheck(h: str):
-    "检查是否登录"
+    "检查是否登录（返回302）"
     if pa.pas:
         read = sect.check(h)
         if not read:
@@ -28,9 +28,19 @@ def logincheck(h: str):
 
 
 def apilogincheck(h: str):
-    "检查是否登录"
+    "检查是否登录（啥都不返回）"
     if pa.pas:
         read = sect.check(h)
         if not read:
+            return True
+    return False
+
+
+def logincheck2(h: str):
+    "检查是否登录（返回403）"
+    if pa.pas:
+        read = sect.check(h)
+        if not read:
+            web.HTTPError('403')
             return True
     return False

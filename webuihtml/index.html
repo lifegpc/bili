@@ -1,10 +1,17 @@
-$def with (se, ip)
+$def with (ip, se)
 $code:
+    urlencode = __import__('webui').urlencode
+    match = __import__('re').match
     def gets(s):
         t=None
         if s in se:t=se[s]
         if s in ip:t=ip[s]
         return t
+    def getfonturl(s):
+        if match(r'^https?:/{2}\w.+$', s):
+            return s
+        else:
+            return '/font?' + urlencode({'l':s})
 <html>
 
 <head>
@@ -18,6 +25,8 @@ $code:
 $ fontname=gets('uifont')
 $if fontname is not None:
     <style>body {font-family: "$fontname";}</style>
+    $if 'uifontloc' in se:
+        <style>@font-face{font-family: "$fontname";src: local("$fontname"),url("$:getfonturl(se['uifontloc'])")}</style>
 </head>
 
 <body>

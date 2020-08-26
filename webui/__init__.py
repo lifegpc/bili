@@ -23,7 +23,7 @@ from .pas import passw
 pa = passw()
 from .section import sectionlist
 sect = sectionlist()
-from .section2 import logincheck, apilogincheck
+from .section2 import logincheck, apilogincheck, logincheck2
 from .index import index
 from .translate import translate
 from .js import js
@@ -31,3 +31,4 @@ from .css import css
 from .settings import setting
 from .json import jsong
 from .login import login
+from .font import font
