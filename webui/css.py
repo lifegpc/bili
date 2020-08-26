@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web
+from . import web, getEtag
 from os.path import exists
 
 
@@ -21,9 +21,16 @@ class css:
     def GET(self, n):
         web.header('Content-Type', 'text/css; charset=utf-8')
         if exists(f'webuihtml/css/{n}'):
-            f = open(f'webuihtml/css/{n}', 'r', encoding='utf8')
-            t = f.read()
-            f.close()
+            et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
+            et2 = getEtag(f'webuihtml/css/{n}')
+            if et == et2 and et2 is not None:
+                web.HTTPError('304')
+                t = ''
+            else:
+                web.header('Etag', et2)
+                f = open(f'webuihtml/css/{n}', 'r', encoding='utf8')
+                t = f.read()
+                f.close()
             return t
         else:
             web.notfound()

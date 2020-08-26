@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from .loadsettings import loadset, getdfset, saveset
 from .command import gopt
+from file import getEtag, getlanEtag
 from urllib.parse import urlencode
 import web
 render = web.template.render('webuihtml')

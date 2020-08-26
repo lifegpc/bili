@@ -21,7 +21,7 @@ def logincheck(h: str):
     if pa.pas:
         read = sect.check(h)
         if not read:
-            web.HTTPError('301', {'Location': "/login?" + urlencode(
+            web.HTTPError('302', {'Location': "/login?" + urlencode(
                 {"p": web.ctx.get('homepath') + web.ctx.get('fullpath')})})
             return True
     return False

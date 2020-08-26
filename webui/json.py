@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web
+from . import web, getEtag
 from os.path import exists
 from json import dumps, loads
 
@@ -22,10 +22,18 @@ class jsong:
     def GET(self, n):
         web.header('Content-Type', 'text/json; charset=utf-8')
         if exists(f'webuihtml/json/{n}'):
-            f = open(f'webuihtml/json/{n}', 'r', encoding='utf8')
-            t = f.read()
-            f.close()
-            t = loads(t)
-            return dumps({'code': 0, 'result': t})
+            et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
+            et2 = getEtag(f'webuihtml/json/{n}')
+            if et == et2 and et2 is not None:
+                web.HTTPError('304')
+                t = ''
+            else:
+                web.header('Etag', et2)
+                f = open(f'webuihtml/json/{n}', 'r', encoding='utf8')
+                t = f.read()
+                f.close()
+                t = loads(t)
+                t = dumps({'code': 0, 'result': t})
+            return t
         else:
             return dumps({'code': -404})

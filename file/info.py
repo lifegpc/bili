@@ -18,6 +18,10 @@ from file.time import ttos
 from file.str import width,size,ftts
 from re import split
 from platform import system
+from hashl import md5
+from time import time
+
+
 def getinfo(fn) :
     "获取文件信息"
     if not exists(fn['a']) :
@@ -112,3 +116,31 @@ def spfln(f:str)->(str,str):
         else :
             s="."
     return s,n
+
+
+def getEtag(fn):
+    "利用文件名和上次修改时间生成Etag"
+    if not exists(fn):
+        return None
+    try:
+        mtime = getmtime(fn)
+    except:
+        mtime = time()
+    return md5(f"{fn}{mtime}")
+
+
+def getlanEtag(sn: str, lan: str, sn2: str = "bili"):
+    "语言资源文件生成Etag"
+    if lan=="en":
+        fn = f"Language/{sn2}.{sn}.pot"
+    else:
+        fn = f"Language/{sn2}.{sn}.{lan}.po"
+    if not exists(fn):
+        fn = f'Language/{sn2}.{sn}.pot'
+        if not exists(fn):
+            return None
+    try:
+        mtime = getmtime(fn)
+    except:
+        mtime = time()
+    return md5(f"{fn}{mtime}")
