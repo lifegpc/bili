@@ -23,7 +23,7 @@ window.addEventListener('load', () => {
         window.location.href = uri;
     }
     pass.addEventListener('keydown', (e) => {
-        if (e.code == "Enter") {
+        if (e.code == "Enter" || e.keyCode == 13) {
             if (pass.validationMessage != "") {
                 alert(pass.validationMessage);
                 return;
