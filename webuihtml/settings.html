@@ -146,7 +146,7 @@ $if fontname is not None:
         <label class="trans" trans="bili.command O21" value="1-*">使用aria2c时单个文件最大连接数。有效值：&lt;value&gt;</label>
         <input class="form df" type="number" id="as" min="1" df="5"$:getse2('as')>
         <br/>
-        <label class="trans" trans="bili.command O22" value1="M" value2="5">使用aria2c时文件分片大小。单位：&lt;value1&gt;，有效值：&lt;value2&gt;</label>
+        <label class="trans" trans="bili.command O22" value1="M" value2="1-1024">使用aria2c时文件分片大小。单位：&lt;value1&gt;，有效值：&lt;value2&gt;</label>
         <input class="form df" type="number" id="ak" min="1" max="1024" df="5"$:getse2('ak')>
         <br/>
         <input class="form nty check" type="checkbox" id="ab"$:getch('ab')>
