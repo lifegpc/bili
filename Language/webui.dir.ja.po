@@ -3,11 +3,15 @@
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-08-27 05:04:00+0000\n"
 "PO-Revision-Date: 2020-08-27 08:04+0000\n"
+"Last-Translator: Kum4423, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,36 +21,36 @@ msgstr ""
 
 msgctxt "FILENAME"
 msgid "File name"
-msgstr ""
+msgstr "ファイル名"
 
 msgctxt "FILETYPE"
 msgid "File type"
-msgstr ""
+msgstr "ファイルの種類"
 
 msgctxt "FILESIZE"
 msgid "File size"
-msgstr ""
+msgstr "ファイルサイズ"
 
 msgctxt "LASTMODI"
 msgid "Last modified time"
-msgstr ""
+msgstr "最新更新時間"
 
 msgctxt "INDEXOF"
 msgid "Index of <dir>"
-msgstr ""
+msgstr "<dir> のインデックス"
 
 msgctxt "AO"
 msgid "Ascending order"
-msgstr ""
+msgstr "昇順"
 
 msgctxt "DO"
 msgid "Descending order"
-msgstr ""
+msgstr "降順"
 
 msgctxt "DIR"
 msgid "Directory"
-msgstr ""
+msgstr "階層"
 
 msgctxt "FILE"
 msgid "File"
-msgstr ""
+msgstr "ファイル"
