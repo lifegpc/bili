@@ -71,6 +71,9 @@ window.addEventListener('load', () => {
                         }
                         o.innerText = t;
                     }
+                    if (o.hasAttribute('n')) {
+                        o.setAttribute('n', t);
+                    }
                     if (i < le - 1) {
                         setTimeout(() => { dealwith(list[i + 1], i + 1); }, 10);
                     }

@@ -14,10 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from .range import getrange, checkrange, getcontentbyrange
+from .headers import getheader, getstatus, getcontenttype, mimetype
 from .loadsettings import loadset, getdfset, saveset
 from .command import gopt
 from file import getEtag, getlanEtag
-from urllib.parse import urlencode
+from urllib.parse import urlencode, quote
 import web
 render = web.template.render('webuihtml')
 from .pas import passw
@@ -33,3 +34,4 @@ from .settings import setting
 from .json import jsong
 from .login import login
 from .font import font
+from .video import video

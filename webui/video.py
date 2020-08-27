@@ -13,39 +13,60 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, getEtag, logincheck2, render, getrange, checkrange, getcontentbyrange
-from os.path import exists, getsize
+from . import web, render, loadset, gopt, quote, mimetype, getEtag, getrange, checkrange, getcontentbyrange
+from JSONParser import loadset as loadset2
+import sys
+from os.path import exists, isdir, isfile, getsize
 from file import spfn
 
-mimetype = {'otf': 'font/otf', 'ttf': 'font/ttf',
-            'woff': 'font/woff', 'woff2': 'font/woff'}
+ip = {}
+if len(sys.argv) > 1:
+    ip = gopt(sys.argv[1:])
+se = loadset()
+if se == -1 or se == -2:
+    se = {}
+se2 = loadset2()
+if se2 == -1 or se2 == -2:
+    se2 = {}
 
 
-class font:
-    def GET(self):
-        h = web.cookies().get('section')
-        if logincheck2(h):
-            return '403 Forbidden'
-        t = web.input().get('l')
-        if not exists(t):
-            web.HTTPError('404')
-            return '404 Not Found'
-        elif spfn(t)[1].lower() in mimetype:
-            mime = mimetype[spfn(t)[1].lower()]
+class video:
+    def GET(self, *t):
+        s: str = t[0]
+        if s == None:
+            s = ''
+        o = 'Download/'
+        if 'o' in se2:
+            o = se2['o']
+        if exists(o + s[1:]) and isdir(o + s[1:]):
+            if not s.endswith('/'):
+                web.HTTPError('301', {'location': quote(web.ctx.get(
+                    'homepath') + web.ctx.get('path') + '/') + web.ctx.get('query')})
+                return ''
+            f = open('webuihtml/video.html', 'r', encoding='utf8')
+            video2 = web.template.Template(f.read())
+            f.close()
+            yield video2(s, se, ip, se2, str)
+        elif exists(o + s[1:]) and isfile(o + s[1:]):
+            fn = o + s[1:]
+            mime = 'application/octet-stream'
+            ex = spfn(fn)[1]
+            if ex.lower() in mimetype:
+                mime = mimetype[ex.lower()]
             web.header('Content-type', mime)
             et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
-            et2 = getEtag(t)
+            et2 = getEtag(fn)
             if et == et2:
                 web.HTTPError('304')
                 return ''
             else:
                 web.header('Etag', et2)
                 web.header('Content-Transfer-Encoding', 'BINARY')
-                fs = getsize(t)
+                fs = getsize(fn)
                 ran = web.ctx.env.get('HTTP_RANGE')
                 if ran is None:
                     web.header('Content-Length', str(fs))
-                    f = open(t, 'rb', 1024)
+                    f = open(fn, 'rb', 1024)
                     while f.readable():
                         yield f.read(1024 * 1024)
                     f.close()
@@ -55,9 +76,9 @@ class font:
                         web.HTTPError('416')
                         return '416 Range Not Satisfiable'
                     else:
-                        f = open(t, 'rb', 1024)
+                        f = open(fn, 'rb', 1024)
                         web.HTTPError('206')
                         yield getcontentbyrange(ran2, f)
         else:
-            web.HTTPError('400')
-            return '400 Bad Request'
+            web.HTTPError('404')
+            return render.HTTP404()

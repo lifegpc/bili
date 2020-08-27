@@ -98,19 +98,29 @@ def checkrange(r: Range, l: int):
 
 
 def getcontentbyrange(r: Range, f: IO):
+    "传输前需将Content-Transfer-Encoding设置为BINARY"
     if r is None or len(r) == 0:
         f.seek(0, 0)
-        return f.read()
+        while f.readable():
+            yield f.read(1024*1024)
+        f.close()
     if len(r) == 1 and r[0][1] is None:
         if r[0][0] > 0:
             f.seek(r[0][0]-1, 0)
-            return f.read()
+            while f.readable():
+                yield f.read(1024 * 1024)
+            f.close()
         else:
             f.seek(r[0][0], 2)
-            return f.read()
+            while f.readable():
+                yield f.read(1024 * 1024)
+            f.close()
     else:
-        b = b''
         for i in r:
             f.seek(i[0]-1, 0)
-            b = b+f.read(i[1]-i[0]+1)
-        return b
+            l = f.tell()
+            while l < i[1]:
+                le = min(i[1] - l, 1024 * 1024)
+                yield f.read(le)
+                l = f.tell()
+        f.close()

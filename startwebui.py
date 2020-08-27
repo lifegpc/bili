@@ -17,7 +17,7 @@ import web
 from cheroot.server import HTTPServer
 from cheroot.ssl.builtin import BuiltinSSLAdapter
 import os
-from webui import index, gopt, translate, js, render, css, setting, loadset, pa, jsong, login, font
+from webui import index, gopt, translate, js, render, css, setting, loadset, pa, jsong, login, font, video
 import sys
 from lang import getdict, getlan
 lan = None
@@ -30,7 +30,8 @@ urls = (
     r"/settings(\.html)?(/.+)?", "setting",
     r"/json/(.+)", "jsong",
     r"/login(\.html)?", "login",
-    r"/font", "font"
+    r"/font", "font",
+    r"/video(.+)?", "video"
 )
 
 
