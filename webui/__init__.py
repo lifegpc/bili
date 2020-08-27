@@ -13,6 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from .range import getrange, checkrange, getcontentbyrange
 from .loadsettings import loadset, getdfset, saveset
 from .command import gopt
 from file import getEtag, getlanEtag

@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, getEtag, logincheck2, render
+from . import web, getEtag, logincheck2, render, getrange, checkrange, getcontentbyrange
 from os.path import exists, getsize
 from file import spfn
 
@@ -41,11 +41,24 @@ class font:
             else:
                 web.header('Etag', et2)
                 fs = getsize(t)
-                web.header('Content-Length', str(fs))
-                f = open(t, 'rb', 1024)
-                r = f.read()
-                f.close()
-                return r
+                ran = web.ctx.env.get('HTTP_RANGE')
+                if ran is None:
+                    web.header('Content-Length', str(fs))
+                    f = open(t, 'rb', 1024)
+                    r = f.read()
+                    f.close()
+                    return r
+                else:
+                    ran2 = getrange(ran)
+                    if not checkrange(ran2, fs):
+                        web.HTTPError('416')
+                        return '416 Range Not Satisfiable'
+                    else:
+                        f = open(t, 'rb', 1024)
+                        web.HTTPError('206')
+                        r = getcontentbyrange(ran2, f)
+                        f.close()
+                        return r
         else:
             web.HTTPError('400')
             return '400 Bad Request'
