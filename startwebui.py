@@ -17,7 +17,8 @@ import web
 from cheroot.server import HTTPServer
 from cheroot.ssl.builtin import BuiltinSSLAdapter
 import os
-from webui import index, gopt, translate, js, css, setting, loadset, pa, jsong, login, font, video, gettemplate
+import webui
+from webui import gopt, loadset, pa, gettemplate
 import sys
 from lang import getdict, getlan
 lan = None
@@ -48,7 +49,7 @@ class mywebapp(web.application):
 
 
 def main(ip: dict):
-    app = mywebapp(urls, globals())
+    app = mywebapp(urls, vars(webui))
     app.notfound = notfound
     global se
     port = 8080
