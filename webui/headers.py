@@ -18,8 +18,8 @@ from typing import List, Tuple
 
 Headers = List[Tuple[str, str]]
 ContentType = Tuple[str, str, str]
-mimetype = {"xml": "text/xml", "txt": "text/plain", "png": "image/png",
-            "jpeg": "image/jpeg", "jpg": "image/jpeg", "webp": "image/webp"}
+mimetype = {"xml": "text/xml", "txt": "text/plain", "png": "image/png", "mp4": "video/mp4",
+            "m4a": "audio/mp4", "mkv": "video/mp4", "jpeg": "image/jpeg", "jpg": "image/jpeg", "webp": "image/webp"}
 
 
 def getstatus(s: str) -> int:

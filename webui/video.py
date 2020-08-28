@@ -64,8 +64,7 @@ class video:
                 ran = web.ctx.env.get('HTTP_RANGE')
                 if ran is None:
                     web.header('Content-Length', str(fs))
-                    f = open(fn, 'rb', 1024)
-                    return getcontentbyrange(None, f)
+                    return getcontentbyrange(None, fn)
                 else:
                     ran2 = getrange(ran)
                     if not checkrange(ran2, fs):
@@ -73,9 +72,8 @@ class video:
                         return '416 Range Not Satisfiable'
                     else:
                         web.header('Content-Range', DashRange(ran2, fs))
-                        f = open(fn, 'rb', 1024)
                         web.HTTPError('206')
-                        return getcontentbyrange(ran2, f)
+                        return getcontentbyrange(ran2, fn)
         else:
             web.HTTPError('404')
             HTTP404 = gettemplate('HTTP404')

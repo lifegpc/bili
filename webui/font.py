@@ -45,8 +45,7 @@ class font:
                 ran = web.ctx.env.get('HTTP_RANGE')
                 if ran is None:
                     web.header('Content-Length', str(fs))
-                    f = open(t, 'rb', 1024)
-                    return getcontentbyrange(None, f)
+                    return getcontentbyrange(None, t)
                 else:
                     ran2 = getrange(ran)
                     if not checkrange(ran2, fs):
@@ -54,9 +53,8 @@ class font:
                         return '416 Range Not Satisfiable'
                     else:
                         web.header('Content-Range', DashRange(ran2, fs))
-                        f = open(t, 'rb', 1024)
                         web.HTTPError('206')
-                        return getcontentbyrange(ran2, f)
+                        return getcontentbyrange(ran2, t)
         else:
             web.HTTPError('400')
             return '400 Bad Request'

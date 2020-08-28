@@ -100,33 +100,30 @@ def checkrange(r: Range, l: int):
             return False
 
 
-def getcontentbyrange(r: Range, f: IO):
+def getcontentbyrange(r: Range, fn: str):
     "传输前需将Content-Transfer-Encoding设置为BINARY"
-    if r is None or len(r) == 0:
-        f.seek(0, 0)
-        while f.readable():
-            yield f.read(1024*1024)
-        f.close()
-    if len(r) == 1 and r[0][1] is None:
-        if r[0][0] >= 0:
-            f.seek(r[0][0], 0)
+    with open(fn, 'rb', 1024) as f:
+        if r is None or len(r) == 0:
+            f.seek(0, 0)
             while f.readable():
-                yield f.read(1024 * 1024)
-            f.close()
+                yield f.read(1024*1024)
+        if len(r) == 1 and r[0][1] is None:
+            if r[0][0] >= 0:
+                f.seek(r[0][0], 0)
+                while f.readable():
+                    yield f.read(1024 * 1024)
+            else:
+                f.seek(r[0][0], 2)
+                while f.readable():
+                    yield f.read(1024 * 1024)
         else:
-            f.seek(r[0][0], 2)
-            while f.readable():
-                yield f.read(1024 * 1024)
-            f.close()
-    else:
-        for i in r:
-            f.seek(i[0], 0)
-            l = f.tell()
-            while l <= i[1]:
-                le = min(i[1] - l, 1024 * 1024)
-                yield f.read(le)
+            for i in r:
+                f.seek(i[0], 0)
                 l = f.tell()
-        f.close()
+                while l <= i[1]:
+                    le = min(i[1] - l, 1024 * 1024)
+                    yield f.read(le)
+                    l = f.tell()
 
 
 def DashRange(r: Range, fs: int):
