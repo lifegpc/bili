@@ -2,6 +2,7 @@
 - [BiliBili 弹幕/视频下载软件](#bilibili-弹幕视频下载软件)
   * [简介](#简介)
   * [依赖库](#依赖库)
+    + [JavaScript依赖库](#javascript依赖库)
   * [配置文件](#配置文件)
     + [cookies.json](#cookiesjson)
     + [settings.json](#settingsjson)
@@ -32,6 +33,9 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
 用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。  
 识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。
+### JavaScript依赖库
+[jQuery](https://jquery.com/)  
+[js-sha256](https://github.com/emn178/js-sha256)
 ## 配置文件
 ### cookies.json
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用以及下载720P及以上视频使用）   
