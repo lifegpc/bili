@@ -15,12 +15,12 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from .range import getrange, checkrange, getcontentbyrange
 from .headers import getheader, getstatus, getcontenttype, mimetype
+from .template import gettemplate
 from .loadsettings import loadset, getdfset, saveset
 from .command import gopt
 from file import getEtag, getlanEtag
 from urllib.parse import urlencode, quote
 import web
-render = web.template.render('webuihtml')
 from .pas import passw
 pa = passw()
 from .section import sectionlist

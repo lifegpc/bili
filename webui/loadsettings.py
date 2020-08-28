@@ -38,7 +38,6 @@ def loadset():
 def getdfset():
     "获取默认设置"
     o = {}
-    o['lan'] = 'en'
     o['s'] = '127.0.0.1'
     o['p'] = '8080'
     return o

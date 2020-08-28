@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, getEtag, logincheck2, render, getrange, checkrange, getcontentbyrange
+from . import web, getEtag, logincheck2, getrange, checkrange, getcontentbyrange
 from os.path import exists, getsize
 from file import spfn
 
@@ -25,11 +25,11 @@ class font:
     def GET(self):
         h = web.cookies().get('section')
         if logincheck2(h):
-            return '403 Forbidden'
+            yield '403 Forbidden'
         t = web.input().get('l')
         if not exists(t):
             web.HTTPError('404')
-            return '404 Not Found'
+            yield '404 Not Found'
         elif spfn(t)[1].lower() in mimetype:
             mime = mimetype[spfn(t)[1].lower()]
             web.header('Content-type', mime)
@@ -37,7 +37,7 @@ class font:
             et2 = getEtag(t)
             if et == et2:
                 web.HTTPError('304')
-                return ''
+                yield ''
             else:
                 web.header('Etag', et2)
                 web.header('Content-Transfer-Encoding', 'BINARY')
@@ -53,11 +53,11 @@ class font:
                     ran2 = getrange(ran)
                     if not checkrange(ran2, fs):
                         web.HTTPError('416')
-                        return '416 Range Not Satisfiable'
+                        yield '416 Range Not Satisfiable'
                     else:
                         f = open(t, 'rb', 1024)
                         web.HTTPError('206')
                         yield getcontentbyrange(ran2, f)
         else:
             web.HTTPError('400')
-            return '400 Bad Request'
+            yield '400 Bad Request'

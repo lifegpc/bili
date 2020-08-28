@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, render, loadset, gopt, quote, mimetype, getEtag, getrange, checkrange, getcontentbyrange
+from . import web, loadset, gopt, quote, mimetype, getEtag, getrange, checkrange, getcontentbyrange, gettemplate
 from JSONParser import loadset as loadset2
 import sys
 from os.path import exists, isdir, isfile, getsize
@@ -42,10 +42,8 @@ class video:
             if not s.endswith('/'):
                 web.HTTPError('301', {'location': quote(web.ctx.get(
                     'homepath') + web.ctx.get('path') + '/') + web.ctx.get('query')})
-                return ''
-            f = open('webuihtml/video.html', 'r', encoding='utf8')
-            video2 = web.template.Template(f.read())
-            f.close()
+                yield ''
+            video2 = gettemplate('video')
             yield video2(s, se, ip, se2, str)
         elif exists(o + s[1:]) and isfile(o + s[1:]):
             fn = o + s[1:]
@@ -58,7 +56,7 @@ class video:
             et2 = getEtag(fn)
             if et == et2:
                 web.HTTPError('304')
-                return ''
+                yield ''
             else:
                 web.header('Etag', et2)
                 web.header('Content-Transfer-Encoding', 'BINARY')
@@ -74,11 +72,12 @@ class video:
                     ran2 = getrange(ran)
                     if not checkrange(ran2, fs):
                         web.HTTPError('416')
-                        return '416 Range Not Satisfiable'
+                        yield '416 Range Not Satisfiable'
                     else:
                         f = open(fn, 'rb', 1024)
                         web.HTTPError('206')
                         yield getcontentbyrange(ran2, f)
         else:
             web.HTTPError('404')
-            return render.HTTP404()
+            HTTP404 = gettemplate('HTTP404')
+            yield HTTP404()

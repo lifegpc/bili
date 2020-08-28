@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import render, web, loadset, gopt, sect, pa
+from . import web, loadset, gopt, sect, pa, gettemplate
 import sys
 from json import dumps
 
@@ -28,7 +28,8 @@ if se == -1 or se == -2:
 
 class login:
     def GET(self, *t):
-        return render.login(ip, se)
+        log = gettemplate('login')
+        return log(ip, se)
 
     def POST(self, *t):
         web.header('Content-Type', 'text/json; charset=utf-8')

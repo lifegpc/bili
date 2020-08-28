@@ -13,6 +13,8 @@ $def getch2(s):
     $if s in se:checked
 $def gesel(s = None):
     $if type == s:class="select"
+$def getlannull2():
+    $if not 'lan' in se:selected
 $def getlannull():
     $if not 'lan' in se2:selected
 $def getsel(s, t=None):
@@ -69,7 +71,7 @@ $if fontname is not None:
         <input value="1" id="type" class="form hide">
         <label class="trans" trans="webui.settings WEBUILAN">WEB用户界面语言：</label>
         <select class="form" id="lan">
-        $if not 'lan' in se and 'lan' in dfse:$ se['lan']=dfse['lan']
+            <option value="" class="trans" trans="webui.settings NOTSET" $:getlannull2()>不设置</option>
         $for i in lan.keys():
             $if 'lan' in se and se['lan'] == i:<option value="$i" selected>$lan[i]</option>
             $else:<option value="$i">$lan[i]</option>

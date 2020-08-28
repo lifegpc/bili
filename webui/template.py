@@ -13,22 +13,11 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, logincheck, gettemplate
-import sys
+from web.template import Template
 
 
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
-
-
-class index:
-    def GET(self, *t):
-        h = web.cookies().get('section')
-        if logincheck(h):
-            return ''
-        ind = gettemplate('index')
-        return ind(ip, se)
+def gettemplate(s: str) -> Template:
+    f = open(f"webuihtml/{s}.html", 'r', encoding='utf8')
+    t = Template(f.read())
+    f.close()
+    return t

@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, render, loadset, translate, getdfset, saveset, gopt, pa, logincheck, apilogincheck
+from . import web, loadset, translate, getdfset, saveset, gopt, pa, logincheck, apilogincheck, gettemplate
 from lang import lan
 from json import dumps, loads
 import sys
@@ -38,7 +38,8 @@ class setting:
         se2 = loadset2()
         if se2 == -1 or se2 == -2:
             se2 = {}
-        return render.settings(t[1], lan, se, getdfset(), ip, se2, getDefalutSettings())
+        sett = gettemplate('settings')
+        return sett(t[1], lan, se, getdfset(), ip, se2, getDefalutSettings())
 
     def POST(self, *t):
         web.header('Content-Type', 'text/json; charset=utf-8')

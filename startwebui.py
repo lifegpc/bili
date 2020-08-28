@@ -17,7 +17,7 @@ import web
 from cheroot.server import HTTPServer
 from cheroot.ssl.builtin import BuiltinSSLAdapter
 import os
-from webui import index, gopt, translate, js, render, css, setting, loadset, pa, jsong, login, font, video
+from webui import index, gopt, translate, js, css, setting, loadset, pa, jsong, login, font, video, gettemplate
 import sys
 from lang import getdict, getlan
 lan = None
@@ -36,7 +36,8 @@ urls = (
 
 
 def notfound():
-    return web.notfound(render.HTTP404())
+    HTTP404 = gettemplate('HTTP404')
+    return web.notfound(HTTP404())
 
 
 class mywebapp(web.application):
