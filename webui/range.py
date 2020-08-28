@@ -108,8 +108,8 @@ def getcontentbyrange(r: Range, f: IO):
             yield f.read(1024*1024)
         f.close()
     if len(r) == 1 and r[0][1] is None:
-        if r[0][0] > 0:
-            f.seek(r[0][0]-1, 0)
+        if r[0][0] >= 0:
+            f.seek(r[0][0], 0)
             while f.readable():
                 yield f.read(1024 * 1024)
             f.close()
@@ -120,9 +120,9 @@ def getcontentbyrange(r: Range, f: IO):
             f.close()
     else:
         for i in r:
-            f.seek(i[0]-1, 0)
+            f.seek(i[0], 0)
             l = f.tell()
-            while l < i[1]:
+            while l <= i[1]:
                 le = min(i[1] - l, 1024 * 1024)
                 yield f.read(le)
                 l = f.tell()
@@ -134,11 +134,11 @@ def DashRange(r: Range, fs: int):
     if len(r) == 1 and r[0][1] is None:
         t = r[0]
         if t[0] >= 0:
-            web.header('Content-Length', f'{fs - t[0] + 1}')
-            return f'bytes {t[0]}-{fs}/{fs}'
+            web.header('Content-Length', f'{fs - t[0]}')
+            return f'bytes {t[0]}-{fs - 1}/{fs}'
         else:
             web.header('Content-Length', str(t[0]))
-            return f'bytes {fs - t[0] + 1}-{fs}/{fs}'
+            return f'bytes {fs - t[0]}-{fs - 1}/{fs}'
     else:
         s = 'bytes '
         f = True
