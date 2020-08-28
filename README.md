@@ -26,6 +26,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 [selenium](https://pypi.org/project/selenium/)  
 [rsa](https://pypi.org/project/rsa/)  
 [polib](https://pypi.org/project/polib/)  
+[web.py](https://webpy.org/)  
 自己写的file库   
 如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
 如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
