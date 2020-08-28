@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from .range import getrange, checkrange, getcontentbyrange
+from .range import getrange, checkrange, getcontentbyrange, DashRange
 from .headers import getheader, getstatus, getcontenttype, mimetype
 from .template import gettemplate
 from .loadsettings import loadset, getdfset, saveset

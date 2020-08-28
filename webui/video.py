@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, quote, mimetype, getEtag, getrange, checkrange, getcontentbyrange, gettemplate
+from . import web, loadset, gopt, quote, mimetype, getEtag, getrange, checkrange, getcontentbyrange, gettemplate, DashRange
 from JSONParser import loadset as loadset2
 import sys
 from os.path import exists, isdir, isfile, getsize
@@ -42,9 +42,9 @@ class video:
             if not s.endswith('/'):
                 web.HTTPError('301', {'location': quote(web.ctx.get(
                     'homepath') + web.ctx.get('path') + '/') + web.ctx.get('query')})
-                yield ''
+                return ''
             video2 = gettemplate('video')
-            yield video2(s, se, ip, se2, str)
+            return video2(s, se, ip, se2, str)
         elif exists(o + s[1:]) and isfile(o + s[1:]):
             fn = o + s[1:]
             mime = 'application/octet-stream'
@@ -56,7 +56,7 @@ class video:
             et2 = getEtag(fn)
             if et == et2:
                 web.HTTPError('304')
-                yield ''
+                return ''
             else:
                 web.header('Etag', et2)
                 web.header('Content-Transfer-Encoding', 'BINARY')
@@ -65,19 +65,18 @@ class video:
                 if ran is None:
                     web.header('Content-Length', str(fs))
                     f = open(fn, 'rb', 1024)
-                    while f.readable():
-                        yield f.read(1024 * 1024)
-                    f.close()
+                    return getcontentbyrange(None, f)
                 else:
                     ran2 = getrange(ran)
                     if not checkrange(ran2, fs):
                         web.HTTPError('416')
-                        yield '416 Range Not Satisfiable'
+                        return '416 Range Not Satisfiable'
                     else:
+                        web.header('Content-Range', DashRange(ran2, fs))
                         f = open(fn, 'rb', 1024)
                         web.HTTPError('206')
-                        yield getcontentbyrange(ran2, f)
+                        return getcontentbyrange(ran2, f)
         else:
             web.HTTPError('404')
             HTTP404 = gettemplate('HTTP404')
-            yield HTTP404()
+            return HTTP404()

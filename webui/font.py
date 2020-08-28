@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, getEtag, logincheck2, getrange, checkrange, getcontentbyrange
+from . import web, getEtag, logincheck2, getrange, checkrange, getcontentbyrange, DashRange
 from os.path import exists, getsize
 from file import spfn
 
@@ -25,11 +25,11 @@ class font:
     def GET(self):
         h = web.cookies().get('section')
         if logincheck2(h):
-            yield '403 Forbidden'
+            return '403 Forbidden'
         t = web.input().get('l')
         if not exists(t):
             web.HTTPError('404')
-            yield '404 Not Found'
+            return '404 Not Found'
         elif spfn(t)[1].lower() in mimetype:
             mime = mimetype[spfn(t)[1].lower()]
             web.header('Content-type', mime)
@@ -37,7 +37,7 @@ class font:
             et2 = getEtag(t)
             if et == et2:
                 web.HTTPError('304')
-                yield ''
+                return ''
             else:
                 web.header('Etag', et2)
                 web.header('Content-Transfer-Encoding', 'BINARY')
@@ -46,18 +46,17 @@ class font:
                 if ran is None:
                     web.header('Content-Length', str(fs))
                     f = open(t, 'rb', 1024)
-                    while f.readable():
-                        yield f.read(1024 * 1024)
-                    f.close()
+                    return getcontentbyrange(None, f)
                 else:
                     ran2 = getrange(ran)
                     if not checkrange(ran2, fs):
                         web.HTTPError('416')
-                        yield '416 Range Not Satisfiable'
+                        return '416 Range Not Satisfiable'
                     else:
+                        web.header('Content-Range', DashRange(ran2, fs))
                         f = open(t, 'rb', 1024)
                         web.HTTPError('206')
-                        yield getcontentbyrange(ran2, f)
+                        return getcontentbyrange(ran2, f)
         else:
             web.HTTPError('400')
-            yield '400 Bad Request'
+            return '400 Bad Request'

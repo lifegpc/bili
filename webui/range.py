@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from re import search, I
 from typing import List, Tuple, IO
+import web
 
 Range = List[Tuple[int, int]]
 
@@ -92,7 +93,9 @@ def checkrange(r: Range, l: int):
         return False
     else:
         if r[len(r)-1][1] <= l:
-            return True
+            if len(r) == 1:
+                return True
+            return False
         else:
             return False
 
@@ -124,3 +127,26 @@ def getcontentbyrange(r: Range, f: IO):
                 yield f.read(le)
                 l = f.tell()
         f.close()
+
+
+def DashRange(r: Range, fs: int):
+    "生成Content-Range头部"
+    if len(r) == 1 and r[0][1] is None:
+        t = r[0]
+        if t[0] >= 0:
+            web.header('Content-Length', f'{fs - t[0] + 1}')
+            return f'bytes {t[0]}-{fs}/{fs}'
+        else:
+            web.header('Content-Length', str(t[0]))
+            return f'bytes {fs - t[0] + 1}-{fs}/{fs}'
+    else:
+        s = 'bytes '
+        f = True
+        for i in r:
+            if f:
+                f = False
+            else:
+                s = f"{s}, "
+            web.header('Content-Length', f'{i[1] - i[0] + 1}')
+            s = f"{s}{i[0]}-{i[1]}/{fs}"
+        return s
