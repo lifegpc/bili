@@ -32,7 +32,8 @@ urls = (
     r"/json/(.+)", "jsong",
     r"/login(\.html)?", "login",
     r"/font", "font",
-    r"/video(.+)?", "video"
+    r"/video(.+)?", "video",
+    r"/favicon.ico", "favicon"
 )
 
 
