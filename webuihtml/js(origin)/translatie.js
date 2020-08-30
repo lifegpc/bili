@@ -22,7 +22,10 @@ var transobj = Object();
 */
 var gettrans = (name, list, i, dealwith) => {
     var le = list.length;
-    $.getJSON('/translate/' + name, {}, (ob, stat) => {
+    var param = {};
+    var hl = new URL(window.location.href).searchParams.get('hl');
+    if (hl != null) param['hl'] = hl;
+    $.getJSON('/translate/' + name, param, (ob, stat) => {
         if (stat == "success") {
             if (ob.code == 0) {
                 transobj[name] = ob.dict;
@@ -94,5 +97,22 @@ window.addEventListener('load', () => {
     }
     if (le > 0) {
         dealwith(list[0], 0);
+    }
+    var uri = new URL(window.location.href);
+    var param = {};
+    var hl = uri.searchParams.get('hl');
+    if (hl != null) param['hl'] = hl;
+    var alist = document.getElementsByTagName('a');
+    for (var i = 0; i < alist.length; i++) {
+        var a = alist[i];
+        var url = new URL(a.href);
+        if (url.origin == uri.origin) {
+            if (url.search == "") {
+                a.href = url.href + "?" + $.param(param);
+            }
+            else {
+                a.href = url.href + "&" + $.param(param);
+            }
+        }
     }
 })

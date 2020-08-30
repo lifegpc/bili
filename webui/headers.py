@@ -14,10 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from re import search, I
-from typing import List, Tuple
+from typing import List, Tuple, Dict
 
 Headers = List[Tuple[str, str]]
 ContentType = Tuple[str, str, str]
+AcceptLanguage = Dict[float, List[str]]
 mimetype = {"xml": "text/xml", "txt": "text/plain", "png": "image/png", "mp4": "video/mp4",
             "m4a": "audio/mp4", "mkv": "video/mp4", "jpeg": "image/jpeg", "jpg": "image/jpeg", "webp": "image/webp"}
 
@@ -50,3 +51,28 @@ def getcontenttype(s: str) -> ContentType:
     if rs is not None:
         t = rs.groups()
         return (t[0], None, t[2])
+
+
+def getacceptlanguage(s: str) -> AcceptLanguage:
+    if s is None:
+        return None
+    r: AcceptLanguage = {}
+    t = s.strip()
+    if t == "*":
+        return None
+    l = t.split(',')
+    tem = []
+    for i in l:
+        i = i.strip()
+        l2 = i.split(';')
+        if len(l2) > 0:
+            tem.append(l2[0].strip())
+            if len(l2) > 1:
+                rs = search(r'^q=([0-9]+(.[0-9]+)?)$', l2[1].strip(), I)
+                if rs is not None:
+                    q = float(rs.groups()[0])
+                    r[q] = tem
+                    tem = []
+    if len(tem) > 0:
+        r[float(1)] = tem
+    return r
