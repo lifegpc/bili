@@ -21,6 +21,12 @@ import webui
 from webui import gopt, loadset, pa, gettemplate
 import sys
 from lang import getdict, getlan
+from re import search, I
+import traceback
+
+un_safe_port_in_chrome = [1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 42, 43, 53, 77, 79, 87, 95, 101, 102, 103, 104, 109, 110, 111, 113, 115, 117, 119, 123, 135,
+                          139, 143, 179, 389, 427, 465, 512, 513, 514, 515, 526, 530, 531, 532, 540, 548, 556, 563, 587, 601, 636, 993, 995, 2049, 3659, 4045, 6000, 6665, 6666, 6667, 6668, 6669, 6697]
+
 lan = None
 
 urls = (
@@ -45,8 +51,45 @@ def notfound():
 class mywebapp(web.application):
     def run(self, host: str = "127.0.0.1", port: int = 8080, *middleware):
         "重写方法以支持指定host和port"
+        o_port = port
+        pr = None
+        if port == 0:
+            port = 2
+            pr = lan['ZEROPORT']
+        while port in un_safe_port_in_chrome:
+            port = port + 1
+            pr = lan['UNSAFEPORT'].replace('<value1>', str(
+                o_port)).replace('<value2>', str(port))
+        if pr is not None:
+            print(pr)
         func = self.wsgifunc(*middleware)
-        return web.httpserver.runsimple(func, (host, port))
+        bs = True
+        while bs:
+            bs = False
+            try:
+                return web.httpserver.runsimple(func, (host, port))
+            except OSError as e:
+                if len(e.args) < 1:
+                    print(traceback.format_exc())
+                else:
+                    for i in e.args:
+                        rs = search(r'\[winerror ([0-9]+)\]', i, I)
+                        if rs is not None:
+                            break
+                    if rs is None:
+                        print(traceback.format_exc())
+                    else:
+                        print(i)
+                        pr = lan['UNAPORT'].replace('<value1>', str(port))
+                        rn = int(rs.groups()[0])
+                        if rn in [10013, 10048]:
+                            port = (port + 1) % 65536
+                            if port == 0:
+                                port = 2  # 解决不识别端口0的情况
+                            while port in un_safe_port_in_chrome:
+                                port = port + 1
+                            print(pr.replace('<value2>', str(port)))
+                            bs = True
 
 
 def main(ip: dict):
