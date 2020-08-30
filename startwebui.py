@@ -77,7 +77,24 @@ class mywebapp(web.application):
                         if rs is not None:
                             break
                     if rs is None:
-                        print(traceback.format_exc())
+                        for i in e.args:
+                            rs = search(r'\[errno ([0-9]+)\]', i, I)
+                            if rs is not None:
+                                break
+                        if rs is None:
+                            print(traceback.format_exc())
+                        else:
+                            print(i)
+                            pr = lan['UNAPORT'].replace('<value1>', str(port))
+                            rn = int(rs.groups()[0])
+                            if rn in [98]:
+                                port = (port + 1) % 65536
+                                if port == 0:
+                                    port = 2  # 解决不识别端口0的情况
+                                while port in un_safe_port_in_chrome:
+                                    port = port + 1
+                                print(pr.replace('<value2>', str(port)))
+                                bs = True
                     else:
                         print(i)
                         pr = lan['UNAPORT'].replace('<value1>', str(port))
