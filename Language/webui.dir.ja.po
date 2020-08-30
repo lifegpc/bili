@@ -5,13 +5,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
 # Kum4423, 2020
+# 1 q <g1710431395@gmail.com>, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-08-27 05:04:00+0000\n"
 "PO-Revision-Date: 2020-08-27 08:04+0000\n"
-"Last-Translator: Kum4423, 2020\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -49,7 +50,7 @@ msgstr "降順"
 
 msgctxt "DIR"
 msgid "Directory"
-msgstr "階層"
+msgstr "ディレクトリ"
 
 msgctxt "FILE"
 msgid "File"
