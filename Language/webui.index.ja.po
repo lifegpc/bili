@@ -46,16 +46,16 @@ msgstr "パスワード認証を無効にしているので、ログインしな
 
 msgctxt "BACKTOINDEX"
 msgid "Back to the main page."
-msgstr ""
+msgstr "メインページに戻る"
 
 msgctxt "ABOUT"
 msgid "About"
-msgstr ""
+msgstr "ソフトウェアについて"
 
 msgctxt "SOURCE"
 msgid "Source code"
-msgstr ""
+msgstr "ソースコード"
 
 msgctxt "LICENSE"
 msgid "License"
-msgstr ""
+msgstr "ライセンス"
