@@ -134,3 +134,32 @@ def checkver():
                 print(f"{lan['HTTP_STATUS_ERROR']}{re.status_code}")
     except UnknownVersionString as e:
         print(f"{lan['UNKNOWN_VER_STR']}{e.s}")
+
+
+def getversion():
+    """返回当前版本字符串
+    如果无法获取当前版本，返回None"""
+    ver = None
+    f = popen('git --version 2>&1', 'r', 10)
+    o = f.read()
+    f.close()
+    if o.startswith('git version'):
+        git = True
+    if exists('.git/') and git:  # 优先从git仓库获取当前版本
+        f = popen('git describe --long --dirty --tags', 'r', 10)
+        ver = f.read()
+        ver = ver.split('\n')[0]
+        f.close()
+    elif exists('version.txt'):
+        f = open('version.txt', 'r', encoding='utf8')
+        ver = f.read()
+        ver = ver.split('\n')[0]
+        f.close()
+    if ver is None:
+        return None
+    else:
+        try:
+            v = version(ver)
+            return v.tostr()
+        except:
+            return None

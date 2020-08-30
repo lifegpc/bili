@@ -52,6 +52,9 @@ $code:
     <script src="/js/prototype.js"></script>
     <script src="/js/translatie.js"></script>
     <script src="/js/dir.js"></script>
+    <script src="/js/footer.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/video.css">
+    <link rel="stylesheet" type="text/css" href="/css/footer.css">
 $ fontname=gets('uifont')
 $if fontname is not None:
     <style>body {font-family: "$fontname";}</style>
@@ -68,6 +71,11 @@ $ s2=getdir()
         <thead><tr><td id="a" i="1" z="0" n="文件名" class="trans" trans="webui.dir FILENAME">文件名</td><td id="b" i="2" z="0" n="文件类型" class="trans" trans="webui.dir FILETYPE">文件类型</td><td id="c" i="3" z="0" n="文件大小" class="trans" trans="webui.dir FILESIZE">文件大小</td><td id="d" i="4" z="0" n="上次修改时间" class="trans" trans="webui.dir LASTMODI">上次修改时间</td></tr></thead>
         <tbody id="n"></tbody>
     </table>
+    <div class="footer">
+        <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>
+        <div><a href="https://github.com/lifegpc/bili" class="trans" trans="webui.index SOURCE">源代码</a></div>
+        <div><a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
+    </div>
 </body>
 
 </html>

@@ -77,4 +77,4 @@ class video:
         else:
             web.HTTPError('404')
             HTTP404 = gettemplate('HTTP404')
-            return HTTP404()
+            return HTTP404(ip, se)

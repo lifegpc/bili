@@ -43,3 +43,19 @@ msgctxt "NONELOG"
 msgid ""
 "You have disabled password verification, so you don't need to login in."
 msgstr "您禁用了密码验证，因此无需进行登录。"
+
+msgctxt "BACKTOINDEX"
+msgid "Back to the main page."
+msgstr "返回主页。"
+
+msgctxt "ABOUT"
+msgid "About"
+msgstr "关于"
+
+msgctxt "SOURCE"
+msgid "Source code"
+msgstr "源代码"
+
+msgctxt "LICENSE"
+msgid "License"
+msgstr "许可证"

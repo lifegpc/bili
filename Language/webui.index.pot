@@ -38,3 +38,19 @@ msgstr ""
 msgctxt "NONELOG"
 msgid "You have disabled password verification, so you don't need to login in."
 msgstr ""
+
+msgctxt "BACKTOINDEX"
+msgid "Back to the main page."
+msgstr ""
+
+msgctxt "ABOUT"
+msgid "About"
+msgstr ""
+
+msgctxt "SOURCE"
+msgid "Source code"
+msgstr ""
+
+msgctxt "LICENSE"
+msgid "License"
+msgstr ""

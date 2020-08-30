@@ -92,6 +92,13 @@ source_file = file.all.pot
 source_lang = en
 type = PO
 
+[bili.webuiaboutpot]
+file_filter = webui.about.<lang>.po
+minimum_perc = 0
+source_file = webui.about.pot
+source_lang = en
+type = PO
+
 [bili.webuicommandpot]
 file_filter = webui.command.<lang>.po
 minimum_perc = 0

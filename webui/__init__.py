@@ -36,3 +36,4 @@ from .login import login
 from .font import font
 from .video import video
 from .favicon import favicon
+from .about import about

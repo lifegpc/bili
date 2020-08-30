@@ -1,0 +1,19 @@
+.footer {
+    display: inline-block;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
+}
+
+.footer div {
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.footer * a {
+    color: #0366d6;
+    text-decoration: none;
+}

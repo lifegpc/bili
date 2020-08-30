@@ -23,7 +23,9 @@ $code:
     <script src="js/sha256.min.js"></script>
     <script src="js/translatie.js"></script>
     <script src="js/login.js"></script>
+    <script src="js/footer.js"></script>
     <link rel="stylesheet" type="text/css" href="css/login.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
 $ fontname=gets('uifont')
 $if fontname is not None:
     <style>body, .form {font-family: "$fontname";}</style>
@@ -37,6 +39,11 @@ $if fontname is not None:
     <div>
         <label class="trans" trans="webui.settings PASS">密码：</label>
         <input id="password" type="password" minlength="8" maxlength="20">
+    </div>
+    <div class="footer">
+        <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>
+        <div><a href="https://github.com/lifegpc/bili" class="trans" trans="webui.index SOURCE">源代码</a></div>
+        <div><a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
     </div>
 </body>
 
