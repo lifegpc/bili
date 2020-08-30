@@ -18,7 +18,7 @@ from cheroot.server import HTTPServer
 from cheroot.ssl.builtin import BuiltinSSLAdapter
 import os
 import webui
-from webui import gopt, loadset, pa, gettemplate
+from webui import gopt, loadset, pa, gettemplate, server_ver
 import sys
 from lang import getdict, getlan
 from re import search, I
@@ -164,6 +164,7 @@ def main(ip: dict):
         if re == -1:
             print(lan['INVALPAS'])
             return -1
+    app.add_processor(server_ver)
     app.run(host, port)
 
 

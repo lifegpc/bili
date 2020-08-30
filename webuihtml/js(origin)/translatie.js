@@ -102,16 +102,19 @@ window.addEventListener('load', () => {
     var param = {};
     var hl = uri.searchParams.get('hl');
     if (hl != null) param['hl'] = hl;
-    var alist = document.getElementsByTagName('a');
-    for (var i = 0; i < alist.length; i++) {
-        var a = alist[i];
-        var url = new URL(a.href);
-        if (url.origin == uri.origin) {
-            if (url.search == "") {
-                a.href = url.href + "?" + $.param(param);
-            }
-            else {
-                a.href = url.href + "&" + $.param(param);
+    param = $.param(param)
+    if (param != "") {
+        var alist = document.getElementsByTagName('a');
+        for (var i = 0; i < alist.length; i++) {
+            var a = alist[i];
+            var url = new URL(a.href);
+            if (url.origin == uri.origin) {
+                if (url.search == "") {
+                    a.href = url.href + "?" + param;
+                }
+                else {
+                    a.href = url.href + "&" + param;
+                }
             }
         }
     }

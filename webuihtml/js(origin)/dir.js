@@ -19,6 +19,11 @@ window.addEventListener('load', function () {
             setTimeout(aload, 1000);
             return;
         }
+        var uri = new URL(window.location.href)
+        var hl = uri.searchParams.get('hl');
+        var param = {};
+        if (hl != null) param['hl'] = hl;
+        param = $.param(param)
         var a = document.getElementById('n');
         var da = document.getElementById('a');
         var db = document.getElementById('b');
@@ -157,7 +162,8 @@ window.addEventListener('load', function () {
                 var a = document.createElement('a');
                 if (i.ft == "dir") {
                     a.innerText = i.fn + '/';
-                    a.href = i.fn + '/';
+                    if (param != "") a.href = i.fn + '/?' + param;
+                    else a.href = i.fn + '/';
                 }
                 else {
                     a.innerText = i.fn;

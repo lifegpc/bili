@@ -25,9 +25,17 @@ se = loadset()
 if se == -1 or se == -2:
     se = {}
 ver = getversion()
+if ver is None:
+    ver2 = "bili"
+ver2 = f"bili {ver}"
 
 
 class about:
     def GET(self, *t):
         abo = gettemplate('about')
         return abo(ip, se, ver)
+
+
+def server_ver(handler):
+    web.header('Server', ver2)
+    return handler()
