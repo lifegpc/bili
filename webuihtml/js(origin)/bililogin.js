@@ -41,7 +41,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             uri = '/?' + param;
         }
         else {
-            var uri2 = new URL(uri);
+            var uri2 = new URL(uri, url.origin);
             if (param != "" && uri2.searchParams.get('hl') == null) {
                 uri2.searchParams.set('hl', hl);
             }
