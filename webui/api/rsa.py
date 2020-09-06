@@ -13,29 +13,30 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, gettemplate
-import sys
-from biliVersion import getversion
+from . import apic
+import rsa
+from base64 import b64encode
+
+pubkey = None
+privkey = None
 
 
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
-ver = getversion()
-if ver is None:
-    ver2 = "bili"
-ver2 = f"bili v{ver}"
+def decrypt(s: bytes) -> bytes:
+    "解密"
+    return rsa.decrypt(s, privkey)
 
 
-class about:
-    def GET(self, *t):
-        abo = gettemplate('about')
-        return abo(ip, se, ver)
+def int_to_bytes(x: int) -> bytes:
+    return x.to_bytes((x.bit_length() + 7) // 8, 'big')
 
 
-def server_ver(handler):
-    web.header('Server', ver2)
-    return handler()
+class apirsa(apic):
+    _VALID_URI = r'^rsa$'
+
+    def _handle(self):
+        global pubkey, privkey
+        if pubkey is None:
+            pubkey, privkey = rsa.newkeys(2048)
+        k = b64encode(int_to_bytes(pubkey.n)).decode('utf8')
+        e = b64encode(int_to_bytes(pubkey.e)).decode('utf8')
+        return {'code': '0', 'k': k, 'e': e}

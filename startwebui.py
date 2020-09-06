@@ -37,17 +37,19 @@ un_safe_port_in_chrome = [1, 7, 9, 11, 13, 15, 17, 19, 20, 21, 22, 23, 25, 37, 4
 lan = None
 
 urls = (
-    r"/(index)?(\.html)?", "index",
-    r"/translate/(.+)", "translate",
-    r"/js/(.+)", "js",
-    r"/css/(.+)", "css",
-    r"/settings(\.html)?(/.+)?", "setting",
-    r"/json/(.+)", "jsong",
-    r"/login(\.html)?", "login",
-    r"/font", "font",
-    r"/video(.+)?", "video",
-    r"/favicon.ico", "favicon",
-    r"/about", "about"
+    r"^/(index)?(\.html)?", "index",
+    r"^/translate/(.+)", "translate",
+    r"^/js/(.+)", "js",
+    r"^/css/(.+)", "css",
+    r"^/settings(\.html)?(/.+)?", "setting",
+    r"^/json/(.+)", "jsong",
+    r"^/login(\.html)?", "login",
+    r"^/font", "font",
+    r"^/video(.+)?", "video",
+    r"^/favicon.ico", "favicon",
+    r"^/about", "about",
+    r"^/bililogin(\.html)?", "biliLogin",
+    r"^/api/(.+)", "api"
 )
 
 

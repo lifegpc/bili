@@ -35,7 +35,9 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。
 ### JavaScript依赖库
 [jQuery](https://jquery.com/)  
-[js-sha256](https://github.com/emn178/js-sha256)
+[js-sha256](https://github.com/emn178/js-sha256)  
+[jsbn](http://www-cs-students.stanford.edu/~tjw/jsbn/)（注：已被合并到```webuihtml/js(origin)/rsa.js```）  
+[js-base64](https://github.com/dankogai/js-base64)
 ## 配置文件
 ### cookies.json
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用以及下载720P及以上视频使用）   

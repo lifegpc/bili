@@ -99,6 +99,13 @@ source_file = webui.about.pot
 source_lang = en
 type = PO
 
+[bili.webuibililoginpot]
+file_filter = webui.bililogin.<lang>.po
+minimum_perc = 0
+source_file = webui.bililogin.pot
+source_lang = en
+type = PO
+
 [bili.webuicommandpot]
 file_filter = webui.command.<lang>.po
 minimum_perc = 0

@@ -13,10 +13,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, gettemplate
+from . import gopt, loadset, web, logincheck, gettemplate
 import sys
-from biliVersion import getversion
-
 
 ip = {}
 if len(sys.argv) > 1:
@@ -24,18 +22,11 @@ if len(sys.argv) > 1:
 se = loadset()
 if se == -1 or se == -2:
     se = {}
-ver = getversion()
-if ver is None:
-    ver2 = "bili"
-ver2 = f"bili v{ver}"
 
-
-class about:
-    def GET(self, *t):
-        abo = gettemplate('about')
-        return abo(ip, se, ver)
-
-
-def server_ver(handler):
-    web.header('Server', ver2)
-    return handler()
+class biliLogin:
+    def GET(self, t):
+        h = web.cookies().get('section')
+        if logincheck(h):
+            return ''
+        bilo = gettemplate('bililogin')
+        return bilo(ip, se)

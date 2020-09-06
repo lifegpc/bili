@@ -13,29 +13,27 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, gettemplate
-import sys
-from biliVersion import getversion
+from re import search, I
 
 
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
-ver = getversion()
-if ver is None:
-    ver2 = "bili"
-ver2 = f"bili v{ver}"
+class InvalidInputEroor(Exception):
+    def __init__(self):
+        Exception.__init__(self, 'Input is invalid.')
 
 
-class about:
-    def GET(self, *t):
-        abo = gettemplate('about')
-        return abo(ip, se, ver)
+class apic:
+    _VALID_URI = r''
+    _groupdict = {}
+    _inp = ""
 
+    def __init__(self, inp: str):
+        "对uri进行处理"
+        re = search(self._VALID_URI, inp, I)
+        if re == None:
+            raise InvalidInputEroor()
+        self._inp = inp
+        self._groupdict = re.groupdict()
 
-def server_ver(handler):
-    web.header('Server', ver2)
-    return handler()
+    def _handle(self):
+        "具体处理"
+        return {'code': 0}

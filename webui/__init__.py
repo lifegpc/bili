@@ -13,6 +13,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+http_headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36", "Connection": "keep-alive",
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8", "Accept-Language": "zh-CN,zh;q=0.8"}
 from .range import getrange, checkrange, getcontentbyrange, DashRange
 from .headers import getheader, getstatus, getcontenttype, mimetype, getacceptlanguage
 from .template import gettemplate
@@ -26,6 +28,7 @@ pa = passw()
 from .section import sectionlist
 sect = sectionlist()
 from .section2 import logincheck, apilogincheck, logincheck2
+from .api import api
 from .index import index
 from .translate import translate
 from .js import js
@@ -37,3 +40,4 @@ from .font import font
 from .video import video
 from .favicon import favicon
 from .about import about, server_ver
+from .biliLogin import biliLogin

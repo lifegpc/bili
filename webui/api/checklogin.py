@@ -13,29 +13,28 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, gettemplate
-import sys
-from biliVersion import getversion
+from . import apic, new_Session
+from os.path import exists
+from JSONParser import loadcookie
 
 
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
-ver = getversion()
-if ver is None:
-    ver2 = "bili"
-ver2 = f"bili v{ver}"
+def logincheck() -> bool:
+    if not exists('cookies.json'):
+        return False
+    r = new_Session(False)
+    read = loadcookie(r)
+    if read != 0:
+        return False
+    re = r.get('https://api.bilibili.com/x/web-interface/nav')
+    re.encoding = 'utf8'
+    obj = re.json()
+    if obj['code'] == 0 and 'data' in obj and obj['data']['isLogin']:
+        return True
+    return False
 
 
-class about:
-    def GET(self, *t):
-        abo = gettemplate('about')
-        return abo(ip, se, ver)
+class checklogin(apic):
+    _VALID_URI = r"^checklogin$"
 
-
-def server_ver(handler):
-    web.header('Server', ver2)
-    return handler()
+    def _handle(self):
+        return {'code': 0, 'islogin': logincheck()}

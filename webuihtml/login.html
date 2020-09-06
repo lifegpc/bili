@@ -21,6 +21,7 @@ $code:
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="js/jquery.js"></script>
     <script src="js/sha256.min.js"></script>
+    <script src="js/prototype.js"></script>
     <script src="js/translatie.js"></script>
     <script src="js/login.js"></script>
     <script src="js/footer.js"></script>
@@ -35,10 +36,12 @@ $if fontname is not None:
 
 <body>
     <div class="trans" style="display: none;" trans="bili.biliLogin OUTPUT1"></div>
-    <h1 class="trans" trans="webui.index NELOGIN">您需要登录才能访问。</h1>
-    <div>
-        <label class="trans" trans="webui.settings PASS">密码：</label>
-        <input id="password" type="password" minlength="8" maxlength="20">
+    <div id="main">
+        <h1 class="trans" trans="webui.index NELOGIN">您需要登录才能访问。</h1>
+        <div>
+            <label class="trans" trans="webui.settings PASS">密码：</label>
+            <input id="password" type="password" minlength="8" maxlength="20">
+        </div>
     </div>
     <div class="footer">
         <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>

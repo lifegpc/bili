@@ -40,7 +40,7 @@ var gettrans = (name, list, i, dealwith) => {
         }
     })
 }
-window.addEventListener('load', () => {
+transobj.deal = () => {
     /**@type {HTMLCollectionOf<HTMLElement>}*/
     var list = document.getElementsByClassName('trans');
     var le = list.length;
@@ -48,6 +48,12 @@ window.addEventListener('load', () => {
      * @param {HTMLElement} o 元素
      * @param {number} i 正在处理的元素索引*/
     function dealwith(o, i) {
+        if (o.hasAttribute('t')) {
+            if (i < le - 1) {
+                setTimeout(() => { dealwith(list[i + 1], i + 1); }, 10);
+            }
+            return;
+        }
         var a = o.getAttribute('trans');
         if (a != null) {
             var l = a.split(' ');
@@ -77,6 +83,10 @@ window.addEventListener('load', () => {
                     if (o.hasAttribute('n')) {
                         o.setAttribute('n', t);
                     }
+                    if (o.classList.has('tvalue')) {
+                        o.setAttribute('value', t);
+                    }
+                    o.setAttribute('t', 1);//标记为已翻译过
                     if (i < le - 1) {
                         setTimeout(() => { dealwith(list[i + 1], i + 1); }, 10);
                     }
@@ -107,6 +117,9 @@ window.addEventListener('load', () => {
         var alist = document.getElementsByTagName('a');
         for (var i = 0; i < alist.length; i++) {
             var a = alist[i];
+            if (a.hasAttribute('hl')) {
+                continue;
+            }
             var url = new URL(a.href);
             if (url.origin == uri.origin) {
                 if (url.search == "") {
@@ -116,6 +129,8 @@ window.addEventListener('load', () => {
                     a.href = url.href + "&" + param;
                 }
             }
+            a.setAttribute('hl', 1)
         }
     }
-})
+}
+window.addEventListener('load', transobj.deal)

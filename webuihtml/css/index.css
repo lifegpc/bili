@@ -1,0 +1,11 @@
+#main {
+    position: absolute;
+    width: 99%;
+    text-align: center;
+}
+
+#main input {
+    width: 80%;
+    text-align: center;
+    color: gray;
+}

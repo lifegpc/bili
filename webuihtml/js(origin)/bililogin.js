@@ -13,10 +13,24 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
-window.addEventListener('load', () => {
-    /**@type {HTMLInputElement}*/
-    var pass = document.getElementById('password');
-    function direct() {
+(() => {
+    function bytesToHex(bytes) {
+        for (var hex = [], i = 0; i < bytes.length; i++) {
+            var current = bytes[i] < 0 ? bytes[i] + 256 : bytes[i];
+            hex.push((current >>> 4).toString(16));
+            hex.push((current & 0xF).toString(16));
+        }
+        var r = hex.join("");
+        while (r.charCodeAt(0) == 48) r = r.substring(1);
+        return r;
+    }
+    function hexToBytes(hex) {
+        if (hex.length % 2 == 1) hex = "0" + hex;
+        for (var bytes = [], c = 0; c < hex.length; c += 2)
+            bytes.push(parseInt(hex.substr(c, 2), 16));
+        return bytes;
+    }
+    function driect() {
         var url = new URL(window.location.href);
         var uri = url.searchParams.get('p');
         var hl = url.searchParams.get('hl');
@@ -35,31 +49,44 @@ window.addEventListener('load', () => {
         }
         window.location.href = uri;
     }
-    pass.addEventListener('keydown', (e) => {
-        if (e.code == "Enter" || e.keyCode == 13) {
-            if (pass.validationMessage != "") {
-                alert(pass.validationMessage);
-                return;
+    $.getJSON('/api/checklogin', (e, s) => {
+        if (s == "success") {
+            if (e.code == 0) {
+                if (e.islogin) {
+                    driect();
+                    return;
+                }
             }
             else {
-                $.post("/login", { 'p': sha256(pass.value) }, function (data, s) {
-                    if (s == "success") {
-                        if (data.code == 0) {
-                            alert(transobj['bili.biliLogin']['OUTPUT1']);
-                            direct();
-                        }
-                        else if (data.code == -1) {
-                            alert(transobj['bili.biliLogin']['ERROR2']);
-                        }
-                        else {
-                            alert(transobj['webui.index']['NONELOG']);
-                            direct();
-                        }
-                    }
-                })
+                console.error(e)
             }
+            $.getJSON('/api/rsa', (e, s) => {
+                if (s == "success") {
+                    getpubkey(e);
+                }
+            })
         }
     })
+    var pubkey;
+    function getpubkey(e) {
+        if (e.code == 0) {
+            var e2 = bytesToHex(Base64.toUint8Array(e.e));
+            var k = bytesToHex(Base64.toUint8Array(e.k));
+            pubkey = new RSAKey();
+            pubkey.setPublic(k, e2);
+            $.getJSON('/api/getpubkey', (e, s) => {
+                if (s == "success") {
+                    if (e.code == 0) { }
+                    else {
+                        console.error(e);
+                    }
+                }
+            })
+        }
+        else {
+            console.error(e);
+        }
+    }
     /**@type {HTMLStyleElement}*/
     var sty = null;
     /**@type {HTMLDivElement}*/
@@ -83,11 +110,13 @@ window.addEventListener('load', () => {
             sty.innerText = "#main{top:" + top + "px;}"
         }
     }
-    mainchange();
-    var timeout = () => {
+    window.addEventListener('load', () => {
         mainchange();
+        var timeout = () => {
+            mainchange();
+            setTimeout(timeout, 2000);
+        }
         setTimeout(timeout, 2000);
-    }
-    setTimeout(timeout, 2000);
-    window.addEventListener('resize', mainchange)
-})
+    })
+    window.addEventListener('resize', mainchange);
+})()

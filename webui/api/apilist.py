@@ -13,29 +13,15 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, gettemplate
-import sys
-from biliVersion import getversion
+from . import apic
+from typing import List
+from .rsa import apirsa
+from .checklogin import checklogin
+from .loginapi import getpubkey
+
+apil = [value for key, value in globals().items() if type(
+    value) == type(apic) and issubclass(value, apic) and key != "apic"]
 
 
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
-ver = getversion()
-if ver is None:
-    ver2 = "bili"
-ver2 = f"bili v{ver}"
-
-
-class about:
-    def GET(self, *t):
-        abo = gettemplate('about')
-        return abo(ip, se, ver)
-
-
-def server_ver(handler):
-    web.header('Server', ver2)
-    return handler()
+def getapilist() -> List[apic]:
+    return apil

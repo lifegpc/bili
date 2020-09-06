@@ -20,30 +20,35 @@ $code:
     <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="js/jquery.js"></script>
+    <script src="js/rsa.js"></script>
+    <script src="js/base64.min.js"></script>
     <script src="js/prototype.js"></script>
     <script src="js/translatie.js"></script>
-    <script src="js/index.js"></script>
+    <script src="js/bililogin.js"></script>
     <script src="js/footer.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/topmenu.css">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
     <link rel="stylesheet" type="text/css" href="css/footer.css">
 $ fontname=gets('uifont')
 $if fontname is not None:
-    <style>body, #main input {font-family: "$fontname";}</style>
+    <style>body, .form {font-family: "$fontname";}</style>
     $if 'uifontloc' in se:
         <style>@font-face{font-family: "$fontname";src: local("$fontname"),url("$:getfonturl(se['uifontloc'])")}</style>
 </head>
 
 <body>
-    <div class="topmenu first">
-        <div class="select"><a href="/" class="trans" trans="webui.index MAINPAGE">主页</a></div>
-        <div><a href="/downloadlist" class="trans" trans="webui.index DOWNLIST">下载任务列表</a></div>
-        <div><a href="/settings" class="trans" trans="webui.index SETTING">设置</a></div>
-    </div>
+    <div class="trans" style="display: none;" trans="bili.biliLogin OUTPUT1"></div>
     <div id="main">
-        <label class="trans" trans="bili.start INPUT1">请输入av/ss/ep/md/bv号（BV号请以BV开头）或者链接（支持用户页的收藏夹、频道、投稿、小视频链接，支持直播、直播回放和已购课程视频链接）：</label>
-        <br/>
-        <input class="trans tvalue" id="inp" trans="webui.index ENTTOS" n="请按Enter以确认。">
+        <div id="uap">
+            <h1 class="trans" trans="webui.bililogin NEEDLOGIN">您需要登录bilibili账号才能继续使用此程序。</h1>
+            <div>
+                <label class="trans" trans="webui.bililogin USERNAME">用户名：</label>
+                <input id="username">
+                <br/>
+                <label class="trans" trans="webui.settings PASS">密码：</label>
+                <input id="password" type="password">
+            </div>
+        </div>
+        <div id="qrc" style="display: none;"></div>
     </div>
     <div class="footer">
         <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>

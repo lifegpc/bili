@@ -13,29 +13,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, gettemplate
-import sys
-from biliVersion import getversion
+from .. import web, apilogincheck
+from . import getapilist, InvalidInputEroor
+from json import dumps
+import traceback
+
+apil = getapilist()
 
 
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
-ver = getversion()
-if ver is None:
-    ver2 = "bili"
-ver2 = f"bili v{ver}"
-
-
-class about:
-    def GET(self, *t):
-        abo = gettemplate('about')
-        return abo(ip, se, ver)
-
-
-def server_ver(handler):
-    web.header('Server', ver2)
-    return handler()
+class api:
+    def GET(self, t):
+        web.header('Content-Type', 'text/json; charset=utf-8')
+        h = web.cookies().get('section')
+        if apilogincheck(h):
+            return dumps({'code': -403})
+        for i in apil:
+            try:
+                e = i(t)
+                return dumps(e._handle())
+            except InvalidInputEroor:
+                pass
+            except Exception:
+                return dumps({'code': -500, 'e': traceback.format_exc()})
+        return dumps({'code': -404})

@@ -54,3 +54,7 @@ msgstr ""
 msgctxt "LICENSE"
 msgid "License"
 msgstr ""
+
+msgctxt "ENTTOS"
+msgid "Please press Enter to confirm."
+msgstr ""

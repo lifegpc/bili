@@ -13,29 +13,29 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, gettemplate
-import sys
-from biliVersion import getversion
+from requests import Session
+from .. import http_headers
+from JSONParser import loadcookie, loadset, getset
 
 
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
 se = loadset()
 if se == -1 or se == -2:
     se = {}
-ver = getversion()
-if ver is None:
-    ver2 = "bili"
-ver2 = f"bili v{ver}"
 
 
-class about:
-    def GET(self, *t):
-        abo = gettemplate('about')
-        return abo(ip, se, ver)
+class NotLoginError(Exception):
+    def __init__(self):
+        Exception.__init__(self, "You are not login in.")
 
 
-def server_ver(handler):
-    web.header('Server', ver2)
-    return handler()
+def new_Session(cookies: bool = True):
+    "新建新会话，cookies为True则包含cookies"
+    r = Session()
+    r.headers.update(http_headers)
+    if cookies:
+        read = loadcookie(r)
+        if read != 0:
+            raise NotLoginError()
+    if getset(se, 'te') == False:
+        r.trust_env = False
+    return r

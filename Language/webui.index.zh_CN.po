@@ -59,3 +59,7 @@ msgstr "源代码"
 msgctxt "LICENSE"
 msgid "License"
 msgstr "许可证"
+
+msgctxt "ENTTOS"
+msgid "Please press Enter to confirm."
+msgstr "请按Enter以确认。"

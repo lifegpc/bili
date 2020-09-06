@@ -59,3 +59,7 @@ msgstr "ソースコード"
 msgctxt "LICENSE"
 msgid "License"
 msgstr "ライセンス"
+
+msgctxt "ENTTOS"
+msgid "Please press Enter to confirm."
+msgstr "Enterキーを押して確定してください。"
