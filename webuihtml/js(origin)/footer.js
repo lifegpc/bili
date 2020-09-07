@@ -21,6 +21,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             sty = document.createElement('style');
             document.head.append(sty);
         }
+        var footer = document.getElementsByClassName('footer');
+        var footer_h = 0;
+        if (footer.length) {
+            footer_h = footer[0].scrollHeight;
+        }
         if (sty.hasAttribute('top')) {
             sty.innerText = ".footer{display:none;top:" + sty.getAttribute('top') + "px;}"
         }
@@ -29,7 +34,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
         }
         var w_height = window.innerHeight;
         var b_height = document.body.scrollHeight;
-        if (b_height > w_height) {
+        if (b_height + footer_h > w_height) {
             sty.innerText = ".footer{top:" + b_height + "px;padding-boto}"
             sty.setAttribute('top', b_height);
         }
