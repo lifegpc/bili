@@ -6,6 +6,8 @@
   * [配置文件](#配置文件)
     + [cookies.json](#cookiesjson)
     + [settings.json](#settingsjson)
+    + [webui.json](#webuijson)
+    + [sections.json](#sectionsjson)
     + [tv.bilibili.player.xml](#tvbilibiliplayerxml)
   * [开始使用](#开始使用)
     + [过滤弹幕](#过滤弹幕)
@@ -45,6 +47,12 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 ### settings.json
 该文件保存了一些默认操作的设置，可以运行**setsettings.py**来设置。
 
+### webui.json
+保存了WEB用户界面的设置。
+
+### sections.json
+当WEB用户界面打开密码验证时，存储会话信息。
+
 ### tv.bilibili.player.xml
 该文件不一定需要   
 主要用来对弹幕进行过滤。   
@@ -52,6 +60,10 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 
 ## 开始使用
 直接运行start.py即可
+
+### WEB用户界面
+运行**startwebui.py**后，可以在浏览器访问。  
+默认地址为```http://localhost:8080```。
 
 ### 过滤弹幕
 运行filter.py即可   
