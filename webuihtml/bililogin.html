@@ -30,7 +30,7 @@ $code:
     <link rel="stylesheet" type="text/css" href="css/footer.css">
 $ fontname=gets('uifont')
 $if fontname is not None:
-    <style>body, .form {font-family: "$fontname";}</style>
+    <style>body, input {font-family: "$fontname";}</style>
     $if 'uifontloc' in se:
         <style>@font-face{font-family: "$fontname";src: local("$fontname"),url("$:getfonturl(se['uifontloc'])")}</style>
 </head>
@@ -40,15 +40,20 @@ $if fontname is not None:
     <div id="main">
         <div id="uap">
             <h1 class="trans" trans="webui.bililogin NEEDLOGIN">您需要登录bilibili账号才能继续使用此程序。</h1>
-            <div>
+            <div style="display: inline-block;">
                 <label class="trans" trans="webui.bililogin USERNAME">用户名：</label>
-                <input id="username">
+                <input id="username" required>
                 <br/>
                 <label class="trans" trans="webui.settings PASS">密码：</label>
-                <input id="password" type="password">
+                <input id="password" type="password" required>
+                <br/>
+                <label class="trans" trans="webui.bililogin CAPTCHA">验证码：</label>
+                <input id="captcha">
             </div>
+            <img id="captimg">
         </div>
         <div id="qrc" style="display: none;"></div>
+        <button class="trans" id="submit" trans="webui.settings SUBMIT" disabled>提交</button>
     </div>
     <div class="footer">
         <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>

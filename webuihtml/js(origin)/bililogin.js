@@ -14,6 +14,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 (() => {
+    /**将元素背景临时变成红色
+     * @param {HTMLElement} i
+    */
+    function turnred(i) {
+        var oldstyle = i.style.backgroundColor;
+        i.style.backgroundColor = "red";
+        ((i, oldstyle) => { setTimeout(() => { i.style.backgroundColor = oldstyle }, 3000) })(i, oldstyle);
+    }
     function bytesToHex(bytes) {
         for (var hex = [], i = 0; i < bytes.length; i++) {
             var current = bytes[i] < 0 ? bytes[i] + 256 : bytes[i];
@@ -68,20 +76,134 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
         }
     })
     var pubkey;
+    var submittype = 0;
+    /**@type {HTMLImageElement}*/
+    var img = null;
+    /**@type {HTMLInputElement}*/
+    var cap = null;
+    function addtoimg() {
+        img.addEventListener('click', addtoimg);
+        $.getJSON('/api/captcha', (e, s) => {
+            if (s == "success") {
+                if (e.code == 0) {
+                    var type = e.type == null ? "image/jpeg;charset=UTF-8" : e.type;
+                    var img2 = new Blob([Base64.toUint8Array(e.img)], { 'type': type });
+                    img.src = URL.createObjectURL(img2);
+                    var cap2 = e.cap == null ? "" : e.cap;
+                    cap.value = cap2;
+                }
+                else console.warn(e)
+            }
+        })
+    }
     function getpubkey(e) {
         if (e.code == 0) {
             var e2 = bytesToHex(Base64.toUint8Array(e.e));
             var k = bytesToHex(Base64.toUint8Array(e.k));
             pubkey = new RSAKey();
             pubkey.setPublic(k, e2);
-            $.getJSON('/api/getpubkey', (e, s) => {
+            /**@type {HTMLInputElement}*/
+            var sub = document.getElementById('submit');
+            function addtosub() {
+                sub.addEventListener('click', submit);
+                sub.disabled = false;
+            }
+            if (sub == null) {
+                window.addEventListener('load', () => {
+                    sub = document.getElementById('submit');
+                    addtosub()
+                })
+            }
+            else addtosub();
+            img = document.getElementById('captimg');
+            cap = document.getElementById('captcha');
+            if (img == null || cap == null) {
+                window.addEventListener('load', () => {
+                    img = document.getElementById('captimg');
+                    cap = document.getElementById('captcha');
+                    addtoimg();
+                })
+            }
+            else addtoimg();
+        }
+        else {
+            console.error(e);
+        }
+    }
+    function submit() {
+        $.getJSON('/api/getpubkey', (e, s) => {
+            if (s == "success") {
+                if (e.code == 0) {
+                    if (submittype == 0) {
+                        /**@type {HTMLInputElement}*/
+                        var un = document.getElementById('username');
+                        /**@type {HTMLInputElement}*/
+                        var pa = document.getElementById('password');
+                        /**@type {HTMLInputElement}*/
+                        var ca = document.getElementById('captcha');
+                        if (un.validationMessage != "") {
+                            alert(un.validationMessage);
+                            turnred(un);
+                            return;
+                        }
+                        if (pa.validationMessage != "") {
+                            alert(pa.validationMessage);
+                            turnred(pa);
+                            return;
+                        }
+                        var user = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(un.value))));
+                        var pass = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(pa.value))));
+                        var param = { type: submittype, username: user, password: pass };
+                        if (ca.value != "") param['capt'] = ca.value;
+                        $.getJSON('/api/login', param, (e, s) => {
+                            if (s == "success") dealwithuserpass(e);
+                        })
+                    }
+                }
+                else {
+                    console.error(e);
+                }
+            }
+        })
+    }
+    function dealwithuserpass(e) {
+        console.log(e);
+        if (e.code == -2) {//解密失败，尝试获取新的公钥再次重试
+            console.warn(e.e);
+            /**@type {HTMLInputElement}*/
+            var sub = document.getElementById('submit');
+            sub.disabled = true;
+            $.getJSON('/api/rsa', (e, s) => {
                 if (s == "success") {
-                    if (e.code == 0) { }
-                    else {
-                        console.error(e);
+                    if (e.code == 0) {
+                        var e2 = bytesToHex(Base64.toUint8Array(e.e));
+                        var k = bytesToHex(Base64.toUint8Array(e.k));
+                        pubkey = new RSAKey();
+                        pubkey.setPublic(k, e2);
+                        sub.disabled = false;
+                        sub.click();//重新点击
                     }
                 }
             })
+        }
+        else if (e.code == -3) {//需要验证码
+            cap.required = true;
+            alert(transobj['webui.bililogin']['NEEDCAP']);
+        }
+        else if (e.code == -4) {//服务繁忙
+            console.log(e.result);
+            alert(transobj['webui.bililogin']['SERISBUS'])
+        }
+        else if (e.code == -5) {//其他API返回值
+            console.warn(e.result);
+            alert(e.result.code + " " + e.result.message);
+        }
+        else if (e.code == -6) {//用户名或密码错误。
+            alert(transobj['webui.bililogin']['INCOUSPA']);
+        }
+        else if (e.code == 0) {
+            alert(transobj['bili.biliLogin']['OUTPUT1']);
+            driect();
         }
         else {
             console.error(e);

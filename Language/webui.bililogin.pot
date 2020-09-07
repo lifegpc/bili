@@ -22,3 +22,19 @@ msgstr ""
 msgctxt "USERNAME"
 msgid "User name:"
 msgstr ""
+
+msgctxt "CAPTCHA"
+msgid "Captcha:"
+msgstr ""
+
+msgctxt "NEEDCAP"
+msgid "Captcha is required to login in."
+msgstr ""
+
+msgctxt "SERISBUS"
+msgid "Service is busy."
+msgstr ""
+
+msgctxt "INCOUSPA"
+msgid "Incorrect user name or password."
+msgstr ""
