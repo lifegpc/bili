@@ -1,0 +1,65 @@
+# bili - webui/index Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-08-24 06:16:00+0000\n"
+"PO-Revision-Date: 2020-08-24 10:08+0000\n"
+"Last-Translator: Kum4423, 2020\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "TITLE"
+msgid "bili WEB User Interface"
+msgstr "bili WEBユーザーインターフェース"
+
+msgctxt "MAINPAGE"
+msgid "Main Page"
+msgstr "メインページ"
+
+msgctxt "DOWNLIST"
+msgid "Download Task List"
+msgstr "ダウンロード タスクリスト"
+
+msgctxt "SETTING"
+msgid "Settings"
+msgstr "設定"
+
+msgctxt "NELOGIN"
+msgid "You need to login in to access."
+msgstr "アクセスするにはログインが必要です。"
+
+msgctxt "NONELOG"
+msgid ""
+"You have disabled password verification, so you don't need to login in."
+msgstr "パスワード認証を無効にしているので、ログインしなくても大丈夫です。"
+
+msgctxt "BACKTOINDEX"
+msgid "Back to the main page."
+msgstr "メインページに戻る"
+
+msgctxt "ABOUT"
+msgid "About"
+msgstr "ソフトウェアについて"
+
+msgctxt "SOURCE"
+msgid "Source code"
+msgstr "ソースコード"
+
+msgctxt "LICENSE"
+msgid "License"
+msgstr "ライセンス"
+
+msgctxt "ENTTOS"
+msgid "Please press Enter to confirm."
+msgstr "Enterキーを押して確定してください。"

@@ -1,0 +1,32 @@
+# bili - webui/about Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-08-30 07:20:00+0000\n"
+"PO-Revision-Date: 2020-08-30 10:47+0000\n"
+"Last-Translator: Kum4423, 2020\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "THIRDPARTY"
+msgid "Third Party Libraries"
+msgstr "サードパーティーライブラリ"
+
+msgctxt "PROJECT"
+msgid "Project"
+msgstr "プロジェクト"
+
+msgctxt "WEBSITE"
+msgid "Website"
+msgstr "ウェブサイト"

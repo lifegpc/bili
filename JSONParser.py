@@ -150,6 +150,20 @@ def loadset():
     except :
         return -2
     return o
+
+
+def getDefalutSettings():
+    "获取默认设置"
+    t = {}
+    t['a'] = True
+    t['ab'] = True
+    t['sv'] = True
+    t['te'] = True
+    t['lrh'] = True
+    t['in'] = True
+    return t
+
+
 def saveset(d):
     "保存settings.json设置"
     try :

@@ -1,0 +1,19 @@
+body {
+    text-align: center;
+}
+
+#main {
+    position: absolute;
+    width: 99%;
+}
+
+#submit {
+    margin-top: 10px;
+    position: absolute;
+    right: 10%;
+}
+
+#captimg {
+    width: 200px;
+    height: 50px;
+}

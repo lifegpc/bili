@@ -1,0 +1,81 @@
+$def with (s, se, ip, se2, str)
+$code:
+    urlencode = __import__('webui').urlencode
+    match = __import__('re').match
+    os = __import__('os')
+    path = os.path
+    if not s.endswith('/'):
+        s = s + '/'
+    o = 'Download/'
+    if 'o' in se2:
+        o = se2['o']
+    o = o + s[1:]
+    def gets(s):
+        t=None
+        if s in se:t=se[s]
+        if s in ip:t=ip[s]
+        return t
+    def getfonturl(s):
+        if match(r'^https?:/{2}\w.+$', s):
+            return s
+        else:
+            return '/font?' + urlencode({'l':s})
+    def gettype(s):
+        if path.isdir(s):
+            return 'dir'
+        if path.isfile(s):
+            return 'file'
+        if path.islink(s):
+            return 'link'
+        return ''
+    def getdir():
+        list = os.listdir(o)
+        f = True
+        r = ""
+        for i in list:
+            fn = o + i
+            s = '{fn:"'+i+'",fs:'+str(path.getsize(fn))+',lm:'+str(int(path.getmtime(fn)))+',ft:"'+gettype(fn)+'"}'
+            if f:
+                r = s
+                f = False
+            else:
+                r = r + ',' + s
+        return r
+<html>
+
+<head>
+    <title class="trans" trans="webui.index TITLE">bili WEB用户界面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/prototype.js"></script>
+    <script src="/js/translatie.js"></script>
+    <script src="/js/dir.js"></script>
+    <script src="/js/footer.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/video.css">
+    <link rel="stylesheet" type="text/css" href="/css/footer.css">
+$ fontname=gets('uifont')
+$if fontname is not None:
+    <style>body {font-family: "$fontname";}</style>
+    $if 'uifontloc' in se:
+        <style>@font-face{font-family: "$fontname";src: local("$fontname"),url("$:getfonturl(se['uifontloc'])")}</style>
+$ s1=int(path.getmtime(o))
+$ s2=getdir()
+<script>l="/video$s[:-1]";lm=$s1;fl=[$s2]</script>
+</head>
+
+<body>
+    <h1 class="trans" trans="webui.dir INDEXOF" dir="/video$s[:-1]">Index of &lt;dir&gt;</h1>
+    <table id="main">
+        <thead><tr><td id="a" i="1" z="0" n="文件名" class="trans" trans="webui.dir FILENAME">文件名</td><td id="b" i="2" z="0" n="文件类型" class="trans" trans="webui.dir FILETYPE">文件类型</td><td id="c" i="3" z="0" n="文件大小" class="trans" trans="webui.dir FILESIZE">文件大小</td><td id="d" i="4" z="0" n="上次修改时间" class="trans" trans="webui.dir LASTMODI">上次修改时间</td></tr></thead>
+        <tbody id="n"></tbody>
+    </table>
+    <div class="footer">
+        <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>
+        <div><a href="https://github.com/lifegpc/bili" class="trans" trans="webui.index SOURCE">源代码</a></div>
+        <div><a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
+    </div>
+</body>
+
+</html>

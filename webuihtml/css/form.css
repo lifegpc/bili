@@ -1,0 +1,18 @@
+form.form {
+    margin-top: 10px;
+}
+
+input.form, input.form2 {
+    width: max-content;
+    min-width: 300px;
+}
+
+input.form.checkt, input.form.check {
+    min-width: unset;
+}
+
+button.form#submit {
+    margin-top: 10px;
+    position: absolute;
+    right: 10%;
+}

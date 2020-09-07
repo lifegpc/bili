@@ -1,0 +1,77 @@
+$def with (ip, se, ver)
+$code:
+    urlencode = __import__('webui').urlencode
+    match = __import__('re').match
+    def gets(s):
+        t=None
+        if s in se:t=se[s]
+        if s in ip:t=ip[s]
+        return t
+    def getver():
+        if ver is None:
+            return ''
+        else:
+            return ' v' + ver
+    def getfonturl(s):
+        if match(r'^https?:/{2}\w.+$', s):
+            return s
+        else:
+            return '/font?' + urlencode({'l':s})
+<html>
+
+<head>
+    <title class="trans" trans="webui.index TITLE">bili WEB用户界面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="js/jquery.js"></script>
+    <script src="js/prototype.js"></script>
+    <script src="js/translatie.js"></script>
+    <script src="js/about.js"></script>
+    <script src="js/footer.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/topmenu.css">
+    <link rel="stylesheet" type="text/css" href="css/about.css">
+    <link rel="stylesheet" type="text/css" href="css/footer.css">
+$ fontname=gets('uifont')
+$if fontname is not None:
+    <style>body {font-family: "$fontname";}</style>
+    $if 'uifontloc' in se:
+        <style>@font-face{font-family: "$fontname";src: local("$fontname"),url("$:getfonturl(se['uifontloc'])")}</style>
+</head>
+
+<body>
+    <div class="topmenu first">
+        <div><a href="/" class="trans" trans="webui.index MAINPAGE">主页</a></div>
+        <div><a href="/downloadlist" class="trans" trans="webui.index DOWNLIST">下载任务列表</a></div>
+        <div><a href="/settings" class="trans" trans="webui.index SETTING">设置</a></div>
+    </div>
+    <div class="about">
+        <h1><a href="https://github.com/lifegpc/bili">bili$:getver()</a></h1>
+        <div>bili  Copyright (C) 2019-2020  lifegpc<br/>
+        This program comes with ABSOLUTELY NO WARRANTY; for details please view <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">here</a>.<br/>
+        This is free software, and you are welcome to redistribute it under certain conditions; look <a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html">here</a> for details.<br/>
+        </div>
+        <h2 class="trans" trans="webui.about THIRDPARTY">第三方库</h2>
+        <table id="third">
+            <thead><tr><td class="trans" trans="webui.about PROJECT">项目</td><td class="trans" trans="webui.index LICENSE">许可证</td><td class="trans" trans="webui.about WEBSITE">网站</td></tr></thead>
+            <tbody>
+                <tr><td>requests</td><td><a href="https://github.com/psf/requests/blob/master/LICENSE">Apache License 2.0</a></td><td><a href="https://requests.readthedocs.io">requests.readthedocs.io</a></td></tr>
+                <tr><td>selenium</td><td><a href="https://github.com/SeleniumHQ/selenium/blob/trunk/LICENSE">Apache License 2.0</a></td><td><a href="https://github.com/SeleniumHQ/selenium/">github.com/SeleniumHQ/selenium/</a></td></tr>
+                <tr><td>rsa</td><td><a href="https://github.com/sybrenstuvel/python-rsa/blob/master/LICENSE">Apache License 2.0</a></td><td><a href="https://stuvel.eu/software/rsa/">stuvel.eu/software/rsa/</a></td></tr>
+                <tr><td>polib</td><td>MIT License</td><td><a href="https://pypi.org/project/polib/">pypi.org/project/polib/</a></td></tr>
+                <tr><td>web.py</td><td><a href="https://webpy.org/#about-webpy">Public Domain</a></td><td><a href="https://webpy.org/">webpy.org</a></td></tr>
+                <tr><td>jQuery</td><td><a href="https://jquery.org/license/">MIT License</a></td><td><a href="https://jquery.org/">jquery.org</a></td></tr>
+                <tr><td>js-sha256</td><td><a href="https://github.com/emn178/js-sha256/blob/master/LICENSE.txt">MIT License</a></td><td><a href="https://github.com/emn178/js-sha256/">github.com/emn178/js-sha256/</a></td></tr>
+                <tr><td>jsbn</td><td><a href="http://www-cs-students.stanford.edu/~tjw/jsbn/LICENSE">BSD license</a></td><td><a href="http://www-cs-students.stanford.edu/~tjw/jsbn/">www-cs-students.stanford.edu/~tjw/jsbn/</a></td></tr>
+                <tr><td>js-base64</td><td><a href="https://github.com/dankogai/js-base64/blob/master/LICENSE.md">BSD 3-Clause License</a></td><td><a href="https://github.com/dankogai/js-base64/">github.com/dankogai/js-base64/</a></td></tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="footer">
+        <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>
+        <div><a href="https://github.com/lifegpc/bili" class="trans" trans="webui.index SOURCE">源代码</a></div>
+        <div><a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
+    </div>
+</body>
+
+</html>

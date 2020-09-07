@@ -141,6 +141,9 @@ def cal_sign(p):
     sh.update(f"{p}{salt}".encode())
     return sh.hexdigest()
 def scap(r:requests.session,image):
-    re=r.post("https://bili.dev:2233/captcha",json={'image':base64.b64encode(image).decode("utf-8")})
-    re=re.json()
+    try:
+        re=r.post("https://bili.dev:2233/captcha",json={'image':base64.b64encode(image).decode("utf-8")})
+        re=re.json()
+    except:
+        return None
     return re['message'] if re and re["code"]==0 else None

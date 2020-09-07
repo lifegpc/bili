@@ -91,3 +91,52 @@ minimum_perc = 0
 source_file = file.all.pot
 source_lang = en
 type = PO
+
+[bili.webuiaboutpot]
+file_filter = webui.about.<lang>.po
+minimum_perc = 0
+source_file = webui.about.pot
+source_lang = en
+type = PO
+
+[bili.webuibililoginpot]
+file_filter = webui.bililogin.<lang>.po
+minimum_perc = 0
+source_file = webui.bililogin.pot
+source_lang = en
+type = PO
+
+[bili.webuicommandpot]
+file_filter = webui.command.<lang>.po
+minimum_perc = 0
+source_file = webui.command.pot
+source_lang = en
+type = PO
+
+[bili.webuidirpot]
+file_filter = webui.dir.<lang>.po
+minimum_perc = 0
+source_file = webui.dir.pot
+source_lang = en
+type = PO
+
+[bili.webuiindexpot]
+file_filter = webui.index.<lang>.po
+minimum_perc = 0
+source_file = webui.index.pot
+source_lang = en
+type = PO
+
+[bili.webuisettingspot]
+file_filter = webui.settings.<lang>.po
+minimum_perc = 0
+source_file = webui.settings.pot
+source_lang = en
+type = PO
+
+[bili.webuistartwebuipot]
+file_filter = webui.startwebui.<lang>.po
+minimum_perc = 0
+source_file = webui.startwebui.pot
+source_lang = en
+type = PO

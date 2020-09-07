@@ -26,3 +26,14 @@ converttohtml.js
 README.html
 easyuse.html
 html.css
+# Download JavaScript file or Compressed JavaScript file
+webuihtml/js/
+webuihtml/jso/
+compiler.jar
+# JSON use for webUI
+!webuihtml/json/*.json
+# FONT file
+*.ttf
+*.otf
+*.woff
+*.woff2

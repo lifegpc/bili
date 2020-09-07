@@ -1,0 +1,156 @@
+# bili - webui/settings Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-08-24 12:07:00+0000\n"
+"PO-Revision-Date: 2020-08-24 15:02+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "WEBUISET"
+msgid "WEB User Interface Settings"
+msgstr "WEB用户界面设置"
+
+msgctxt "WEBUILAN"
+msgid "WEB User Interface language:"
+msgstr "WEB用户界面语言："
+
+msgctxt "IPADDR"
+msgid "The IP address:"
+msgstr "IP地址："
+
+msgctxt "IPPORT"
+msgid "The port of IP address:"
+msgstr "IP地址端口："
+
+msgctxt "SSLCPATH"
+msgid "The path to the SSL certificate:"
+msgstr "SSL证书路径："
+
+msgctxt "SSLPPATH"
+msgid "The path to the SSL private key:"
+msgstr "SSL私钥路径："
+
+msgctxt "SSLCCPATH"
+msgid "The path to the SSL certificate chain:"
+msgstr "SSL证书链路径："
+
+msgctxt "SUBMIT"
+msgid "Submit"
+msgstr "提交"
+
+msgctxt "SUBOK"
+msgid "Save successfully."
+msgstr "保存成功。"
+
+msgctxt "SUBFA"
+msgid "Failed to save settings."
+msgstr "保存设置失败。"
+
+msgctxt "INVALIP"
+msgid "\"<value>\" is not an invalid IP address."
+msgstr "\"<value>\"不是一个有效的IP地址。"
+
+msgctxt "ENPASS"
+msgid "Enable password verification"
+msgstr "启用密码验证"
+
+msgctxt "PASS"
+msgid "Password:"
+msgstr "密码："
+
+msgctxt "UIFONT"
+msgid "User interface font name:"
+msgstr "用户界面字体名称："
+
+msgctxt "MAIN"
+msgid "Main Program Settings"
+msgstr "主程序设置"
+
+msgctxt "MAINPS"
+msgid ""
+"PS. If the settings on this page are successfully saved, the origin file "
+"\"settings.json\" will be overwriten."
+msgstr "注：这里的设置保存后将覆盖原有的settings.json。"
+
+msgctxt "MAINLAN"
+msgid "Program language:"
+msgstr "程序语言："
+
+msgctxt "MAINFB"
+msgid "Filter barrage by default:"
+msgstr "默认过滤弹幕："
+
+msgctxt "MAINMP"
+msgid ""
+"Download with maximum quality (Enable this will not ask for specific "
+"quality):"
+msgstr "默认下载最高画质（这样将不会询问具体画质）："
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr "不设置"
+
+msgctxt "ENABLE"
+msgid "Enable"
+msgstr "启用"
+
+msgctxt "DISABLE"
+msgid "Disable"
+msgstr "禁用"
+
+msgctxt "MAINAD"
+msgid "Delete useless files after merge is complete:"
+msgstr "合并完成后删除无用文件："
+
+msgctxt "MAINCD"
+msgid "Enable \"Continue Download\" function by default:"
+msgstr "默认启用继续下载功能："
+
+msgctxt "MAINRD"
+msgid "Download again automatically after the download failed:"
+msgstr "下载失败后自动重新下载："
+
+msgctxt "MAINSV"
+msgid "Put video/audio quality information in the file name."
+msgstr "在文件名中输出视频画质信息。"
+
+msgctxt "MAINMA"
+msgid ""
+"Add video information to file forcibly. (This will transcode the video and "
+"transcoding will not affect the video/audio quality.)"
+msgstr "强制增加视频元数据。（这会使视频被转码，转码不会影响画质。）"
+
+msgctxt "MAINDA"
+msgid ""
+"\"Download all parts of each video automatically\" when you input Favorites,"
+" Channels, Uploaded Video page link:"
+msgstr "当输入收藏夹/频道/投稿链接时是否自动下载每一个视频的所有分P："
+
+msgctxt "MAINJT"
+msgid ""
+"Set the number of days between crawls to automatic by default when "
+"downloading all barrage."
+msgstr "下载全弹幕时两次抓取之间的天数默认设置为自动。"
+
+msgctxt "MAINO"
+msgid "Download folder location:"
+msgstr "下载文件夹位置："
+
+msgctxt "FONTPATH"
+msgid ""
+"The path to the font file (The font format should be one of "
+"TTF/OTF/WOFF/WOFF2.):"
+msgstr "字体文件路径（字体格式需要是TTF/OTF/WOFF/WOFF2之一）："

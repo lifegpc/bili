@@ -15,7 +15,7 @@
 打开命令提示符   
 输入
 ``` bash
-pip3 install --upgrade requests selenium rsa polib
+pip3 install --upgrade requests selenium rsa polib web.py
 ```
 等待依赖库安装完毕
 

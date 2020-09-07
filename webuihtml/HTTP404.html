@@ -1,0 +1,45 @@
+$def with (ip, se)
+$code:
+    urlencode = __import__('webui').urlencode
+    match = __import__('re').match
+    def gets(s):
+        t=None
+        if s in se:t=se[s]
+        if s in ip:t=ip[s]
+        return t
+    def getfonturl(s):
+        if match(r'^https?:/{2}\w.+$', s):
+            return s
+        else:
+            return '/font?' + urlencode({'l':s})
+<html>
+
+<head>
+    <title class="trans" trans="webui.index TITLE">bili WEB用户界面</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="/js/jquery.js"></script>
+    <script src="/js/prototype.js"></script>
+    <script src="/js/translatie.js"></script>
+    <script src="/js/footer.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/footer.css">
+$ fontname=gets('uifont')
+$if fontname is not None:
+    <style>body {font-family: "$fontname";}</style>
+    $if 'uifontloc' in se:
+        <style>@font-face{font-family: "$fontname";src: local("$fontname"),url("$:getfonturl(se['uifontloc'])")}</style>
+</head>
+
+<body>
+    404 Not Found
+    <br/>
+    <a href="/" class="trans" trans="webui.index BACKTOINDEX">回到首页</a>
+    <div class="footer">
+        <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>
+        <div><a href="https://github.com/lifegpc/bili" class="trans" trans="webui.index SOURCE">源代码</a></div>
+        <div><a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
+    </div>
+</body>
+
+</html>
