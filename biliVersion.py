@@ -45,7 +45,7 @@ class version:
     def __init__(self, s: str):
         self.s = s
         r = search(
-            r'v([0-9]+)\.([0-9]+)\.([0-9]+)([-\.]([0-9]+))?(-g([^-]+))?(-dirty)?', s, I)
+            r'v([0-9]+)\.([0-9]+)\.([0-9]+)(.([0-9]+))?([-\.]([0-9]+))?(-g([^-]+))?(-dirty)?', s, I)
         if r is not None:
             r = r.groups()
             self.v1 = int(r[0])
@@ -53,12 +53,14 @@ class version:
             self.v3 = int(r[2])
             self.v4 = 0
             if r[3]:
-                self.v4 = int(r[4])
-            self.sha = ""
+                self.v4 = self.v4 + int(r[4])
             if r[5]:
-                self.sha = r[6]
-            self.dirty = False
+                self.v4 = self.v4 + int(r[6])
+            self.sha = ""
             if r[7]:
+                self.sha = r[8]
+            self.dirty = False
+            if r[9]:
                 self.dirty = True
         else:
             raise UnknownVersionString(s)
