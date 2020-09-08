@@ -139,7 +139,7 @@ class loginapi(apic):
                     i2 = urlp2[i][0]
                     sa.append({'name': i, 'value': i2,
                                'domain': '.bilibili.com', 'path': '/'})
-                    savecookie(sa)
+            savecookie(sa)
         return {'code': 0, 'status': re['status']}
 
     def _cal_sign(self, p):
