@@ -114,9 +114,9 @@ class main:
         if not exists(fn):
             self._get_file(uri, fn)
             if tag == "":
-                print(f'INFO: -> {fn}')
+                print(f'INFO: {uri} -> {fn}')
             else:
-                print(f'INFO: -> {fn} (Tag: {tag})')
+                print(f'INFO: {uri} -> {fn} (Tag: {tag})')
 
     def _check_with_com(self, fn: str, uri: str):
         if exists(fn) and self._upa:
@@ -127,7 +127,7 @@ class main:
             if system(f'java -jar compiler.jar --js "{fn2}" --js_output_file "{fn}"') != 0:
                 raise Exception('Error in compiler.')
             remove(fn2)
-            print(f'INFO: -> {fn}')
+            print(f'INFO: {uri} -> {fn}')
 
     def _get_jquery_tag(self) -> str:
         re = self._r.get('https://api.github.com/repos/jquery/jquery/tags')
