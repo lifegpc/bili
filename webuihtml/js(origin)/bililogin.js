@@ -209,6 +209,169 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             console.error(e);
         }
     }
+    /**@type {HTMLCollectionOf<HTMLLabelElement>}*/
+    var switc = document.getElementsByClassName('switch');
+    if (switc.length == 0) {
+        window.addEventListener('load', () => {
+            switc = document.getElementsByClassName('switch');
+            switc_thendo();
+        })
+    }
+    else switc_thendo();
+    function switc_thendo() {
+        for (var i = 0; i < switc.length; i++) {
+            var sw = switc[i];
+            sw.addEventListener('click', switc_click);
+        }
+    }
+    /**@param {MouseEvent} e*/
+    function switc_click(e) {
+        /**@type {HTMLLabelElement}*/
+        var src = this
+        if (src.hasAttribute('switch')) {
+            var sw = src.getAttribute('switch');
+            try {
+                sw = sw - 1 + 1;
+            } catch (error) {
+                console.warn(error)
+                return;
+            }
+            submittype = sw;
+            src.parentElement.style.display = "none";
+            if (src.hasAttribute('switch2')) {
+                var targetid = src.getAttribute('switch2');
+                var target = document.getElementById(targetid);
+                if (target == null) {
+                    console.warn(src);
+                    console.warn('This target id have wrong.')
+                    return;
+                }
+                target.style.display = null;
+                if (targetid == "qrc") {
+                    makeqrcode();
+                }
+            }
+            else {
+                console.warn(src);
+                console.warn('This object do not have switch2 attribute.');
+                return;
+            }
+            for (var i = 0; i < switc.length; i++) {
+                var te = switc[i];
+                if (te != src) {
+                    te.parentElement.style.display = null;
+                    if (!te.hasAttribute('switch2')) {
+                        console.warn(te);
+                        console.warn('This object do not have switch2 attribute.');
+                        return;
+                    }
+                    var targetid = te.getAttribute('switch2');
+                    var target = document.getElementById(targetid);
+                    if (target == null) {
+                        console.warn(te);
+                        console.warn('This target id have wrong.')
+                        return;
+                    }
+                    target.style.display = "none";
+                }
+            }
+        }
+        else {
+            console.warn(src)
+            console.warn('This object do not have switch attribute.')
+        }
+    }
+    var qrcode = null;
+    /**@type {HTMLDivElement}*/
+    var qrdiv = null;
+    /**生成QRCODE
+     * @param {string} c
+     * @param {(e:string)=>void} f 回调函数
+     */
+    function getqrcode(c, f) {
+        if (qrcode == null) {
+            qrdiv = document.createElement('div');
+            qrcode = new QRCode(qrdiv, { text: c, width: 140, height: 140, colorcolorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H })
+        }
+        else qrcode.makeCode(c);
+        function getcode() {
+            if (qrdiv.children[1].src == "") {
+                setTimeout(getcode, 100);
+            }
+            else {
+                var arr = Base64.toUint8Array(qrdiv.children[1].src.split(',')[1]);
+                f(URL.createObjectURL(new Blob([arr], { "type": "image/png" })));
+            }
+        }
+        getcode();
+    }
+    /**@type {number} 存储检查是否登录成功的定时器句柄*/
+    var qrcode_loop = null;
+    /**@type {string} QRCode URL*/
+    var qrcode_url = null;
+    /**@type {string} QRCode 生成时间*/
+    var qrcode_ts = null;
+    /**@type {string} QRCode oauthKey*/
+    var qrcode_oauthKey = null;
+    function makeqrcode() {
+        if (qrcode_loop != null) {
+            clearInterval(qrcode_loop);
+            qrcode_loop = null;
+        }
+        $.getJSON('/api/qrgetloginurl', (e, s) => {
+            if (s == "success") {
+                if (e.code == 0) {
+                    var result = e.result;
+                    if (result.code == 0 && result.status) {
+                        qrcode_ts = result.ts;
+                        qrcode_url = result.data.url;
+                        qrcode_oauthKey = result.data.oauthKey;
+                        /**@type {HTMLImageElement}*/
+                        var qrc = document.getElementById('qrcimg');
+                        /**@type {HTMLLabelElement}*/
+                        var qrcl = document.getElementById('qrcl');
+                        getqrcode(qrcode_url, (q_img) => {
+                            qrc.src = q_img;
+                            qrcl.style.display = "none";
+                            if (!qrcl.hasAttribute('add')) {
+                                qrcl.addEventListener('click', makeqrcode);
+                                qrcl.setAttribute('add', '1');
+                            }
+                            checkislogin();
+                        });
+                    }
+                }
+                else {
+                    console.error(e)
+                }
+            }
+        })
+    }
+    /**判断是否登录成功 */
+    function checkislogin() {
+        /**当前时间*/
+        var now = Math.round(new Date().getTime() / 1000);
+        if (now < qrcode_ts + 180) {
+            $.getJSON('/api/qrgetlogininfo', { 'key': qrcode_oauthKey }, (e, s) => {
+                if (e.code == 0) {
+                    if (e.status) {//登录成功
+                        alert(transobj['bili.biliLogin']['OUTPUT1']);
+                        driect();
+                    }
+                    else qrcode_loop = setTimeout(checkislogin, 3000);
+                }
+                else {
+                    console.error(e);
+                }
+            })
+        }
+        else {
+            /**@type {HTMLLabelElement}*/
+            var qrcl = document.getElementById('qrcl');
+            qrcl.style.display = null;
+            qrcode_loop = null;
+        }
+    }
     /**@type {HTMLStyleElement}*/
     var sty = null;
     /**@type {HTMLDivElement}*/

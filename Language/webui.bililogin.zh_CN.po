@@ -44,3 +44,22 @@ msgstr "服务繁忙。"
 msgctxt "INCOUSPA"
 msgid "Incorrect user name or password."
 msgstr "不正确的用户名或密码。"
+
+msgctxt "HTTPWARN"
+msgid ""
+"Although the program has encrypted the user name and password, it is still "
+"subject to man-in-the-middle(MITM) attacks. If you use this in the public "
+"network, please enable HTTPS."
+msgstr "虽然程序已经对用户名和密码进行了加密处理，但是依旧可能遭到中间人(MITM)攻击。如果在公网中使用，请启用HTTPS。"
+
+msgctxt "QRSCAN"
+msgid "Use APP to scan QR Code to login in"
+msgstr "使用APP扫码登录"
+
+msgctxt "USEANDPA"
+msgid "Use user name and password to login in"
+msgstr "使用用户名和密码登录"
+
+msgctxt "QRCEXPR"
+msgid "The QR code has expired, click here to reload."
+msgstr "二维码已过期，单击这里重新加载。"

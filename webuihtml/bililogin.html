@@ -1,4 +1,4 @@
-$def with (ip, se)
+$def with (ip, se, https)
 $code:
     urlencode = __import__('webui').urlencode
     match = __import__('re').match
@@ -24,6 +24,7 @@ $code:
     <script src="js/base64.min.js"></script>
     <script src="js/prototype.js"></script>
     <script src="js/translatie.js"></script>
+    <script src="js/qrcode.min.js"></script>
     <script src="js/bililogin.js"></script>
     <script src="js/footer.js"></script>
     <link rel="stylesheet" type="text/css" href="css/login.css">
@@ -38,8 +39,8 @@ $if fontname is not None:
 <body>
     <div class="trans" style="display: none;" trans="bili.biliLogin OUTPUT1"></div>
     <div id="main">
+        <h1 class="trans" trans="webui.bililogin NEEDLOGIN">您需要登录bilibili账号才能继续使用此程序。</h1>
         <div id="uap">
-            <h1 class="trans" trans="webui.bililogin NEEDLOGIN">您需要登录bilibili账号才能继续使用此程序。</h1>
             <div style="display: inline-block;">
                 <label class="trans" trans="webui.bililogin USERNAME">用户名：</label>
                 <input id="username" required>
@@ -52,7 +53,14 @@ $if fontname is not None:
             </div>
             <img id="captimg">
         </div>
-        <div id="qrc" style="display: none;"></div>
+        <div id="qrc" style="display: none;">
+            <img id="qrcimg"><br/>
+            <label id="qrcl" class="trans" trans="webui.bililogin QRCEXPR" style="color:red;display: none;">二维码已过期，单击这里重新加载。</label>
+        </div>
+        <div style="display: none;"><label id="uap1" class="trans switch" switch="0" switch2="uap" trans="webui.bililogin USEANDPA">使用用户名和密码登录</label><br/></div>
+        <div><label id="qrcl" class="trans switch" switch="1" switch2="qrc" trans="webui.bililogin QRSCAN">使用APP扫码登录</label><br/></div>
+        $if not https:
+            <label class="trans" trans="webui.bililogin HTTPWARN" style="color:red;">虽然程序已经对用户名和密码进行了加密处理，但是依旧可能遭到中间人(MITM)攻击。如果在公网中使用，请启用HTTPS。</label><br/>
         <button class="trans" id="submit" trans="webui.settings SUBMIT" disabled>提交</button>
     </div>
     <div class="footer">

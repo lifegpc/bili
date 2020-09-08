@@ -38,3 +38,19 @@ msgstr ""
 msgctxt "INCOUSPA"
 msgid "Incorrect user name or password."
 msgstr ""
+
+msgctxt "HTTPWARN"
+msgid "Although the program has encrypted the user name and password, it is still subject to man-in-the-middle(MITM) attacks. If you use this in the public network, please enable HTTPS."
+msgstr ""
+
+msgctxt "QRSCAN"
+msgid "Use APP to scan QR Code to login in"
+msgstr ""
+
+msgctxt "USEANDPA"
+msgid "Use user name and password to login in"
+msgstr ""
+
+msgctxt "QRCEXPR"
+msgid "The QR code has expired, click here to reload."
+msgstr ""

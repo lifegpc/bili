@@ -21,7 +21,7 @@ import rsa
 from base64 import b64encode, b64decode
 from .rsa import decrypt
 import traceback
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urlsplit, parse_qs
 from JSONParser import savecookie
 import time
 
@@ -117,6 +117,31 @@ class loginapi(apic):
             return {'code': -5, 'result': re}
         return {'code': -7}
 
+    def _qr_getloginurl(self):
+        re = self._r.get('https://passport.bilibili.com/qrcode/getLoginUrl')
+        re = re.json()
+        return {'code': 0, 'result': re}
+
+    def _qr_getlogininfo(self):
+        key = web.input().get('key')
+        if key is None:
+            return {'code': -1}
+        re = self._r.post('https://passport.bilibili.com/qrcode/getLoginInfo', {
+                          'oauthKey': key, 'gourl': 'https://passport.bilibili.com/ajax/miniLogin/redirect'})
+        re = re.json()
+        if re['status']:
+            url = re['data']['url']
+            urlp = urlsplit(url)
+            urlp2 = parse_qs(urlp.query)
+            sa = []
+            for i in urlp2.keys():
+                if i != "gourl":
+                    i2 = urlp2[i][0]
+                    sa.append({'name': i, 'value': i2,
+                               'domain': '.bilibili.com', 'path': '/'})
+                    savecookie(sa)
+        return {'code': 0, 'status': re['status']}
+
     def _cal_sign(self, p):
         sh = hashlib.md5()
         sh.update(f"{p}{self._salt}".encode())
@@ -134,14 +159,14 @@ class getpubkey(loginapi):
 
 
 class captcha(loginapi):
-    _VALID_URI = r'captcha'
+    _VALID_URI = r'^captcha$'
 
     def _handle(self):
         return self._captcha()
 
 
 class login(loginapi):
-    _VALID_URI = r'login'
+    _VALID_URI = r'^login$'
 
     def _handle(self):
         t = web.input().get('type')
@@ -150,3 +175,17 @@ class login(loginapi):
         if t == "0":
             return self._login_with_user_pass()
         return {'code': -1}
+
+
+class qrgetloginurl(loginapi):
+    _VALID_URI = r'^qrgetloginurl$'
+
+    def _handle(self):
+        return self._qr_getloginurl()
+
+
+class qrgetlogininfo(loginapi):
+    _VALID_URI = r'^qrgetlogininfo$'
+
+    def _handle(self):
+        return self._qr_getlogininfo()

@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import gopt, loadset, web, logincheck, gettemplate
+from . import gopt, loadset, web, logincheck, gettemplate, pa
 import sys
 
 ip = {}
@@ -29,4 +29,4 @@ class biliLogin:
         if logincheck(h):
             return ''
         bilo = gettemplate('bililogin')
-        return bilo(ip, se)
+        return bilo(ip, se, pa.https)
