@@ -405,3 +405,7 @@ msgid ""
 "The list of javascript file in webuihtml/js(origin) you want to compiler. If"
 " no list is provided,, it will update all javascript file."
 msgstr ""
+
+msgctxt "O75"
+msgid "Only compile javascript file."
+msgstr ""

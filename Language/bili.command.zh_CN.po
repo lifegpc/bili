@@ -386,3 +386,7 @@ msgid ""
 " no list is provided,, it will update all javascript file."
 msgstr ""
 "您想要编译的在webuihtml/js(origin)中的javascript文件列表。如果不提供该列表，将会更新所有javascript文件。"
+
+msgctxt "O75"
+msgid "Only compile javascript file."
+msgstr "仅编译javascript文件。"

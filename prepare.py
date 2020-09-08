@@ -35,15 +35,16 @@ la = getdict('command', getlan(se, {}))
 def ph():
     h = f'''{la['O1']}
     prepare.py [-h/-?/--help]   {la['O2']}
-    prepare.py [--lan <LANGUAGECODE>] [-u] [filelist]
+    prepare.py [--lan <LANGUAGECODE>] [-u] [-c] [filelist]
     --lan <LANGUAGECODE>    {la['O55']}
     -u      {la['O73']}
+    -c      {la['O75']}
     filelist    {la['O74']}'''
     print(h)
 
 
 def gopt(args: List[str]):
-    re = getopt(args, 'h?u', ['help', 'lan='])
+    re = getopt(args, 'h?uc', ['help', 'lan='])
     rr = re[0]
     r = {}
     h = False
@@ -54,6 +55,8 @@ def gopt(args: List[str]):
             r['lan'] = i[1]
         if i[0] == '-u':
             r['u'] = True
+        if i[0] == '-c':
+            r['c'] = True
     if h:
         global la
         la = getdict('command', getlan(se, r))
@@ -65,42 +68,55 @@ def gopt(args: List[str]):
 class main:
     _r: Session = None
     _upa: bool = False
+    _onlyc: bool = False
 
     def __init__(self, ip: dict, fl: List[str]):
         if 'u' in ip:
             self._upa = True
+        if 'c' in ip:
+            self._onlyc = True
         if not exists('webuihtml/js(origin)/'):
             raise FileNotFoundError('webuihtml/js(origin)/')
         if len(fl) == 0:
             fl = listdir('webuihtml/js(origin)/')
         self._r = Session()
-        tag = self._get_jquery_tag()
-        if not exists('webuihtml/jso/'):
-            mkdir('webuihtml/jso/')
-        self._check('webuihtml/jso/jquery.js',
-                    f"https://code.jquery.com/jquery-{tag}.min.js")
-        self._check('webuihtml/jso/qrcode.min.js',
-                    "https://github.com/davidshimjs/qrcodejs/raw/master/qrcode.min.js")
-        self._check('webuihtml/jso/sha256.min.js',
-                    "https://github.com/emn178/js-sha256/raw/master/build/sha256.min.js")
-        if not self._check_java():
-            raise FileNotFoundError('Can not find java.')
-        tag = self._get_compiler_tag()
-        self._check(
-            'compiler.jar', f"https://repo1.maven.org/maven2/com/google/javascript/closure-compiler/{tag}/closure-compiler-{tag}.jar")
-        self._check_with_com('webuihtml/jso/base64.min.js',
-                             "https://raw.githubusercontent.com/dankogai/js-base64/master/base64.js")
+        if not self._onlyc:
+            tag = self._get_jquery_tag()
+            if not exists('webuihtml/jso/'):
+                mkdir('webuihtml/jso/')
+            self._check('webuihtml/jso/jquery.js',
+                        f"https://code.jquery.com/jquery-{tag}.min.js", tag)
+            self._check('webuihtml/jso/qrcode.min.js',
+                        "https://github.com/davidshimjs/qrcodejs/raw/master/qrcode.min.js")
+            self._check('webuihtml/jso/sha256.min.js',
+                        "https://github.com/emn178/js-sha256/raw/master/build/sha256.min.js")
+            if not self._check_java():
+                raise FileNotFoundError('Can not find java.')
+            tag = self._get_compiler_tag()
+            self._check(
+                'compiler.jar', f"https://repo1.maven.org/maven2/com/google/javascript/closure-compiler/{tag}/closure-compiler-{tag}.jar", tag)
+            self._check_with_com('webuihtml/jso/base64.min.js',
+                                 "https://raw.githubusercontent.com/dankogai/js-base64/master/base64.js")
+        else:
+            if not self._check_java():
+                raise FileNotFoundError('Can not find java.')
+            if not exists('compiler.jar'):
+                raise FileNotFoundError('compiler.jar')
         for fn in fl:
             fn2 = f'webuihtml/js(origin)/{fn}'
             if not exists(fn2):
                 raise FileNotFoundError(fn2)
             self._com_javascript(fn)
 
-    def _check(self, fn: str, uri: str):
+    def _check(self, fn: str, uri: str, tag: str = ""):
         if exists(fn) and self._upa:
             remove(fn)
         if not exists(fn):
             self._get_file(uri, fn)
+            if tag == "":
+                print(f'INFO: -> {fn}')
+            else:
+                print(f'INFO: -> {fn} (Tag: {tag})')
 
     def _check_with_com(self, fn: str, uri: str):
         if exists(fn) and self._upa:
@@ -111,6 +127,7 @@ class main:
             if system(f'java -jar compiler.jar --js "{fn2}" --js_output_file "{fn}"') != 0:
                 raise Exception('Error in compiler.')
             remove(fn2)
+            print(f'INFO: -> {fn}')
 
     def _get_jquery_tag(self) -> str:
         re = self._r.get('https://api.github.com/repos/jquery/jquery/tags')
@@ -142,7 +159,7 @@ class main:
         return False
 
     def _com_javascript(self, fn: str):
-        print(fn)
+        print(f'INFO: webuihtml/js(origin)/{fn} -> webuihtml/js/{fn}')
         if system(f'java -jar compiler.jar --js "webuihtml/js(origin)/{fn}" --js_output_file "webuihtml/js/{fn}"') != 0:
             raise Exception('Error in compiler.')
 
