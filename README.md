@@ -10,6 +10,7 @@
     + [sections.json](#sectionsjson)
     + [tv.bilibili.player.xml](#tvbilibiliplayerxml)
   * [开始使用](#开始使用)
+    + [prepare.py](#preparepy)
     + [过滤弹幕](#过滤弹幕)
   * [翻译](#翻译)
   * [其他](#其他-1)
@@ -61,6 +62,10 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 
 ## 开始使用
 直接运行start.py即可
+
+### prepare.py
+运行后可以取得运行WEB用户界面必须的一些文件。  
+运行时确保可以直接访问```java```。
 
 ### WEB用户界面
 运行**startwebui.py**后，可以在浏览器访问。  

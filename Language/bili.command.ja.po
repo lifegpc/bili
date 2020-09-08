@@ -395,3 +395,13 @@ msgstr "乗算部分のある動画用に別のディレクトリを作成しま
 msgctxt "O72"
 msgid "Do not create a separate directory for videos with multiply parts."
 msgstr "乗算部分のある動画用に別のディレクトリを作成しません。"
+
+msgctxt "O73"
+msgid "Update all components."
+msgstr ""
+
+msgctxt "O74"
+msgid ""
+"The list of javascript file in webuihtml/js(origin) you want to compiler. If"
+" no list is provided,, it will update all javascript file."
+msgstr ""
