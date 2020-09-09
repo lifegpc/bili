@@ -409,3 +409,7 @@ msgstr ""
 msgctxt "O75"
 msgid "Only compile javascript file."
 msgstr ""
+
+msgctxt "O76"
+msgid "The path of java binary."
+msgstr ""

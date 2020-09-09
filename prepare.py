@@ -35,16 +35,17 @@ la = getdict('command', getlan(se, {}))
 def ph():
     h = f'''{la['O1']}
     prepare.py [-h/-?/--help]   {la['O2']}
-    prepare.py [--lan <LANGUAGECODE>] [-u] [-c] [filelist]
+    prepare.py [--lan <LANGUAGECODE>] [-u] [-c] [-j PATH] [filelist]
     --lan <LANGUAGECODE>    {la['O55']}
     -u      {la['O73']}
     -c      {la['O75']}
+    -j PATH     {la['O76']}
     filelist    {la['O74']}'''
     print(h)
 
 
 def gopt(args: List[str]):
-    re = getopt(args, 'h?uc', ['help', 'lan='])
+    re = getopt(args, 'h?ucj:', ['help', 'lan='])
     rr = re[0]
     r = {}
     h = False
@@ -57,6 +58,8 @@ def gopt(args: List[str]):
             r['u'] = True
         if i[0] == '-c':
             r['c'] = True
+        if i[0] == '-j' and not 'j' in r:
+            r['j'] = i[1]
     if h:
         global la
         la = getdict('command', getlan(se, r))
@@ -69,12 +72,15 @@ class main:
     _r: Session = None
     _upa: bool = False
     _onlyc: bool = False
+    _java: str = "java"
 
     def __init__(self, ip: dict, fl: List[str]):
         if 'u' in ip:
             self._upa = True
         if 'c' in ip:
             self._onlyc = True
+        if 'j' in ip:
+            self._java = ip['j']
         if not exists('webuihtml/js(origin)/'):
             raise FileNotFoundError('webuihtml/js(origin)/')
         if len(fl) == 0:
@@ -112,22 +118,22 @@ class main:
         if exists(fn) and self._upa:
             remove(fn)
         if not exists(fn):
-            self._get_file(uri, fn)
             if tag == "":
                 print(f'INFO: {uri} -> {fn}')
             else:
                 print(f'INFO: {uri} -> {fn} (Tag: {tag})')
+            self._get_file(uri, fn)
 
     def _check_with_com(self, fn: str, uri: str):
         if exists(fn) and self._upa:
             remove(fn)
         if not exists(fn):
+            print(f'INFO: {uri} -> {fn}')
             fn2 = f"{fn}.tmp"
             self._get_file(uri, fn2)
-            if system(f'java -jar compiler.jar --js "{fn2}" --js_output_file "{fn}"') != 0:
+            if system(f'{self._java} -jar compiler.jar --js "{fn2}" --js_output_file "{fn}"') != 0:
                 raise Exception('Error in compiler.')
             remove(fn2)
-            print(f'INFO: {uri} -> {fn}')
 
     def _get_jquery_tag(self) -> str:
         re = self._r.get('https://api.github.com/repos/jquery/jquery/tags')
@@ -154,13 +160,13 @@ class main:
         s = " 2>&0 1>&0"
         if sn == "Linux":
             s = " > /dev/null 2>&1"
-        if system(f"java -h{s}") == 0:
+        if system(f"{self._java} -h{s}") == 0:
             return True
         return False
 
     def _com_javascript(self, fn: str):
         print(f'INFO: webuihtml/js(origin)/{fn} -> webuihtml/js/{fn}')
-        if system(f'java -jar compiler.jar --js "webuihtml/js(origin)/{fn}" --js_output_file "webuihtml/js/{fn}"') != 0:
+        if system(f'{self._java} -jar compiler.jar --js "webuihtml/js(origin)/{fn}" --js_output_file "webuihtml/js/{fn}"') != 0:
             raise Exception('Error in compiler.')
 
 

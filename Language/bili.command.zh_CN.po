@@ -390,3 +390,7 @@ msgstr ""
 msgctxt "O75"
 msgid "Only compile javascript file."
 msgstr "仅编译javascript文件。"
+
+msgctxt "O76"
+msgid "The path of java binary."
+msgstr "java可执行文件的路径。"
