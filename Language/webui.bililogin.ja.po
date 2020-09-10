@@ -65,3 +65,31 @@ msgstr "ユーザー名とパスワードを使用してログインする"
 msgctxt "QRCEXPR"
 msgid "The QR code has expired, click here to reload."
 msgstr "QRコードの有効期限が切れていますので、こちらをクリックしてリロードしてください。"
+
+msgctxt "USEPHONE"
+msgid "Login in with SMS"
+msgstr ""
+
+msgctxt "PHONEN"
+msgid "Phone number:"
+msgstr ""
+
+msgctxt "SENDSMS"
+msgid "Send captcha code by SMS"
+msgstr ""
+
+msgctxt "INVALIDCPN"
+msgid "This is an invalid China phone number."
+msgstr ""
+
+msgctxt "MUSTCAPT"
+msgid "You must complete the captcha to continue."
+msgstr ""
+
+msgctxt "CAPERROR"
+msgid "An error occured:"
+msgstr ""
+
+msgctxt "SMSSEND"
+msgid "SMS is already send."
+msgstr ""

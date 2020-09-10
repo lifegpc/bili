@@ -130,16 +130,7 @@ class loginapi(apic):
                           'oauthKey': key, 'gourl': 'https://passport.bilibili.com/ajax/miniLogin/redirect'})
         re = re.json()
         if re['status']:
-            url = re['data']['url']
-            urlp = urlsplit(url)
-            urlp2 = parse_qs(urlp.query)
-            sa = []
-            for i in urlp2.keys():
-                if i != "gourl":
-                    i2 = urlp2[i][0]
-                    sa.append({'name': i, 'value': i2,
-                               'domain': '.bilibili.com', 'path': '/'})
-            savecookie(sa)
+            self._save_cookie(re['data']['url'])
         return {'code': 0, 'status': re['status']}
 
     def _cal_sign(self, p):
@@ -149,6 +140,81 @@ class loginapi(apic):
 
     def _encrypt(self, s: str):
         return quote_plus(b64encode(rsa.encrypt(s.encode(), pubkey)))
+
+    def _get_country_list(self):
+        re = self._r.get(
+            'https://passport.bilibili.com/web/generic/country/list')
+        re = re.json()
+        if re['code'] == 0:
+            data = re['data']
+            return {'code': 0, 'result': data['common'] + data['others']}
+        return {'code': -1, 'result': re}
+
+    def _get_captcha_combine(self):
+        "获取网页验证的数据，调用initGeetest时使用。"
+        re = self._r.get(f'https://passport.bilibili.com/web/captcha/combine?plat=6&t={round(time.time()*1000)}', headers={
+                         'referer': 'https://passport.bilibili.com/ajax/miniLogin/minilogin'})
+        re = re.json()
+        if re['code'] == 0:
+            return {'code': 0, 'data': re['data']}
+        return {'code': -1, 'result': re}
+
+    def _sendloginSMS(self):
+        "发送验证短信请求"
+        queries = web.ctx.query
+        qr = parse_qs(queries[1:])
+        for key in qr.keys():
+            qr[key] = qr[key][0]
+        try:
+            qr['tel'] = decrypt(b64decode(qr['tel'])).decode('utf8')
+        except:
+            return {'code': -1, 'e': traceback.format_exc()}
+        re = self._r.post(f'https://passport.bilibili.com/web/sms/general/v2/send', data=qr,
+                          headers={'referer': 'https://passport.bilibili.com/ajax/miniLogin/minilogin'})
+        re = re.json()
+        if re['code'] == 0:
+            return {'code': 0}
+        else:
+            return {'code': -2, 'result': re}
+
+    def _login_with_SMS(self):
+        queries = web.ctx.query
+        qr = parse_qs(queries[1:])
+        for key in qr.keys():
+            qr[key] = qr[key][0]
+        try:
+            qr['tel'] = decrypt(b64decode(qr['tel'])).decode('utf8')
+        except:
+            return {'code': -1, 'e': traceback.format_exc()}
+        re = self._r.post('https://passport.bilibili.com/web/login/rapid', data=qr,
+                          headers={'referer': 'https://passport.bilibili.com/ajax/miniLogin/minilogin'})
+        re = re.json()
+        if re['code'] == 0:
+            if 'data' in re and 'is_new' in re['data'] and re['data']['is_new']:
+                re = self._r.post('https://passport.bilibili.com/web/reg/rapid', data=qr, headers={
+                                  'referer': 'https://passport.bilibili.com/ajax/miniLogin/minilogin'})
+                re = re.json()
+                if re['code'] == 0:
+                    self._save_cookie(re['data']['url'])
+                    return {'code': 0}
+                else:
+                    return {'code': -2, 'result': re}
+            self._save_cookie(re['data']['url'])
+            return {'code': 0}
+        else:
+            return {'code': -2, 'result': re}
+    
+    def _save_cookie(self, url):
+        "保存来自URL的Cookie"
+        urlp = urlsplit(url)
+        urlp2 = parse_qs(urlp.query)
+        sa = []
+        for i in urlp2.keys():
+            if i != "gourl":
+                i2 = urlp2[i][0]
+                sa.append({'name': i, 'value': i2,
+                           'domain': '.bilibili.com', 'path': '/'})
+        savecookie(sa)
 
 
 class getpubkey(loginapi):
@@ -189,3 +255,30 @@ class qrgetlogininfo(loginapi):
 
     def _handle(self):
         return self._qr_getlogininfo()
+
+
+class getcountrylist(loginapi):
+    _VALID_URI = r'^getcountrylist$'
+
+    def _handle(self):
+        return self._get_country_list()
+
+
+class getcaptchacombine(loginapi):
+    _VALID_URI = r'^getcaptchacombine$'
+
+    def _handle(self):
+        return self._get_captcha_combine()
+
+
+class sendloginsms(loginapi):
+    _VALID_URI = r'^sendloginsms$'
+
+    def _handle(self):
+        return self._sendloginSMS()
+
+class loginwithsms(loginapi):
+    _VALID_URI = r'^loginwithsms$'
+
+    def _handle(self):
+        return self._login_with_SMS()
