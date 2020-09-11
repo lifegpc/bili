@@ -93,3 +93,7 @@ msgstr ""
 msgctxt "SMSSEND"
 msgid "SMS is already send."
 msgstr ""
+
+msgctxt "USEANDPAW"
+msgid "Use user name and password to login in (Web API)"
+msgstr ""

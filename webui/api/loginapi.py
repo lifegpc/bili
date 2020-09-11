@@ -28,6 +28,8 @@ import time
 
 keyhash = None
 pubkey = None
+web_keyhash = None
+web_pubkey = None
 
 
 class loginapi(apic):
@@ -141,6 +143,9 @@ class loginapi(apic):
     def _encrypt(self, s: str):
         return quote_plus(b64encode(rsa.encrypt(s.encode(), pubkey)))
 
+    def _encrypt_web(self, s: str):
+        return b64encode(rsa.encrypt(s.encode(), web_pubkey)).decode()
+
     def _get_country_list(self):
         re = self._r.get(
             'https://passport.bilibili.com/web/generic/country/list')
@@ -203,7 +208,35 @@ class loginapi(apic):
             return {'code': 0}
         else:
             return {'code': -2, 'result': re}
-    
+
+    def _get_pubkey_web(self):
+        re = self._r.get(f'https://passport.bilibili.com/login?act=getkey&_={round(time.time()*1000)}', headers={
+                         'referer': 'https://passport.bilibili.com/ajax/miniLogin/minilogin'})
+        re = re.json()
+        global web_keyhash, web_pubkey
+        web_keyhash = re['hash']
+        web_pubkey = rsa.PublicKey.load_pkcs1_openssl_pem(re['key'].encode())
+        return {'code': 0}
+
+    def _login_with_user_pass_web(self):
+        queries = web.ctx.query
+        qr = parse_qs(queries[1:])
+        for key in qr.keys():
+            qr[key] = qr[key][0]
+        try:
+            pas = decrypt(b64decode(qr['password'])).decode('utf8')
+        except:
+            return {'code': -1, 'e': traceback.format_exc()}
+        qr['password'] = self._encrypt_web(web_keyhash + pas)
+        re = self._r.post('https://passport.bilibili.com/web/mini/login', data=qr,
+                          headers={'referer': 'https://passport.bilibili.com/ajax/miniLogin/minilogin'})
+        re = re.json()
+        if re['code'] == 0:
+            self._save_cookie(re['data']['redirectUrl'])
+            return {'code': 0}
+        else:
+            return {'code': -2, 'result': re}
+
     def _save_cookie(self, url):
         "保存来自URL的Cookie"
         urlp = urlsplit(url)
@@ -277,8 +310,23 @@ class sendloginsms(loginapi):
     def _handle(self):
         return self._sendloginSMS()
 
+
 class loginwithsms(loginapi):
     _VALID_URI = r'^loginwithsms$'
 
     def _handle(self):
         return self._login_with_SMS()
+
+
+class getpubkeyweb(loginapi):
+    _VALID_URI = r'^getpubkeyweb$'
+
+    def _handle(self):
+        return self._get_pubkey_web()
+
+
+class loginwithuserpassweb(loginapi):
+    _VALID_URI = r'^loginwithuserpassweb$'
+
+    def _handle(self):
+        return self._login_with_user_pass_web()

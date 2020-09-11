@@ -140,6 +140,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             loginwithSMS();
             return;
         }
+        else if (submittype == 3) {
+            loginwithpassweb();
+            return;
+        }
         $.getJSON('/api/getpubkey', (e, s) => {
             if (s == "success") {
                 if (e.code == 0) {
@@ -268,6 +272,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
                 var sub = document.getElementById('submit');
                 sub.disabled = false;
                 if (targetid == "qrc") {
+                    sub.disabled = true;
                     makeqrcode();
                 }
                 else if (targetid == "phocode") {
@@ -398,6 +403,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
     }
     /**@typedef {()=>void} callback
      * @typedef {(error:{error_code:string,msg:string})=>void} GeetestErrorCallback
+     * @typedef {{"success":number,"gt":string,"challenge":string,"key":string}} CapcomInfo
      * @typedef {Object} GeetestObj 
      * @property {(position:(string|HTMLElement))=>void} appendTo 用于将验证按钮插到宿主页面，使其显示在页面上。接受的参数可以是 id 选择器（例如 #captcha-box），或者 DOM 元素对象。
      * @property {(position:(string|HTMLElement))=>void} bindForm 接受的参数类型与 appendTo 方法一致。该该接口的作用是插入验证结果的三个 input 标签到指定的表单中。
@@ -471,7 +477,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             if (s == "success") {
                 var rtype = e.data.type;
                 if (rtype == 1) {
-                    /**@typedef {{"success":number,"gt":string,"challenge":string,"key":string}} CapcomInfo*/
                     /**@type {CapcomInfo}*/
                     var re = e.data.result;
                     initGeetest({ gt: re.gt, challenge: re.challenge, new_captcha: true, offline: !re.success, next_width: "270px", product: "bind" }, function (obj) {
@@ -526,7 +531,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
                             }
                             sendlogin_sms();
                         })
-                        captchaObj.onReady(()=>{
+                        captchaObj.onReady(() => {
                             captchaObj.verify();
                         })
                     })
@@ -585,6 +590,103 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             })
         }
         send_login_with_SMS();
+    }
+    function loginwithpassweb() {
+        /**@type {HTMLInputElement}*/
+        var userw = document.getElementById('usernamew');
+        /**@type {HTMLInputElement}*/
+        var passw = document.getElementById('passwordw');
+        if (userw.validationMessage != "") {
+            alert(userw.validationMessage);
+            return;
+        }
+        if (passw.validationMessage != "") {
+            alert(passw.validationMessage);
+            return;
+        }
+        /**用户名*/
+        var un = userw.value;
+        /**密码*/
+        var pa = passw.value;
+        $.getJSON('/api/getpubkeyweb', (e, s) => {
+            if (s != "success") return;
+            if (e.code != 0) {
+                console.error(e);
+                return;
+            }
+            $.getJSON('/api/getcaptchacombine', (e, s) => {
+                if (s != "success") return;
+                if (e.code == -1) {
+                    console.error(e);
+                    var errmsg = transobj['webui.bililogin']['CAPERROR'] + '\n' + e.result.code + ':' + e.result.message;
+                    alert(errmsg)
+                    return;
+                }
+                else if (e.code != 0) {
+                    console.error(e.e);
+                    return;
+                }
+                if (e.data.type != 1) {
+                    console.error(e.data);
+                    return;
+                }
+                /**@type {CapcomInfo}*/
+                var re = e.data.result;
+                initGeetest({ gt: re.gt, challenge: re.challenge, new_captcha: true, offline: !re.success, next_width: "270px", product: "bind" }, function (obj) {
+                    captchaObj = obj;
+                    captchaObj.onClose(() => {
+                        alert(transobj['webui.bililogin']['MUSTCAPT']);
+                        captchaObj.destroy();
+                    })
+                    captchaObj.onError((error) => {
+                        var str = transobj['webui.bililogin']['CAPERROR'] + '\n' + error.error_code + ":" + error.msg;
+                        alert(str);
+                        captchaObj.destroy();
+                    })
+                    captchaObj.onSuccess(() => {
+                        var capres = captchaObj.getValidate();
+                        var epa = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(pa))));//加密密码
+                        var par = { username: un, password: epa, keep: true, key: re.key, captchaType: 6, goUrl: "https://passport.bilibili.com/ajax/miniLogin/minilogin", challenge: capres.geetest_challenge, validate: capres.geetest_validate, seccode: capres.geetest_seccode }
+                        function sendlogin() {
+                            $.getJSON('/api/loginwithuserpassweb', par, (e, s) => {
+                                if (s != "success") return;
+                                if (e.code == -1) {
+                                    console.warn(e.e);
+                                    /**@type {HTMLInputElement}*/
+                                    var sub = document.getElementById('submit');
+                                    sub.disabled = true;
+                                    regetpubkey(() => {
+                                        epa = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(pa))));
+                                        par['password'] = epa;
+                                        sub.disabled = false;
+                                        sendlogin();
+                                    })
+                                    return;
+                                }
+                                if (e.code == -2) {
+                                    captchaObj.destroy();
+                                    console.warn(e)
+                                    var errmsg = transobj['webui.bililogin']['CAPERROR'] + '\n' + e.result.code + ':' + e.result.message;
+                                    alert(errmsg);
+                                    return;
+                                }
+                                if (e.code != 0) {
+                                    console.error(e);
+                                    captchaObj.destroy();
+                                    return;
+                                }
+                                alert(transobj['bili.biliLogin']['OUTPUT1']);
+                                driect();
+                            })
+                        }
+                        sendlogin();
+                    })
+                    captchaObj.onReady(() => {
+                        captchaObj.verify();
+                    })
+                })
+            })
+        })
     }
     /**@type {HTMLStyleElement}*/
     var sty = null;

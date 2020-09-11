@@ -91,3 +91,7 @@ msgstr "一个错误产生了："
 msgctxt "SMSSEND"
 msgid "SMS is already send."
 msgstr "手机短信已发送。"
+
+msgctxt "USEANDPAW"
+msgid "Use user name and password to login in (Web API)"
+msgstr "使用用户名和密码登录（网页API）"

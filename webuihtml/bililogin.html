@@ -69,9 +69,17 @@ $if fontname is not None:
             <input id="phocapt" required>
             <button id="sendSMS" class="trans" trans="webui.bililogin SENDSMS">发送短信验证码</button>
         </div>
+        <div id="uapweb" style="display: none;">
+            <label class="trans" trans="webui.bililogin USERNAME">用户名：</label>
+            <input id="usernamew" required>
+            <br/>
+            <label class="trans" trans="webui.settings PASS">密码：</label>
+            <input id="passwordw" type="password" required>
+        </div>
         <div style="display: none;"><label id="uap1" class="trans switch" switch="0" switch2="uap" trans="webui.bililogin USEANDPA">使用用户名和密码登录</label><br/></div>
         <div><label id="qrcl" class="trans switch" switch="1" switch2="qrc" trans="webui.bililogin QRSCAN">使用APP扫码登录</label><br/></div>
         <div><label id="phol" class="trans switch" switch="2" switch2="phocode" trans="webui.bililogin USEPHONE">使用手机短信登录</label><br/></div>
+        <div><label id="uapwl" class="trans switch" switch="3" switch2="uapweb" trans="webui.bililogin USEANDPAW">使用用户名和密码登录（网页API）</label><br/></div>
         $if not https:
             <label class="trans" trans="webui.bililogin HTTPWARN" style="color:red;">虽然程序已经对用户名和密码进行了加密处理，但是依旧可能遭到中间人(MITM)攻击。如果在公网中使用，请启用HTTPS。</label><br/>
         <button class="trans" id="submit" trans="webui.settings SUBMIT" disabled>提交</button>
