@@ -645,8 +645,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
                     })
                     captchaObj.onSuccess(() => {
                         var capres = captchaObj.getValidate();
+                        var eun = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(un))));//加密用户名
                         var epa = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(pa))));//加密密码
-                        var par = { username: un, password: epa, keep: true, key: re.key, captchaType: 6, goUrl: "https://passport.bilibili.com/ajax/miniLogin/minilogin", challenge: capres.geetest_challenge, validate: capres.geetest_validate, seccode: capres.geetest_seccode }
+                        var par = { username: eun, password: epa, keep: true, key: re.key, captchaType: 6, goUrl: "https://passport.bilibili.com/ajax/miniLogin/minilogin", challenge: capres.geetest_challenge, validate: capres.geetest_validate, seccode: capres.geetest_seccode }
                         function sendlogin() {
                             $.getJSON('/api/loginwithuserpassweb', par, (e, s) => {
                                 if (s != "success") return;
@@ -657,7 +658,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
                                     sub.disabled = true;
                                     regetpubkey(() => {
                                         epa = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(pa))));
+                                        eun = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(un))));
                                         par['password'] = epa;
+                                        par['username'] = eun;
                                         sub.disabled = false;
                                         sendlogin();
                                     })

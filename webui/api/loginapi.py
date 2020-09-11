@@ -225,6 +225,7 @@ class loginapi(apic):
             qr[key] = qr[key][0]
         try:
             pas = decrypt(b64decode(qr['password'])).decode('utf8')
+            qr['username'] = decrypt(b64decode(qr['username'])).decode('utf8')
         except:
             return {'code': -1, 'e': traceback.format_exc()}
         qr['password'] = self._encrypt_web(web_keyhash + pas)
