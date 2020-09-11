@@ -68,32 +68,32 @@ msgstr "QRコードの有効期限が切れていますので、こちらをク�
 
 msgctxt "USEPHONE"
 msgid "Login in with SMS"
-msgstr ""
+msgstr "SMSでログインする"
 
 msgctxt "PHONEN"
 msgid "Phone number:"
-msgstr ""
+msgstr "電話番号:"
 
 msgctxt "SENDSMS"
 msgid "Send captcha code by SMS"
-msgstr ""
+msgstr "SMSでキャプチャコードを送信"
 
 msgctxt "INVALIDCPN"
 msgid "This is an invalid China phone number."
-msgstr ""
+msgstr "無効な中国の電話番号です。"
 
 msgctxt "MUSTCAPT"
 msgid "You must complete the captcha to continue."
-msgstr ""
+msgstr "続行するには、キャプチャを完了する必要があります。"
 
 msgctxt "CAPERROR"
 msgid "An error occured:"
-msgstr ""
+msgstr "エラーが発生しました:"
 
 msgctxt "SMSSEND"
 msgid "SMS is already send."
-msgstr ""
+msgstr "SMSは既に送信済みです。"
 
 msgctxt "USEANDPAW"
 msgid "Use user name and password to login in (Web API)"
-msgstr ""
+msgstr "ユーザー名とパスワードを使ってログインする (Web API)"

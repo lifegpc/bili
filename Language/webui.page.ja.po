@@ -3,11 +3,15 @@
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-09-11 06:58:00+0000\n"
 "PO-Revision-Date: 2020-09-11 13:39+0000\n"
+"Last-Translator: Kum4423, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,4 +21,4 @@ msgstr ""
 
 msgctxt "NOTEXT"
 msgid "Now is not support this."
-msgstr ""
+msgstr "今はこれをサポートしていません。"
