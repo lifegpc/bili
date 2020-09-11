@@ -13,27 +13,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from regex import search, I
-
-
-class InvalidInputEroor(Exception):
-    def __init__(self):
-        Exception.__init__(self, 'Input is invalid.')
-
-
-class apic:
-    _VALID_URI = r''
-    _groupdict = {}
-    _inp = ""
-
-    def __init__(self, inp: str):
-        "对uri进行处理"
-        re = search(self._VALID_URI, inp, I)
-        if re == None:
-            raise InvalidInputEroor()
-        self._inp = inp
-        self._groupdict = re.groupdict()
-
-    def _handle(self):
-        "具体处理"
-        return {'code': 0}
+from ..api.session import new_Session
+from ..api.apiclass import InvalidInputEroor
+from .extractor import extractor
+from .extractorlist import getextractorlist
+from .page import page

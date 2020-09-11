@@ -13,7 +13,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
-/**@type {Object} 存放翻译内容*/
+/**@typedef {Object} TransObj
+ * @property {()=>void} deal 处理新的元素
+*/
+/**@type {TransObj} 存放翻译内容*/
 var transobj = Object();
 /**@param {string} name
  * @param {HTMLCollectionOf<HTMLElement>} list

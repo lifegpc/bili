@@ -41,3 +41,5 @@ from .video import video
 from .favicon import favicon
 from .about import about, server_ver
 from .biliLogin import biliLogin
+from .page import page
+from .pic import pic
