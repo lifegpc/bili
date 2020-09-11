@@ -22,6 +22,7 @@ from json import dumps
 import sys
 import requests
 from re import search
+from urllib.parse import unquote_plus
 
 extractorl = getextractorlist()
 
@@ -35,6 +36,7 @@ if se == -1 or se == -2:
 
 class page:
     def GET(self, t):
+        t = unquote_plus(t)
         h = web.cookies().get('section')
         if logincheck(h):
             return ''
