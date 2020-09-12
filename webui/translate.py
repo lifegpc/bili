@@ -26,7 +26,7 @@ if len(sys.argv) > 1:
     ip = gopt(sys.argv[1:])
 
 
-def islanin(l:str) -> str:
+def islanin(l: str) -> str:
     """检查是否存在该语种
     是返回字符串，否返回None"""
     li = l.split('-')
@@ -85,7 +85,7 @@ class translate:
             else:
                 r['code'] = 0
                 r['dict'] = la
-            t = dumps(r)
+            t = dumps(r, ensure_ascii=False)
         return t
 
     def resetse(self):

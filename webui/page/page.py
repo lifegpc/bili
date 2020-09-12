@@ -50,13 +50,13 @@ class page:
                 if re is None:
                     t = "https://"+t
                 re = requests.head(t)
-                if 'Location' in re.headers :
+                if 'Location' in re.headers:
                     re = self._extract(re.headers['Location'])
                     if re is not None:
                         r = re
             else:
                 r = re
-        r = dumps(r)
+        r = dumps(r, ensure_ascii=False)
         pag = gettemplate('page')
         return pag(ip, se, r)
 

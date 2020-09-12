@@ -151,7 +151,8 @@ window.addEventListener('load', () => {
         smallinfod2.append(createTransLabel('bili.PrintInfo O2'));//BV号
         smallinfod2.append(createLabel(data.bvid));
         img = document.createElement('img');
-        img.src = "/pic/" + encodeURIComponent(data.pic);
+        var ip = { s: data.pic };
+        img.src = "/pic/" + encodeURIComponent(data.title) + "?" + $.param(ip);
         smallinfod3.append(img);
         smallinfod1.append(newbr());
         smallinfod1.append(createTransLabel('bili.PrintInfo O3'));//分P数

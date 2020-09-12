@@ -25,6 +25,9 @@ class pic:
         h = web.cookies().get('section')
         if logincheck2(h):
             return '403 Forbidden'
+        t2 = web.input().get('s')
+        if t2 is not None:
+            t = t2
         he = {'referer': unquote_plus(t)}
         et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
         if et is not None:

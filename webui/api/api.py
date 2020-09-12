@@ -30,9 +30,9 @@ class api:
         for i in apil:
             try:
                 e = i(t)
-                return dumps(e._handle())
+                return dumps(e._handle(), ensure_ascii=False)
             except InvalidInputEroor:
                 pass
             except Exception:
-                return dumps({'code': -500, 'e': traceback.format_exc()})
+                return dumps({'code': -500, 'e': traceback.format_exc()}, ensure_ascii=False)
         return dumps({'code': -404})

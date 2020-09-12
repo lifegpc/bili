@@ -33,7 +33,7 @@ class jsong:
                 t = f.read()
                 f.close()
                 t = loads(t)
-                t = dumps({'code': 0, 'result': t})
+                t = dumps({'code': 0, 'result': t}, ensure_ascii=False)
             return t
         else:
             return dumps({'code': -404})
