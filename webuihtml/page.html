@@ -21,16 +21,18 @@ $code:
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script>info=$r;</script>
     <script src="/js/jquery.js"></script>
+    <script src="/js/viewer.min.js"></script>
     <script src="/js/prototype.js"></script>
     <script src="/js/translatie.js"></script>
     <script src="/js/page.js"></script>
     <script src="/js/footer.js"></script>
+    <link rel="stylesheet" type="text/css" href="/css/viewer.min.css">
     <link rel="stylesheet" type="text/css" href="/css/topmenu.css">
     <link rel="stylesheet" type="text/css" href="/css/page.css">
     <link rel="stylesheet" type="text/css" href="/css/footer.css">
 $ fontname=gets('uifont')
 $if fontname is not None:
-    <style>body, #main input {font-family: "$fontname";}</style>
+    <style>body, #main select {font-family: "$fontname";}</style>
     $if 'uifontloc' in se:
         <style>@font-face{font-family: "$fontname";src: local("$fontname"),url("$:getfonturl(se['uifontloc'])")}</style>
 </head>

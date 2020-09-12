@@ -10,10 +10,11 @@
 
 #main {
     position: absolute;
-    width: 100%;
+    min-width: 100%;
 }
 
 #main .videoinfo {
+    margin-top: 10px;
     border: 1px dashed;
     min-width: 90%;
     padding-left: 5%;
@@ -33,6 +34,26 @@
     min-width: 33%;
 }
 
-.flex div img {
-    max-width: 100%;
+#main .pagelist {
+    border: 1px dashed;
+    min-width: 100%;
+    margin-top: 10px;
+}
+
+.pagelist * td {
+    border-right: 1px dashed;
+    border-bottom: 1px dashed;
+    white-space: nowrap;
+}
+
+.pagelist * td.last {
+    border-right: none;
+}
+
+.pagelist * tr.last td {
+    border-bottom: none;
+}
+
+.videoinfo * img:hover {
+    cursor: zoom-in;
 }

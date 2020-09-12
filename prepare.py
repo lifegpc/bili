@@ -87,22 +87,35 @@ class main:
             fl = listdir('webuihtml/js(origin)/')
         self._r = Session()
         if not self._onlyc:
-            tag = self._get_jquery_tag()
+            tag = self._get_tag(
+                'https://api.github.com/repos/jquery/jquery/tags')
             if not exists('webuihtml/jso/'):
                 mkdir('webuihtml/jso/')
             self._check('webuihtml/jso/jquery.js',
                         f"https://code.jquery.com/jquery-{tag}.min.js", tag)
             self._check('webuihtml/jso/qrcode.min.js',
                         "https://github.com/davidshimjs/qrcodejs/raw/master/qrcode.min.js")
+            tag = self._get_tag(
+                'https://api.github.com/repos/emn178/js-sha256/tags')
             self._check('webuihtml/jso/sha256.min.js',
-                        "https://github.com/emn178/js-sha256/raw/master/build/sha256.min.js")
+                        "https://github.com/emn178/js-sha256/raw/master/build/sha256.min.js", tag)
+            tag = self._get_tag(
+                'https://api.github.com/repos/fengyuanchen/viewerjs/tags')
+            self._check('webuihtml/jso/viewer.min.js',
+                        'https://github.com/fengyuanchen/viewerjs/raw/master/dist/viewer.min.js', tag)
+            if not exists('webuihtml/csso/'):
+                mkdir('webuihtml/csso/')
+            self._check('webuihtml/csso/viewer.min.css',
+                        'https://github.com/fengyuanchen/viewerjs/raw/master/dist/viewer.min.css', tag)
             if not self._check_java():
                 raise FileNotFoundError('Can not find java.')
             tag = self._get_compiler_tag()
             self._check(
                 'compiler.jar', f"https://repo1.maven.org/maven2/com/google/javascript/closure-compiler/{tag}/closure-compiler-{tag}.jar", tag)
+            tag = self._get_tag(
+                'https://api.github.com/repos/dankogai/js-base64/tags')
             self._check_with_com('webuihtml/jso/base64.min.js',
-                                 "https://raw.githubusercontent.com/dankogai/js-base64/master/base64.js")
+                                 "https://github.com/dankogai/js-base64/raw/master/base64.js", tag)
         else:
             if not self._check_java():
                 raise FileNotFoundError('Can not find java.')
@@ -124,19 +137,22 @@ class main:
                 print(f'INFO: {uri} -> {fn} (Tag: {tag})')
             self._get_file(uri, fn)
 
-    def _check_with_com(self, fn: str, uri: str):
+    def _check_with_com(self, fn: str, uri: str, tag: str):
         if exists(fn) and self._upa:
             remove(fn)
         if not exists(fn):
-            print(f'INFO: {uri} -> {fn}')
+            if tag == "":
+                print(f'INFO: {uri} -> {fn}')
+            else:
+                print(f'INFO: {uri} -> {fn} (Tag: {tag})')
             fn2 = f"{fn}.tmp"
             self._get_file(uri, fn2)
             if system(f'{self._java} -jar compiler.jar --js "{fn2}" --js_output_file "{fn}"') != 0:
                 raise Exception('Error in compiler.')
             remove(fn2)
 
-    def _get_jquery_tag(self) -> str:
-        re = self._r.get('https://api.github.com/repos/jquery/jquery/tags')
+    def _get_tag(self, uri: str) -> str:
+        re = self._r.get(uri)
         re = re.json()
         return re[0]['name']
 

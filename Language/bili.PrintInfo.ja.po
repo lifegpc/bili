@@ -40,8 +40,8 @@ msgid "Publish time :"
 msgstr "公開日時 :"
 
 msgctxt "O6"
-msgid "Last modified time :"
-msgstr "最終更新時刻 :"
+msgid "Create time:"
+msgstr ""
 
 msgctxt "O7"
 msgid "Description :"

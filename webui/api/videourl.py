@@ -13,27 +13,24 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, getEtag
-from os.path import exists
+from . import apic, new_Session
+from .checklogin import logincheck
+from .session import NotLoginError
+from requests import Session
+from time import time
 
 
-class css:
-    def GET(self, n):
-        web.header('Content-Type', 'text/css; charset=utf-8')
-        fn = f'webuihtml/css/{n}'
-        if not exists(fn):
-            fn = f'webuihtml/csso/{n}'
-            if not exists(fn):
-                web.HTTPError('404')
-                return ''
-        et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
-        et2 = getEtag(fn)
-        if et == et2 and et2 is not None:
-            web.HTTPError('304')
-            t = ''
-        else:
-            web.header('Etag', et2)
-            f = open(fn, 'r', encoding='utf8')
-            t = f.read()
-            f.close()
-        return t
+last_checktime: int = None  # 上次检查登录时间
+
+
+class videourl(apic):
+    _r: Session = None
+
+    def __init__(self, inp: str):
+        apic.__init__(self, inp)
+        global last_checktime
+        if last_checktime is None or last_checktime < (time()-60):
+            last_checktime = time()
+            if not logincheck():
+                raise NotLoginError()
+        self._r = new_Session()

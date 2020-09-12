@@ -18,3 +18,51 @@ msgstr ""
 msgctxt "NOTEXT"
 msgid "Now is not support this."
 msgstr ""
+
+msgctxt "PARTNO"
+msgid "Part Number"
+msgstr ""
+
+msgctxt "PARTCID"
+msgid "Part CID"
+msgstr ""
+
+msgctxt "PARTNAME"
+msgid "Part Name"
+msgstr ""
+
+msgctxt "DMME"
+msgid "Download Method"
+msgstr ""
+
+msgctxt "DMME1"
+msgid "Barrage"
+msgstr ""
+
+msgctxt "DMME2"
+msgid "All barrage"
+msgstr ""
+
+msgctxt "DMME3"
+msgid "Video"
+msgstr ""
+
+msgctxt "DMME4"
+msgid "Barrage and video"
+msgstr ""
+
+msgctxt "DMME5"
+msgid "All barrage and video"
+msgstr ""
+
+msgctxt "DMME6"
+msgid "Subtitles only"
+msgstr ""
+
+msgctxt "DMME7"
+msgid "Cover image only"
+msgstr ""
+
+msgctxt "DMME8"
+msgid "Audio only"
+msgstr ""

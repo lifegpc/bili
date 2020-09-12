@@ -22,3 +22,51 @@ msgstr ""
 msgctxt "NOTEXT"
 msgid "Now is not support this."
 msgstr "现在不支持这个。"
+
+msgctxt "PARTNO"
+msgid "Part Number"
+msgstr "分P序号"
+
+msgctxt "PARTCID"
+msgid "Part CID"
+msgstr "分P CID"
+
+msgctxt "PARTNAME"
+msgid "Part Name"
+msgstr "分P名"
+
+msgctxt "DMME"
+msgid "Download Method"
+msgstr "下载方式"
+
+msgctxt "DMME1"
+msgid "Barrage"
+msgstr "弹幕"
+
+msgctxt "DMME2"
+msgid "All barrage"
+msgstr "全弹幕"
+
+msgctxt "DMME3"
+msgid "Video"
+msgstr "视频"
+
+msgctxt "DMME4"
+msgid "Barrage and video"
+msgstr "弹幕和视频"
+
+msgctxt "DMME5"
+msgid "All barrage and video"
+msgstr "全弹幕和视频"
+
+msgctxt "DMME6"
+msgid "Subtitles only"
+msgstr "仅字幕"
+
+msgctxt "DMME7"
+msgid "Cover image only"
+msgstr "仅封面"
+
+msgctxt "DMME8"
+msgid "Audio only"
+msgstr "仅音频"
