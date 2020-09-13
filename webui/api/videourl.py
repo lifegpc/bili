@@ -16,8 +16,10 @@
 from . import apic, new_Session
 from .checklogin import logincheck
 from .session import NotLoginError
+from ..extractor.normal import normalurle
 from requests import Session
 from time import time
+import web
 
 
 last_checktime: int = None  # 上次检查登录时间
@@ -34,3 +36,60 @@ class videourl(apic):
             if not logincheck():
                 raise NotLoginError()
         self._r = new_Session()
+
+
+class normalvideourl(videourl):
+    _VALID_URI = r'^normalvideourl$'
+
+    def _handle(self):
+        aid: str = web.input().get('aid')
+        bvid: str = web.input().get('bvid')
+        cid: str = web.input().get('cid')
+        p: str = web.input().get('p')
+        vip: str = web.input().get('vip')
+        vurl: str = web.input().get('vurl')
+        vq: str = web.input().get('vq')
+        vcodec: str = web.input().get('vcodec')
+        aq: str =web.input().get('aq')
+        if aid is None or bvid is None or cid is None or vip is None:
+            return {'code': -1}
+        if not aid.isnumeric() or not cid.isnumeric() or not vip.isnumeric():
+            return {'code': -1}
+        aid = int(aid)
+        cid = int(cid)
+        vip = int(vip)
+        all = True
+        if vq is not None and vq.isnumeric():
+            vq = int(vq)
+            all = False
+        else:
+            vq = 120
+        if aq is not None and aq.isnumeric():
+            aq = int(vq)
+            all = False
+        else:
+            aq = 30280
+        if vcodec is not None and vcodec in ['avc','hev']:
+            all = False
+        else:
+            vcodec = None
+        if vurl is None:
+            vurl = False
+        else:
+            vurl = True
+        if p is not None and not p.isnumeric():
+            return {'code': -1}
+        if p is None:
+            p = 1
+        else:
+            p = int(p)
+        if aid is not None:
+            url = f'https://www.bilibili.com/video/av{aid}?p={p}'
+        else:
+            url = f'https://www.bilibili.com/video/{bvid}?p={p}'
+        data = {'aid': aid, 'bvid': bvid, 'cid': cid, 'vip': vip}
+        re, d = normalurle(self._r, url, data, all, vurl, vq, vcodec, aq)
+        if re == -1:
+            return d
+        elif re == 0:
+            return {'code': 0, 'data': d}

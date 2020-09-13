@@ -66,3 +66,7 @@ msgstr ""
 msgctxt "DMME8"
 msgid "Audio only"
 msgstr ""
+
+msgctxt "PARTDUR"
+msgid "Part Duration"
+msgstr ""

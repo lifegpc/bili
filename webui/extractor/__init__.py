@@ -13,16 +13,3 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import apic
-from typing import List
-from .rsa import apirsa
-from .checklogin import checklogin
-from .videourl import normalvideourl
-from .loginapi import getpubkey, captcha, login, qrgetloginurl, qrgetlogininfo, getcountrylist, getcaptchacombine, sendloginsms, loginwithsms, getpubkeyweb, loginwithuserpassweb
-
-apil = [value for key, value in globals().items() if type(
-    value) == type(apic) and issubclass(value, apic) and key != "apic"]
-
-
-def getapilist() -> List[apic]:
-    return apil

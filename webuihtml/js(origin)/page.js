@@ -18,6 +18,7 @@ window.addEventListener('load', () => {
      * @property {number} page P数
      * @property {string} part 分P名
      * @property {number} cid 视频CID
+     * @property {number} duration 分P时长（s）
      * @typedef {Object} NormalVideoData
      * @property {number} aid AV号
      * @property {string} bvid BV号
@@ -43,6 +44,7 @@ window.addEventListener('load', () => {
      * @property {string|undefined} e 抛出的错误信息（仅code为-500时存在）
      * @property {string|undefined} type 解析器的类型（仅code为0时存在）
      * @property {string|undefined} url 仅当type为redirect时存在，重定向至的地址
+     * @property {number|undefined} vip VIP状态（仅当code为0时并type不为redirect时存在）
      * @property {infodata|undefined} data 数据（仅当code为0时并type不为redirect时存在）
      * @typedef {Object} DurlUrl
      * @property {number} id 视频流画质
@@ -50,9 +52,8 @@ window.addEventListener('load', () => {
      * @property {number} size 流大小（B）
      * @typedef {Object} DashUrl
      * @property {number} id 画/音质ID
-     * @property {"video"|"audio"} type 指定类型
-     * @property {string} desc 画质描述
-     * @property {string} codecs 编码信息
+     * @property {string|undefined} desc 画质描述
+     * @property {string|undefined} codecs 编码信息
      * @property {number|undefined} width 视频宽度
      * @property {number|undefined} height 视频高度
      * @property {string} frame_rate 帧率（B站API返回值，不准确）
@@ -63,12 +64,13 @@ window.addEventListener('load', () => {
      * @property {Array<String>} accept_description 所有视频格式描述
      * @property {Array<number>} accept_quality 所有视频格式ID
      * @property {Object.<number,String>} accept_description_dict 以ID为key的视频格式描述
-     * @property {Array<number>|undefined} accept_audio_quality 音频格式ID（仅dash流类型有）
-     * @property {Object.<number,DurlUrl>|Array<DashUrl>} data 更具体的信息
+     * @property {Array<number>|null|undefined} accept_audio_quality 音频格式ID（仅dash流类型有。dash流不存在为null）
+     * @property {Object.<number,DurlUrl>|{video:Array<DashUrl>,audio:Array<DashUrl>|null}} data 更具体的信息
      * @typedef {Object} VideoUrlRe videoUrl 系列API返回值
-     * @property {0|-403|-404|-500} code 返回值，-403 WEBUI未登录，-404 未匹配到对应的API，-500 内部错误，-501 bili未登录
+     * @property {0|-1|-2|-403|-404|-500|-501} code 返回值，-1 GET请求参数不正确，-2 API调用出错，-403 WEBUI未登录，-404 未匹配到对应的API，-500 内部错误，-501 bili未登录
      * @property {string|undefined} e 错误详细信息，仅code为-500时存在
      * @property {VideoUrl|undefined} data 数据，仅code为0时存在
+     * @property {errorinfo|undefined} re 错误信息，仅code为-2时存在
     */
     /**重定向至BiliBili登录页 */
     function biliredir() {
@@ -148,6 +150,20 @@ window.addEventListener('load', () => {
     */
     function formattime(t) {
         return new Date(t * 1000).format("yyyy-MM-dd hh:mm:ss");
+    }
+    /**将时长转换为字符串格式
+     * @param {number} t 时间（秒）
+     * @returns {string}
+    */
+    function durtostr(t) {
+        var o = [Math.floor(t / 3600), Math.floor(t % 3600 / 60), t % 60];
+        if (o[0] == 0) o.shift();
+        var d = [];
+        for (var i = 0; i < o.length; i++) {
+            var e = o[i];
+            d.push(("00" + e).substr(("" + e).length));
+        }
+        return d.join(':');
     }
     /**根据type创建Download Method选择元素
      * @param {string} t 解析器type
@@ -290,6 +306,7 @@ window.addEventListener('load', () => {
         head.append(createTd(createTransLabel('webui.page PARTNO')));
         head.append(createTd(createTransLabel('webui.page PARTCID')));
         head.append(createTd(createTransLabel('webui.page PARTNAME')));
+        head.append(createTd(createTransLabel('webui.page PARTDUR')));
         head.append(createTd(createTransLabel('webui.page DMME')));
         head.append(createTd(null, "last"));
         for (var i = 0; i < data.page.length; i++) {
@@ -305,6 +322,7 @@ window.addEventListener('load', () => {
             tr.append(createTd(pd.page));
             tr.append(createTd(pd.cid));
             tr.append(createTd(pd.part));
+            tr.append(createTd(durtostr(pd.duration)));
             tr.append(createTd(createsel(info.type)));
             tr.append(createTd(null, "last"));
             tbody.append(tr);

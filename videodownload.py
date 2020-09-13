@@ -319,7 +319,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     if rs!=None :
         re=json.loads(rs.groups()[0])
     elif data['videos']>=1 :
-        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16"%(data['page'][i-1]['cid'],120,data['bvid'])
+        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16&session="%(data['page'][i-1]['cid'],120,data['bvid'])
         re=r2.get(uri)
         re.encoding="utf8"
         re=re.json()
@@ -3680,12 +3680,17 @@ def streamgetlength(r:requests.Session,uri):
         bs=False
         try :
             re=r.get(uri,stream=True)
-            if re.headers.get('Content-Length')!=None :
-                a=int(re.headers.get('Content-Length'))
-            else :
-                a=-1#无法获取长度，什么神必服务器
-            re.close()
-            return a
+            try :
+                if re.headers.get('Content-Length')!=None :
+                    a=int(re.headers.get('Content-Length'))
+                else :
+                    a=-1#无法获取长度，什么神必服务器
+                re.close()
+                return a
+            except :
+                re.close()
+                print(lan['OUTPUT21'])#获取文件大小失败。尝试重新获取……
+                bs=True
         except :
             print(lan['OUTPUT21'])#获取文件大小失败。尝试重新获取……
             bs=True

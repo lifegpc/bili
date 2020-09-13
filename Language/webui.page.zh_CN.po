@@ -70,3 +70,7 @@ msgstr "仅封面"
 msgctxt "DMME8"
 msgid "Audio only"
 msgstr "仅音频"
+
+msgctxt "PARTDUR"
+msgid "Part Duration"
+msgstr "分P时长"

@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from .extractor import extractor
+from ..api.checklogin import logincheck
 from HTMLParser import Myparser
 from JSONParser import Myparser as JMyparser
 from re import search, I
@@ -22,7 +23,7 @@ import traceback
 
 
 class normal(extractor):
-    _VALID_URI = r'^(av)?(?P<av>\d+)$|^(?P<bv>BV\w+)$|^([^:]+://)?(www\.)?(m\.)?bilibili\.com/video/(av(?P<av>\d+)|(?P<bv>BV\w+))$|^([^:]+://)?(www\.)?b23\.tv/(av(?P<av>\d+)|(?P<bv>BV\w+))$'
+    _VALID_URI = r'^(av)?(?P<av>\d+)$|^(?P<bv>BV\w+)$|^([^:]+://)?(www\.)?(m\.)?bilibili\.com/video/(av(?P<av>\d+)|(?P<bv>BV\w+)).*$|^([^:]+://)?(www\.)?b23\.tv/(av(?P<av>\d+)|(?P<bv>BV\w+)).*$'
     r: dict = {}
 
     def _handle(self):
@@ -58,6 +59,14 @@ class normal(extractor):
                 if read == -1:
                     return self.r
             self.r['data'] = {'code': 0, 'data': data}
+            r2 = logincheck(True)[1]
+            if r2 is None:
+                self.r = {'code': -1}
+            else:
+                if 'vipStatus' in r2:
+                    self.r['vip'] = r2['vipStatus']
+                else:
+                    self.r['vip'] = 0
         except Exception:
             if aid is None:
                 uri = f"https://api.bilibili.com/x/web-interface/view/detail?bvid={bvid}&aid=&jsonp=jsonp"
