@@ -46,10 +46,19 @@ window.addEventListener('load', () => {
      * @property {string|undefined} url 仅当type为redirect时存在，重定向至的地址
      * @property {number|undefined} vip VIP状态（仅当code为0时并type不为redirect时存在）
      * @property {infodata|undefined} data 数据（仅当code为0时并type不为redirect时存在）
+     * @typedef {Object} DurlLink
+     * @property {string} ahead 未知
+     * @property {Array<string>|null} backup_url 备用地址
+     * @property {number} length 该部分时间长短（ms）
+     * @property {number} order 分段数
+     * @property {number} size 该部分大小
+     * @property {string} url 地址
+     * @property {string} vhead 未知
      * @typedef {Object} DurlUrl
      * @property {number} id 视频流画质
      * @property {string} desc 画质描述
      * @property {number} size 流大小（B）
+     * @property {Array<DurlLink>|undefined} url 视频地址（调用API时有vurl参数时才有）
      * @typedef {Object} DashUrl
      * @property {number} id 画/音质ID
      * @property {string|undefined} desc 画质描述
@@ -58,6 +67,7 @@ window.addEventListener('load', () => {
      * @property {number|undefined} height 视频高度
      * @property {string} frame_rate 帧率（B站API返回值，不准确）
      * @property {number} size 流大小
+     * @property {Array<string>|undefined} url 视频地址（调用API时有vurl参数时才有）
      * @typedef {Object} VideoUrl
      * @property {string} referer HTTP referer字符串
      * @property {"dash"|"durl"} type 视频链接格式
@@ -83,6 +93,16 @@ window.addEventListener('load', () => {
         param = $.param(param);
         window.location.href = '/bililogin?' + param;
     }
+    /**重定向至webui登录页 */
+    function redir() {
+        var uri = new URL(window.location.href);
+        var param = {};
+        var hl = uri.searchParams.get('hl');
+        if (hl != null) param['hl'] = hl;
+        param['p'] = window.location.href;
+        param = $.param(param);
+        window.location.href = '/login?' + param;
+    }
     /**@type {ExtractorInfo}*/
     var info = window['info'];
     if (info.code == -1) {
@@ -92,12 +112,14 @@ window.addEventListener('load', () => {
     /**新建一个需要翻译的Label或者其他元素
      * @param {string} s trans字段
      * @param {string} h 元素名称（默认为label）
+     * @param {string} c innerText
      * @returns {HTMLLabelElement|HTMLElement}
      */
-    function createTransLabel(s, h = "label") {
+    function createTransLabel(s, h = "label", c = "") {
         var label = document.createElement(h);
         label.className = "trans";
         label.setAttribute('trans', s);
+        label.innerText = c;
         return label;
     }
     /**创建一个td
@@ -191,6 +213,47 @@ window.addEventListener('load', () => {
             return sel
         }
     }
+    var size_list = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y'];
+    /**计算大小
+     * @param {number} s 大小
+    */
+    function calsize(s) {
+        var b = 0;
+        while (s >= 10240 && b < 8) {
+            b = b + 1;
+            s = s / 1024;
+        }
+        return s.toFixed(2) + size_list[b];
+    }
+    /**计算码率
+     * @param {number} s 大小（B）
+     * @param {number} t 时间（毫秒）
+    */
+    function calbitrate(s, t) {
+        var k = s * 8 / t;
+        return k.toFixed(2) + "kbps";
+    }
+    /**计算FPS（来自B站API，不准确）
+     * @param {string} s
+    */
+    function calfps(s) {
+        var re = s.match(/^([0-9]+)(\.[0-9]*)?$/)
+        if (re != null) {
+            if (re[2] != null) {
+                re[2] = re[2].substr(0, 4);
+                if (re[2].length == 1) re[2] += "0";
+            }
+            return re.slice(1).join("") + "fps";
+        }
+        re = s.match(/^([0-9]+)\/([0-9]+)$/)
+        if (re != null) {
+            var x = re[1] - 1 + 1;
+            var y = re[2] - 1 + 1;
+            var z = x / y;
+            return z.toFixed(3) + "(" + s + ")fps";
+        }
+        return s + "fps";
+    }
     if (info.code == -500) {
         if (!main.classList.has('e500')) {
             main.classList.add(['e500']);
@@ -243,7 +306,29 @@ window.addEventListener('load', () => {
     var all_selected;
     /**@type {Array<VideoUrl>} */
     var videourl;
+    /**@type {HTMLButtonElement}*/
+    var clipboardb;
+    /**@type {HTMLTextAreaElement}*/
+    var clipboardt;
+    var clipboard;
+    function createclipboard() {
+        clipboardb = document.createElement('button');
+        clipboardb.className = 'clipb';
+        clipboardb.setAttribute('data-clipboard-target', '#clipt');
+        clipboardb.style.display = "none";
+        clipboardt = document.createElement('textarea');
+        clipboardt.style.width = "0";
+        clipboardt.style.height = "0";
+        clipboardt.style.position = "absolute";
+        clipboardt.id = "clipt";
+        clipboardt.innerText = '';
+        main.append(clipboardt);
+        main.append(clipboardb);
+        clipboard = new ClipboardJS(".clipb");
+    }
     function dealnormalvideo() {
+        createclipboard();
+        /**@type {NormalVideoData}*/
         var data = info.data.data;
         var videoinfo = document.createElement('div');
         videoinfo.className = "videoinfo";
@@ -329,6 +414,275 @@ window.addEventListener('load', () => {
             tbody.append(tr);
         }
         transobj.deal();
+        setTimeout(mainchange, 2000);
+        getnormalvideourl(0);
+    }
+    /**获取视频URI
+     * @param {number} 视频P数-1
+    */
+    function getnormalvideourl(i) {
+        /**@type {NormalVideoData}*/
+        var data = info.data.data;
+        var pages = data.page;
+        if (i >= pages.length) {
+            window['videourl'] = videourl;
+            transobj.deal();
+            setTimeout(mainchange, 2000);
+            return;
+        }
+        var page = pages[i];
+        var pa = { "aid": data.aid, "bvid": data.bvid, "cid": page.cid, "p": page.page, "vip": info.vip, "vurl": 1 }
+        $.getJSON('/api/normalvideourl', pa,
+            /**@param {VideoUrlRe} e*/
+            (e, s) => {
+                if (s != "success") {
+                    transobj.deal();
+                    return;
+                }
+                console.log(e);
+                if (e.code == -1 || e.code == -404) {
+                    console.error(e);
+                    transobj.deal();
+                    return;
+                }
+                if (e.code == -500) {
+                    console.error(e.e);
+                    transobj.deal();
+                    return;
+                }
+                if (e.code == -2) {
+                    var ef = e.re;
+                    console.error(ef);
+                    alert(ef.code + " " + ef.message);
+                    transobj.deal();
+                    return;
+                }
+                if (e.code == -501) {
+                    biliredir();
+                    return;
+                }
+                if (e.code == -403) {
+                    redir();
+                    return;
+                }
+                if (e.code == 0) {
+                    if (videourl == null) {
+                        videourl = [];
+                        videourl.push(e.data);
+                    }
+                    else videourl.push(e.data);
+                    dealnormalurl(e.data, i);
+                    setTimeout(() => { getnormalvideourl(i + 1) }, 100);
+                }
+            })
+    }
+    /**处理Video Url
+     * @param {VideoUrl} d 视频网址信息
+     * @param {number} i P数-1
+    */
+    function dealnormalurl(d, i) {
+        var row = table.tBodies[0].rows[i];
+        var cell = row.cells[row.cells.length - 1];
+        console.log(cell);
+        cell.setAttribute('p', i);
+        if (d.type == "dash") {
+            cell.append(createdashvideosel(d, i));
+            if (d.data.audio != null) cell.append(createdashaudiosel(d, i));
+            cell.append(createdashvideob(i));
+            if (d.data.audio != null) cell.append(createdashaudiob(i));
+        }
+        else if (d.type == "durl") {
+            var durlb = createdurlvideob(d, i)
+            var durlsel = createdurlvideosel(d, i, durlb)
+            cell.append(durlsel);
+            cell.append(durlb);
+        }
+    }
+    /**创建dash流的视频描述选择
+     * @param {VideoUrl} d
+     * @param {number} p P数-1
+    */
+    function createdashvideosel(d, p) {
+        var sel = document.createElement('select')
+        sel.id = "dashvp" + p;
+        /**@type {HTMLOptionElement}*/
+        var dop = createTransLabel("webui.page DFE", "option");
+        dop.value = -1;
+        sel.append(dop);
+        /**@type {Array<DashUrl>}*/
+        var viddat = d.data.video;
+        for (var i = 0; i < viddat.length; i++) {
+            var vd = viddat[i];
+            var opi = document.createElement('option');
+            opi.value = i;
+            opi.append(createTransLabel("bili.videodownload " + vd.desc, "label", vd.desc));
+            opi.append('(' + vd.codecs + "," + vd.width + "x" + vd.height + "," + calsize(vd.size) + "," + calbitrate(vd.size, videourl[p].timelength) + "," + calfps(vd.frame_rate) + ")");
+            sel.append(opi);
+        }
+        return sel;
+    }
+    /**创建dash流的视频描述选择
+     * @param {VideoUrl} d
+     * @param {number} p P数-1
+    */
+    function createdashaudiosel(d, p) {
+        var sel = document.createElement('select')
+        sel.id = "dashap" + p;
+        /**@type {HTMLOptionElement}*/
+        var dop = createTransLabel("webui.page DFE", "option");
+        dop.value = -1;
+        sel.append(dop);
+        /**@type {Array<DashUrl>}*/
+        var audat = d.data.audio;
+        for (var i = 0; i < audat.length; i++) {
+            var ad = audat[i];
+            var opi = document.createElement('option');
+            opi.value = i;
+            opi.append(ad.id + "(" + ad.codecs + "," + calsize(ad.size) + "," + calbitrate(ad.size, videourl[p].timelength) + ")")
+            sel.append(opi);
+        }
+        return sel;
+    }
+    /**创建dash流视频轨链接复制按钮
+     * @param {number} p P数-1
+    */
+    function createdashvideob(p) {
+        /**@type {HTMLButtonElement}*/
+        var bu = createTransLabel("webui.page VCB", "button");
+        bu.setAttribute('p', p);
+        bu.addEventListener('click', dashvideob_click);
+        return bu;
+    }
+    /**dash流视频轨链接复制按钮鼠标单击事件*/
+    function dashvideob_click() {
+        /**@type {HTMLButtonElement}*/
+        var bu = this;
+        var p = bu.getAttribute('p') - 1 + 1;
+        var id = "dashvp" + p;
+        /**@type {HTMLSelectElement}*/
+        var sel = document.getElementById(id);
+        var i = sel.value - 1 + 1;
+        if (i < 0) i = 0;
+        var url = new URL(window.location.href);
+        /**@type {NormalVideoData}*/
+        var data = info.data.data;
+        /**@type {DashUrl}*/
+        var vd = videourl[p].data.video[i];
+        var pa = { 's': vd.url[0], 'r': videourl[p].referer, 't': 'video/mp4' };
+        pa = $.param(pa)
+        var uri = "/live/" + encodeURIComponent(data.title + " - " + data.page[p].part) + ".mp4?" + pa;
+        var ur = new URL(uri, url.origin);
+        clipboardt.value = ur.href;
+        clipboardb.click();
+    }
+    /**创建dash流音频轨链接复制按钮
+     * @param {number} p P数-1
+    */
+    function createdashaudiob(p) {
+        /**@type {HTMLButtonElement}*/
+        var bu = createTransLabel("webui.page ACB", "button");
+        bu.setAttribute('p', p);
+        bu.addEventListener('click', dashaudiob_click);
+        return bu;
+    }
+    /**dash流音频轨链接复制按钮鼠标单击事件*/
+    function dashaudiob_click() {
+        /**@type {HTMLButtonElement}*/
+        var bu = this;
+        var p = bu.getAttribute('p') - 1 + 1;
+        var id = "dashap" + p;
+        /**@type {HTMLSelectElement}*/
+        var sel = document.getElementById(id);
+        var i = sel.value - 1 + 1;
+        if (i < 0) i = 0;
+        var url = new URL(window.location.href);
+        /**@type {NormalVideoData}*/
+        var data = info.data.data;
+        /**@type {DashUrl}*/
+        var vd = videourl[p].data.audio[i];
+        var pa = { 's': vd.url[0], 'r': videourl[p].referer, 't': 'audio/mp4' };
+        pa = $.param(pa)
+        var uri = "/live/" + encodeURIComponent(data.title + " - " + data.page[p].part) + ".m4a?" + pa;
+        var ur = new URL(uri, url.origin);
+        clipboardt.value = ur.href;
+        clipboardb.click();
+    }
+    /**创建durl流的视频描述选择
+     * @param {VideoUrl} d
+     * @param {number} p P数-1
+     * @param {HTMLButtonElement} b 复制链接按钮
+    */
+    function createdurlvideosel(d, p, b) {
+        var sel = document.createElement('select');
+        sel.id = "durlp" + p;
+        sel.setAttribute('p', p);
+        /**@type {HTMLOptionElement}*/
+        var dop = createTransLabel("webui.page DFE", "option");
+        dop.value = -1;
+        sel.append(dop);
+        for (var i = 0; i < d.accept_quality.length; i++) {
+            var q = d.accept_quality[i];
+            /**@type {DurlUrl}*/
+            var vd = d.data[q];
+            var opi = document.createElement('option');
+            opi.value = i;
+            opi.append(createTransLabel('bili.videodownload ' + vd.desc, "label", vd.desc));
+            opi.append('(' + calsize(vd.size) + "," + calbitrate(vd.size, videourl[p].timelength) + ")");
+            if (vd.url.length > 1) opi.setAttribute('cpl', 1);
+            else opi.setAttribute('cpl', 0);
+            sel.append(opi);
+        }
+        ((b, sel) => { sel.addEventListener('change', () => { durlvideosel_change(b, sel); }) })(b, sel);
+        return sel;
+    }
+    /**durl流的视频描述选择变化
+     * @param {HTMLButtonElement} b 复制链接按钮
+     * @param {HTMLSelectElement} sel sel元素
+    */
+    function durlvideosel_change(b, sel) {
+        var op = sel.selectedOptions[0];
+        var i = op.value - 1 + 1;
+        var p = sel.getAttribute('p') - 1 + 1;
+        /**@type {DurlUrl}*/
+        var vd = videourl[p].data[videourl[p].accept_quality[i]];
+        if (vd.url.length == 1) b.disabled = false;
+        else b.disabled = true;
+    }
+    /**创建durl流链接复制按钮
+     * @param {VideoUrl} d
+     * @param {number} p P数-1
+    */
+    function createdurlvideob(d, p) {
+        /**@type {HTMLButtonElement}*/
+        var bu = createTransLabel("webui.page VCB", "button");
+        /**@type {DurlUrl}*/
+        var vd = d.data[d.accept_quality[0]];
+        if (vd.url.length > 1) bu.disabled = true;
+        bu.setAttribute('p', p);
+        bu.addEventListener('click', durlvideob_click);
+        return bu;
+    }
+    /**durl流链接复制按钮鼠标单击事件*/
+    function durlvideob_click() {
+        /**@type {HTMLButtonElement}*/
+        var bu = this;
+        var p = bu.getAttribute('p') - 1 + 1;
+        var id = "durlp" + p;
+        /**@type {HTMLSelectElement}*/
+        var sel = document.getElementById(id);
+        var i = sel.value - 1 + 1;
+        if (i < 0) i = 0;
+        var url = new URL(window.location.href);
+        /**@type {NormalVideoData}*/
+        var data = info.data.data;
+        /**@type {DurlUrl}*/
+        var vd = videourl[p].data[videourl[p].accept_quality[i]];
+        var pa = { 's': vd.url[0].url, 'r': videourl[p].referer, 't': 'video/mp4' };
+        pa = $.param(pa)
+        var uri = "/live/" + encodeURIComponent(data.title + " - " + data.page[p].part) + ".flv?" + pa;
+        var ur = new URL(uri, url.origin);
+        clipboardt.value = ur.href;
+        clipboardb.click();
     }
     function sel_change() {
         /**@type {HTMLInputElement}*/
@@ -425,7 +779,7 @@ window.addEventListener('load', () => {
                 sty2.innerText = ".pagelist * td.last{width:" + wid + "px;}";
             }
             else sty2.innerText = "";
-            document.body.scrollTo(mx, my);
+            if (document.body.scrollLeft != mx || document.body.scrollTop != my) document.body.scrollTo(mx, my);
         }
         var m_height = main.scrollHeight;
         if (w_height <= (m_height + t_height)) {
@@ -437,10 +791,5 @@ window.addEventListener('load', () => {
         }
     }
     mainchange();
-    var timeout = () => {
-        mainchange();
-        setTimeout(timeout, 2000);
-    }
-    setTimeout(timeout, 2000);
     window.addEventListener('resize', mainchange);
 })

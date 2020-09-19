@@ -74,3 +74,15 @@ msgstr "仅音频"
 msgctxt "PARTDUR"
 msgid "Part Duration"
 msgstr "分P时长"
+
+msgctxt "DFE"
+msgid "Default"
+msgstr "默认"
+
+msgctxt "VCB"
+msgid "Copy video link"
+msgstr "复制视频链接"
+
+msgctxt "ACB"
+msgid "Copy audio link"
+msgstr "复制音频链接"

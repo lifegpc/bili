@@ -74,3 +74,15 @@ msgstr ""
 msgctxt "PARTDUR"
 msgid "Part Duration"
 msgstr ""
+
+msgctxt "DFE"
+msgid "Default"
+msgstr ""
+
+msgctxt "VCB"
+msgid "Copy video link"
+msgstr ""
+
+msgctxt "ACB"
+msgid "Copy audio link"
+msgstr ""

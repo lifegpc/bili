@@ -107,6 +107,10 @@ class main:
                 mkdir('webuihtml/csso/')
             self._check('webuihtml/csso/viewer.min.css',
                         'https://github.com/fengyuanchen/viewerjs/raw/master/dist/viewer.min.css', tag)
+            tag = self._get_tag(
+                'https://api.github.com/repos/zenorocha/clipboard.js/tags')
+            self._check('webuihtml/jso/clipboard.min.js',
+                        'https://github.com/zenorocha/clipboard.js/raw/master/dist/clipboard.min.js', tag)
             if not self._check_java():
                 raise FileNotFoundError('Can not find java.')
             tag = self._get_compiler_tag()

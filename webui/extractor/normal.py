@@ -84,7 +84,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
         else:
             d['data'] = d2
         if vurl:
-            d2['durl'] = re['durl']
+            d2['url'] = re['durl']
         size = 0
         for i in re['durl']:
             size = size + i['size']
@@ -120,7 +120,8 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                             'id': re['quality'], 'desc': accept_description_dict[re['quality']]}
                         durl[re['quality']] = d2
                         if vurl:
-                            d2['durl'] = re['durl']
+                            d2['url'] = re['durl']
+                        size = 0
                         for i in re['durl']:
                             size = size + i['size']
                         d2['size'] = size
