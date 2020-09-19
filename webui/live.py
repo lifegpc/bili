@@ -61,7 +61,8 @@ class live:
                 web.HTTPError('304')
                 return ''
             web.header('Content-Transfer-Encoding', 'BINARY')
-            web.header('ETag', re.headers['ETag'])
+            if 'ETag' in re.headers:
+                web.header('ETag', re.headers['ETag'])
             if ra is None:
                 if 'Content-Length' in re.headers:
                     web.header('Content-Length', re.headers['Content-Length'])
