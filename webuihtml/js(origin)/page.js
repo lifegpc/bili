@@ -439,7 +439,6 @@ window.addEventListener('load', () => {
                     transobj.deal();
                     return;
                 }
-                console.log(e);
                 if (e.code == -1 || e.code == -404) {
                     console.error(e);
                     transobj.deal();
@@ -483,7 +482,6 @@ window.addEventListener('load', () => {
     function dealnormalurl(d, i) {
         var row = table.tBodies[0].rows[i];
         var cell = row.cells[row.cells.length - 1];
-        console.log(cell);
         cell.setAttribute('p', i);
         if (d.type == "dash") {
             cell.append(createdashvideosel(d, i));
