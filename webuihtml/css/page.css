@@ -21,6 +21,15 @@
     padding-right: 5%;
 }
 
+#main .videoinfo * a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+#main .videoinfo * a:hover {
+    color: pink;
+}
+
 #main .videoinfo h1 {
     text-align: center;
 }

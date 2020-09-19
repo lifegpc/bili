@@ -93,6 +93,7 @@ window.addEventListener('load', () => {
         param = $.param(param);
         window.location.href = '/bililogin?' + param;
     }
+    var arel = "noreferrer noopener";
     /**重定向至webui登录页 */
     function redir() {
         var uri = new URL(window.location.href);
@@ -334,7 +335,12 @@ window.addEventListener('load', () => {
         videoinfo.className = "videoinfo";
         main.append(videoinfo);
         var title = document.createElement('h1');
-        title.innerText = data.title;
+        var titlea = document.createElement('a');
+        titlea.innerText = data.title;
+        titlea.href = "https://www.bilibili.com/video/" + data.bvid;
+        titlea.target = "_blank";
+        titlea.rel = arel;
+        title.append(titlea);
         videoinfo.append(title);
         /**多列布局用*/
         var smallinfo = document.createElement('div');
@@ -366,7 +372,12 @@ window.addEventListener('load', () => {
         smallinfod1.append(createLabel(formattime(data.ctime)));
         smallinfod2.append(newbr());
         smallinfod2.append(createTransLabel('bili.PrintInfo O24'));//UP主名称
-        smallinfod2.append(createLabel(data.name));
+        var upn = document.createElement('a');
+        upn.innerText = data.name;
+        upn.href = "https://space.bilibili.com/" + data.uid;
+        upn.rel = arel;
+        upn.target = "_blank";
+        smallinfod2.append(upn);
         smallinfod1.append(newbr());
         smallinfod1.append(createLabel('UID:'));
         smallinfod1.append(createLabel(data.uid));
