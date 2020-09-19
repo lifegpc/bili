@@ -22,6 +22,7 @@ se = loadset()
 if se == -1 or se == -2:
     se = {}
 
+
 class live:
     "反代B站视频资源"
 
@@ -35,6 +36,7 @@ class live:
             t = t2
         t = unquote_plus(t)
         refer = web.input().get('r')
+        contenttype = web.input().get('t')
         if refer is None:
             web.HTTPError('400')
             return 'No Referer.'
@@ -49,7 +51,9 @@ class live:
         r = new_Session()
         re = r.get(unquote_plus(t), headers=he, stream=True)
         if re.ok:
-            if 'Content-Type' in re.headers:
+            if contenttype is not None:
+                web.header('Content-Type', unquote_plus(contenttype))
+            elif 'Content-Type' in re.headers:
                 web.header('Content-Type', re.headers['Content-Type'])
             else:
                 web.header('Content-Type', 'video/mp4')
