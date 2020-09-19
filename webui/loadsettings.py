@@ -40,6 +40,7 @@ def getdfset():
     o = {}
     o['s'] = '127.0.0.1'
     o['p'] = '8080'
+    o['dclive'] = True
     return o
 
 

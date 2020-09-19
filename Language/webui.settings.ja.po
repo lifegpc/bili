@@ -155,3 +155,7 @@ msgid ""
 "The path to the font file (The font format should be one of "
 "TTF/OTF/WOFF/WOFF2.):"
 msgstr "フォントファイルのパス（フォント形式はTTF/OTF/WOFF/WOFF2のいずれかである必要があります。）"
+
+msgctxt "LENPASS"
+msgid "Enable password verification for pages beginning with \"/live/\"."
+msgstr ""

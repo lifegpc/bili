@@ -47,7 +47,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
         if re['code'] != 0:
             return -1, {'code': -2, 're': re}
         napi = False
-    d = {}
+    d = {'referer': url}
     if 'data' in re and 'durl' in re['data']:
         re = re['data']
         d['type'] = 'durl'

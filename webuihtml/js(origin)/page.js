@@ -59,6 +59,7 @@ window.addEventListener('load', () => {
      * @property {string} frame_rate 帧率（B站API返回值，不准确）
      * @property {number} size 流大小
      * @typedef {Object} VideoUrl
+     * @property {string} referer HTTP referer字符串
      * @property {"dash"|"durl"} type 视频链接格式
      * @property {number} timelength 视频时长（ms）
      * @property {Array<String>} accept_description 所有视频格式描述

@@ -51,7 +51,8 @@ urls = (
     r"^/bililogin(\.html)?", "biliLogin",
     r"^/api/(.+)", "api",
     r"^/page/(.+)$", "page",
-    r"^/pic/(.+)$", "pic"
+    r"^/pic/(.+)$", "pic",
+    r"^/live/(.+)$", "live"
 )
 
 

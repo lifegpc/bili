@@ -138,3 +138,7 @@ msgstr ""
 msgctxt "FONTPATH"
 msgid "The path to the font file (The font format should be one of TTF/OTF/WOFF/WOFF2.):"
 msgstr ""
+
+msgctxt "LENPASS"
+msgid "Enable password verification for pages beginning with \"/live/\"."
+msgstr ""
