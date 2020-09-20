@@ -146,7 +146,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
         d['accept_quality'] = accept_quality
         d['accept_description_dict'] = accept_description_dict
         has_audio = False
-        if 'audio' in re['dash']:
+        if 'audio' in re['dash'] and re['dash']['audio'] is not None:
             has_audio = True
             accept_audio_quality = []
             for i in re['dash']['audio']:

@@ -86,3 +86,7 @@ msgstr "复制视频链接"
 msgctxt "ACB"
 msgid "Copy audio link"
 msgstr "复制音频链接"
+
+msgctxt "SMU"
+msgid "Save as playlist file"
+msgstr "保存为播放列表文件"

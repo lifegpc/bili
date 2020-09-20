@@ -111,6 +111,10 @@ class main:
                 'https://api.github.com/repos/zenorocha/clipboard.js/tags')
             self._check('webuihtml/jso/clipboard.min.js',
                         'https://github.com/zenorocha/clipboard.js/raw/master/dist/clipboard.min.js', tag)
+            tag = self._get_tag(
+                'https://api.github.com/repos/eligrey/FileSaver.js/tags')
+            self._check('webuihtml/jso/FileSaver.min.js',
+                        "https://github.com/eligrey/FileSaver.js/raw/master/dist/FileSaver.min.js", tag)
             if not self._check_java():
                 raise FileNotFoundError('Can not find java.')
             tag = self._get_compiler_tag()

@@ -255,6 +255,12 @@ window.addEventListener('load', () => {
         }
         return s + "fps";
     }
+    /**毫秒转秒
+     * @param {number} t
+    */
+    function mstos(t) {
+        return (t / 1000).toFixed(3);
+    }
     if (info.code == -500) {
         if (!main.classList.has('e500')) {
             main.classList.add(['e500']);
@@ -499,12 +505,16 @@ window.addEventListener('load', () => {
             if (d.data.audio != null) cell.append(createdashaudiosel(d, i));
             cell.append(createdashvideob(i));
             if (d.data.audio != null) cell.append(createdashaudiob(i));
+            cell.append(createdashsel(d, i));
+            cell.append(createdashb(i));
         }
         else if (d.type == "durl") {
             var durlb = createdurlvideob(d, i)
             var durlsel = createdurlvideosel(d, i, durlb)
             cell.append(durlsel);
             cell.append(durlb);
+            cell.append(createdurlvideosel2(i));
+            cell.append(createdurlvideob2(i));
         }
     }
     /**创建dash流的视频描述选择
@@ -616,6 +626,175 @@ window.addEventListener('load', () => {
         clipboardt.value = ur.href;
         clipboardb.click();
     }
+    /**创建文件保存格式选择
+     * @param {VideoUrl} d
+     * @param {number} p P数-1
+    */
+    function createdashsel(d, p) {
+        var sel = document.createElement('select')
+        sel.id = "dashp" + p;
+        sel.setAttribute('p', p);
+        var opi = document.createElement('option');
+        opi.value = "mpcpl";
+        opi.innerText = "mpcpl";
+        sel.append(opi);
+        if (d.data.audio == null) {
+            opi = document.createElement('option');
+            opi.value = "pls";
+            opi.innerText = "pls";
+            sel.append(opi);
+            opi = document.createElement('option');
+            opi.value = "asx";
+            opi.innerText = "asx";
+            sel.append(opi);
+            opi = document.createElement('option');
+            opi.value = "xspf";
+            opi.innerText = "xspf";
+            sel.append(opi);
+            opi = document.createElement('option');
+            opi.value = "m3u8";
+            opi.innerText = "m3u8";
+            sel.append(opi);
+        }
+        return sel;
+    }
+    /**创建文件保存按钮
+     * @param {number} p P数-1
+    */
+    function createdashb(p) {
+        /**@type {HTMLButtonElement}*/
+        var bu = createTransLabel("webui.page SMU", "button");
+        bu.setAttribute('p', p);
+        bu.addEventListener('click', dashb_click);
+        return bu;
+    }
+    function dashb_click() {
+        /**@type {HTMLButtonElement}*/
+        var bu = this;
+        var p = bu.getAttribute('p') - 1 + 1;
+        var dash = videourl[p];
+        var vid = "dashvp" + p;
+        var id = "dashp" + p;
+        /**@type {HTMLSelectElement}*/
+        var vsel = document.getElementById(vid);
+        /**@type {HTMLSelectElement}*/
+        var sel = document.getElementById(id);
+        var vi = vsel.value - 1 + 1;
+        if (vi < 0) vi = 0;
+        var typ = sel.value;
+        /**@type {NormalVideoData}*/
+        var data = info.data.data;
+        var has_audio = false;
+        if (dash.data.audio != null) has_audio = true;
+        if (has_audio) {
+            var aid = "dashap" + p;
+            /**@type {HTMLSelectElement}*/
+            var asel = document.getElementById(aid);
+            var ai = asel.value - 1 + 1;
+            if (ai < 0) ai = 0;
+        }
+        if (typ == "mpcpl") {
+            /**@type {DashUrl}*/
+            var vd = dash.data.video[vi];
+            var url = new URL(window.location.href);
+            var mpc = "MPCPLAYLIST\n1,type,0\n1,label," + data.title + " - " + data.page[p].part + "\n";
+            var pa = { 's': vd.url[0], 'r': videourl[p].referer, 't': 'video/mp4' };
+            pa = $.param(pa);
+            var uri = "/live/1.mp4?" + pa;
+            var ur = new URL(uri, url.origin);
+            mpc += ("1,video," + ur.href + "\n");
+            if (has_audio) {
+                /**@type {DashUrl}*/
+                var ad = dash.data.audio[ai];
+                pa = { 's': ad.url[0], 'r': videourl[p].referer, 't': 'audio/mp4' };
+                pa = $.param(pa);
+                uri = "/live/1.m4a?" + pa;
+                var ur = new URL(uri, url.origin);
+                mpc += ("1,audio," + ur.href + "\n");
+            }
+            var mpcb = new Blob([mpc], { 'type': 'text/plain;charset=utf-8' });
+            saveAs(mpcb, data.title + " - " + data.page[p].part + ".mpcpl");
+        }
+        else if (!has_audio && typ == "pls") {
+            /**@type {DashUrl}*/
+            var vd = dash.data.video[vi];
+            var url = new URL(window.location.href);
+            var pa = { 's': vd.url[0], 'r': videourl[p].referer, 't': 'video/mp4' };
+            pa = $.param(pa);
+            var uri = "/live/1.mp4?" + pa;
+            var ur = new URL(uri, url.origin);
+            var pls = "[playlist]\nFile1=" + ur.href + "\nTitle1=" + data.title + " - " + data.page[p].part + "\nNumberOfEntries=1\nVersion=2\n";
+            var plsb = new Blob([pls], { 'type': 'text/plain;charset=utf-8' });
+            saveAs(plsb, data.title + " - " + data.page[p].part + ".pls");
+        }
+        else if (!has_audio && typ == "asx") {
+            /**@type {DashUrl}*/
+            var vd = dash.data.video[vi];
+            var url = new URL(window.location.href);
+            var pa = { 's': vd.url[0], 'r': videourl[p].referer, 't': 'video/mp4' };
+            pa = $.param(pa);
+            var uri = "/live/1.mp4?" + pa;
+            var ur = new URL(uri, url.origin);
+            var par = new DOMParser();
+            var dum = new XMLSerializer();
+            /**@type {XMLDocument}*/
+            var asxd = par.parseFromString('<asx  version="3.0"></asx>', 'text/xml');
+            var asx = asxd.children[0];
+            var title = asxd.createElement('title');
+            title.append(data.title + " - " + data.page[p].part);
+            asx.append(title);
+            var entry = asxd.createElement('entry');
+            title = asxd.createElement('title');
+            title.append(data.title + " - " + data.page[p].part);
+            entry.append(title);
+            var ref = asxd.createElement('ref');
+            ref.setAttribute('href', ur.href);
+            entry.append(ref);
+            asx.append(entry);
+            var asxt = dum.serializeToString(asxd);
+            var asxb = new Blob([asxt], { 'type': 'text/xml;charset=utf-8' });
+            saveAs(asxb, data.title + " - " + data.page[p].part + ".asx");
+        }
+        else if (!has_audio && typ == "xspf") {
+            /**@type {DashUrl}*/
+            var vd = dash.data.video[vi];
+            var url = new URL(window.location.href);
+            var pa = { 's': vd.url[0], 'r': videourl[p].referer, 't': 'video/mp4' };
+            pa = $.param(pa);
+            var uri = "/live/1.mp4?" + pa;
+            var ur = new URL(uri, url.origin);
+            var par = new DOMParser();
+            var dum = new XMLSerializer();
+            /**@type {XMLDocument}*/
+            var xspd = par.parseFromString('<playlist version="1" xmlns="http://xspf.org/ns/0/"></playlist>', 'text/xml');
+            var pl = xspd.children[0];
+            var tl = xspd.createElement('trackList');
+            pl.append(tl);
+            var t = xspd.createElement('track');
+            var title = xspd.createElement('title');
+            title.append(data.title + " - " + data.page[p].part);
+            t.append(title);
+            var loc = xspd.createElement('location');
+            loc.append(ur.href);
+            t.append(loc);
+            tl.append(t);
+            var xspt = dum.serializeToString(xspd);
+            var xspb = new Blob([xspt], { 'type': 'text/xml;charset=utf-8' });
+            saveAs(xspb, data.title + " - " + data.page[p].part + ".xspf");
+        }
+        else if (!has_audio && typ == "m3u8") {
+            /**@type {DashUrl}*/
+            var vd = dash.data.video[vi];
+            var url = new URL(window.location.href);
+            var pa = { 's': vd.url[0], 'r': videourl[p].referer, 't': 'video/mp4' };
+            pa = $.param(pa);
+            var uri = "/live/1.mp4?" + pa;
+            var ur = new URL(uri, url.origin);
+            var m3u = "#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-PLAYLIST-TYPE:VOD\n#EXTINF:" + mstos(dash.timelength) + "," + data.title + " - " + data.page[p].part + "\n" + ur.href + "\n#EXT-X-ENDLIST\n";
+            var m3ub = new Blob([m3u], { 'type': 'text/plain;charset=utf-8' });
+            saveAs(m3ub, data.title + " - " + data.page[p].part + ".m3u8");
+        }
+    }
     /**创建durl流的视频描述选择
      * @param {VideoUrl} d
      * @param {number} p P数-1
@@ -657,6 +836,35 @@ window.addEventListener('load', () => {
         if (vd.url.length == 1) b.disabled = false;
         else b.disabled = true;
     }
+    /**创建文件保存格式选择
+     * @param {number} p P数-1
+    */
+    function createdurlvideosel2(p) {
+        var sel = document.createElement('select');
+        sel.id = "durl2p" + p;
+        sel.setAttribute('p', p);
+        var opi = document.createElement('option');
+        opi.value = "mpcpl";
+        opi.innerText = "mpcpl";
+        sel.append(opi);
+        opi = document.createElement('option');
+        opi.value = "pls";
+        opi.innerText = "pls";
+        sel.append(opi);
+        opi = document.createElement('option');
+        opi.value = "asx";
+        opi.innerText = "asx";
+        sel.append(opi);
+        opi = document.createElement('option');
+        opi.value = "xspf";
+        opi.innerText = "xspf";
+        sel.append(opi);
+        opi = document.createElement('option');
+        opi.value = "m3u8";
+        opi.innerText = "m3u8";
+        sel.append(opi);
+        return sel;
+    }
     /**创建durl流链接复制按钮
      * @param {VideoUrl} d
      * @param {number} p P数-1
@@ -692,6 +900,131 @@ window.addEventListener('load', () => {
         var ur = new URL(uri, url.origin);
         clipboardt.value = ur.href;
         clipboardb.click();
+    }
+    /**创建durl流保存为文件按钮
+     * @param {number} p P数-1
+    */
+    function createdurlvideob2(p) {
+        /**@type {HTMLButtonElement}*/
+        var bu = createTransLabel("webui.page SMU", "button");
+        bu.setAttribute('p', p);
+        bu.addEventListener('click', durlvideob2_click);
+        return bu;
+    }
+    function durlvideob2_click(p) {
+        /**@type {HTMLButtonElement}*/
+        var bu = this;
+        var p = bu.getAttribute('p') - 1 + 1;
+        var id = "durlp" + p;
+        var id2 = "durl2p" + p;
+        /**@type {HTMLSelectElement}*/
+        var sel = document.getElementById(id);
+        /**@type {HTMLSelectElement}*/
+        var sel2 = document.getElementById(id2);
+        var i = sel.value - 1 + 1;
+        if (i < 0) i = 0;
+        var typ = sel2.value;
+        var url = new URL(window.location.href);
+        /**@type {NormalVideoData}*/
+        var data = info.data.data;
+        /**@type {DurlUrl}*/
+        var vd = videourl[p].data[videourl[p].accept_quality[i]];
+        if (typ == "mpcpl") {
+            var mpc = "MPCPLAYLIST\n";
+            for (var j = 0; j < vd.url.length; j++) {
+                var durl = vd.url[j];
+                var pa = { 's': durl.url, 'r': videourl[p].referer, 't': 'video/mp4' };
+                pa = $.param(pa);
+                var uri = "/live/" + durl.order + ".flv?" + pa;
+                var ur = new URL(uri, url.origin);
+                mpc += ((j + 1) + ",type,0\n" + (j + 1) + ",label," + data.title + " - " + data.page[p].part + " - " + durl.order + "\n" + (j + 1) + ",video," + ur.href + "\n")
+            }
+            var mpcb = new Blob([mpc], { 'type': 'text/plain;charset=utf-8' });
+            saveAs(mpcb, data.title + " - " + data.page[p].part + ".mpcpl");
+        }
+        else if (typ == "pls") {
+            var pls = "[playlist]\n";
+            for (var j = 0; j < vd.url.length; j++) {
+                var durl = vd.url[j];
+                var pa = { 's': durl.url, 'r': videourl[p].referer, 't': 'video/mp4' };
+                pa = $.param(pa);
+                var uri = "/live/" + durl.order + ".flv?" + pa;
+                var ur = new URL(uri, url.origin);
+                pls += ("File" + (j + 1) + "=" + ur.href + "\nTitle" + (j + 1) + "=" + data.title + " - " + data.page[p].part + " - " + durl.order + "\n");
+            }
+            pls += ("NumberOfEntries=" + vd.url.length + "\nVersion=2\n");
+            var plsb = new Blob([pls], { 'type': 'text/plain;charset=utf-8' });
+            saveAs(plsb, data.title + " - " + data.page[p].part + ".pls");
+        }
+        else if (typ == "asx") {
+            var par = new DOMParser();
+            var dum = new XMLSerializer();
+            /**@type {XMLDocument}*/
+            var asxd = par.parseFromString('<asx  version="3.0"></asx>', 'text/xml');
+            var asx = asxd.children[0];
+            var title = asxd.createElement('title');
+            title.append(data.title + " - " + data.page[p].part);
+            asx.append(title);
+            for (var j = 0; j < vd.url.length; j++) {
+                var durl = vd.url[j];
+                var pa = { 's': durl.url, 'r': videourl[p].referer, 't': 'video/mp4' };
+                pa = $.param(pa);
+                var uri = "/live/" + durl.order + ".flv?" + pa;
+                var ur = new URL(uri, url.origin);
+                var entry = asxd.createElement('entry');
+                var title = asxd.createElement('title');
+                title.append(data.title + " - " + data.page[p].part + " - " + durl.order);
+                entry.append(title);
+                var ref = asxd.createElement('ref');
+                ref.setAttribute('href', ur.href);
+                entry.append(ref);
+                asx.append(entry);
+            }
+            var asxt = dum.serializeToString(asxd);
+            var asxb = new Blob([asxt], { 'type': 'text/xml;charset=utf-8' });
+            saveAs(asxb, data.title + " - " + data.page[p].part + ".asx");
+        }
+        else if (typ == "xspf") {
+            var par = new DOMParser();
+            var dum = new XMLSerializer();
+            /**@type {XMLDocument}*/
+            var xspd = par.parseFromString('<playlist version="1" xmlns="http://xspf.org/ns/0/"></playlist>', 'text/xml');
+            var pl = xspd.children[0];
+            var tl = xspd.createElement('trackList');
+            pl.append(tl);
+            for (var j = 0; j < vd.url.length; j++) {
+                var durl = vd.url[j];
+                var pa = { 's': durl.url, 'r': videourl[p].referer, 't': 'video/mp4' };
+                pa = $.param(pa);
+                var uri = "/live/" + durl.order + ".flv?" + pa;
+                var ur = new URL(uri, url.origin);
+                var t = xspd.createElement('track');
+                var title = xspd.createElement('title');
+                title.append(data.title + " - " + data.page[p].part + " - " + durl.order);
+                t.append(title);
+                var loc = xspd.createElement('location');
+                loc.append(ur.href);
+                t.append(loc);
+                tl.append(t);
+            }
+            var xspt = dum.serializeToString(xspd);
+            var xspb = new Blob([xspt], { 'type': 'text/xml;charset=utf-8' });
+            saveAs(xspb, data.title + " - " + data.page[p].part + ".xspf");
+        }
+        else if (typ == "m3u8") {
+            var m3u = "#EXTM3U\n#EXT-X-VERSION:3\n#EXT-X-PLAYLIST-TYPE:VOD\n";
+            for (var j = 0; j < vd.url.length; j++) {
+                var durl = vd.url[j];
+                var pa = { 's': durl.url, 'r': videourl[p].referer, 't': 'video/mp4' };
+                pa = $.param(pa);
+                var uri = "/live/" + durl.order + ".flv?" + pa;
+                var ur = new URL(uri, url.origin);
+                m3u += ("#EXTINF:" + mstos(durl.length) + "," + data.title + " - " + data.page[p].part + " - " + durl.order + "\n" + ur.href + "\n");
+            }
+            m3u += "#EXT-X-ENDLIST\n";
+            var m3ub = new Blob([m3u], { 'type': 'text/plain;charset=utf-8' });
+            saveAs(m3ub, data.title + " - " + data.page[p].part + ".m3u8");
+        }
     }
     function sel_change() {
         /**@type {HTMLInputElement}*/

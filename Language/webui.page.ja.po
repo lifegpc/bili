@@ -86,3 +86,7 @@ msgstr ""
 msgctxt "ACB"
 msgid "Copy audio link"
 msgstr ""
+
+msgctxt "SMU"
+msgid "Save as playlist file"
+msgstr ""
