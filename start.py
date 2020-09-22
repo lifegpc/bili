@@ -360,7 +360,12 @@ def main(ip={}):
         rs=search(r'__INITIAL_STATE__=([^;]+)',re.text,I)
         if rs!=None :
             rs=rs.groups()[0]
-            re=json.loads(rs)
+            try:
+                re = json.loads(rs)
+            except json.JSONDecodeError:
+                pa = HTMLParser.Myparser3()
+                pa.feed(re.text)
+                re = json.loads(pa.videodata)
             ip2=copyip(ip)
             if 'p' in ip :
                 ip2['p']=ip['p']

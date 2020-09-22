@@ -38,3 +38,18 @@ class Myparser2(HTMLParser) :
     def handle_data(self,data) :
         if self.script==1 and data[0:19]=="window.__playinfo__":
             self.videodata=data[20:]
+
+
+class Myparser3(HTMLParser):
+    script=0
+    videodata=''
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'script':
+            self.script = 1
+        else:
+            self.script = 0
+
+    def handle_data(self, data):
+        if self.script == 1 and data[0:24] == "window.__INITIAL_STATE__":
+            self.videodata = data[25:-122]
