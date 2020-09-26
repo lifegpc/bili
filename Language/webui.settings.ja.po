@@ -4,15 +4,15 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# Kum4423, 2020
 # 1 q <g1710431395@gmail.com>, 2020
+# Kum4423, 2020
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-08-24 12:07:00+0000\n"
 "PO-Revision-Date: 2020-08-24 15:02+0000\n"
-"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Last-Translator: Kum4423, 2020\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -158,4 +158,4 @@ msgstr "フォントファイルのパス（フォント形式はTTF/OTF/WOFF/WO
 
 msgctxt "LENPASS"
 msgid "Enable password verification for pages beginning with \"/live/\"."
-msgstr ""
+msgstr "\"/live/\" で始まるページのパスワード認証を有効にします。"

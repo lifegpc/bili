@@ -41,7 +41,7 @@ msgstr "公開日時 :"
 
 msgctxt "O6"
 msgid "Create time:"
-msgstr ""
+msgstr "作成時間 :"
 
 msgctxt "O7"
 msgid "Description :"

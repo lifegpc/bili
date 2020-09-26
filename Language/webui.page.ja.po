@@ -25,68 +25,68 @@ msgstr "今はこれをサポートしていません。"
 
 msgctxt "PARTNO"
 msgid "Part Number"
-msgstr ""
+msgstr "Part 番号"
 
 msgctxt "PARTCID"
 msgid "Part CID"
-msgstr ""
+msgstr "Part CID"
 
 msgctxt "PARTNAME"
 msgid "Part Name"
-msgstr ""
+msgstr "Part 名 :"
 
 msgctxt "DMME"
 msgid "Download Method"
-msgstr ""
+msgstr "ダウンロード方法"
 
 msgctxt "DMME1"
 msgid "Barrage"
-msgstr ""
+msgstr "弾幕"
 
 msgctxt "DMME2"
 msgid "All barrage"
-msgstr ""
+msgstr "全弾幕"
 
 msgctxt "DMME3"
 msgid "Video"
-msgstr ""
+msgstr "動画"
 
 msgctxt "DMME4"
 msgid "Barrage and video"
-msgstr ""
+msgstr "弾幕と動画"
 
 msgctxt "DMME5"
 msgid "All barrage and video"
-msgstr ""
+msgstr "全弾幕と動画"
 
 msgctxt "DMME6"
 msgid "Subtitles only"
-msgstr ""
+msgstr "字幕のみ"
 
 msgctxt "DMME7"
 msgid "Cover image only"
-msgstr ""
+msgstr "カバーイメージのみ"
 
 msgctxt "DMME8"
 msgid "Audio only"
-msgstr ""
+msgstr "音声のみ"
 
 msgctxt "PARTDUR"
 msgid "Part Duration"
-msgstr ""
+msgstr "パーツの長さ"
 
 msgctxt "DFE"
 msgid "Default"
-msgstr ""
+msgstr "デフォルト"
 
 msgctxt "VCB"
 msgid "Copy video link"
-msgstr ""
+msgstr "動画リンクをコピー"
 
 msgctxt "ACB"
 msgid "Copy audio link"
-msgstr ""
+msgstr "音声リンクをコピー"
 
 msgctxt "SMU"
 msgid "Save as playlist file"
-msgstr ""
+msgstr "プレイリストファイルとして保存する"
