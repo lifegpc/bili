@@ -48,7 +48,7 @@ class live:
         ra = web.ctx.env.get('HTTP_RANGE')
         if ra is not None:
             he['Range'] = ra
-        r = new_Session()
+        r = new_Session(False)
         re = r.get(unquote_plus(t), headers=he, stream=True)
         if re.ok:
             if contenttype is not None:
