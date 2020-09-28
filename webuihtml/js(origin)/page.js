@@ -318,6 +318,8 @@ window.addEventListener('load', () => {
     /**@type {HTMLTextAreaElement}*/
     var clipboardt;
     var clipboard;
+    /**@type {HTMLDivElement} 当有选项选中时页面底部的框*/
+    var toolbar;
     function createclipboard() {
         clipboardb = document.createElement('button');
         clipboardb.className = 'clipb';
@@ -430,6 +432,10 @@ window.addEventListener('load', () => {
             tr.append(createTd(null, "last"));
             tbody.append(tr);
         }
+        toolbar = document.createElement('div');
+        toolbar.className = "toolbar";
+        toolbar.style.display = "none";
+        main.append(toolbar);
         transobj.deal();
         setTimeout(mainchange, 2000);
         getnormalvideourl(0);
@@ -1059,6 +1065,12 @@ window.addEventListener('load', () => {
             all_selected.indeterminate = false;
             all_selected.disabled = true;
         }
+        if (sel_n > 0) {
+            toolbar.style.display = null;
+        }
+        else {
+            toolbar.style.display = "none";
+        }
     }
     /**@param {MouseEvent} e*/
     function allsel_click(e) {
@@ -1074,6 +1086,7 @@ window.addEventListener('load', () => {
                 for (var i = 0; i < selc.length; i++) {
                     selc[i].checked = true;
                 }
+                toolbar.style.display = null;
             }
             else {
                 inp.checked = false;
@@ -1081,6 +1094,7 @@ window.addEventListener('load', () => {
                 for (var i = 0; i < selc.length; i++) {
                     selc[i].checked = false;
                 }
+                toolbar.style.display = "none";
             }
         });
     }

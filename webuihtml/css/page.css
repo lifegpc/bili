@@ -66,3 +66,14 @@
 .videoinfo * img:hover {
     cursor: zoom-in;
 }
+
+#main .toolbar {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    height: 40px;
+    background-color: #0bf7ffee;
+    left: 0;
+    bottom: 0;
+    overflow: auto;
+}
