@@ -11,6 +11,9 @@ $def getch(s):$#nty需要增加默认设置
 $def getch2(s):
     $if not s in se and s in dfse:$ se[s]=dfse[s]
     $if s in se:checked
+$def getch3(s):
+    $if s in se and se[s]:checked
+    $elif not s in se and s in dfse and dfse[s]:checked
 $def gesel(s = None):
     $if type == s:class="select"
 $def getlannull2():
@@ -106,6 +109,9 @@ $if fontname is not None:
         <br/>
         <label class="trans" trans="webui.settings FONTPATH">字体文件路径（字体格式需要是TTF/OTF/WOFF/WOFF2之一）：</label>
         <input class="form" pattern=".+\.([wW][oO][fF]{2}|[wW][oO][fF]{2}2|[tT]{2}[Ff]|[oO][tT][Ff])" id="uifontloc"$:getse('uifontloc')>
+        <br/>
+        <input class="form nty check" type="checkbox" id="dclive"$:getch3("dclive")>
+        <label class="trans" trans="webui.settings LENPASS">对"/live/"开头的页面进行密码验证。</label>
     $if type == '/main':
         <input value="2" id="type" class="form hide">
         <label class="trans" trans="webui.settings MAINLAN">程序语言：</label>

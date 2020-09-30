@@ -44,3 +44,54 @@ msgstr "服务繁忙。"
 msgctxt "INCOUSPA"
 msgid "Incorrect user name or password."
 msgstr "不正确的用户名或密码。"
+
+msgctxt "HTTPWARN"
+msgid ""
+"Although the program has encrypted the user name and password, it is still "
+"subject to man-in-the-middle(MITM) attacks. If you use this in the public "
+"network, please enable HTTPS."
+msgstr "虽然程序已经对用户名和密码进行了加密处理，但是依旧可能遭到中间人(MITM)攻击。如果在公网中使用，请启用HTTPS。"
+
+msgctxt "QRSCAN"
+msgid "Use APP to scan QR Code to login in"
+msgstr "使用APP扫码登录"
+
+msgctxt "USEANDPA"
+msgid "Use user name and password to login in"
+msgstr "使用用户名和密码登录"
+
+msgctxt "QRCEXPR"
+msgid "The QR code has expired, click here to reload."
+msgstr "二维码已过期，单击这里重新加载。"
+
+msgctxt "USEPHONE"
+msgid "Login in with SMS"
+msgstr "使用手机短信登录"
+
+msgctxt "PHONEN"
+msgid "Phone number:"
+msgstr "电话号码："
+
+msgctxt "SENDSMS"
+msgid "Send captcha code by SMS"
+msgstr "使用短信发送验证码"
+
+msgctxt "INVALIDCPN"
+msgid "This is an invalid China phone number."
+msgstr "这不是一个有效的中国大陆手机号码。"
+
+msgctxt "MUSTCAPT"
+msgid "You must complete the captcha to continue."
+msgstr "你必须完成验证才能继续。"
+
+msgctxt "CAPERROR"
+msgid "An error occured:"
+msgstr "一个错误产生了："
+
+msgctxt "SMSSEND"
+msgid "SMS is already send."
+msgstr "手机短信已发送。"
+
+msgctxt "USEANDPAW"
+msgid "Use user name and password to login in (Web API)"
+msgstr "使用用户名和密码登录（网页API）"

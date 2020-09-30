@@ -13,20 +13,13 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import gopt, loadset, web, logincheck, gettemplate, pa
-import sys
+from . import extractor
+from typing import List
+from .normal import normal
 
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
+extractorl = [value for key, value in globals().items() if type(value) == type(
+    extractor) and issubclass(value, extractor) and key != "extractor"]
 
-class biliLogin:
-    def GET(self, t):
-        h = web.cookies().get('section')
-        if logincheck(h):
-            return ''
-        bilo = gettemplate('bililogin')
-        return bilo(ip, se, pa.https)
+
+def getextractorlist() -> List[extractor]:
+    return extractorl

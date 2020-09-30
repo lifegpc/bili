@@ -49,7 +49,10 @@ urls = (
     r"^/favicon.ico", "favicon",
     r"^/about", "about",
     r"^/bililogin(\.html)?", "biliLogin",
-    r"^/api/(.+)", "api"
+    r"^/api/(.+)", "api",
+    r"^/page/(.+)$", "page",
+    r"^/pic/(.+)$", "pic",
+    r"^/live/(.+)$", "live"
 )
 
 

@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from .. import web, apilogincheck
 from . import getapilist, InvalidInputEroor
+from .session import NotLoginError
 from json import dumps
 import traceback
 
@@ -30,9 +31,11 @@ class api:
         for i in apil:
             try:
                 e = i(t)
-                return dumps(e._handle())
+                return dumps(e._handle(), ensure_ascii=False)
             except InvalidInputEroor:
                 pass
+            except NotLoginError:
+                return {'code': -501}
             except Exception:
-                return dumps({'code': -500, 'e': traceback.format_exc()})
+                return dumps({'code': -500, 'e': traceback.format_exc()}, ensure_ascii=False)
         return dumps({'code': -404})

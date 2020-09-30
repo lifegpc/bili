@@ -36,11 +36,12 @@ def Myparser(s) :
     data['pic']=obj['videoData']['pic']
     page=[]
     for i in obj['videoData']['pages'] :
-    	t={}
-    	t['cid']=i['cid']
-    	t['page']=i['page']
-    	t['part']=i['part']
-    	page.append(t)
+        t={}
+        t['cid']=i['cid']
+        t['page']=i['page']
+        t['part']=i['part']
+        t['duration'] = i['duration']
+        page.append(t)
     data['page']=page
     return data
 def Myparser2(s) :

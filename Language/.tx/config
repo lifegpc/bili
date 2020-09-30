@@ -127,6 +127,13 @@ source_file = webui.index.pot
 source_lang = en
 type = PO
 
+[bili.webuipagepot]
+file_filter = webui.page.<lang>.po
+minimum_perc = 0
+source_file = webui.page.pot
+source_lang = en
+type = PO
+
 [bili.webuisettingspot]
 file_filter = webui.settings.<lang>.po
 minimum_perc = 0

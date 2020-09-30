@@ -10,6 +10,7 @@
     + [sections.json](#sectionsjson)
     + [tv.bilibili.player.xml](#tvbilibiliplayerxml)
   * [开始使用](#开始使用)
+    + [prepare.py](#preparepy)
     + [过滤弹幕](#过滤弹幕)
   * [翻译](#翻译)
   * [其他](#其他-1)
@@ -30,6 +31,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 [rsa](https://pypi.org/project/rsa/)  
 [polib](https://pypi.org/project/polib/)  
 [web.py](https://webpy.org/)  
+[regex](https://pypi.org/project/regex/)  
 自己写的file库   
 如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
 如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
@@ -39,7 +41,11 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 [jQuery](https://jquery.com/)  
 [js-sha256](https://github.com/emn178/js-sha256)  
 [jsbn](http://www-cs-students.stanford.edu/~tjw/jsbn/)（注：已被合并到```webuihtml/js(origin)/rsa.js```）  
-[js-base64](https://github.com/dankogai/js-base64)
+[js-base64](https://github.com/dankogai/js-base64)  
+[QRCode.js](https://github.com/davidshimjs/qrcodejs)  
+[Viewer.js](https://github.com/fengyuanchen/viewerjs)  
+[clipboard.js](https://github.com/zenorocha/clipboard.js)  
+[FileSaver.js](https://github.com/eligrey/FileSaver.js)
 ## 配置文件
 ### cookies.json
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用以及下载720P及以上视频使用）   
@@ -60,6 +66,10 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 
 ## 开始使用
 直接运行start.py即可
+
+### prepare.py
+运行后可以取得运行WEB用户界面必须的一些文件。  
+运行时确保可以直接访问```java```。
 
 ### WEB用户界面
 运行**startwebui.py**后，可以在浏览器访问。  

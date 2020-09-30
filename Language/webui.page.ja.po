@@ -1,0 +1,92 @@
+# bili - webui/page Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# Kum4423, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-09-11 06:58:00+0000\n"
+"PO-Revision-Date: 2020-09-11 13:39+0000\n"
+"Last-Translator: Kum4423, 2020\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "NOTEXT"
+msgid "Now is not support this."
+msgstr "今はこれをサポートしていません。"
+
+msgctxt "PARTNO"
+msgid "Part Number"
+msgstr "Part 番号"
+
+msgctxt "PARTCID"
+msgid "Part CID"
+msgstr "Part CID"
+
+msgctxt "PARTNAME"
+msgid "Part Name"
+msgstr "Part 名 :"
+
+msgctxt "DMME"
+msgid "Download Method"
+msgstr "ダウンロード方法"
+
+msgctxt "DMME1"
+msgid "Barrage"
+msgstr "弾幕"
+
+msgctxt "DMME2"
+msgid "All barrage"
+msgstr "全弾幕"
+
+msgctxt "DMME3"
+msgid "Video"
+msgstr "動画"
+
+msgctxt "DMME4"
+msgid "Barrage and video"
+msgstr "弾幕と動画"
+
+msgctxt "DMME5"
+msgid "All barrage and video"
+msgstr "全弾幕と動画"
+
+msgctxt "DMME6"
+msgid "Subtitles only"
+msgstr "字幕のみ"
+
+msgctxt "DMME7"
+msgid "Cover image only"
+msgstr "カバーイメージのみ"
+
+msgctxt "DMME8"
+msgid "Audio only"
+msgstr "音声のみ"
+
+msgctxt "PARTDUR"
+msgid "Part Duration"
+msgstr "パーツの長さ"
+
+msgctxt "DFE"
+msgid "Default"
+msgstr "デフォルト"
+
+msgctxt "VCB"
+msgid "Copy video link"
+msgstr "動画リンクをコピー"
+
+msgctxt "ACB"
+msgid "Copy audio link"
+msgstr "音声リンクをコピー"
+
+msgctxt "SMU"
+msgid "Save as playlist file"
+msgstr "プレイリストファイルとして保存する"

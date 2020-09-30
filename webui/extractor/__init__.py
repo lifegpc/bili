@@ -13,20 +13,3 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import gopt, loadset, web, logincheck, gettemplate, pa
-import sys
-
-ip = {}
-if len(sys.argv) > 1:
-    ip = gopt(sys.argv[1:])
-se = loadset()
-if se == -1 or se == -2:
-    se = {}
-
-class biliLogin:
-    def GET(self, t):
-        h = web.cookies().get('section')
-        if logincheck(h):
-            return ''
-        bilo = gettemplate('bililogin')
-        return bilo(ip, se, pa.https)

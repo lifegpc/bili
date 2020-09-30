@@ -258,3 +258,7 @@ msgstr ""
 msgctxt "COM_CONV"
 msgid "Convert completed."
 msgstr ""
+
+msgctxt "真彩 HDR"
+msgid "HDR"
+msgstr ""

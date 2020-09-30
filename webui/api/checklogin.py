@@ -18,7 +18,8 @@ from os.path import exists
 from JSONParser import loadcookie
 
 
-def logincheck() -> bool:
+def logincheck(needdata: bool = False) -> bool:
+    "检查登录，needdata为True时同时返回数据"
     if not exists('cookies.json'):
         return False
     r = new_Session(False)
@@ -29,8 +30,14 @@ def logincheck() -> bool:
     re.encoding = 'utf8'
     obj = re.json()
     if obj['code'] == 0 and 'data' in obj and obj['data']['isLogin']:
-        return True
-    return False
+        if not needdata:
+            return True
+        else:
+            return True, obj['data']
+    if not needdata:
+        return False
+    else:
+        return False, None
 
 
 class checklogin(apic):

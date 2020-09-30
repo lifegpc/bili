@@ -13,7 +13,10 @@ GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
-/**@type {Object} 存放翻译内容*/
+/**@typedef {Object} TransObj
+ * @property {()=>void} deal 处理新的元素
+*/
+/**@type {TransObj} 存放翻译内容*/
 var transobj = Object();
 /**@param {string} name
  * @param {HTMLCollectionOf<HTMLElement>} list
@@ -57,6 +60,9 @@ transobj.deal = () => {
         var a = o.getAttribute('trans');
         if (a != null) {
             var l = a.split(' ');
+            if (l.length > 2) {
+                l = [l[0], l.slice(1).join(" ")];
+            }
             if (transobj.hasOwnProperty(l[0])) {
                 /**@type {Object} 翻译词典*/
                 var obj2 = transobj[l[0]];
@@ -94,6 +100,7 @@ transobj.deal = () => {
                 else {
                     console.warn(o);
                     console.warn('This object do not have translated text.')
+                    setTimeout(() => { dealwith(list[i + 1], i + 1); }, 10);
                 }
             }
             else {
@@ -103,6 +110,7 @@ transobj.deal = () => {
         else {
             console.warn(o);
             console.warn('This object do not have trans attribute.')
+            setTimeout(() => { dealwith(list[i + 1], i + 1); }, 10);
         }
     }
     if (le > 0) {

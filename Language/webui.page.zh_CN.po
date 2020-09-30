@@ -1,0 +1,92 @@
+# bili - webui/page Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# 1 q <g1710431395@gmail.com>, 2020
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-09-11 06:58:00+0000\n"
+"PO-Revision-Date: 2020-09-11 13:39+0000\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_CN\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "NOTEXT"
+msgid "Now is not support this."
+msgstr "现在不支持这个。"
+
+msgctxt "PARTNO"
+msgid "Part Number"
+msgstr "分P序号"
+
+msgctxt "PARTCID"
+msgid "Part CID"
+msgstr "分P CID"
+
+msgctxt "PARTNAME"
+msgid "Part Name"
+msgstr "分P名"
+
+msgctxt "DMME"
+msgid "Download Method"
+msgstr "下载方式"
+
+msgctxt "DMME1"
+msgid "Barrage"
+msgstr "弹幕"
+
+msgctxt "DMME2"
+msgid "All barrage"
+msgstr "全弹幕"
+
+msgctxt "DMME3"
+msgid "Video"
+msgstr "视频"
+
+msgctxt "DMME4"
+msgid "Barrage and video"
+msgstr "弹幕和视频"
+
+msgctxt "DMME5"
+msgid "All barrage and video"
+msgstr "全弹幕和视频"
+
+msgctxt "DMME6"
+msgid "Subtitles only"
+msgstr "仅字幕"
+
+msgctxt "DMME7"
+msgid "Cover image only"
+msgstr "仅封面"
+
+msgctxt "DMME8"
+msgid "Audio only"
+msgstr "仅音频"
+
+msgctxt "PARTDUR"
+msgid "Part Duration"
+msgstr "分P时长"
+
+msgctxt "DFE"
+msgid "Default"
+msgstr "默认"
+
+msgctxt "VCB"
+msgid "Copy video link"
+msgstr "复制视频链接"
+
+msgctxt "ACB"
+msgid "Copy audio link"
+msgstr "复制音频链接"
+
+msgctxt "SMU"
+msgid "Save as playlist file"
+msgstr "保存为播放列表文件"

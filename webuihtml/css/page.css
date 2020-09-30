@@ -1,0 +1,79 @@
+.e500 {
+    text-align: center;
+    font-size: 20px;
+}
+
+.e404, .e1 {
+    text-align: center;
+    font-size: 30px;
+}
+
+#main {
+    position: absolute;
+    min-width: 100%;
+}
+
+#main .videoinfo {
+    margin-top: 10px;
+    border: 1px dashed;
+    min-width: 90%;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+#main .videoinfo * a {
+    color: #0366d6;
+    text-decoration: none;
+}
+
+#main .videoinfo * a:hover {
+    color: pink;
+}
+
+#main .videoinfo h1 {
+    text-align: center;
+}
+
+#main * .flex {
+    display: flex;
+}
+
+#main * .flex div {
+    padding-right: 10px;
+    min-width: 33%;
+}
+
+#main .pagelist {
+    border: 1px dashed;
+    min-width: 100%;
+    margin-top: 10px;
+}
+
+.pagelist * td {
+    border-right: 1px dashed;
+    border-bottom: 1px dashed;
+    white-space: nowrap;
+}
+
+.pagelist * td.last {
+    border-right: none;
+}
+
+.pagelist * tr.last td {
+    border-bottom: none;
+}
+
+.videoinfo * img:hover {
+    cursor: zoom-in;
+}
+
+#main .toolbar {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
+    height: 40px;
+    background-color: #0bf7ffee;
+    left: 0;
+    bottom: 0;
+    overflow: auto;
+}

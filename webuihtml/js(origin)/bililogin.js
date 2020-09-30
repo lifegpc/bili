@@ -75,6 +75,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             })
         }
     })
+    /**@typedef {Object} RSAKey
+     * @property {(pubkeyhex:string,ehex:string)=>void} setPublic 设置公钥
+     * @property {(con:string)=>string} encrypt 加密内容，返回为hex
+    */
+    /**@type {RSAKey}*/
     var pubkey;
     var submittype = 0;
     /**@type {HTMLImageElement}*/
@@ -131,6 +136,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
         }
     }
     function submit() {
+        if (submittype == 2) {
+            loginwithSMS();
+            return;
+        }
+        else if (submittype == 3) {
+            loginwithpassweb();
+            return;
+        }
         $.getJSON('/api/getpubkey', (e, s) => {
             if (s == "success") {
                 if (e.code == 0) {
@@ -166,6 +179,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             }
         })
     }
+    /**重新获得PubKey
+     * @param {callback} f
+     */
+    function regetpubkey(f) {
+        $.getJSON('/api/rsa', (e, s) => {
+            if (s == "success") {
+                if (e.code == 0) {
+                    var e2 = bytesToHex(Base64.toUint8Array(e.e));
+                    var k = bytesToHex(Base64.toUint8Array(e.k));
+                    pubkey = new RSAKey();
+                    pubkey.setPublic(k, e2);
+                    f();
+                }
+            }
+        })
+    }
     function dealwithuserpass(e) {
         console.log(e);
         if (e.code == -2) {//解密失败，尝试获取新的公钥再次重试
@@ -173,17 +202,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
             /**@type {HTMLInputElement}*/
             var sub = document.getElementById('submit');
             sub.disabled = true;
-            $.getJSON('/api/rsa', (e, s) => {
-                if (s == "success") {
-                    if (e.code == 0) {
-                        var e2 = bytesToHex(Base64.toUint8Array(e.e));
-                        var k = bytesToHex(Base64.toUint8Array(e.k));
-                        pubkey = new RSAKey();
-                        pubkey.setPublic(k, e2);
-                        sub.disabled = false;
-                        sub.click();//重新点击
-                    }
-                }
+            regetpubkey(() => {
+                sub.disabled = false;
+                sub.click();//重新点击
             })
         }
         else if (e.code == -3) {//需要验证码
@@ -208,6 +229,467 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
         else {
             console.error(e);
         }
+    }
+    /**@type {HTMLCollectionOf<HTMLLabelElement>}*/
+    var switc = document.getElementsByClassName('switch');
+    if (switc.length == 0) {
+        window.addEventListener('load', () => {
+            switc = document.getElementsByClassName('switch');
+            switc_thendo();
+        })
+    }
+    else switc_thendo();
+    function switc_thendo() {
+        for (var i = 0; i < switc.length; i++) {
+            var sw = switc[i];
+            sw.addEventListener('click', switc_click);
+        }
+    }
+    /**@param {MouseEvent} e*/
+    function switc_click(e) {
+        /**@type {HTMLLabelElement}*/
+        var src = this
+        if (src.hasAttribute('switch')) {
+            var sw = src.getAttribute('switch');
+            try {
+                sw = sw - 1 + 1;
+            } catch (error) {
+                console.warn(error)
+                return;
+            }
+            submittype = sw;
+            src.parentElement.style.display = "none";
+            if (src.hasAttribute('switch2')) {
+                var targetid = src.getAttribute('switch2');
+                var target = document.getElementById(targetid);
+                if (target == null) {
+                    console.warn(src);
+                    console.warn('This target id have wrong.')
+                    return;
+                }
+                target.style.display = null;
+                /**@type {HTMLInputElement}*/
+                var sub = document.getElementById('submit');
+                sub.disabled = false;
+                if (targetid == "qrc") {
+                    sub.disabled = true;
+                    makeqrcode();
+                }
+                else if (targetid == "phocode") {
+                    init_smslogin();
+                    sub.disabled = true;
+                }
+            }
+            else {
+                console.warn(src);
+                console.warn('This object do not have switch2 attribute.');
+                return;
+            }
+            for (var i = 0; i < switc.length; i++) {
+                var te = switc[i];
+                if (te != src) {
+                    te.parentElement.style.display = null;
+                    if (!te.hasAttribute('switch2')) {
+                        console.warn(te);
+                        console.warn('This object do not have switch2 attribute.');
+                        return;
+                    }
+                    var targetid = te.getAttribute('switch2');
+                    var target = document.getElementById(targetid);
+                    if (target == null) {
+                        console.warn(te);
+                        console.warn('This target id have wrong.')
+                        return;
+                    }
+                    target.style.display = "none";
+                }
+            }
+        }
+        else {
+            console.warn(src)
+            console.warn('This object do not have switch attribute.')
+        }
+    }
+    var qrcode = null;
+    /**@type {HTMLDivElement}*/
+    var qrdiv = null;
+    /**生成QRCODE
+     * @param {string} c
+     * @param {(e:string)=>void} f 回调函数
+     */
+    function getqrcode(c, f) {
+        if (qrcode == null) {
+            qrdiv = document.createElement('div');
+            qrcode = new QRCode(qrdiv, { text: c, width: 140, height: 140, colorcolorDark: "#000000", colorLight: "#ffffff", correctLevel: QRCode.CorrectLevel.H })
+        }
+        else qrcode.makeCode(c);
+        function getcode() {
+            if (qrdiv.children[1].src == "") {
+                setTimeout(getcode, 100);
+            }
+            else {
+                var arr = Base64.toUint8Array(qrdiv.children[1].src.split(',')[1]);
+                f(URL.createObjectURL(new Blob([arr], { "type": "image/png" })));
+            }
+        }
+        getcode();
+    }
+    /**@type {number} 存储检查是否登录成功的定时器句柄*/
+    var qrcode_loop = null;
+    /**@type {string} QRCode URL*/
+    var qrcode_url = null;
+    /**@type {string} QRCode 生成时间*/
+    var qrcode_ts = null;
+    /**@type {string} QRCode oauthKey*/
+    var qrcode_oauthKey = null;
+    function makeqrcode() {
+        if (qrcode_loop != null) {
+            clearInterval(qrcode_loop);
+            qrcode_loop = null;
+        }
+        $.getJSON('/api/qrgetloginurl', (e, s) => {
+            if (s == "success") {
+                if (e.code == 0) {
+                    var result = e.result;
+                    if (result.code == 0 && result.status) {
+                        qrcode_ts = result.ts;
+                        qrcode_url = result.data.url;
+                        qrcode_oauthKey = result.data.oauthKey;
+                        /**@type {HTMLImageElement}*/
+                        var qrc = document.getElementById('qrcimg');
+                        /**@type {HTMLLabelElement}*/
+                        var qrcl = document.getElementById('qrcl');
+                        getqrcode(qrcode_url, (q_img) => {
+                            qrc.src = q_img;
+                            qrcl.style.display = "none";
+                            if (!qrcl.hasAttribute('add')) {
+                                qrcl.addEventListener('click', makeqrcode);
+                                qrcl.setAttribute('add', '1');
+                            }
+                            checkislogin();
+                        });
+                    }
+                }
+                else {
+                    console.error(e)
+                }
+            }
+        })
+    }
+    /**判断是否登录成功 */
+    function checkislogin() {
+        /**当前时间*/
+        var now = Math.round(new Date().getTime() / 1000);
+        if (now < qrcode_ts + 180) {
+            $.getJSON('/api/qrgetlogininfo', { 'key': qrcode_oauthKey }, (e, s) => {
+                if (e.code == 0) {
+                    if (e.status) {//登录成功
+                        alert(transobj['bili.biliLogin']['OUTPUT1']);
+                        driect();
+                    }
+                    else qrcode_loop = setTimeout(checkislogin, 3000);
+                }
+                else {
+                    console.error(e);
+                }
+            })
+        }
+        else {
+            /**@type {HTMLLabelElement}*/
+            var qrcl = document.getElementById('qrcl');
+            qrcl.style.display = null;
+            qrcode_loop = null;
+        }
+    }
+    /**@typedef {()=>void} callback
+     * @typedef {(error:{error_code:string,msg:string})=>void} GeetestErrorCallback
+     * @typedef {{"success":number,"gt":string,"challenge":string,"key":string}} CapcomInfo
+     * @typedef {Object} GeetestObj 
+     * @property {(position:(string|HTMLElement))=>void} appendTo 用于将验证按钮插到宿主页面，使其显示在页面上。接受的参数可以是 id 选择器（例如 #captcha-box），或者 DOM 元素对象。
+     * @property {(position:(string|HTMLElement))=>void} bindForm 接受的参数类型与 appendTo 方法一致。该该接口的作用是插入验证结果的三个 input 标签到指定的表单中。
+     * @property {()=>{geetest_challenge:string,geetest_validate:string,geetest_seccode:string}} getValidate 获取用户进行成功验证(onSuccess)所得到的结果，该结果用于进行服务端 SDK 进行二次验证。
+     * @property {()=>void} reset 让验证回到初始状态。一般是在用户后台发现验证成功但其他信息不对的情况（比如用户名密码错误），或者验证出现错误的情况。因此，该接口只能在成功或者出错的时候调用才有效。
+     * @property {()=>void} verify 当product为bind类型时，可以调用该接口进行验证。这种形式的好处是，允许开发者先对用户所填写的数据进行检查，没有问题之后在调用验证接口。
+     * @property {(callback:callback)=>void} onReady 监听验证按钮的 DOM 生成完毕事件。
+     * @property {(callback:callback)=>void} onSuccess 监听验证成功事件。
+     * @property {(callback:GeetestErrorCallback)=>void} onError 监听验证出错事件。刷新过多、静态资源加载失败、网络不给力等验证码能捕获到的错误，都会触发onError回调。当出错事件触发时，可以提示用户刷新页面重试。
+     * @property {(callback:callback)=>void} onClose 对于product为bind形式的验证。当用户关闭弹出来的验证时，会触发该回调。
+     * @property {()=>void} destroy 销毁验证实例，验证相关UI以及验证注册的事件监听器都会被移除。
+    */
+    /**@type {GeetestObj}*/
+    var captchaObj = null;
+    /**@type {string} 手机号码*/
+    var PHONE_NUM;
+    /**@type {string} 国家ID*/
+    var CONID;
+    function init_smslogin() {
+        var phoarea = document.getElementById('phoarea');
+        if (!phoarea.hasAttribute('geted')) {
+            $.getJSON('/api/getcountrylist', (e, s) => {
+                if (s == "success") {
+                    if (e.code == 0) {
+                        /**@typedef {{"id":number,"cname":string,"country_id":string}} country*/
+                        /**@type {Array<country>} */
+                        var code_list = e.result;
+                        for (var i = 0; i < code_list.length; i++) {
+                            var country = code_list[i];
+                            var op = document.createElement('option');
+                            op.value = country.id;
+                            op.innerText = country.cname;
+                            op.setAttribute('country_id', country.country_id);
+                            phoarea.append(op);
+                        }
+                        phoarea.setAttribute('geted', 1);
+                    }
+                    else {
+                        console.error(e)
+                    }
+                }
+            })
+        }
+        var sendSMS = document.getElementById('sendSMS');
+        if (!sendSMS.hasAttribute('adde')) {
+            sendSMS.addEventListener('click', init_sendSMS);
+            sendSMS.setAttribute('adde', 1);
+        }
+    }
+    function init_sendSMS() {
+        /**@type {HTMLSelectElement}*/
+        var phoarea = document.getElementById('phoarea');
+        /**@type {HTMLInputElement}*/
+        var phonum = document.getElementById('phonum');
+        if (phonum.validationMessage != "") {
+            alert(phonum.validationMessage);
+            turnred(phonum);
+            return;
+        }
+        /**区域码*/
+        var area = phoarea.value;
+        /**电话号码*/
+        var phon = phonum.value;
+        if (area == "1" && (phon[0] != "1" || phon.length != 11)) {
+            alert(transobj['webui.bililogin']['INVALIDCPN']);
+            turnred(phonum);
+            turnred(phoarea);
+            return;
+        }
+        $.getJSON('/api/getcaptchacombine', (e, s) => {
+            if (s == "success") {
+                var rtype = e.data.type;
+                if (rtype == 1) {
+                    /**@type {CapcomInfo}*/
+                    var re = e.data.result;
+                    initGeetest({ gt: re.gt, challenge: re.challenge, new_captcha: true, offline: !re.success, next_width: "270px", product: "bind" }, function (obj) {
+                        captchaObj = obj;
+                        captchaObj.onClose(() => {
+                            alert(transobj['webui.bililogin']['MUSTCAPT']);
+                            captchaObj.destroy();
+                        })
+                        captchaObj.onError((error) => {
+                            var str = transobj['webui.bililogin']['CAPERROR'] + '\n' + error.error_code + ":" + error.msg;
+                            alert(str);
+                            captchaObj.destroy();
+                        })
+                        captchaObj.onSuccess(() => {
+                            var capres = captchaObj.getValidate();
+                            var ephon = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(phon))));//加密电话号码
+                            var par = { cid: area, tel: ephon, key: re.key, captchaType: 6, type: 21, challenge: capres.geetest_challenge, validate: capres.geetest_validate, seccode: capres.geetest_seccode }
+                            function sendlogin_sms() {
+                                $.getJSON('/api/sendloginsms', par, (e, s) => {
+                                    if (s != "success") return;
+                                    if (e.code == -1) {//加密解密错误
+                                        console.warn(e.e);
+                                        /**@type {HTMLInputElement}*/
+                                        var sendSMS = document.getElementById('sendSMS');
+                                        sendSMS.disabled = true;
+                                        regetpubkey(() => {
+                                            ephon = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(phon))));
+                                            par['tel'] = ephon;
+                                            sendSMS.disabled = false;
+                                            sendlogin_sms();
+                                        })
+                                    }
+                                    else if (e.code == 0) {
+                                        PHONE_NUM = phon;
+                                        CONID = area;
+                                        /**@type {HTMLInputElement}*/
+                                        var sub = document.getElementById('submit');
+                                        sub.disabled = false;
+                                        alert(transobj['webui.bililogin']['SMSSEND'])
+                                    }
+                                    else if (e.code == -2) {
+                                        captchaObj.destroy();
+                                        console.warn(e)
+                                        var errmsg = transobj['webui.bililogin']['CAPERROR'] + '\n' + e.result.code + ':' + e.result.message;
+                                        alert(errmsg);
+                                    }
+                                    else {
+                                        console.error(e);
+                                        captchaObj.destroy();
+                                    }
+                                })
+                            }
+                            sendlogin_sms();
+                        })
+                        captchaObj.onReady(() => {
+                            captchaObj.verify();
+                        })
+                    })
+                }
+                else {
+                    console.error(e.data);
+                }
+            }
+        })
+    }
+    function loginwithSMS() {
+        /**@type {HTMLInputElement}*/
+        var phocapt = document.getElementById('phocapt');
+        if (phocapt.validationMessage != "") {
+            alert(phocapt.validationMessage);
+            turnred(phocapt);
+            return;
+        }
+        var captcode = phocapt.value;
+        var capres = captchaObj.getValidate();
+        if (!capres) {
+            alert(transobj['webui.bililogin']['MUSTCAPT']);
+            return;
+        }
+        var ephon = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(PHONE_NUM))));//加密电话号码
+        var par = { cid: CONID, tel: ephon, smsCode: captcode, source: "main-mini", keep: true, degrade: true, gourl: "https://passport.bilibili.com/ajax/miniLogin/redirect" };
+        function send_login_with_SMS() {
+            $.getJSON('/api/loginwithsms', par, (e, s) => {
+                if (s != "success") return;
+                if (e.code == -1) {
+                    console.warn(e.e);
+                    /**@type {HTMLInputElement}*/
+                    var sub = document.getElementById('submit');
+                    sub.disabled = true;
+                    regetpubkey(() => {
+                        ephon = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(phon))));
+                        par['tel'] = ephon;
+                        sub.disabled = false;
+                        send_login_with_SMS();
+                    })
+                }
+                else if (e.code == -2) {
+                    captchaObj.destroy();
+                    console.warn(e)
+                    var errmsg = transobj['webui.bililogin']['CAPERROR'] + '\n' + e.result.code + ':' + e.result.message;
+                    alert(errmsg);
+                }
+                else if (e.code == 0) {
+                    alert(transobj['bili.biliLogin']['OUTPUT1']);
+                    driect();
+                }
+                else {
+                    console.error(e);
+                    captchaObj.destroy();
+                }
+            })
+        }
+        send_login_with_SMS();
+    }
+    function loginwithpassweb() {
+        /**@type {HTMLInputElement}*/
+        var userw = document.getElementById('usernamew');
+        /**@type {HTMLInputElement}*/
+        var passw = document.getElementById('passwordw');
+        if (userw.validationMessage != "") {
+            alert(userw.validationMessage);
+            return;
+        }
+        if (passw.validationMessage != "") {
+            alert(passw.validationMessage);
+            return;
+        }
+        /**用户名*/
+        var un = userw.value;
+        /**密码*/
+        var pa = passw.value;
+        $.getJSON('/api/getpubkeyweb', (e, s) => {
+            if (s != "success") return;
+            if (e.code != 0) {
+                console.error(e);
+                return;
+            }
+            $.getJSON('/api/getcaptchacombine', (e, s) => {
+                if (s != "success") return;
+                if (e.code == -1) {
+                    console.error(e);
+                    var errmsg = transobj['webui.bililogin']['CAPERROR'] + '\n' + e.result.code + ':' + e.result.message;
+                    alert(errmsg)
+                    return;
+                }
+                else if (e.code != 0) {
+                    console.error(e.e);
+                    return;
+                }
+                if (e.data.type != 1) {
+                    console.error(e.data);
+                    return;
+                }
+                /**@type {CapcomInfo}*/
+                var re = e.data.result;
+                initGeetest({ gt: re.gt, challenge: re.challenge, new_captcha: true, offline: !re.success, next_width: "270px", product: "bind" }, function (obj) {
+                    captchaObj = obj;
+                    captchaObj.onClose(() => {
+                        alert(transobj['webui.bililogin']['MUSTCAPT']);
+                        captchaObj.destroy();
+                    })
+                    captchaObj.onError((error) => {
+                        var str = transobj['webui.bililogin']['CAPERROR'] + '\n' + error.error_code + ":" + error.msg;
+                        alert(str);
+                        captchaObj.destroy();
+                    })
+                    captchaObj.onSuccess(() => {
+                        var capres = captchaObj.getValidate();
+                        var eun = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(un))));//加密用户名
+                        var epa = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(pa))));//加密密码
+                        var par = { username: eun, password: epa, keep: true, key: re.key, captchaType: 6, goUrl: "https://passport.bilibili.com/ajax/miniLogin/minilogin", challenge: capres.geetest_challenge, validate: capres.geetest_validate, seccode: capres.geetest_seccode }
+                        function sendlogin() {
+                            $.getJSON('/api/loginwithuserpassweb', par, (e, s) => {
+                                if (s != "success") return;
+                                if (e.code == -1) {
+                                    console.warn(e.e);
+                                    /**@type {HTMLInputElement}*/
+                                    var sub = document.getElementById('submit');
+                                    sub.disabled = true;
+                                    regetpubkey(() => {
+                                        epa = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(pa))));
+                                        eun = Base64.fromUint8Array(new Uint8Array(hexToBytes(pubkey.encrypt(un))));
+                                        par['password'] = epa;
+                                        par['username'] = eun;
+                                        sub.disabled = false;
+                                        sendlogin();
+                                    })
+                                    return;
+                                }
+                                if (e.code == -2) {
+                                    captchaObj.destroy();
+                                    console.warn(e)
+                                    var errmsg = transobj['webui.bililogin']['CAPERROR'] + '\n' + e.result.code + ':' + e.result.message;
+                                    alert(errmsg);
+                                    return;
+                                }
+                                if (e.code != 0) {
+                                    console.error(e);
+                                    captchaObj.destroy();
+                                    return;
+                                }
+                                alert(transobj['bili.biliLogin']['OUTPUT1']);
+                                driect();
+                            })
+                        }
+                        sendlogin();
+                    })
+                    captchaObj.onReady(() => {
+                        captchaObj.verify();
+                    })
+                })
+            })
+        })
     }
     /**@type {HTMLStyleElement}*/
     var sty = null;

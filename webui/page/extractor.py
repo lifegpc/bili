@@ -13,18 +13,16 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+from . import InvalidInputEroor, new_Session
 from regex import search, I
+from requests import Session
 
 
-class InvalidInputEroor(Exception):
-    def __init__(self):
-        Exception.__init__(self, 'Input is invalid.')
-
-
-class apic:
+class extractor:
     _VALID_URI = r''
     _groupdict = {}
     _inp = ""
+    _r: Session = None
 
     def __init__(self, inp: str):
         "对uri进行处理"
@@ -33,7 +31,19 @@ class apic:
             raise InvalidInputEroor()
         self._inp = inp
         self._groupdict = re.groupdict()
+        self._r = new_Session()
 
     def _handle(self):
         "具体处理"
-        return {'code': 0}
+        return {'code': 0, 'type': 'unknown'}
+
+    def _addcookies(self, vq: int = 125):
+        "增加具体的cookies,vq为视频画质"
+        self._r.cookies.set('CURRENT_QUALITY', str(
+            vq), domain='.bilibili.com', path='/')
+        self._r.cookies.set('CURRENT_FNVAL', '80',
+                            domain='.bilibili.com', path='/')
+        self._r.cookies.set('laboratory', '1-1',
+                            domain='.bilibili.com', path='/')
+        self._r.cookies.set('stardustvideo', '1',
+                            domain='.bilibili.com', path='/')
