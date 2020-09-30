@@ -277,3 +277,7 @@ msgstr "使用ffmpeg将m4s文件转换为m4a文件。"
 msgctxt "COM_CONV"
 msgid "Convert completed."
 msgstr "转换完成！"
+
+msgctxt "真彩 HDR"
+msgid "HDR"
+msgstr "真彩 HDR"

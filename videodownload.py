@@ -308,8 +308,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     if i>1:
         url="%s?p=%s"%(url,i)
     r2.headers.update({'referer':url})
-    r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
-    r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
     re=r2.get(url)
@@ -319,7 +319,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     if rs!=None :
         re=json.loads(rs.groups()[0])
     elif data['videos']>=1 :
-        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16&session="%(data['page'][i-1]['cid'],120,data['bvid'])
+        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=80&session="%(data['page'][i-1]['cid'],125,data['bvid'])
         re=r2.get(uri)
         re.encoding="utf8"
         re=re.json()
@@ -358,7 +358,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         else :
                             return -2
                     else :
-                        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=16"%(data['page'][i-1]['cid'],l,data['bvid'])
+                        uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=80"%(data['page'][i-1]['cid'],l,data['bvid'])
                         re=r2.get(uri)
                         re.encoding='utf8'
                         re=re.json()
@@ -380,7 +380,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 durz[l]=size
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(size)}({size}B,{file.cml(size,re['data']['timelength'])})")#大小：
-            r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+            r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
             if F :
                 return 0
             bs=True
@@ -736,7 +736,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         break
                     else :
                         return -2
-        r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+        r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
         nau=False #不存在音频
         if not 'audio' in re['data']['dash'] or re['data']['dash']['audio']==None :
             nau=True
@@ -1180,8 +1180,8 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
     if i>1:
         url="%s?p=%s"%(url,i)
     r2.headers.update({'referer':url})
-    r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
-    r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
     rr=r2.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][i-1]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
@@ -1367,7 +1367,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
     if i>1:
         url = f"{url}?p={i}"
     r2.headers.update({'referer': url})
-    r2.cookies.set('CURRENT_QUALITY', '120', domain='.bilibili.com', path='/')
+    r2.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
     r2.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
     r2.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
     r2.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
@@ -1377,7 +1377,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
     if rs is not None:
         re = json.loads(rs.groups()[0])
     elif data['videos'] >= 1:
-        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i - 1]['cid']}&qn=120&otype=json&bvid={data['bvid']}&fnver=0&fnval=16"
+        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i - 1]['cid']}&qn=125&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
         re = r2.get(uri)
         re.encoding = "utf8"
         re = re.json()
@@ -1660,8 +1660,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         print(lan['ERROR2'])#读取cookies.json出现错误
         return -1
     r2.headers.update({'referer':url2})
-    r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
-    r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
     if not che :
@@ -1681,7 +1681,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         else :
             return -2
     else :
-        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=120&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=16&session=")
+        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
         re.encoding='utf8'
         re=re.json()
     if 'data' in re and 'dash' in re['data']:
@@ -1717,7 +1717,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         else :
                             return -2
                     else :
-                        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=16&session=")
+                        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
                         re.encoding='utf8'
                         re=re.json()
                     if "data" in re and "dash" in re['data'] :
@@ -1732,7 +1732,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     else :
                         return -2
         if not che:
-            r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+            r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
         for j in re['data']['dash']['audio']:
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
@@ -2094,7 +2094,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         else :
                             return -2
                     else :
-                        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=16&session=")
+                        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
                         re.encoding='utf8'
                         re=re.json()
                     durl[re["data"]['quality']]=re['data']['durl']
@@ -2112,7 +2112,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 durz[l]=size
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(size)}({size}B,{file.cml(size,re['data']['timelength'])})")#大小：
-            r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
+            r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
             if F:
                 return 0
             bs=True
@@ -2575,7 +2575,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
         print(lan['ERROR2'])  # 读取cookies.json出现错误
         return -1
     r2.headers.update({'referer': url2})
-    r2.cookies.set('CURRENT_QUALITY', '120', domain='.bilibili.com', path='/')
+    r2.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
     r2.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
     r2.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
     r2.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
@@ -2596,7 +2596,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
         else:
             return -2
     else:
-        re = r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=120&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=16&session=")
+        re = r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
         re.encoding = 'utf8'
         re = re.json()
     if 'data' in re and 'durl' in re['data']:
@@ -3093,8 +3093,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
         print(lan['ERROR2'])#读取cookies.json出现错误
         return -1
     r2.headers.update({'referer':'https://live.bilibili.com/record/%s'%(data['rid'])})
-    r2.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
-    r2.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
+    r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
     re=r2.get('https://api.live.bilibili.com/xlive/web-room/v1/record/getLiveRecordUrl?rid=%s&platform=html5'%(data['rid']))

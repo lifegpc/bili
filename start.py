@@ -558,8 +558,8 @@ def main(ip={}):
         if read!=0 :
             print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
-        r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
-        r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
         r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
         if cid ==-1 :
@@ -857,8 +857,8 @@ def main(ip={}):
         if read!=0 :
             print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
-        r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
-        r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
         r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
         re=r.get('https://api.live.bilibili.com/xlive/web-room/v1/record/getInfoByLiveRecord?rid=%s'%(rid)) #直播回放信息
@@ -964,8 +964,8 @@ def main(ip={}):
         if read!=0 :
             print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
-        r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
-        r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
+        r.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
         r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
         r.headers.update({'referer':'https://www.bilibili.com/v/cheese/mine/list'})
@@ -1068,7 +1068,7 @@ def main(ip={}):
         if read != 0:
             print(lan['ERROR10'])  # 读取cookies.json出现错误
             return -1
-        r.cookies.set('CURRENT_QUALITY', '120', domain='.bilibili.com', path='/')
+        r.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
         r.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
         r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
         r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
@@ -1207,8 +1207,8 @@ def main(ip={}):
                 print(lan['ERROR10'])#读取cookies.json出现错误
                 return -1
             r.headers.update({'referer':"https://www.bilibili.com/video/%s"%(data['bvid'])})
-            r.cookies.set('CURRENT_QUALITY','120',domain='.bilibili.com',path='/')
-            r.cookies.set('CURRENT_FNVAL','16',domain='.bilibili.com',path='/')
+            r.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
+            r.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
             r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
             r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
             re=r.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][0]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
