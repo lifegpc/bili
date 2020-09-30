@@ -33,7 +33,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
     vq 指定具体画质（仅在all为false时生效）
     vcodec 指定具体编码器（hev或avc）
     aq 指定具体音质（仅在all为false并且流类型为dash时生效）"""
-    if not all and vq is not None and ((data['vip'] < 1 and not vq in video_id_list) or (data['vip'] > 0 and not vq in video_id_vip_list)):
+    if not all and vq is not None and not vq in video_id_vip_list:
         return -1, {'code': -1}
     if not all and aq is not None and not aq in audio_id_list:
         return -1, {'code': -1}
