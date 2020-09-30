@@ -20,12 +20,12 @@ from json import loads
 from dict import delli, dellk
 
 video_id_list = [16, 32, 64, 80]
-video_id_vip_list = [16, 32, 64, 74, 80, 112, 116, 120]
+video_id_vip_list = [16, 32, 64, 74, 80, 112, 116, 120, 125]
 audio_id_list = [30216, 30232, 30280]
 vcodec_list = ['avc', 'hev']
 
 
-def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = True, vq: int = 120, vcodec: str = None, aq: int = 30280) -> (int, dict):
+def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = True, vq: int = 125, vcodec: str = None, aq: int = 30280) -> (int, dict):
     """解析视频链接
     data 存储有aid,bvid,cid的字典
     all 是否解析出所有格式
@@ -51,7 +51,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
     if rs is not None:
         re = loads(rs.groups()[0])
     else:
-        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={vq}&otype=json&bvid={data['bvid']}&fnver=0&fnval=16&session="
+        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={vq}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
         re = r.get(uri)
         re.encoding = 'utf8'
         re = re.json()
@@ -101,14 +101,14 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                             re = loads(rs.groups()[0])
                         else:
                             napi = False
-                            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=16&session="
+                            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
                             re = r.get(uri)
                             re.encoding = 'utf8'
                             re = re.json()
                             if re['code'] != 0:
                                 return -1, {'code': -2, 're': re}
                     else:
-                        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=16&session="
+                        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
                         re = r.get(uri)
                         re.encoding = 'utf8'
                         re = re.json()
@@ -195,14 +195,14 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                                 re = loads(rs.groups()[0])
                             else:
                                 napi = False
-                                uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=16&session="
+                                uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
                                 re = r.get(uri)
                                 re.encoding = 'utf8'
                                 re = re.json()
                                 if re['code'] != 0:
                                     return -1, {'code': -2, 're': re}
                         else:
-                            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=16&session="
+                            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
                             re = r.get(uri)
                             re.encoding = 'utf8'
                             re = re.json()
@@ -273,14 +273,14 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                         re = loads(rs.groups()[0])
                     else:
                         napi = False
-                        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=16&session="
+                        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
                         re = r.get(uri)
                         re.encoding = 'utf8'
                         re = re.json()
                         if re['code'] != 0:
                             return -1, {'code': -2, 're': re}
                 else:
-                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=16&session="
+                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
                     re = r.get(uri)
                     re.encoding = 'utf8'
                     re = re.json()

@@ -63,7 +63,7 @@ class normalvideourl(videourl):
             vq = int(vq)
             all = False
         else:
-            vq = 120
+            vq = 125
         if aq is not None and aq.isnumeric():
             aq = int(aq)
             all = False

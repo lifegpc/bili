@@ -17,10 +17,10 @@ from requests import Session
 import traceback
 
 
-def addcookies(r: Session, vq: int = 120):
+def addcookies(r: Session, vq: int = 125):
     "增加具体的cookies,vq为视频画质"
     r.cookies.set('CURRENT_QUALITY', str(vq), domain='.bilibili.com', path='/')
-    r.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
+    r.cookies.set('CURRENT_FNVAL', '80', domain='.bilibili.com', path='/')
     r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
     r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
 

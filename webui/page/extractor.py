@@ -37,11 +37,11 @@ class extractor:
         "具体处理"
         return {'code': 0, 'type': 'unknown'}
 
-    def _addcookies(self, vq: int = 120):
+    def _addcookies(self, vq: int = 125):
         "增加具体的cookies,vq为视频画质"
         self._r.cookies.set('CURRENT_QUALITY', str(
             vq), domain='.bilibili.com', path='/')
-        self._r.cookies.set('CURRENT_FNVAL', '16',
+        self._r.cookies.set('CURRENT_FNVAL', '80',
                             domain='.bilibili.com', path='/')
         self._r.cookies.set('laboratory', '1-1',
                             domain='.bilibili.com', path='/')
