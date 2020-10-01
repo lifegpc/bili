@@ -1665,20 +1665,32 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
     if not che :
+        napi = True
+        paok = False
         re=r2.get(url2)
         re.encoding='utf8'
         rs=search('__playinfo__=([^<]+)',re.text)
         rs2=search('__PGC_USERSTATE__=([^<]+)',re.text)
-        if rs!=None :
+        if rs != None:
             re=json.loads(rs.groups()[0])
-        elif rs2!=None :
+            paok = True
+        else:
+            napi = False
+            re = r2.get(f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+            re = re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+            else:
+                re['data'] = re['result']
+                paok = True
+        if not paok and rs2!=None:
             rs2=json.loads(rs2.groups()[0])
             if 'dialog' in rs2:
                 print(rs2['dialog']['title'])
             if rs2['area_limit']:
                 print(lan['ERROR7'])#有区域限制，请尝试使用代理。
             return -2
-        else :
+        elif not paok:
             return -2
     else :
         re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
@@ -1708,14 +1720,28 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     elif ud['vip']>0 :
                         bs=True #大会员一旦强制获取所有
                     if not che:
-                        r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
-                        re=r2.get(url2)
-                        re.encoding='utf8'
-                        rs=search('__playinfo__=([^<]+)',re.text)
-                        if rs!=None :
-                            re=json.loads(rs.groups()[0])
-                        else :
-                            return -2
+                        if napi:
+                            r2.cookies.set('CURRENT_QUALITY', str(j), domain='.bilibili.com', path='/')
+                            re = r2.get(url2)
+                            re.encoding = 'utf8'
+                            rs = search('__playinfo__=([^<]+)', re.text)
+                            if rs != None:
+                                re = json.loads(rs.groups()[0])
+                            else:
+                                napi = False
+                                re = r2.get(f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+                                re = re.json()
+                                if re['code'] != 0:
+                                    print(f"{re['code']} {re['message']}")
+                                    return -2
+                                re['data'] = re['result']
+                        else:
+                            re = r2.get(f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+                            re = re.json()
+                            if re['code'] != 0:
+                                print(f"{re['code']} {re['message']}")
+                                return -2
+                            re['data'] = re['result']
                     else :
                         re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
                         re.encoding='utf8'
