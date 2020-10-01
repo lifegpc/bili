@@ -32,7 +32,7 @@ if len(sys.argv) > 1:
 lan = getdict('biliVersion', getlan(se, ip))
 
 uri = "https://raw.githubusercontent.com/lifegpc/bili/master/version.txt"  # 检测更新用URI
-backup_uri = "https://cdn.jsdelivr.net/gh/lifegpc/bili@latest/version.txt"  # 备用URI
+backup_uri = "https://cdn.jsdelivr.net/gh/lifegpc/bili@master/version.txt"  # 备用URI
 
 
 class UnknownVersionString(Exception):
