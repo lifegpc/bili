@@ -18,9 +18,10 @@ from ..page.extractorlist import getextractorlist
 from urllib.parse import unquote_plus
 from .checklogin import logincheck
 import requests
-from re import search
+from re import search, I
 from . import InvalidInputEroor
 import traceback
+from urllib3.exceptions import MaxRetryError, NewConnectionError
 
 extractorl = getextractorlist()
 
@@ -39,11 +40,34 @@ class infoextractor(apic):
                 re = search(r"[^:]+://", inp)
                 if re is None:
                     inp = "https://"+inp
-                re = requests.head(inp)
-                if 'Location' in re.headers:
-                    re = self._extract(re.headers['Location'])
-                    if re is not None:
-                        r = re
+                try:
+                    ses = requests.Session()
+                    ses.trust_env = False
+                    re = ses.head(inp)
+                    if 'Location' in re.headers:
+                        re = self._extract(re.headers['Location'])
+                        if re is not None:
+                            r = re
+                except requests.models.ConnectionError as e:
+                    ok = False
+                    if len(e.args) > 0:
+                        rea: MaxRetryError = e.args[0]
+                        if type(rea) == MaxRetryError:
+                            rea2: NewConnectionError = rea.reason  # pylint: disable=E1101
+                            if type(rea2) == NewConnectionError:
+                                if len(rea2.args) > 0:
+                                    rea3: str = rea2.args[0]
+                                    if type(rea3) == str:
+                                        rs = search(
+                                            r'\[errno ([0-9]+)\]', rea3, I)
+                                        if rs is not None:
+                                            errno = int(rs.groups()[0])
+                                            if errno == 11001:
+                                                ok = True
+                    if not ok:
+                        r = {'code': -500, 'e': traceback.format_exc()}
+                except:
+                    r = {'code': -500, 'e': traceback.format_exc()}
             else:
                 r = re
         return {'code': 0, 're': r}

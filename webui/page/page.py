@@ -51,7 +51,9 @@ class page:
                 if re is None:
                     t = "https://"+t
                 try:
-                    re = requests.head(t)
+                    ses = requests.Session()
+                    ses.trust_env = False
+                    re = ses.head(t)
                     if 'Location' in re.headers:
                         re = self._extract(re.headers['Location'])
                         if re is not None:
