@@ -28,14 +28,17 @@ class api:
         h = web.cookies().get('section')
         if apilogincheck(h):
             return dumps({'code': -403})
+        asc = False
+        if web.input().get('asc') is not None:
+            asc = True
         for i in apil:
             try:
                 e = i(t)
-                return dumps(e._handle(), ensure_ascii=False)
+                return dumps(e._handle(), ensure_ascii=asc)
             except InvalidInputEroor:
                 pass
             except NotLoginError:
                 return {'code': -501}
             except Exception:
-                return dumps({'code': -500, 'e': traceback.format_exc()}, ensure_ascii=False)
+                return dumps({'code': -500, 'e': traceback.format_exc()}, ensure_ascii=asc)
         return dumps({'code': -404})
