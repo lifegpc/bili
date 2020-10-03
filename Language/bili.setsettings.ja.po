@@ -245,3 +245,7 @@ msgctxt "INPUT35"
 msgid ""
 "Do you want to create a separate directory for videos with multiply parts?"
 msgstr "乗算部分のある動画用に別のディレクトリを作成しますか？"
+
+msgctxt "INPUT36"
+msgid "Do you want to overwrite existing files by default?"
+msgstr ""

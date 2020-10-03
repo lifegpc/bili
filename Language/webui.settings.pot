@@ -142,3 +142,7 @@ msgstr ""
 msgctxt "LENPASS"
 msgid "Enable password verification for pages beginning with \"/live/\"."
 msgstr ""
+
+msgctxt "OWFIBD"
+msgid "Overwrite existing files by default:"
+msgstr ""

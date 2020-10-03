@@ -66,13 +66,12 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         if not ns:
             fg=True
             bs=False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
         if 'y' in ip :
-            if ip['y'] :
-                fg=True
-                bs=False
-            else :
-                fg=False
-                bs=False
+            fg = ip['y']
+            bs = False
         while bs:
             inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
             if len(inp)>0 :

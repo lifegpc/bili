@@ -224,6 +224,9 @@ $if fontname is not None:
         <input class="form ntn check" type="checkbox" id="dmp"$:getch('dmp')>
         <label class="trans" trans="bili.command O71">为多P视频创建单独的文件夹。</label>
         <br/>
+        <label class="trans" trans="webui.settings OWFIBD">默认覆盖已存在文件：</label>
+        <select class="form ynd" id="y"$:getse2('y')></select>
+        <br/>
         <label class="trans" trans="webui.settings MAINPS">注：这里的设置保存后将覆盖原有的settings.json。</label>
     </form>
     <button class="form trans" id="submit" trans="webui.settings SUBMIT">提交</button>

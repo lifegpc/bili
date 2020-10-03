@@ -53,13 +53,12 @@ def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = F
         if 's' in ip:
             fg=True
             bs=False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
         if 'y' in ip :
-            if ip['y'] :
-                fg=True
-                bs=False
-            else :
-                fg=False
-                bs=False
+            fg = ip['y']
+            bs = False
         while bs:
             inp=input(f'{lan["INPUT1"]}(y/n)'.replace("<filename>",fn))#"<filename>"文件已存在，是否覆盖？
             if len(inp)>0 :

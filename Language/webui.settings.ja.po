@@ -159,3 +159,7 @@ msgstr "フォントファイルのパス（フォント形式はTTF/OTF/WOFF/WO
 msgctxt "LENPASS"
 msgid "Enable password verification for pages beginning with \"/live/\"."
 msgstr "\"/live/\" で始まるページのパスワード認証を有効にします。"
+
+msgctxt "OWFIBD"
+msgid "Overwrite existing files by default:"
+msgstr ""

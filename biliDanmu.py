@@ -123,13 +123,12 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             if not ns:
                 bs=False
                 fg=True
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip:
-                if ip['y']:
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs :
                 inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
                 if inp[0].lower()=='y' :
@@ -230,13 +229,12 @@ def DanmuGetn(c,data,r,t,xml,xmlc,ip:dict,se:dict) :
             if not ns:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip:
-                if ip['y']:
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs :
                 inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
                 if inp[0].lower()=='y' :
@@ -394,13 +392,12 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
             if not ns:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip:
-                if ip['y']:
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs :
                 inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
                 if inp[0].lower()=='y' :
@@ -774,13 +771,12 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
             if not ns:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip:
-                if ip['y']:
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs :
                 inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
                 if inp[0].lower()=='y' :

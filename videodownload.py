@@ -163,13 +163,12 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
             if 's' in ip:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip:
-                if ip['y'] :
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
         while bs and not d2 :
             inp=input(f'{lan["INPUT1"].replace("<filename>",fn)}{s}(y/n)')#"<filename>"文件已存在，是否覆盖？
             if len(inp)>0 :
@@ -461,13 +460,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if not ns:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip :
-                if ip['y'] :
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs:
                 inp=input(f"{lan['INPUT1'].replace('<filename>','%s.mkv'%(filen))}(y/n)")
                 if len(inp)>0 :
@@ -911,13 +909,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if not ns:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip :
-                if ip['y'] :
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs:
                 inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")#"%s"文件已存在，是否覆盖？
                 if len(inp)>0 :
@@ -1266,13 +1263,12 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
         if not ns:
             fg=True
             bs=False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
         if 'y' in ip:
-            if ip['y'] :
-                fg=True
-                bs=False
-            else :
-                fg=False
-                bs=False
+            fg = ip['y']
+            bs = False
         while bs:
             inp=input(f"{lan['INPUT1'].replace('<filename>',fn)}(y/n)")#"%s"文件已存在，是否覆盖？
             if len(inp)>0 :
@@ -1483,6 +1479,9 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             bs = True
             if not ns:
                 overwrite = True
+                bs = False
+            if 'y' in se:
+                overwrite = se['y']
                 bs = False
             if 'y' in ip:
                 overwrite = ip['y']
@@ -1903,13 +1902,12 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if not ns:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip :
-                if ip['y'] :
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs:
                 inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")#"%s"文件已存在，是否覆盖？
                 if len(inp)>0 :
@@ -2213,13 +2211,12 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if not ns:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip :
-                if ip['y'] :
-                    fg=True
-                    bs=False
-                else :
-                    fg=True
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs:
                 inp=input(f"{lan['INPUT1'].replace('<filename>','%s.mkv'%(filen))}(y/n)")
                 if len(inp)>0 :
@@ -2502,13 +2499,12 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
         if not ns:
             fg=True
             bs=False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
         if 'y' in ip:
-            if ip['y'] :
-                fg=True
-                bs=False
-            else :
-                fg=False
-                bs=False
+            fg = ip['y']
+            bs = False
         while bs:
             inp=input(f"{lan['INPUT1'].replace('<filename>',fn)}(y/n)")#"%s"文件已存在，是否覆盖？
             if len(inp)>0 :
@@ -2714,6 +2710,9 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             bs = True
             if not ns:
                 overwrite = True
+                bs = False
+            if 'y' in se:
+                overwrite = se['y']
                 bs = False
             if 'y' in ip:
                 overwrite = ip['y']
@@ -2948,13 +2947,12 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         if not ns:
             fg=True
             bs=False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
         if 'y' in ip :
-            if ip['y'] :
-                fg=True
-                bs=False
-            else :
-                fg=False
-                bs=False
+            fg = ip['y']
+            bs = False
         while bs:
             inp=input(f"{lan['INPUT1'].replace('<filename>','%s.mkv'%(filen))}(y/n)")
             if len(inp)>0 :
@@ -3175,13 +3173,12 @@ def lrvideodownload(data,r,c,c3,se,ip):
             if not ns:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip :
-                if ip['y'] :
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
             while bs:
                 inp=input(f"{lan['INPUT1'].replace('<filename>','%s.mkv'%(filen))}(y/n)")
                 if len(inp)>0 :
@@ -3620,13 +3617,12 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             if 's' in ip:
                 fg=True
                 bs=False
+            if 'y' in se:
+                fg = se['y']
+                bs = False
             if 'y' in ip:
-                if ip['y'] :
-                    fg=True
-                    bs=False
-                else :
-                    fg=False
-                    bs=False
+                fg = ip['y']
+                bs = False
         if size==-1 :
             fg=True
             bs=False

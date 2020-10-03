@@ -236,3 +236,7 @@ msgctxt "INPUT35"
 msgid ""
 "Do you want to create a separate directory for videos with multiply parts?"
 msgstr "是否要为多P视频创建单独的文件夹？"
+
+msgctxt "INPUT36"
+msgid "Do you want to overwrite existing files by default?"
+msgstr "您想默认覆盖已存在文件吗？"
