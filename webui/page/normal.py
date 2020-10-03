@@ -23,7 +23,7 @@ import traceback
 
 
 class normal(extractor):
-    _VALID_URI = r'^(av)?(?P<av>\d+)$|^(?P<bv>BV\w+)$|^([^:]+://)?(www\.)?(m\.)?bilibili\.com/video/(av(?P<av>\d+)|(?P<bv>BV\w+)).*$|^([^:]+://)?(www\.)?b23\.tv/(av(?P<av>\d+)|(?P<bv>BV\w+)).*$'
+    _VALID_URI = r'^(av)?(?P<av>\d+)$|^(?P<bv>BV\w+)$|^([^:]+://)?(www\.)?(m\.)?bilibili\.com/s?/?video/(av(?P<av>\d+)|(?P<bv>BV\w+)).*$|^([^:]+://)?(www\.)?b23\.tv/(av(?P<av>\d+)|(?P<bv>BV\w+)).*$'
     r: dict = {}
 
     def _handle(self):
