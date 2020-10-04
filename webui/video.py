@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, quote, mimetype, getEtag, getrange, checkrange, getcontentbyrange, gettemplate, DashRange
+from . import web, loadset, gopt, quote, mimetype, getEtag, getrange, checkrange, getcontentbyrange, gettemplate, DashRange, logincheck
 from JSONParser import loadset as loadset2
 import sys
 from os.path import exists, isdir, isfile, getsize
@@ -32,6 +32,10 @@ if se2 == -1 or se2 == -2:
 
 class video:
     def GET(self, *t):
+        if 'dcvideo' in se and se['dcvideo']:
+            h = web.cookies().get('section')
+            if logincheck(h):
+                return ''
         s: str = t[0]
         if s == None:
             s = ''

@@ -111,7 +111,10 @@ $if fontname is not None:
         <input class="form" pattern=".+\.([wW][oO][fF]{2}|[wW][oO][fF]{2}2|[tT]{2}[Ff]|[oO][tT][Ff])" id="uifontloc"$:getse('uifontloc')>
         <br/>
         <input class="form nty check" type="checkbox" id="dclive"$:getch3("dclive")>
-        <label class="trans" trans="webui.settings LENPASS">对"/live/"开头的页面进行密码验证。</label>
+        <label class="trans" trans="webui.settings LENPASS" part="/live/">对"/live/"开头的页面进行密码验证。</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="dcvideo"$:getch3("dcvideo")>
+        <label class="trans" trans="webui.settings LENPASS" part="/video/">对"/video/"开头的页面进行密码验证。</label>
     $if type == '/main':
         <input value="2" id="type" class="form hide">
         <label class="trans" trans="webui.settings MAINLAN">程序语言：</label>

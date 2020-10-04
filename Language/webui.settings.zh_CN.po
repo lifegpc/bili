@@ -156,8 +156,8 @@ msgid ""
 msgstr "字体文件路径（字体格式需要是TTF/OTF/WOFF/WOFF2之一）："
 
 msgctxt "LENPASS"
-msgid "Enable password verification for pages beginning with \"/live/\"."
-msgstr "对\"/live/\"开头的页面进行密码验证。"
+msgid "Enable password verification for pages beginning with \"<part>\"."
+msgstr "对\"<part>\"开头的页面进行密码验证。"
 
 msgctxt "OWFIBD"
 msgid "Overwrite existing files by default:"
