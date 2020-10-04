@@ -24,7 +24,8 @@ window.addEventListener('load', () => {
         if (hl != null) param['hl'] = hl;
         param = $.param(param)
         if (uri == null) {
-            uri = '/?' + param;
+            if (param != "") uri = '/?' + param;
+            else uri = '/';
         }
         else {
             var uri2 = new URL(uri, url.origin);
@@ -58,6 +59,14 @@ window.addEventListener('load', () => {
                     }
                 })
             }
+        }
+    })
+    $.getJSON('/api/checkuilogin', (e, s) => {
+        if (s != "success") return;
+        if (e.code == 0) direct();
+        else if (e.code == -500) {
+            console.error(e.e);
+            alert(e.e);
         }
     })
     /**@type {HTMLStyleElement}*/

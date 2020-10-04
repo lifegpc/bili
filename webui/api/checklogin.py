@@ -45,3 +45,10 @@ class checklogin(apic):
 
     def _handle(self):
         return {'code': 0, 'islogin': logincheck()}
+
+
+class checkuilogin(apic):
+    _VALID_URI = r'^checkuilogin$'
+
+    def _handle(self):
+        return {'code': 0}

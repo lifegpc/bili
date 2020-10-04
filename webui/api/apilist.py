@@ -16,7 +16,7 @@
 from . import apic
 from typing import List
 from .rsa import apirsa
-from .checklogin import checklogin
+from .checklogin import checklogin, checkuilogin
 from .videourl import normalvideourl
 from .loginapi import getpubkey, captcha, login, qrgetloginurl, qrgetlogininfo, getcountrylist, getcaptchacombine, sendloginsms, loginwithsms, getpubkeyweb, loginwithuserpassweb
 from .infoextractor import infoextractor
