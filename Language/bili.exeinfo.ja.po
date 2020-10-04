@@ -1,0 +1,32 @@
+# bili - The exe versioninfo Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-10-04 01:37:00+0000\n"
+"PO-Revision-Date: 2020-10-04 01:43+0000\n"
+"Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: ja\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "start"
+msgid "Download video/barrage from BiliBili"
+msgstr ""
+
+msgctxt "filter"
+msgid "Filter the barrage file"
+msgstr ""
+
+msgctxt "setsettings"
+msgid "Set settings for program"
+msgstr ""
+
+msgctxt "startwebui"
+msgid "WEB User Interface server"
+msgstr ""
