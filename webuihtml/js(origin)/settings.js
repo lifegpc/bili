@@ -151,7 +151,7 @@ window.addEventListener('load', () => {
         $.post("/settings", { "data": JSON.stringify(data), "type": type }, (data, stat) => {
             if (stat == "success") {
                 if (data.code == 0) {
-                    alert(transobj['webui.settings']['SUBOK'])//保存成功。
+                    alert(transobj['webui.settings']['SUBOK'] + '\n' + transobj['webui.settings']['SUBINFO'])//保存成功。
                 }
                 else if (data.code == -403) {
                     window.location.href = "/login?p=" + encodeURIComponent(window.location.href);

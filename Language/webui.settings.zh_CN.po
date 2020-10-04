@@ -162,3 +162,7 @@ msgstr "对\"/live/\"开头的页面进行密码验证。"
 msgctxt "OWFIBD"
 msgid "Overwrite existing files by default:"
 msgstr "默认覆盖已存在文件："
+
+msgctxt "SUBINFO"
+msgid "PS. You may need to restart the web server to apply the new settings."
+msgstr "注：你可能需要重启网页服务器来应用新的设置。"

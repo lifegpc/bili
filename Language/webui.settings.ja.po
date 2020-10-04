@@ -163,3 +163,7 @@ msgstr "\"/live/\" で始まるページのパスワード認証を有効にし�
 msgctxt "OWFIBD"
 msgid "Overwrite existing files by default:"
 msgstr ""
+
+msgctxt "SUBINFO"
+msgid "PS. You may need to restart the web server to apply the new settings."
+msgstr ""
