@@ -88,6 +88,10 @@ def filterd(dir:str)->str:
                 return f
     if dir[-1]!='/' and dir[-1]!='\\' :
         dir=dir+'/'
+    re = regex.search(r'[^[:print:]]', dir)
+    while re is not None:
+        dir = dir.replace(re.group(), '_')
+        re = regex.search(r'[^[:print:]]', dir)
     dir=dir.replace(':','_')
     dir=dir.replace('*','_')
     dir=dir.replace('?','_')
