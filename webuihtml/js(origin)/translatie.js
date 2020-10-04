@@ -61,7 +61,7 @@ function gettrans2(name, f) {
 }
 transobj.observer = new MutationObserver((mutationsList, observer) => {
     mutationsList.forEach((v) => {
-        if (v.type == "attributes" && !["style", "n", "value"].includes(v.attributeName)) {
+        if (v.type == "attributes" && !["style"].includes(v.attributeName)) {
             /**@type {HTMLElement}*/
             var o = v.target;
             function dealwithtar(o) {
@@ -94,10 +94,10 @@ transobj.observer = new MutationObserver((mutationsList, observer) => {
                                 }
                                 o.innerText = t;
                             }
-                            if (o.hasAttribute('n')) {
+                            if (o.hasAttribute('n') && o.getAttribute('n') != t) {
                                 o.setAttribute('n', t);
                             }
-                            if (o.classList.has('tvalue')) {
+                            if (o.classList.has('tvalue') && o.getAttribute('value') != t) {
                                 o.setAttribute('value', t);
                             }
                         }
