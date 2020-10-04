@@ -90,3 +90,11 @@ msgstr "音声リンクをコピー"
 msgctxt "SMU"
 msgid "Save as playlist file"
 msgstr "プレイリストファイルとして保存する"
+
+msgctxt "SELNUM"
+msgid "You have selected <value> parts."
+msgstr "パート <value> を選択しました。"
+
+msgctxt "ASNOW"
+msgid "Use the selection above"
+msgstr "上記の選択を使用する"

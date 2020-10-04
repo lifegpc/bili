@@ -287,4 +287,4 @@ msgstr "変換が完了しました。"
 
 msgctxt "真彩 HDR"
 msgid "HDR"
-msgstr ""
+msgstr "HDR"

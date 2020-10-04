@@ -248,4 +248,4 @@ msgstr "乗算部分のある動画用に別のディレクトリを作成しま
 
 msgctxt "INPUT36"
 msgid "Do you want to overwrite existing files by default?"
-msgstr ""
+msgstr "デフォルトで既存のファイルを上書きしますか？"

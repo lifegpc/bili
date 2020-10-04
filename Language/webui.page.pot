@@ -86,3 +86,11 @@ msgstr ""
 msgctxt "SMU"
 msgid "Save as playlist file"
 msgstr ""
+
+msgctxt "SELNUM"
+msgid "You have selected <value> parts."
+msgstr ""
+
+msgctxt "ASNOW"
+msgid "Use the selection above"
+msgstr ""
