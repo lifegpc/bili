@@ -16,6 +16,7 @@
 from re import search
 from os.path import isdir,isfile
 import platform
+import regex
 def listf(filelist,lx=0,ft=["xml"]) :
     "对listd获得列表进行过滤，文件夹都将保留"
     r=[]
@@ -55,6 +56,10 @@ def listff(filelist) :
 def filtern(filen:str) :
     "对文件名进行去除不应该字符"
     filen = str(filen)
+    re = regex.search(r'[^[:print:]]', filen)
+    while re is not None:
+        filen = filen.replace(re.group(), '_')
+        re = regex.search(r'[^[:print:]]', filen)
     filen=filen.replace('/','_')
     filen=filen.replace('\\','_')
     filen=filen.replace(':','_')
