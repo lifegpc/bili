@@ -15,4 +15,5 @@ button.form#submit {
     margin-top: 10px;
     position: absolute;
     right: 10%;
+    margin-bottom: 10px;
 }

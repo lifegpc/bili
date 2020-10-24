@@ -14,6 +14,14 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 (() => {
+    function calabselement() {
+        var absc = document.getElementsByClassName('abs');
+        var height = 0;
+        for (var i = 0; i < absc.length; i++) {
+            height += absc[i].scrollHeight;
+        }
+        return height;
+    }
     /**@type {HTMLStyleElement}*/
     var sty = null;
     function footerchange() {
@@ -29,8 +37,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
         }
         var w_height = window.innerHeight;
         var b_height = document.body.scrollHeight;
-        if (b_height > w_height) {
-            sty.innerText = ".footer{top:" + b_height + "px;padding-boto}"
+        var abs_height = calabselement();
+        if ((b_height + abs_height) > w_height) {
+            sty.innerText = ".footer{top:" + (b_height + abs_height + 20) + "px;padding-boto}"
             sty.setAttribute('top', b_height);
         }
         else {

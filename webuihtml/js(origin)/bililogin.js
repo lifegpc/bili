@@ -435,7 +435,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
                             var country = code_list[i];
                             var op = document.createElement('option');
                             op.value = country.id;
-                            op.innerText = country.cname;
+                            op.innerText = country.cname + " (+" + country.country_id + ")";
                             op.setAttribute('country_id', country.country_id);
                             phoarea.append(op);
                         }
