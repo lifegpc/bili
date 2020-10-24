@@ -1153,6 +1153,14 @@ def main(ip={}):
         return 0
     if not che:
         re=section.get(s)
+        rtry = 0
+        while re.status_code == 412 and rtry < 3:
+            biliLogin.dealwithcap(section, s)
+            re = section.get(s)
+            rtry = rtry + 1
+        if re.status_code == 412:
+            print(lan['SPERROR'].replace('<url>', s))
+            return -1
         parser=HTMLParser.Myparser()
         parser.feed(re.text)
         try :

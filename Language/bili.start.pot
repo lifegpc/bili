@@ -174,3 +174,7 @@ msgstr ""
 msgctxt "LIVE_NOT_START"
 msgid "The live has not started. The program will check the live status after 30 seconds."
 msgstr ""
+
+msgctxt "SPERROR"
+msgid "Please open \"<url>\" in a broswer and pass the captcha."
+msgstr ""

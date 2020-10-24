@@ -249,3 +249,7 @@ msgstr "乗算部分のある動画用に別のディレクトリを作成しま
 msgctxt "INPUT36"
 msgid "Do you want to overwrite existing files by default?"
 msgstr "デフォルトで既存のファイルを上書きしますか？"
+
+msgctxt "INPUT37"
+msgid "The video format output from ffmpeg (Default:<value>, Now:<value2>):"
+msgstr ""

@@ -272,4 +272,22 @@ if __name__=='__main__' :
     r = gk(se, 'y')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'y', se)
+    vf = 'mkv'
+    if 'vf' in se:
+        vf = se['vf']
+    print(la['INPUT37'].replace('<value>', 'mkv').replace('<value2>', vf))
+    print(f"1.{la['DE'][1:-1]}\t2.mkv\t3.mp4")
+    b = True
+    while b:
+        inp = input(la['INPUT1'])
+        if len(inp) > 0 and inp.isnumeric():
+            i = int(inp)
+            if i > 0 and i <= 3:
+                b = False
+                if i == 2:
+                    ne['vf'] = 'mkv'
+                elif i == 3:
+                    ne['vf'] = 'mp4'
+        else:
+            b = False
     saveset(ne)

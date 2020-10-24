@@ -254,3 +254,7 @@ msgid ""
 "The live has not started. The program will check the live status after 30 "
 "seconds."
 msgstr "ライブが開始されていません。30秒後にライブの状態を確認します。"
+
+msgctxt "SPERROR"
+msgid "Please open \"<url>\" in a broswer and pass the captcha."
+msgstr ""

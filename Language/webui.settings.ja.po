@@ -167,3 +167,7 @@ msgstr "デフォルトで既存のファイルを上書きする。"
 msgctxt "SUBINFO"
 msgid "PS. You may need to restart the web server to apply the new settings."
 msgstr "追伸。新しい設定を適用するには、Webサーバーを再起動する必要があるかもしれません。"
+
+msgctxt "VIDEOFMT"
+msgid "The video format output from ffmpeg (Default:<value>):"
+msgstr ""

@@ -150,3 +150,7 @@ msgstr ""
 msgctxt "SUBINFO"
 msgid "PS. You may need to restart the web server to apply the new settings."
 msgstr ""
+
+msgctxt "VIDEOFMT"
+msgid "The video format output from ffmpeg (Default:<value>):"
+msgstr ""

@@ -147,3 +147,23 @@ def scap(r:requests.session,image):
     except:
         return None
     return re['message'] if re and re["code"]==0 else None
+
+
+def dealwithcap(r:requests.Session, uri:str):
+    "尝试通过验证"
+    try:
+        driver = webdriver.Chrome()
+        driver.get('https://www.bilibili.com')
+        for i in ['DedeUserID', 'DedeUserID__ckMd5', 'Expires', 'SESSDATA', 'bili_jct']:
+            driver.add_cookie({'name':i ,'value': r.cookies.get(i), 'domain': '.bilibili.com', 'path': '/'})
+        driver.get(uri)
+        time.sleep(10)  # 等待加载完毕
+        aa = True
+        while aa:
+            time.sleep(1)
+            try:
+                driver.find_element_by_class_name('error-panel server-error')
+            except:
+                aa = False
+    except Exception:
+        print(traceback.format_exc())

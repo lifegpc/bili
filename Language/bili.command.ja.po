@@ -414,3 +414,7 @@ msgstr "javascriptファイルのみをコンパイルします。"
 msgctxt "O76"
 msgid "The path of java binary."
 msgstr "javaのバイナリのパス。"
+
+msgctxt "O77"
+msgid "The video format output from ffmpeg. Possible Values: <value>"
+msgstr ""

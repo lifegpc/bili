@@ -394,3 +394,7 @@ msgstr "仅编译javascript文件。"
 msgctxt "O76"
 msgid "The path of java binary."
 msgstr "java可执行文件的路径。"
+
+msgctxt "O77"
+msgid "The video format output from ffmpeg. Possible Values: <value>"
+msgstr "从ffmpeg输出的视频格式。默认值：<value>"

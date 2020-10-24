@@ -231,6 +231,13 @@ $if fontname is not None:
         <label class="trans" trans="webui.settings OWFIBD">默认覆盖已存在文件：</label>
         <select class="form ynd" id="y"$:getse2('y')></select>
         <br/>
+        <label class="trans" trans="webui.settings VIDEOFMT" value="mkv">从ffmpeg输出的视频格式（默认：）：</label>
+        <select class="form" id="vf">
+            <option value="" class="trans" trans="webui.settings NOTSET"$:getsel('vf')>不设置</option>
+            <option value="mkv"$:getsel('vf', 'mkv')>mkv</option>
+            <option value="mp4"$:getsel('vf', 'mp4')>mp4</option>
+        </select>
+        <br/>
         <label class="trans" trans="webui.settings MAINPS">注：这里的设置保存后将覆盖原有的settings.json。</label>
     </form>
     <button class="form trans abs" id="submit" trans="webui.settings SUBMIT">提交</button>
