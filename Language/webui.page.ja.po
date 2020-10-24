@@ -1,7 +1,7 @@
 # bili - webui/page Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
 # Kum4423, 2020
@@ -90,3 +90,11 @@ msgstr "音声リンクをコピー"
 msgctxt "SMU"
 msgid "Save as playlist file"
 msgstr "プレイリストファイルとして保存する"
+
+msgctxt "SELNUM"
+msgid "You have selected <value> parts."
+msgstr "パート <value> を選択しました。"
+
+msgctxt "ASNOW"
+msgid "Use the selection above"
+msgstr "上記の選択を使用する"

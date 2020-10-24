@@ -43,6 +43,13 @@ source_file = bili.command.pot
 source_lang = en
 type = PO
 
+[bili.biliexeinfopot]
+file_filter = bili.exeinfo.<lang>.po
+minimum_perc = 0
+source_file = bili.exeinfo.pot
+source_lang = en
+type = PO
+
 [bili.bilifilterpot]
 file_filter = bili.filter.<lang>.po
 minimum_perc = 0

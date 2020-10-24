@@ -2,16 +2,16 @@
 # This file is part of bili.
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from JSONParser import loadset,saveset,getset
 from re import search
@@ -268,4 +268,26 @@ if __name__=='__main__' :
     r = gk(se, 'dmp')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'dmp', se)
+    print(f"{la['INPUT36']}")
+    r = gk(se, 'y')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'y', se)
+    vf = 'mkv'
+    if 'vf' in se:
+        vf = se['vf']
+    print(la['INPUT37'].replace('<value>', 'mkv').replace('<value2>', vf))
+    print(f"1.{la['DE'][1:-1]}\t2.mkv\t3.mp4")
+    b = True
+    while b:
+        inp = input(la['INPUT1'])
+        if len(inp) > 0 and inp.isnumeric():
+            i = int(inp)
+            if i > 0 and i <= 3:
+                b = False
+                if i == 2:
+                    ne['vf'] = 'mkv'
+                elif i == 3:
+                    ne['vf'] = 'mp4'
+        else:
+            b = False
     saveset(ne)

@@ -2,16 +2,16 @@
 This file is part of bili.
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU General Public License
+You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 (() => {
     /**将元素背景临时变成红色
@@ -435,7 +435,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>. */
                             var country = code_list[i];
                             var op = document.createElement('option');
                             op.value = country.id;
-                            op.innerText = country.cname;
+                            op.innerText = country.cname + " (+" + country.country_id + ")";
                             op.setAttribute('country_id', country.country_id);
                             phoarea.append(op);
                         }

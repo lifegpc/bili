@@ -20,6 +20,7 @@
     + [登录时发生错误（使用ChromeDriver时）](#登录时发生错误使用chromedriver时)
   * [FAQ](#faq)
     + [无法输入密码](#无法输入密码)
+    + [大会员账号提示仅大会员可以观看](#大会员账号提示仅大会员可以观看)
 ## 简介
 程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver。   
 软件只有控制台界面，萌新不会可以看[这里](easyuse.md)   
@@ -32,6 +33,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 [polib](https://pypi.org/project/polib/)  
 [web.py](https://webpy.org/)  
 [regex](https://pypi.org/project/regex/)  
+[iso-639](https://pypi.org/project/iso-639/)  
 自己写的file库   
 如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
 如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
@@ -112,3 +114,6 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 ### 无法输入密码
 这是由于输入密码时关闭了输入内容在屏幕上输出（回显）导致的。  
 解决方法是直接正常输入密码后按回车键即可。
+
+### 大会员账号提示仅大会员可以观看
+先删除```cookies.json```，然后使用Chrome Driver登录，不要使用WEB UI登录。（WEB UI登录目前存在BUG）

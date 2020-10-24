@@ -12,6 +12,7 @@ $code:
             return s
         else:
             return '/font?' + urlencode({'l':s})
+<!doctype html>
 <html>
 
 <head>
@@ -41,7 +42,7 @@ $if fontname is not None:
 
 <body>
     <div class="trans" style="display: none;" trans="bili.biliLogin OUTPUT1"></div>
-    <div id="main">
+    <div id="main" class="abs">
         <h1 class="trans" trans="webui.bililogin NEEDLOGIN">您需要登录bilibili账号才能继续使用此程序。</h1>
         <div id="uap">
             <div style="display: inline-block;">
@@ -82,12 +83,12 @@ $if fontname is not None:
         <div><label id="uapwl" class="trans switch" switch="3" switch2="uapweb" trans="webui.bililogin USEANDPAW">使用用户名和密码登录（网页API）</label><br/></div>
         $if not https:
             <label class="trans" trans="webui.bililogin HTTPWARN" style="color:red;">虽然程序已经对用户名和密码进行了加密处理，但是依旧可能遭到中间人(MITM)攻击。如果在公网中使用，请启用HTTPS。</label><br/>
-        <button class="trans" id="submit" trans="webui.settings SUBMIT" disabled>提交</button>
+        <button class="trans abs" id="submit" trans="webui.settings SUBMIT" disabled>提交</button>
     </div>
     <div class="footer">
         <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>
         <div><a href="https://github.com/lifegpc/bili" class="trans" trans="webui.index SOURCE">源代码</a></div>
-        <div><a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
+        <div><a href="https://www.gnu.org/licenses/agpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
     </div>
 </body>
 

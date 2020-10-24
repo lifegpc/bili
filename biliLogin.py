@@ -2,16 +2,16 @@
 # This file is part of bili.
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from selenium import webdriver
 import requests
@@ -147,3 +147,23 @@ def scap(r:requests.session,image):
     except:
         return None
     return re['message'] if re and re["code"]==0 else None
+
+
+def dealwithcap(r:requests.Session, uri:str):
+    "尝试通过验证"
+    try:
+        driver = webdriver.Chrome()
+        driver.get('https://www.bilibili.com')
+        for i in ['DedeUserID', 'DedeUserID__ckMd5', 'Expires', 'SESSDATA', 'bili_jct']:
+            driver.add_cookie({'name':i ,'value': r.cookies.get(i), 'domain': '.bilibili.com', 'path': '/'})
+        driver.get(uri)
+        time.sleep(10)  # 等待加载完毕
+        aa = True
+        while aa:
+            time.sleep(1)
+            try:
+                driver.find_element_by_class_name('error-panel server-error')
+            except:
+                aa = False
+    except Exception:
+        print(traceback.format_exc())

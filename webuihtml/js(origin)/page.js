@@ -2,16 +2,16 @@
 This file is part of bili.
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU General Public License
+You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 window.addEventListener('load', () => {
     /**@typedef {Object} PageData
@@ -42,7 +42,7 @@ window.addEventListener('load', () => {
      * @typedef {Object} ExtractorInfo
      * @property {0|-1|-404|-500} code 状态码。0正常，-1需要登录，-404匹配不到相应的解析器，-500程序错误。
      * @property {string|undefined} e 抛出的错误信息（仅code为-500时存在）
-     * @property {string|undefined} type 解析器的类型（仅code为0时存在）
+     * @property {"normal"|"redirect"|undefined} type 解析器的类型（仅code为0时存在）
      * @property {string|undefined} url 仅当type为redirect时存在，重定向至的地址
      * @property {number|undefined} vip VIP状态（仅当code为0时并type不为redirect时存在）
      * @property {infodata|undefined} data 数据（仅当code为0时并type不为redirect时存在）
@@ -94,6 +94,9 @@ window.addEventListener('load', () => {
         window.location.href = '/bililogin?' + param;
     }
     var arel = "noreferrer noopener";
+    var videoq = ['真彩 HDR', '超清 4K', '高清 1080P60', '高清 720P60', '高清 1080P+', '高清 1080P', '高清 720P', '清晰 480P', '流畅 360P']
+    var videoid = [125, 120, 116, 74, 112, 80, 64, 32, 16]
+    var audioid = [30280, 30232, 30216];
     /**重定向至webui登录页 */
     function redir() {
         var uri = new URL(window.location.href);
@@ -261,6 +264,124 @@ window.addEventListener('load', () => {
     function mstos(t) {
         return (t / 1000).toFixed(3);
     }
+    /**创建页面底部图质选择条*/
+    function ctoolbarvqsel() {
+        var sel = document.createElement('select');
+        /**@type {HTMLOptionElement}*/
+        var ops = createTransLabel('webui.page ASNOW', 'option');
+        ops.value = 'asnow';
+        sel.append(ops);
+        ops = createTransLabel("webui.page DFE", "option");
+        ops.value = 'dfe';
+        sel.append(ops);
+        for (var i = 0; i < videoq.length; i++) {
+            var tsl = 'bili.videodownload ' + videoq[i];
+            ops = createTransLabel(tsl, 'option');
+            ops.value = videoid[i];
+            sel.append(ops);
+            ops = document.createElement('option');
+            ops.append(createTransLabel(tsl));
+            ops.append('(avc)')
+            ops.value = videoid[i] + ',avc';
+            sel.append(ops);
+            ops = document.createElement('option');
+            ops.append(createTransLabel(tsl));
+            ops.append('(hev)')
+            ops.value = videoid[i] + ',hev';
+            sel.append(ops);
+        }
+        sel.addEventListener('input', toolbarvq_input)
+        return sel;
+    }
+    /**把id,codec分开
+     * @param {string} vqs
+     * @returns {[vq: number, codec: string]}
+    */
+    function splitvqs(vqs) {
+        var s = vqs.split(',');
+        if (s.length > 2) {
+            s = [s[0], s.slice(1).join()];
+        }
+        else if (s.length == 1) {
+            s = [s[0], null];
+        }
+        s[0] = s[0] - 1 + 1;
+        return s
+    }
+    /**根据目标图质和实际有的列表选择最终图质
+     * @param {Array<number>} avq 实际的图质列表
+     * @param {number} vq 目标图质
+    */
+    function getlowq(avq, vq) {
+        var vqi = videoid.indexOf(vq);
+        var avqi = [];
+        for (var i = 0; i < avq.length; i++) {
+            var t = videoid.indexOf(avq[i]);
+            if (t > -1) avqi.push(t);
+        }
+        for (var i = 0; i < avqi.length; i++) {
+            if (avqi[i] >= vqi) break;
+        }
+        return videoid[avqi[i]];
+    }
+    function toolbarvq_input() {
+        var se = toolbarvqsel.value;
+        if (se == "asnow") return;
+        /**@type {HTMLCollectionOf<HTMLInputElement>} */
+        var selc = document.getElementsByClassName('sel');
+        for (var i = 0; i < selc.length; i++) {
+            var sel = selc[i];
+            if (sel.checked) {
+                if (info.type == "normal") {
+                    toolbarvqnor(videourl[i], i, se);
+                }
+            }
+        }
+    }
+    /**创建页面底部音质选择条*/
+    function ctoolbaraqsel() {
+        var sel = document.createElement('select');
+        /**@type {HTMLOptionElement}*/
+        var ops = createTransLabel('webui.page ASNOW', 'option');
+        ops.value = 'asnow';
+        sel.append(ops);
+        ops = createTransLabel("webui.page DFE", "option");
+        ops.value = 'dfe';
+        sel.append(ops);
+        for (var i = 0; i < audioid.length; i++) {
+            ops = document.createElement('option');
+            ops.innerText = audioid[i];
+            ops.value = audioid[i];
+            sel.append(ops);
+        }
+        sel.style.display = "none";
+        sel.addEventListener('input', toolbaraq_input);
+        return sel;
+    }
+    /**根据目标图质和实际有的列表选择最终音质
+     * @param {Array<number>} aaq 实际的音质列表
+     * @param {number} aq 目标音质
+    */
+    function getlowaq(aaq, aq) {
+        for (var i = 0; i < aaq.length; i++) {
+            if (aq >= aaq[i]) break;
+        }
+        return aaq[i];
+    }
+    function toolbaraq_input() {
+        var se = toolbaraqsel.value;
+        if (se == "asnow") return;
+        /**@type {HTMLCollectionOf<HTMLInputElement>} */
+        var selc = document.getElementsByClassName('sel');
+        for (var i = 0; i < selc.length; i++) {
+            var sel = selc[i];
+            if (sel.checked) {
+                if (info.type == "normal") {
+                    toolbaraqnor(videourl[i], i, se);
+                }
+            }
+        }
+    }
     if (info.code == -500) {
         if (!main.classList.has('e500')) {
             main.classList.add(['e500']);
@@ -320,6 +441,12 @@ window.addEventListener('load', () => {
     var clipboard;
     /**@type {HTMLDivElement} 当有选项选中时页面底部的框*/
     var toolbar;
+    /**@type {HTMLLabelElement} 页面底部显示选中的数量*/
+    var toolbarsn;
+    /**@type {HTMLSelectElement} 页面底部批量选择画质*/
+    var toolbarvqsel;
+    /**@type {HTMLSelectElement} 页面底部批量选择音质*/
+    var toolbaraqsel;
     function createclipboard() {
         clipboardb = document.createElement('button');
         clipboardb.className = 'clipb';
@@ -436,6 +563,13 @@ window.addEventListener('load', () => {
         toolbar.className = "toolbar";
         toolbar.style.display = "none";
         main.append(toolbar);
+        toolbarsn = createTransLabel('webui.page SELNUM');
+        toolbarsn.setAttribute('value', 0);
+        toolbar.append(toolbarsn);
+        toolbarvqsel = ctoolbarvqsel();
+        toolbar.append(toolbarvqsel);
+        toolbaraqsel = ctoolbaraqsel();
+        toolbar.append(toolbaraqsel);
         transobj.deal();
         setTimeout(mainchange, 2000);
         getnormalvideourl(0);
@@ -513,6 +647,7 @@ window.addEventListener('load', () => {
             if (d.data.audio != null) cell.append(createdashaudiob(i));
             cell.append(createdashsel(d, i));
             cell.append(createdashb(i));
+            if (d.data.audio != null) toolbaraqsel.style.display = null;
         }
         else if (d.type == "durl") {
             var durlb = createdurlvideob(d, i)
@@ -544,9 +679,15 @@ window.addEventListener('load', () => {
             opi.append('(' + vd.codecs + "," + vd.width + "x" + vd.height + "," + calsize(vd.size) + "," + calbitrate(vd.size, videourl[p].timelength) + "," + calfps(vd.frame_rate) + ")");
             sel.append(opi);
         }
+        sel.addEventListener('change', () => {
+            /**@type {HTMLCollectionOf<HTMLInputElement>}*/
+            var selc = document.getElementsByClassName('sel');
+            var selb = selc[p];
+            if (selb.checked) toolbarvqsel.value = 'asnow';
+        })
         return sel;
     }
-    /**创建dash流的视频描述选择
+    /**创建dash流的音频描述选择
      * @param {VideoUrl} d
      * @param {number} p P数-1
     */
@@ -566,6 +707,12 @@ window.addEventListener('load', () => {
             opi.append(ad.id + "(" + ad.codecs + "," + calsize(ad.size) + "," + calbitrate(ad.size, videourl[p].timelength) + ")")
             sel.append(opi);
         }
+        sel.addEventListener('change', () => {
+            /**@type {HTMLCollectionOf<HTMLInputElement>}*/
+            var selc = document.getElementsByClassName('sel');
+            var selb = selc[p];
+            if (selb.checked) toolbaraqsel.value = 'asnow';
+        })
         return sel;
     }
     /**创建dash流视频轨链接复制按钮
@@ -841,6 +988,10 @@ window.addEventListener('load', () => {
         var vd = videourl[p].data[videourl[p].accept_quality[i]];
         if (vd.url.length == 1) b.disabled = false;
         else b.disabled = true;
+        /**@type {HTMLCollectionOf<HTMLInputElement>}*/
+        var selc = document.getElementsByClassName('sel');
+        var selb = selc[p];
+        if (selb.checked) toolbarvqsel.value = 'asnow';
     }
     /**创建文件保存格式选择
      * @param {number} p P数-1
@@ -1032,6 +1183,93 @@ window.addEventListener('load', () => {
             saveAs(m3ub, data.title + " - " + data.page[p].part + ".m3u8");
         }
     }
+    /**处理选择后的变化
+     * @param {VideoUrl} v
+     * @param {number} i
+     * @param {string} se 配置
+    */
+    function toolbarvqnor(v, i, se) {
+        if (v.type == "dash") {
+            /**@type {HTMLSelectElement}*/
+            var dashvp = document.getElementById('dashvp' + i);
+            if (dashvp == null) return;
+            if (se == "dfe") {
+                dashvp.value = -1;
+                return;
+            }
+            var vq, codec;
+            [vq, codec] = splitvqs(se);
+            var avq = v.accept_quality;
+            if (avq.indexOf(vq) == -1) vq = getlowq(avq, vq);
+            var sl = [];
+            for (var j = 0; j < v.data.video.length; j++) {
+                /**@type {DashUrl}*/
+                var vi = v.data.video[j];
+                if (vi.id == vq) {
+                    if (codec == null) {
+                        dashvp.value = j;
+                        return;
+                    }
+                    else sl.push(j);
+                }
+            }
+            if (sl.length == 1) dashvp.value = sl[0];
+            else {
+                /**@type {DashUrl}*/
+                var vi = v.data.video[sl[0]];
+                if (vi.codecs.startsWith(codec)) dashvp.value = sl[0];
+                else dashvp.value = sl[1];
+            }
+        }
+        else if (v.type == "durl") {
+            /**@type {HTMLSelectElement}*/
+            var durlp = document.getElementById('durlp' + i);
+            if (durlp == null) return;
+            if (se == "dfe") {
+                durlp.value = -1;
+                return;
+            }
+            var vq, codec;
+            [vq, codec] = splitvqs(se);
+            var avq = v.accept_quality;
+            if (avq.indexOf(vq) == -1) vq = getlowq(avq, vq);
+            for (var j = 0; j < v.accept_quality.length; j++) {
+                /**@type {DurlUrl}*/
+                var vi = v.data[v.accept_quality[j]];
+                if (vi.id == vq) {
+                    durlp.value = j;
+                    return;
+                }
+            }
+        }
+    }
+    /**处理选择后的变化
+     * @param {VideoUrl} v
+     * @param {number} i
+     * @param {string} se 配置
+    */
+    function toolbaraqnor(v, i, se) {
+        if (v.type == "dash") {
+            /**@type {HTMLSelectElement}*/
+            var dashap = document.getElementById('dashap' + i);
+            if (dashap == null) return;
+            if (se == "dfe") {
+                dashap.value = -1;
+                return;
+            }
+            var aq = se - 1 + 1;
+            var aaq = v.accept_audio_quality;
+            if (aaq.indexOf(aq) == -1) aq = getlowaq(aaq, aq);
+            for (var j = 0; j < v.data.audio.length; j++) {
+                /**@type {DashUrl}*/
+                var ai = v.data.audio[j];
+                if (ai.id == aq) {
+                    dashap.value = j;
+                    return;
+                }
+            }
+        }
+    }
     function sel_change() {
         /**@type {HTMLInputElement}*/
         var inp = this;
@@ -1071,6 +1309,7 @@ window.addEventListener('load', () => {
         else {
             toolbar.style.display = "none";
         }
+        toolbarsn.setAttribute('value', sel_n);
     }
     /**@param {MouseEvent} e*/
     function allsel_click(e) {
@@ -1087,6 +1326,7 @@ window.addEventListener('load', () => {
                     selc[i].checked = true;
                 }
                 toolbar.style.display = null;
+                toolbarsn.setAttribute('value', selc.length);
             }
             else {
                 inp.checked = false;
@@ -1095,6 +1335,7 @@ window.addEventListener('load', () => {
                     selc[i].checked = false;
                 }
                 toolbar.style.display = "none";
+                toolbarsn.setAttribute('value', 0);
             }
         });
     }

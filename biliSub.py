@@ -2,16 +2,16 @@
 # This file is part of bili.
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from file import spfn
 from requests import Session
@@ -23,6 +23,7 @@ from command import gopt
 import JSONParser
 from ASSWriter import ASSScript, parsefromCSSHex, ASSScriptEvent
 import traceback
+from iso639 import languages
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -31,6 +32,15 @@ ip={}
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
 lan=getdict('biliSub',getlan(se,ip))
+
+
+def getiso6392t(s: str) -> str:
+    t = s.split('_')[0]
+    t = s.split('-')[0]
+    try:
+        return languages.get(alpha2=t).part2t
+    except:
+        return s
 
 
 def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = False,pi: int = 1, width: int = None, height: int = None):
@@ -53,13 +63,12 @@ def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = F
         if 's' in ip:
             fg=True
             bs=False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
         if 'y' in ip :
-            if ip['y'] :
-                fg=True
-                bs=False
-            else :
-                fg=False
-                bs=False
+            fg = ip['y']
+            bs = False
         while bs:
             inp=input(f'{lan["INPUT1"]}(y/n)'.replace("<filename>",fn))#"<filename>"文件已存在，是否覆盖？
             if len(inp)>0 :
@@ -113,10 +122,12 @@ def ffinputstr(i:list,n:int) ->(str,str):
     s=""
     r=""
     z=n
+    c = 0
     for k in i :
         s=s+' -i "%s"'%(k['fn'])
-        r=r+' -metadata:s:%s language="%s" -metadata:s:%s title="%s"'%(z,k['lan'],z,k['land'])
+        r = r + f' -metadata:s:s:{c} language="{getiso6392t(k["lan"])}" -metadata:s:s:{c} title="{k["land"]}" -metadata:s:s:{c} handler_name="{k["land"]}"'
         z=z+1
+        c = c + 1
     for i in range(z) :
         r=r+' -map %s'%(i)
     return s,r

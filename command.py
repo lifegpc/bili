@@ -2,16 +2,16 @@
 # This file is part of bili.
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from getopt import getopt
 from re import search
@@ -23,7 +23,7 @@ import sys
 def ph() :
     h=f'''{la['O1']}
     start.py -h/-?/--help   {la['O2']}
-    start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>] [--bp/--nbp] [--in/--nin] [--mt/--nmt] [--vi <URL_index>] [--uc/--nuc] [--ass/--nass] [--dmp/--ndmp]
+    start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>] [--bp/--nbp] [--in/--nin] [--mt/--nmt] [--vi <URL_index>] [--uc/--nuc] [--ass/--nass] [--dmp/--ndmp] [--vf <format>]
     start.py show c/w   {la['O3']}
     -i <input>   {la['O4']}
     -d <method>   {la['O5']}
@@ -105,13 +105,14 @@ def ph() :
     --nass  {la['O70']}
     --dmp   {la['O71']}
     --ndmp  {la['O72']}
+    --vf <format>   {la['O77'].replace('<value>', 'mkv, mp4')}
     {la['O56']}
     {la['O57']}
     {la['O58']}
     {la['O59']}'''
     print(h)
 def gopt(args,d:bool=False) :
-    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:s', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp'])
+    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:s', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf='])
     if d:
         print(re)
     rr=re[0]
@@ -324,6 +325,8 @@ def gopt(args,d:bool=False) :
             r['dmp'] = True
         if i[0] == '--ndmp' and not 'dmp' in r:
             r['dmp'] = False
+        if i[0] == '--vf' and not 'vf' in r and i[1] in ['mkv', 'mp4']:
+            r['vf'] = i[1]
     if h:
         global la
         la=getdict('command',getlan(se,r))

@@ -1,7 +1,7 @@
 # bili - webui/settings Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 msgid ""
 msgstr ""
@@ -140,5 +140,17 @@ msgid "The path to the font file (The font format should be one of TTF/OTF/WOFF/
 msgstr ""
 
 msgctxt "LENPASS"
-msgid "Enable password verification for pages beginning with \"/live/\"."
+msgid "Enable password verification for pages beginning with \"<part>\"."
+msgstr ""
+
+msgctxt "OWFIBD"
+msgid "Overwrite existing files by default:"
+msgstr ""
+
+msgctxt "SUBINFO"
+msgid "PS. You may need to restart the web server to apply the new settings."
+msgstr ""
+
+msgctxt "VIDEOFMT"
+msgid "The video format output from ffmpeg (Default:<value>):"
 msgstr ""

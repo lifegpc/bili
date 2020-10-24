@@ -1,7 +1,7 @@
 # bili - setsettings.py Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
 # Kum4423, 2020
@@ -245,3 +245,11 @@ msgctxt "INPUT35"
 msgid ""
 "Do you want to create a separate directory for videos with multiply parts?"
 msgstr "乗算部分のある動画用に別のディレクトリを作成しますか？"
+
+msgctxt "INPUT36"
+msgid "Do you want to overwrite existing files by default?"
+msgstr "デフォルトで既存のファイルを上書きしますか？"
+
+msgctxt "INPUT37"
+msgid "The video format output from ffmpeg (Default:<value>, Now:<value2>):"
+msgstr ""

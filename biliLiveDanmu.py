@@ -2,16 +2,16 @@
 # This file is part of bili.
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from requests import Session
 from JSONParser import getset,loadset
@@ -66,13 +66,12 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         if not ns:
             fg=True
             bs=False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
         if 'y' in ip :
-            if ip['y'] :
-                fg=True
-                bs=False
-            else :
-                fg=False
-                bs=False
+            fg = ip['y']
+            bs = False
         while bs:
             inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
             if len(inp)>0 :

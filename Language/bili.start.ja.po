@@ -1,7 +1,7 @@
 # bili - start.py Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
 # Kum4423, 2020
@@ -254,3 +254,7 @@ msgid ""
 "The live has not started. The program will check the live status after 30 "
 "seconds."
 msgstr "ライブが開始されていません。30秒後にライブの状態を確認します。"
+
+msgctxt "SPERROR"
+msgid "Please open \"<url>\" in a broswer and pass the captcha."
+msgstr ""

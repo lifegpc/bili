@@ -1,4 +1,4 @@
-# bili - startwebui.py Strings
+# bili - The exe versioninfo Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU Affero General Public License
@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
-"POT-Creation-Date: 2020-08-25 03:12:00+0000\n"
+"POT-Creation-Date: 2020-10-04 01:37:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,18 +15,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
 
-msgctxt "INVALPAS"
-msgid "Invalid password. Please reset your password."
+msgctxt "start"
+msgid "Download video/barrage from BiliBili"
 msgstr ""
 
-msgctxt "UNAPORT"
-msgid "The port <value1> is not available, try to replace it with the port <value2>."
+msgctxt "filter"
+msgid "Filter the barrage file"
 msgstr ""
 
-msgctxt "ZEROPORT"
-msgid "The port 0 is an invalid port in some software (such as Chrome, curl), try to replace it with the port 2."
+msgctxt "setsettings"
+msgid "Set settings for program"
 msgstr ""
 
-msgctxt "UNSAFEPORT"
-msgid "The port <value1> is in the list of the unsafe port in Chrome, try to replace it with the port <value2>."
+msgctxt "startwebui"
+msgid "WEB User Interface server"
 msgstr ""

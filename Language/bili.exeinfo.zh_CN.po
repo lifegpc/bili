@@ -1,4 +1,4 @@
-# bili - webuihtml/js(origin)/dir.js Strings
+# bili - The exe versioninfo Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU Affero General Public License
@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
-"POT-Creation-Date: 2020-08-27 05:04:00+0000\n"
-"PO-Revision-Date: 2020-08-27 08:04+0000\n"
+"POT-Creation-Date: 2020-10-04 01:37:00+0000\n"
+"PO-Revision-Date: 2020-10-04 01:43+0000\n"
 "Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
 "MIME-Version: 1.0\n"
@@ -19,38 +19,18 @@ msgstr ""
 "Language: zh_CN\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 
-msgctxt "FILENAME"
-msgid "File name"
-msgstr "文件名"
+msgctxt "start"
+msgid "Download video/barrage from BiliBili"
+msgstr "从BiliBili下载视频/弹幕"
 
-msgctxt "FILETYPE"
-msgid "File type"
-msgstr "文件类型"
+msgctxt "filter"
+msgid "Filter the barrage file"
+msgstr "过滤弹幕文件"
 
-msgctxt "FILESIZE"
-msgid "File size"
-msgstr "文件大小"
+msgctxt "setsettings"
+msgid "Set settings for program"
+msgstr "设置程序"
 
-msgctxt "LASTMODI"
-msgid "Last modified time"
-msgstr "上次修改时间"
-
-msgctxt "INDEXOF"
-msgid "Index of <dir>"
-msgstr "<dir>的索引"
-
-msgctxt "AO"
-msgid "Ascending order"
-msgstr "升序"
-
-msgctxt "DO"
-msgid "Descending order"
-msgstr "降序"
-
-msgctxt "DIR"
-msgid "Directory"
-msgstr "目录"
-
-msgctxt "FILE"
-msgid "File"
-msgstr "文件"
+msgctxt "startwebui"
+msgid "WEB User Interface server"
+msgstr "web用户界面服务器"

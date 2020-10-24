@@ -1,7 +1,7 @@
 # bili - webui/settings Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
 # 1 q <g1710431395@gmail.com>, 2020
@@ -156,5 +156,17 @@ msgid ""
 msgstr "字体文件路径（字体格式需要是TTF/OTF/WOFF/WOFF2之一）："
 
 msgctxt "LENPASS"
-msgid "Enable password verification for pages beginning with \"/live/\"."
-msgstr "对\"/live/\"开头的页面进行密码验证。"
+msgid "Enable password verification for pages beginning with \"<part>\"."
+msgstr "对\"<part>\"开头的页面进行密码验证。"
+
+msgctxt "OWFIBD"
+msgid "Overwrite existing files by default:"
+msgstr "默认覆盖已存在文件："
+
+msgctxt "SUBINFO"
+msgid "PS. You may need to restart the web server to apply the new settings."
+msgstr "注：你可能需要重启网页服务器来应用新的设置。"
+
+msgctxt "VIDEOFMT"
+msgid "The video format output from ffmpeg (Default:<value>):"
+msgstr "从ffmpeg输出的视频格式（默认：<value>）："

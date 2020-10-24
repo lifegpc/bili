@@ -37,6 +37,7 @@ $code:
             return s
         else:
             return '/font?' + urlencode({'l':s})
+<!doctype html>
 <html>
 
 <head>
@@ -111,7 +112,10 @@ $if fontname is not None:
         <input class="form" pattern=".+\.([wW][oO][fF]{2}|[wW][oO][fF]{2}2|[tT]{2}[Ff]|[oO][tT][Ff])" id="uifontloc"$:getse('uifontloc')>
         <br/>
         <input class="form nty check" type="checkbox" id="dclive"$:getch3("dclive")>
-        <label class="trans" trans="webui.settings LENPASS">对"/live/"开头的页面进行密码验证。</label>
+        <label class="trans" trans="webui.settings LENPASS" part="/live/">对"/live/"开头的页面进行密码验证。</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="dcvideo"$:getch3("dcvideo")>
+        <label class="trans" trans="webui.settings LENPASS" part="/video/">对"/video/"开头的页面进行密码验证。</label>
     $if type == '/main':
         <input value="2" id="type" class="form hide">
         <label class="trans" trans="webui.settings MAINLAN">程序语言：</label>
@@ -224,13 +228,23 @@ $if fontname is not None:
         <input class="form ntn check" type="checkbox" id="dmp"$:getch('dmp')>
         <label class="trans" trans="bili.command O71">为多P视频创建单独的文件夹。</label>
         <br/>
+        <label class="trans" trans="webui.settings OWFIBD">默认覆盖已存在文件：</label>
+        <select class="form ynd" id="y"$:getse2('y')></select>
+        <br/>
+        <label class="trans" trans="webui.settings VIDEOFMT" value="mkv">从ffmpeg输出的视频格式（默认：）：</label>
+        <select class="form" id="vf">
+            <option value="" class="trans" trans="webui.settings NOTSET"$:getsel('vf')>不设置</option>
+            <option value="mkv"$:getsel('vf', 'mkv')>mkv</option>
+            <option value="mp4"$:getsel('vf', 'mp4')>mp4</option>
+        </select>
+        <br/>
         <label class="trans" trans="webui.settings MAINPS">注：这里的设置保存后将覆盖原有的settings.json。</label>
     </form>
-    <button class="form trans" id="submit" trans="webui.settings SUBMIT">提交</button>
+    <button class="form trans abs" id="submit" trans="webui.settings SUBMIT">提交</button>
     <div class="footer">
         <div><a href="/about" class="trans" trans="webui.index ABOUT">关于</a></div>
         <div><a href="https://github.com/lifegpc/bili" class="trans" trans="webui.index SOURCE">源代码</a></div>
-        <div><a href="https://www.gnu.org/licenses/gpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
+        <div><a href="https://www.gnu.org/licenses/agpl-3.0-standalone.html" class="trans" trans="webui.index LICENSE">许可证</a></div>
     </div>
 </body>
 

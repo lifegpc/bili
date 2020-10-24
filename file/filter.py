@@ -2,20 +2,21 @@
 # This file is part of bili.
 #
 # This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
+# it under the terms of the GNU Affero General Public License as published
+# by the Free Software Foundation, either version 3 of the License, or
 # (at your option) any later version.
 #
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
+# GNU Affero General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from re import search
 from os.path import isdir,isfile
 import platform
+import regex
 def listf(filelist,lx=0,ft=["xml"]) :
     "对listd获得列表进行过滤，文件夹都将保留"
     r=[]
@@ -55,6 +56,10 @@ def listff(filelist) :
 def filtern(filen:str) :
     "对文件名进行去除不应该字符"
     filen = str(filen)
+    re = regex.search(r'[^[:print:]]', filen)
+    while re is not None:
+        filen = filen.replace(re.group(), '_')
+        re = regex.search(r'[^[:print:]]', filen)
     filen=filen.replace('/','_')
     filen=filen.replace('\\','_')
     filen=filen.replace(':','_')
@@ -83,6 +88,10 @@ def filterd(dir:str)->str:
                 return f
     if dir[-1]!='/' and dir[-1]!='\\' :
         dir=dir+'/'
+    re = regex.search(r'[^[:print:]]', dir)
+    while re is not None:
+        dir = dir.replace(re.group(), '_')
+        re = regex.search(r'[^[:print:]]', dir)
     dir=dir.replace(':','_')
     dir=dir.replace('*','_')
     dir=dir.replace('?','_')

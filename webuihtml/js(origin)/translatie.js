@@ -2,16 +2,16 @@
 This file is part of bili.
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU General Public License
+You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>. */
 /**@typedef {Object} TransObj
  * @property {()=>void} deal 处理新的元素
@@ -61,7 +61,7 @@ function gettrans2(name, f) {
 }
 transobj.observer = new MutationObserver((mutationsList, observer) => {
     mutationsList.forEach((v) => {
-        if (v.type == "attributes" && !["style", "n", "value"].includes(v.attributeName)) {
+        if (v.type == "attributes" && !["style"].includes(v.attributeName)) {
             /**@type {HTMLElement}*/
             var o = v.target;
             function dealwithtar(o) {
@@ -94,10 +94,10 @@ transobj.observer = new MutationObserver((mutationsList, observer) => {
                                 }
                                 o.innerText = t;
                             }
-                            if (o.hasAttribute('n')) {
+                            if (o.hasAttribute('n') && o.getAttribute('n') != t) {
                                 o.setAttribute('n', t);
                             }
-                            if (o.classList.has('tvalue')) {
+                            if (o.classList.has('tvalue') && o.getAttribute('value') != t) {
                                 o.setAttribute('value', t);
                             }
                         }

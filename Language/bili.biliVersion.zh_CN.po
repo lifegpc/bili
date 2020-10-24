@@ -1,7 +1,7 @@
 # bili - biliVersion.py Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
-# You should have received a copy of the GNU General Public License
+# You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
 # 1 q <g1710431395@gmail.com>, 2020
