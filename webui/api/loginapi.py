@@ -286,10 +286,12 @@ class loginapi(apic):
                 i2 = urlp2[i][0]
                 sa.append({'name': i, 'value': i2,
                            'domain': '.bilibili.com', 'path': '/'})
+        ke = ['_uuid', 'buvid3', 'sid']
         for i in self._r.cookies.keys():
-            if i in ['_uuid', 'buvid3', 'sid']:
+            if i in ke:
                 sa.append({'name': i, 'value': self._r.cookies.get(
                     i, domain='.bilibili.com', path='/'), 'domain': '.bilibili.com', 'path': '/'})
+                ke.remove(i)
         savecookie(sa)
 
 
