@@ -86,3 +86,7 @@ msgstr ""
 msgctxt "USEANDPAW"
 msgid "Use user name and password to login in (Web API)"
 msgstr ""
+
+msgctxt "BUGWARN"
+msgid "This login method now have bugs, some contents may not available."
+msgstr ""

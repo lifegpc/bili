@@ -171,3 +171,7 @@ msgstr ""
 msgctxt "OUTPUT20"
 msgid "Download completed."
 msgstr "下载完毕！"
+
+msgctxt "NOLIVEDM"
+msgid "This live record do not have any barrage."
+msgstr "该直播回放没有任何弹幕。"

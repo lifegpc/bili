@@ -24,12 +24,15 @@ import traceback
 from urllib.parse import quote_plus, urlsplit, parse_qs
 from JSONParser import savecookie
 import time
+from math import floor
+from random import randint
 
 
 keyhash = None
 pubkey = None
 web_keyhash = None
 web_pubkey = None
+req = None
 
 
 class loginapi(apic):
@@ -39,7 +42,41 @@ class loginapi(apic):
 
     def __init__(self, inp: str):
         apic.__init__(self, inp)
-        self._r = new_Session(False)
+        global req
+        if req is None:
+            self._r = new_Session(False)
+            req = self._r
+            self._r.get(
+                'https://passport.bilibili.com/ajax/miniLogin/minilogin')
+            self._r.cookies.set('_uuid', self._generateUuid(),
+                                domain='.bilibili.com', path='/')
+            self._r.get('https://data.bilibili.com/v/web/web_page_view?mid=null&fts=null&url=https%3A%2F%2Fpassport.bilibili.com%2Fajax%2FminiLogin%2Fminilogin&proid=3&ptype=2&module=game&title=哔哩哔哩快速登录&ajaxtag=&ajaxid=&page_ref=')
+            self._r.cookies.set('finger', '1777945899',
+                                domain='passport.bilibili.com', path='/ajax/miniLogin')  # 通过canvas画图形成的指纹
+        else:
+            self._r = req
+
+    def _generateUuid(self) -> str:
+        r = ''
+        for i in [8, 4, 4, 4, 12]:
+            if r == '':
+                r = self.__generateUuidPart(i)
+            else:
+                r = r + '-' + self.__generateUuidPart(i)
+        t = str(floor(time.time() * 1000 % 100000))
+        while len(t) < 5:
+            t = '0' + t
+        return f'{r}{t}infoc'
+
+    def __generateUuidPart(self, e: int) -> str:
+        r = ''
+        i = 0
+        while i < e:
+            r = r + hex(randint(0, 15))[2].upper()
+            i = i + 1
+        while len(r) < e:
+            r = '0' + r
+        return r
 
     def _get_pubkey(self):
         re = self._r.post('https://passport.bilibili.com/api/oauth2/getKey', {
@@ -240,6 +277,7 @@ class loginapi(apic):
 
     def _save_cookie(self, url):
         "保存来自URL的Cookie"
+        self._r.get(url)
         urlp = urlsplit(url)
         urlp2 = parse_qs(urlp.query)
         sa = []
@@ -248,6 +286,12 @@ class loginapi(apic):
                 i2 = urlp2[i][0]
                 sa.append({'name': i, 'value': i2,
                            'domain': '.bilibili.com', 'path': '/'})
+        ke = ['_uuid', 'buvid3', 'sid']
+        for i in self._r.cookies.keys():
+            if i in ke:
+                sa.append({'name': i, 'value': self._r.cookies.get(
+                    i, domain='.bilibili.com', path='/'), 'domain': '.bilibili.com', 'path': '/'})
+                ke.remove(i)
         savecookie(sa)
 
 

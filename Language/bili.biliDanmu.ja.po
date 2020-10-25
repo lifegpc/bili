@@ -173,3 +173,7 @@ msgstr ""
 msgctxt "OUTPUT20"
 msgid "Download completed."
 msgstr "ダウンロードが完了しました。 "
+
+msgctxt "NOLIVEDM"
+msgid "This live record do not have any barrage."
+msgstr ""
