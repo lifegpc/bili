@@ -154,3 +154,7 @@ msgstr ""
 msgctxt "OUTPUT20"
 msgid "Download completed."
 msgstr ""
+
+msgctxt "NOLIVEDM"
+msgid "This live record do not have any barrage."
+msgstr ""

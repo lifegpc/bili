@@ -93,8 +93,12 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -2
-        for j in re['data']['dm']['dm_info'] :
-            dm.append(j)
+        if re['data']['dm']['dm_info'] is not None:
+            for j in re['data']['dm']['dm_info']:
+                dm.append(j)
+    if len(dm) == 0:
+        print(lan['NOLIVEDM'])  # 该直播回放没有任何弹幕。
+        return 0
     if ns:
         print(lan['OUTPUT19'].replace('<number>',str(len(dm))))#解析完毕，共获得<number>条弹幕。\n正在将JSON转换为XML……
     for i in dm :
