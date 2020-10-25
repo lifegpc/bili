@@ -97,3 +97,7 @@ msgstr "SMSは既に送信済みです。"
 msgctxt "USEANDPAW"
 msgid "Use user name and password to login in (Web API)"
 msgstr "ユーザー名とパスワードを使ってログインする (Web API)"
+
+msgctxt "BUGWARN"
+msgid "This login method now have bugs, some contents may not available."
+msgstr ""

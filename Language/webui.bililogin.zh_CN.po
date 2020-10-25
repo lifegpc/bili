@@ -95,3 +95,7 @@ msgstr "手机短信已发送。"
 msgctxt "USEANDPAW"
 msgid "Use user name and password to login in (Web API)"
 msgstr "使用用户名和密码登录（网页API）"
+
+msgctxt "BUGWARN"
+msgid "This login method now have bugs, some contents may not available."
+msgstr "这种登录方式目前有BUG，部分内容可能不可用。"

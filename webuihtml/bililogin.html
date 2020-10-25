@@ -60,6 +60,8 @@ $if fontname is not None:
         <div id="qrc" style="display: none;">
             <img id="qrcimg"><br/>
             <label id="qrcl" class="trans" trans="webui.bililogin QRCEXPR" style="color:red;display: none;">二维码已过期，单击这里重新加载。</label>
+            <br/>
+            <label class="trans" trans="webui.bililogin BUGWARN">这种登录方式目前有BUG，部分内容可能不可用。</label>
         </div>
         <div id="phocode" style="display: none;">
             <label class="trans" trans="webui.bililogin PHONEN">手机号：</label>
@@ -69,6 +71,8 @@ $if fontname is not None:
             <label class="trans" trans="webui.bililogin CAPTCHA">验证码：</label>
             <input id="phocapt" required>
             <button id="sendSMS" class="trans" trans="webui.bililogin SENDSMS">发送短信验证码</button>
+            <br/>
+            <label class="trans" trans="webui.bililogin BUGWARN">这种登录方式目前有BUG，部分内容可能不可用。</label>
         </div>
         <div id="uapweb" style="display: none;">
             <label class="trans" trans="webui.bililogin USERNAME">用户名：</label>
@@ -76,6 +80,8 @@ $if fontname is not None:
             <br/>
             <label class="trans" trans="webui.settings PASS">密码：</label>
             <input id="passwordw" type="password" required>
+            <br/>
+            <label class="trans" trans="webui.bililogin BUGWARN">这种登录方式目前有BUG，部分内容可能不可用。</label>
         </div>
         <div style="display: none;"><label id="uap1" class="trans switch" switch="0" switch2="uap" trans="webui.bililogin USEANDPA">使用用户名和密码登录</label><br/></div>
         <div><label id="qrcl" class="trans switch" switch="1" switch2="qrc" trans="webui.bililogin QRSCAN">使用APP扫码登录</label><br/></div>
