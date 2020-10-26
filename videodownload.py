@@ -1752,6 +1752,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
         imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
         if ffmpeg:
             print(lan['CONV_M4S_TO_M4A'])
+            tt = int(time.time())
             nss = ""
             imga = ""
             imga2 = ""
@@ -1759,8 +1760,23 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 nss = getnul()
             if imgs == 0:
                 imga = f" -i \"{imgf}\""
-                imga2 = " -map 0 -map 1 -disposition:v:0 attached_pic"
-            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\"{imga} -metadata title=\"{bstr.f(data['page'][i - 1]['part'])}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i}/{data['videos']} -metadata disc=1/1 -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs},{data['uid']}\" -c copy{imga2} \"{filen}.m4a\"{nss}")
+                imga2 = " -map 0 -map 2 -disposition:v:0 attached_pic"
+            tit = data['page'][i - 1]['part']
+            if tit == "":
+                tit = data['title']
+            with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                te.write(';FFMETADATA1\n')
+                te.write(f"title={bstr.g(tit)}\n")
+                te.write(f"comment={bstr.g(data['desc'])}\n")
+                te.write(f"album={bstr.g(data['title'])}\n")
+                te.write(f"artist={bstr.g(data['name'])}\n")
+                te.write(f"album_artist={bstr.g(data['name'])}\n")
+                te.write(f"track={i}/{data['videos']}\n")
+                te.write(f"disc=1/1\n")
+                te.write(f"episode_id=AV{data['aid']}\n")
+                te.write(f"date={tostr4(data['pubdate'])}\n")
+                te.write(f"description={bstr.g(vqs)},{data['uid']}\n")
+            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}.m4a\"{nss}")
             if re == 0:
                 print(lan['COM_CONV'])
                 delete = False
@@ -1788,6 +1804,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                     os.remove(f"{filen}.{hzm}")
                     if imgs == 0 and not bp:
                         os.remove(imgf)
+            os.remove(f"Temp/{data['aid']}_{tt}_metadata.txt")
     return 0
 
 
