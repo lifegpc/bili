@@ -1165,6 +1165,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
+            tt = int(time.time())
             sa=""
             sb=""
             nss=""
@@ -1174,9 +1175,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 nss=getnul()
             if 'sub' in data:
                 if not nau:
-                    sa,sb=ffinputstr(data['sub'],2)
+                    sa, sb = ffinputstr(data['sub'], 3, 2)
                 else :
-                    sa,sb=ffinputstr(data['sub'],1)
+                    sa, sb = ffinputstr(data['sub'], 2, 1)
             if imgs == 0 and vf == "mkv":
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             elif imgs == 0 and vf == "mp4":
@@ -1184,38 +1185,93 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 imga2 = f' -disposition:v:1 attached_pic'
                 if 'sub' in data:
                     if not nau:
-                        sa, sb = ffinputstr(data['sub'], 3)
+                        sa, sb = ffinputstr(data['sub'], 4, 2)
                     else:
-                        sa, sb = ffinputstr(data['sub'], 2)
+                        sa, sb = ffinputstr(data['sub'], 3, 1)
                 else:
                     if not nau:
-                        sb = ' -map 0 -map 1 -map 2'
+                        sb = ' -map 0 -map 1 -map 3'
                     else:
-                        sb = ' -map 0 -map 1'
+                        sb = ' -map 0 -map 2'
             if not nau and vf == "mkv":
-                tit = bstr.f(data['title'])
-                tit2 = bstr.f(data['page'][i - 1]['part'])
+                tit = data['title']
+                tit2 = data['page'][i - 1]['part']
                 if tit2 != "":
                     tit = f'{tit} - {tit2}'
-                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\"{sa} -metadata title=\"{tit}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs[0]}\" -metadata aq=\"{vqs[1]}\"{sb}{imga} -c:s copy -c copy \"{filen}\"{nss}")
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"description={bstr.g(data['desc'])}\n")
+                    te.write(f"aid={data['aid']}\n")
+                    te.write(f"bvid={data['bvid']}\n")
+                    te.write(f"cid={data['page'][i-1]['cid']}\n")
+                    te.write(f"atitle={bstr.g(data['title'])}\n")
+                    te.write(f"pubdate={tostr2(data['pubdate'])}\n")
+                    te.write(f"ctime={tostr2(data['ctime'])}\n")
+                    te.write(f"uid={data['uid']}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"p={i}P/{data['videos']}P\n")
+                    te.write(f"part={bstr.g(data['page'][i-1]['part'])}\n")
+                    te.write(f"vq={bstr.g(vqs[0])}\n")
+                    te.write(f"aq={bstr.g(vqs[1])}\n")
+                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 2{sb}{imga} -c copy \"{filen}\"{nss}")
             elif vf == "mkv":
-                tit = bstr.f(data['title'])
-                tit2 = bstr.f(data['page'][i - 1]['part'])
+                tit = data['title']
+                tit2 = data['page'][i - 1]['part']
                 if tit2 != "":
                     tit = f'{tit} - {tit2}'
-                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\"{sa} -metadata title=\"{tit}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs[0]}\"{sb}{imga} -c:s copy -c copy \"{filen}\"{nss}")
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"description={bstr.g(data['desc'])}\n")
+                    te.write(f"aid={data['aid']}\n")
+                    te.write(f"bvid={data['bvid']}\n")
+                    te.write(f"cid={data['page'][i-1]['cid']}\n")
+                    te.write(f"atitle={bstr.g(data['title'])}\n")
+                    te.write(f"pubdate={tostr2(data['pubdate'])}\n")
+                    te.write(f"ctime={tostr2(data['ctime'])}\n")
+                    te.write(f"uid={data['uid']}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"p={i}P/{data['videos']}P\n")
+                    te.write(f"part={bstr.g(data['page'][i-1]['part'])}\n")
+                    te.write(f"vq={bstr.g(vqs[0])}\n")
+                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}\"{nss}")
             elif not nau:
-                tit = bstr.f(data['title'])
-                tit2 = bstr.f(data['page'][i - 1]['part'])
+                tit = data['title']
+                tit2 = data['page'][i - 1]['part']
                 if tit2 != "":
                     tit = f'{tit} - {tit2}'
-                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\"{imga}{sa}{sb} -metadata title=\"{tit}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i}/{data['videos']} -metadata disc=1/1 -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs[0]},{vqs[1]},{data['uid']}\" -c copy -c:s mov_text{imga2} \"{filen}\"{nss}")
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"comment={bstr.g(data['desc'])}\n")
+                    te.write(f"album={bstr.g(data['title'])}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"album_artist={bstr.g(data['name'])}\n")
+                    te.write(f"track={i}/{data['videos']}\n")
+                    te.write(f"disc=1/1\n")
+                    te.write(f"episode_id=AV{data['aid']}\n")
+                    te.write(f"date={tostr4(data['pubdate'])}\n")
+                    te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])},{data['uid']}\n")
+                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 2{sb} -c copy -c:s mov_text{imga2} \"{filen}\"{nss}")
             else:
-                tit = bstr.f(data['title'])
-                tit2 = bstr.f(data['page'][i - 1]['part'])
+                tit = data['title']
+                tit2 = data['page'][i - 1]['part']
                 if tit2 != "":
                     tit = f'{tit} - {tit2}'
-                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\"{imga}{sa}{sb} -metadata title=\"{tit}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i}/{data['videos']} -metadata disc=1/1 -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs[0]},{data['uid']}\" -c copy -c:s mov_text{imga2} \"{filen}\"{nss}")
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"comment={bstr.g(data['desc'])}\n")
+                    te.write(f"album={bstr.g(data['title'])}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"album_artist={bstr.g(data['name'])}\n")
+                    te.write(f"track={i}/{data['videos']}\n")
+                    te.write(f"disc=1/1\n")
+                    te.write(f"episode_id=AV{data['aid']}\n")
+                    te.write(f"date={tostr4(data['pubdate'])}\n")
+                    te.write(f"description={bstr.g(vqs[0])},{data['uid']}\n")
+                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}\"{nss}")
             de=False
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
@@ -1254,6 +1310,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         os.remove(j['fn'])
                 if imgs==0 and not bp :
                     os.remove(imgf)
+            os.remove(f"Temp/{data['aid']}_{tt}_metadata.txt")
 def avsubdownload(i,url,data,r,se,ip,ud) :
     '''下载普通类视频字幕
     -1 文件夹创建失败'''

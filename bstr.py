@@ -24,7 +24,7 @@ def f(i:str):
 
 
 def g(i: str):
-    s = i
+    s = str(i)
     re = rsearch(r'[^[:print:\r\n]]', s)
     while re is not None:
         s = s.replace(re.group(), '_')
