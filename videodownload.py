@@ -3766,7 +3766,7 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
             aria2c = False
         now = int(time.time())
         if not fin:
-            fn = file.filtern(f"{data['title']}({tostr2(now)})")
+            fn = file.filtern(f"{data['title']}({tostr2(now)}).flv")
         elif sv:
             fn = file.filtern(f"{data['title']}({data['roomid']},UID{data['uid']},{tostr2(now)},{quality_des_dict[video_quality]}).flv")
         else:
