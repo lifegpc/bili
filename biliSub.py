@@ -117,7 +117,7 @@ def assrt(fn:str,b:list):
         i=i+1
     f.close()
     return 0
-def ffinputstr(i:list,n:int) ->(str,str):
+def ffinputstr(i: list, n: int, m: int=-1) -> (str, str):
     "分别解析出ffmpeg输入参数和元数据参数"
     s=""
     r=""
@@ -129,7 +129,8 @@ def ffinputstr(i:list,n:int) ->(str,str):
         z=z+1
         c = c + 1
     for i in range(z) :
-        r=r+' -map %s'%(i)
+        if i != m:
+            r = r + f' -map {i}'
     return s,r
 
 

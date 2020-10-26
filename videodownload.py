@@ -643,16 +643,16 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if not ns:
                 nss=getnul()
             if 'sub' in data:
-                sa,sb=ffinputstr(data['sub'],1)
+                sa, sb = ffinputstr(data['sub'], 2, 1)
             if imgs==0 and vf == "mkv":
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             elif imgs == 0 and vf == "mp4":
                 imga = f' -i "{imgf}"'
                 imga2 = f' -disposition:v:1 attached_pic'
                 if 'sub' in data:
-                    sa, sb = ffinputstr(data['sub'], 2)
+                    sa, sb = ffinputstr(data['sub'], 3, 1)
                 else:
-                    sb = ' -map 0 -map 1'
+                    sb = ' -map 0 -map 2'
             if len(durl) > 1 and vf == "mkv":
                 te=open('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt),'wt',encoding='utf8')
                 j=1
@@ -660,17 +660,47 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
                     j=j+1
                 te.close()
-                tit = bstr.f(data['title'])
-                tit2 = bstr.f(data['page'][i - 1]['part'])
+                tit = data['title']
+                tit2 = data['page'][i - 1]['part']
                 if tit2 != "":
                     tit = f'{tit} - {tit2}'
-                ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(data['aid']))}_{tt}.txt\"{sa} -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata title=\"{tit}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs}\"{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"aid={data['aid']}\n")
+                    te.write(f"bvid={data['bvid']}\n")
+                    te.write(f"ctime={tostr2(data['ctime'])}\n")
+                    te.write(f"description={bstr.g(data['desc'])}\n")
+                    te.write(f"p={i}P/{data['videos']}P\n")
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"pubdate={tostr2(data['pubdate'])}\n")
+                    te.write(f"uid={data['uid']}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"cid={data['page'][i-1]['cid']}\n")
+                    te.write(f"atitle={bstr.g(data['title'])}\n")
+                    te.write(f"part={bstr.g(data['page'][i-1]['part'])}\n")
+                    te.write(f"vq={bstr.g(vqs)}\n")
+                ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['aid']}_{tt}.txt\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
             elif vf == "mkv":
-                tit = bstr.f(data['title'])
-                tit2 = bstr.f(data['page'][i - 1]['part'])
+                tit = data['title']
+                tit2 = data['page'][i - 1]['part']
                 if tit2 != "":
                     tit = f'{tit} - {tit2}'
-                ml=f"ffmpeg -i \"{filen}.{hzm}\"{sa} -metadata aid=\"{data['aid']}\" -metadata bvid=\"{data['bvid']}\" -metadata ctime=\"{tostr2(data['ctime'])}\" -metadata description=\"{bstr.f(data['desc'])}\" -metadata p=\"{i}P/{data['videos']}P\" -metadata title=\"{tit}\" -metadata pubdate=\"{tostr2(data['pubdate'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata cid=\"{data['page'][i-1]['cid']}\" -metadata atitle=\"{bstr.f(data['title'])}\" -metadata part=\"{bstr.f(data['page'][i-1]['part'])}\" -metadata vq=\"{vqs}\"{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"aid={data['aid']}\n")
+                    te.write(f"bvid={data['bvid']}\n")
+                    te.write(f"ctime={tostr2(data['ctime'])}\n")
+                    te.write(f"description={bstr.g(data['desc'])}\n")
+                    te.write(f"p={i}P/{data['videos']}P\n")
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"pubdate={tostr2(data['pubdate'])}\n")
+                    te.write(f"uid={data['uid']}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"cid={data['page'][i-1]['cid']}\n")
+                    te.write(f"atitle={bstr.g(data['title'])}\n")
+                    te.write(f"part={bstr.g(data['page'][i-1]['part'])}\n")
+                    te.write(f"vq={bstr.g(vqs)}\n")
+                ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
             elif len(durl) > 1:
                 te = open('Temp/%s_%s.txt' % (file.filtern('%s' % (data['aid'])), tt), 'wt', encoding='utf8')
                 j = 1
@@ -678,17 +708,41 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write("file '../%s_%s.%s'\n" % (filen, j, hzm))
                     j = j + 1
                 te.close()
-                tit = bstr.f(data['title'])
-                tit2 = bstr.f(data['page'][i - 1]['part'])
+                tit = data['title']
+                tit2 = data['page'][i - 1]['part']
                 if tit2 != "":
                     tit = f'{tit} - {tit2}'
-                ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(data['aid']))}_{tt}.txt\"{imga}{sa}{sb} -metadata title=\"{tit}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i}/{data['videos']} -metadata disc=1/1 -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs},{data['uid']}\" -c copy -c:s mov_text{imga2} \"{filen}.mp4\"{nss}"
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"comment={bstr.g(data['desc'])}\n")
+                    te.write(f"album={bstr.g(data['title'])}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"album_artist={bstr.g(data['name'])}\n")
+                    te.write(f"track={i}/{data['videos']}\n")
+                    te.write(f"disc=1/1\n")
+                    te.write(f"episode_id=AV{data['aid']}\n")
+                    te.write(f"date={tostr4(data['pubdate'])}\n")
+                    te.write(f"description={bstr.g(vqs)},{data['uid']}\n")
+                ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['aid']}_{tt}.txt\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}.mp4\"{nss}"
             else:
-                tit = bstr.f(data['title'])
-                tit2 = bstr.f(data['page'][i - 1]['part'])
+                tit = data['title']
+                tit2 = data['page'][i - 1]['part']
                 if tit2 != "":
                     tit = f'{tit} - {tit2}'
-                ml = f"ffmpeg -i \"{filen}.{hzm}\"{imga}{sa}{sb} -metadata title=\"{tit}\" -metadata comment=\"{bstr.f(data['desc'])}\" -metadata album=\"{bstr.f(data['title'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata album_artist=\"{bstr.f(data['name'])}\" -metadata track={i}/{data['videos']} -metadata disc=1/1 -metadata episode_id=AV{data['aid']} -metadata date={tostr4(data['pubdate'])} -metadata description=\"{vqs},{data['uid']}\" -c copy -c:s mov_text{imga2} \"{filen}.mp4\"{nss}"
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"comment={bstr.g(data['desc'])}\n")
+                    te.write(f"album={bstr.g(data['title'])}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"album_artist={bstr.g(data['name'])}\n")
+                    te.write(f"track={i}/{data['videos']}\n")
+                    te.write(f"disc=1/1\n")
+                    te.write(f"episode_id=AV{data['aid']}\n")
+                    te.write(f"date={tostr4(data['pubdate'])}\n")
+                    te.write(f"description={bstr.g(vqs)},{data['uid']}\n")
+                ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}.mp4\"{nss}"
             re=os.system(ml)
             if re==0:
                 print(lan['OUTPUT14'])#合并完成！
@@ -730,6 +784,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         os.remove(j['fn'])
                 if imgs==0 and not bp :
                     os.remove(imgf)
+            os.remove(f"Temp/{data['aid']}_{tt}_metadata.txt")
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['aid'])),tt))
     elif "data" in re and "dash" in re['data'] :

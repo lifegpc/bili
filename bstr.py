@@ -15,11 +15,29 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from re import search,I
 from html.parser import HTMLParser
+from regex import search as rsearch
 def f(i:str):
     s=i.replace('\r','\\r')
     s=s.replace('\n','\\n')
     s=s.replace('"',"'")
     return s
+
+
+def g(i: str):
+    s = i
+    re = rsearch(r'[^[:print:\r\n]]', s)
+    while re is not None:
+        s = s.replace(re.group(), '_')
+        re = rsearch(r'[^[:print:]]', s)
+    s = s.replace('#', '\\#')
+    s = s.replace('\\', '\\\\')
+    s = s.replace('=', '\\=')
+    s = s.replace(';', '\\;')
+    s = s.replace('\r', '')
+    s = s.replace('\n', '\\\n')
+    return s
+
+
 def gettags(t:list) -> str:
     "将tag列表转换为文字"
     f=True
