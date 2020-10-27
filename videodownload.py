@@ -3233,6 +3233,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             imgs = eppicdownload(i, data, r, ip, se, imgf)
         if ffmpeg:
             print(lan['CONV_M4S_TO_M4A'])
+            tt = int(time.time())
             nss = ""
             imga = ""
             imga2 = ""
@@ -3240,7 +3241,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                 nss = getnul()
             if not che and imgs == 0:
                 imga = f" -i \"{imgf}\""
-                imga2 = " -map 0 -map 1 -disposition:v:0 attached_pic"
+                imga2 = " -map 0 -map 2 -disposition:v:0 attached_pic"
             le = 1
             if 'sections' in data and len(data['sections']) > 1:
                 le = len(data['sections']) + 1
@@ -3252,12 +3253,28 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                         le2 = len(section['epList'])
                         break
             mediaInfo = data['mediaInfo']
-            author = "bilibili"
-            uid = ""
+            author = "哔哩哔哩番剧"
+            uid = ",UID928123"
             if che:
-                author = bstr.f(mediaInfo['up_info']['uname'])
+                author = mediaInfo['up_info']['uname']
                 uid = f",UID{mediaInfo['up_info']['mid']}"
-            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\"{imga} -metadata title=\"{bstr.f(i['titleFormat'])} {bstr.f(i['longTitle'])}\" -metadata comment=\"{bstr.f(mediaInfo['evaluate'])}\" -metadata album=\"{bstr.f(mediaInfo['title'])}\" -metadata artist=\"{author}\" -metadata album_artist=\"{author}\" -metadata track={i['i'] + 1}/{le2} -metadata disc={sectionType + 1}/{le} -metadata episode_id=\"AV{i['aid']},EP{i['id']}\" -metadata date={mediaInfo['time'][:10]} -metadata description=\"{vqs}{uid},SS{mediaInfo['ssId']}\" -c copy{imga2} \"{filen}.m4a\"{nss}")
+            tit = i['titleFormat']
+            tit2 = i['longTitle']
+            if tit2 != "":
+                tit = f"{tit} {tit2}"
+            with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                te.write(';FFMETADATA1\n')
+                te.write(f"title={bstr.g(tit)}\n")
+                te.write(f"comment={bstr.g(mediaInfo['evaluate'])}\n")
+                te.write(f"album={bstr.g(mediaInfo['title'])}\n")
+                te.write(f"artist={bstr.g(author)}\n")
+                te.write(f"album_artist={bstr.g(author)}\n")
+                te.write(f"track={i['i'] + 1}/{le2}\n")
+                te.write(f"disc={sectionType + 1}/{le}\n")
+                te.write(f"episode_id=AV{i['aid']},EP{i['id']}\n")
+                te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
+                te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\n")
+            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}.m4a\"{nss}")
             if re == 0:
                 print(lan['COM_CONV'])
                 delete = False
@@ -3285,6 +3302,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                     os.remove(f"{filen}.{hzm}")
                     if not che and imgs == 0 and not bp:
                         os.remove(imgf)
+            os.remove(f"Temp/{i['aid']}_{tt}_metadata.txt")
     return 0
 
 
