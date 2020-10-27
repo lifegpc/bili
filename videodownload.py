@@ -4136,14 +4136,30 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
                 lrh = ip['lrh']
             if lrh:
                 data['des'] = bstr.rhtml(data['des'])
-            cml = f"ffmpeg -user_agent \"{r.headers['User-Agent']}\" -referer \"{r.headers['referer']}\" -i \"{url}\""
-            metadata = f" -metadata roomid=\"{data['roomid']}\" -metadata livetime=\"{data['livetime']}\" -metadata description=\"{bstr.f(data['des'])}\" -metadata title=\"{bstr.f(data['title'])}\" -metadata uid=\"{data['uid']}\" -metadata author=\"{bstr.f(data['name'])}\" -metadata authorsex=\"{data['sex']}\" -metadata sign=\"{bstr.f(data['sign'])}\" -metadata areaid=\"{data['areaid']}\" -metadata areaname=\"{bstr.f(data['areaname'])}\" -metadata pareaid=\"{data['pareaid']}\" -metadata pareaname=\"{bstr.f(data['pareaname'])}\" -metadata tags=\"{bstr.f(data['tags'])}\" -metadata hotwords=\"{bstr.f(bstr.gettags(data['hotwords']))}\""
-            fileo = f"{metadata} -c copy \"{filen}\""
+            tt = int(time.time())
+            with open(f"Temp/{data['roomid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                te.write(';FFMETADATA1\n')
+                te.write(f"roomid={data['roomid']}\n")
+                te.write(f"livetime={data['livetime']}\n")
+                te.write(f"description={bstr.g(data['des'])}\n")
+                te.write(f"title={bstr.g(data['title'])}\n")
+                te.write(f"uid={data['uid']}\n")
+                te.write(f"artist={bstr.g(data['name'])}\n")
+                te.write(f"author={bstr.g(data['name'])}\n")
+                te.write(f"authorsex={bstr.g(data['sex'])}\n")
+                te.write(f"sign={bstr.g(data['sign'])}\n")
+                te.write(f"areaid={data['areaid']}\n")
+                te.write(f"areaname={bstr.g(data['areaname'])}\n")
+                te.write(f"pareaid={data['pareaid']}\n")
+                te.write(f"pareaname={bstr.g(data['pareaname'])}\n")
+                te.write(f"tags={bstr.g(data['tags'])}\n")
+                te.write(f"hotwords={bstr.g(bstr.gettags(data['hotwords']))}\n")
             nss = ""
             if not ns:
                 nss = getnul()
-            cm = f"{cml}{fileo}{nss}"
+            cm = f"ffmpeg -user_agent \"{r.headers['User-Agent']}\" -referer \"{r.headers['referer']}\" -i \"{url}\" -i \"Temp/{data['roomid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}\"{nss}"
             os.system(cm)
+            os.remove(f"Temp/{data['roomid']}_{tt}_metadata.txt")
         elif aria2c:
             read = dwaria2(r, filen, url, -1, False, ip, se)
             if read == -3:
