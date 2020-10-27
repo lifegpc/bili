@@ -3512,13 +3512,34 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 return -3
     if ma and ff and os.system('ffmpeg -h%s'%(getnul()))==0 :
         print(lan['OUTPUT13'])#将用ffmpeg自动合成
+        tt = int(time.time())
         nss=""
         if not ns:
             nss=getnul()
         if vf == "mkv":
-            ml = f"ffmpeg -i \"{filen}.{hzm}\" -metadata title=\"{bstr.f(i['name'])}-{bstr.f(sn)}\" -metadata description=\"{bstr.f(i['description'])}\" -metadata id=\"{i['id']}\" -metadata pubtime=\"{i['upload_time']}\" -metadata author=\"{bstr.f(i['name'])}\" -metadata uid=\"{i['uid']}\" -metadata vq=\"{i['width']}x{i['height']}\" -metadata tags=\"{bstr.f(bstr.gettags(i['tags']))}\" -metadata purl=\"https://vc.bilibili.com/video/{i['id']}\" -c copy \"{filen}.mkv\"{nss}"
+            with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                te.write(';FFMETADATA1\n')
+                te.write(f"title={bstr.g(i['name'])} - {bstr.g(sn)}\n")
+                te.write(f"description={bstr.g(i['description'])}\n")
+                te.write(f"id={i['id']}\n")
+                te.write(f"pubtime={i['upload_time']}\n")
+                te.write(f"artist={bstr.g(i['name'])}\n")
+                te.write(f"author={bstr.g(i['name'])}\n")
+                te.write(f"uid={i['uid']}\n")
+                te.write(f"vq={i['width']}x{i['height']}\n")
+                te.write(f"tags={bstr.g(bstr.gettags(i['tags']))}\n")
+                te.write(f"purl=https://vc.bilibili.com/video/{i['id']}\n")
+            ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['id']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
         elif vf == "mp4":
-            ml = f"ffmpeg -i \"{filen}.{hzm}\" -metadata title=\"{bstr.f(i['name'])}-{bstr.f(sn)}\" -metadata comment=\"{bstr.f(i['description'])}\" -metadata artist=\"{bstr.f(i['name'])}\" -metadata episode_id=\"https://vc.bilibili.com/video/{i['id']}\" -metadata date=\"{i['upload_time'][:10]}\" -metadata description=\"UID{i['uid']},{i['width']}x{i['height']},{bstr.f(bstr.gettags(i['tags']))}\" -c copy \"{filen}.mp4\"{nss}"
+            with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                te.write(';FFMETADATA1\n')
+                te.write(f"title={bstr.g(i['name'])} - {bstr.g(sn)}\n")
+                te.write(f"comment={bstr.g(i['description'])}\n")
+                te.write(f"artist={bstr.g(i['name'])}\n")
+                te.write(f"episode_id={i['id']}\n")
+                te.write(f"date={i['upload_time'][:10]}\n")
+                te.write(f"description=UID{i['uid']},{i['width']}x{i['height']},{bstr.g(bstr.gettags(i['tags']))}\n")
+            ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['id']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
         re=os.system(ml)
         if re==0:
             print(lan['OUTPUT14'])#合并完成！
@@ -3547,6 +3568,7 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                         de=True
                     elif inp[0].lower()=='n' :
                         bs=False
+        os.remove(f"Temp/{i['id']}_{tt}_metadata.txt")
         if re==0 and de:
             os.remove('%s.%s'%(filen,hzm))
     return 0
