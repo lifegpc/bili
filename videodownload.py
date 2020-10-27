@@ -3860,9 +3860,49 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write("file '../%s_%s.%s'\n"%(filen,j,hzm))
                     j=j+1
                 te.close()
-                ml='ffmpeg -f concat -safe 0 -i "Temp/%s_%s.txt" -metadata rid="%s" -metadata room_id="%s" -metadata uid="%s" -metadata title="%s" -metadata area_id="%s" -metadata parent_area_id="%s" -metadata starttime="%s" -metadata endtime="%s" -metadata description="%s" -metadata area_name="%s" -metadata parent_area_name="%s" -metadata tags="%s" -metadata hot_words="%s" -metadata author="%s" -metadata sex="%s" -metadata sign="%s" -metadata vq="%s" -c copy "%s.mkv"%s' %(file.filtern('%s'%(data['rid'])),tt,data['rid'],data['roomid'],data['uid'],bstr.f(data['title']),data['areaid'],data['pareaid'],tostr2(data['st']),tostr2(data['et']),bstr.f(data['des']),bstr.f(data['arean']),bstr.f(data['parean']),bstr.f(data['tags']),bstr.f(bstr.gettags(data['hotwords'])),bstr.f(data['name']),bstr.f(data['sex']),bstr.f(data['sign']),vqs,filen,nss)
+                with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"rid={data['rid']}\n")
+                    te.write(f"room_id={data['roomid']}\n")
+                    te.write(f"uid={data['uid']}\n")
+                    te.write(f"title={bstr.g(data['title'])}\n")
+                    te.write(f"area_id={data['areaid']}\n")
+                    te.write(f"parent_area_id={data['pareaid']}\n")
+                    te.write(f"starttime={tostr2(data['st'])}\n")
+                    te.write(f"endtime={tostr2(data['et'])}\n")
+                    te.write(f"description={bstr.g(data['des'])}\n")
+                    te.write(f"area_name={bstr.g(data['arean'])}\n")
+                    te.write(f"parent_area_name={bstr.g(data['parean'])}\n")
+                    te.write(f"tags={bstr.g(data['tags'])}\n")
+                    te.write(f"hot_words={bstr.g(bstr.gettags(data['hotwords']))}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"author={bstr.g(data['name'])}\n")
+                    te.write(f"sex={bstr.g(data['sex'])}\n")
+                    te.write(f"sign={bstr.g(data['sign'])}\n")
+                    te.write(f"vq={bstr.g(vqs)}\n")
+                ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['rid']}_{tt}.txt\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
             elif vf == "mkv":
-                ml='ffmpeg -i "%s.%s" -metadata rid="%s" -metadata room_id="%s" -metadata uid="%s" -metadata title="%s" -metadata area_id="%s" -metadata parent_area_id="%s" -metadata starttime="%s" -metadata endtime="%s" -metadata description="%s" -metadata area_name="%s" -metadata parent_area_name="%s" -metadata tags="%s" -metadata hot_words="%s" -metadata author="%s" -metadata sex="%s" -metadata sign="%s" -metadata vq="%s" -c copy "%s.mkv"%s'%(filen,hzm,data['rid'],data['roomid'],data['uid'],bstr.f(data['title']),data['areaid'],data['pareaid'],tostr2(data['st']),tostr2(data['et']),bstr.f(data['des']),bstr.f(data['arean']),bstr.f(data['parean']),bstr.f(data['tags']),bstr.f(bstr.gettags(data['hotwords'])),bstr.f(data['name']),bstr.f(data['sex']),bstr.f(data['sign']),vqs,filen,nss)
+                with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"rid={data['rid']}\n")
+                    te.write(f"room_id={data['roomid']}\n")
+                    te.write(f"uid={data['uid']}\n")
+                    te.write(f"title={bstr.g(data['title'])}\n")
+                    te.write(f"area_id={data['areaid']}\n")
+                    te.write(f"parent_area_id={data['pareaid']}\n")
+                    te.write(f"starttime={tostr2(data['st'])}\n")
+                    te.write(f"endtime={tostr2(data['et'])}\n")
+                    te.write(f"description={bstr.g(data['des'])}\n")
+                    te.write(f"area_name={bstr.g(data['arean'])}\n")
+                    te.write(f"parent_area_name={bstr.g(data['parean'])}\n")
+                    te.write(f"tags={bstr.g(data['tags'])}\n")
+                    te.write(f"hot_words={bstr.g(bstr.gettags(data['hotwords']))}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"author={bstr.g(data['name'])}\n")
+                    te.write(f"sex={bstr.g(data['sex'])}\n")
+                    te.write(f"sign={bstr.g(data['sign'])}\n")
+                    te.write(f"vq={bstr.g(vqs)}\n")
+                ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
             elif len(durl) > 1:
                 te = open('Temp/%s_%s.txt' % (file.filtern('%s' % (data['rid'])), tt), 'wt', encoding='utf8')
                 j = 1
@@ -3870,7 +3910,25 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write("file '../%s_%s.%s'\n" % (filen, j, hzm))
                     j = j + 1
                 te.close()
-                ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(data['rid']))}_{tt}.txt\" -metadata title=\"{bstr.f(data['title'])}\" -metadata comment=\"{bstr.f(data['des'])}\" -metadata artist=\"{bstr.f(data['name'])}\" -metadata episode_id=\"rid{data['rid']}\" -metadata date=\"{tostr2(data['st'])[:10]}\" -metadata description=\"UID{data['uid']},ROOMID{data['roomid']},{vqs}\" -c copy \"{filen}.mp4\"{nss}"
+                with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(data['title'])}\n")
+                    te.write(f"comment={bstr.g(data['des'])}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"episode_id=rid{data['rid']}\n")
+                    te.write(f"date={tostr2(data['st'])[:10]}\n")
+                    te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\n")
+                ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['rid']}_{tt}.txt\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
+            else:
+                with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(data['title'])}\n")
+                    te.write(f"comment={bstr.g(data['des'])}\n")
+                    te.write(f"artist={bstr.g(data['name'])}\n")
+                    te.write(f"episode_id=rid{data['rid']}\n")
+                    te.write(f"date={tostr2(data['st'])[:10]}\n")
+                    te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\n")
+                ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
             re=os.system(ml)
             if re==0:
                 print(lan['OUTPUT14'])#合并完成！
@@ -3907,6 +3965,7 @@ def lrvideodownload(data,r,c,c3,se,ip):
                         j=j+1
                 else :
                     os.remove('%s.%s'%(filen,hzm))
+            os.remove(f"Temp/{data['rid']}_{tt}_metadata.txt")
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['rid'])),tt))
 
