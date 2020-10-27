@@ -3040,7 +3040,6 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
     r2.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
     r2.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
     if not che:
-        napi = True
         paok = False
         re = r2.get(url2)
         re.encoding = 'utf8'
@@ -3050,7 +3049,6 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             re = json.loads(rs.groups()[0])
             paok = True
         else:
-            napi = False
             re = r2.get(f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
             re = re.json()
             if re['code'] != 0:
