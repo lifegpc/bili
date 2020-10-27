@@ -3444,7 +3444,7 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
             return 0
     hzm=file.geturlfe(i['video_playurl'])
     if ma and ff and os.system(f'ffmpeg -h{getnul()}') == 0 and vf == "mp4":
-        hzm = ".temp.mp4"
+        hzm = "temp.mp4"
     fn='%s.%s'%(filen,hzm)
     bs2=True
     while bs2:
