@@ -2276,6 +2276,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
+            tt = int(time.time())
             nss=""
             imga=""
             imga2 = ""
@@ -2284,17 +2285,42 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if not che and imgs == 0 and vf == "mkv":
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             elif not che and imgs == 0 and vf == "mp4":
-                imga = f' -i "{imgf}" -map 0 -map 1 -map 2'
+                imga = f' -i "{imgf}" -map 0 -map 1 -map 3'
                 imga2 = f' -disposition:v:1 attached_pic'
             if vf == "mkv":
                 mediaInfo = data['mediaInfo']
-                tit = bstr.f(i['titleFormat'])
-                tit2 = bstr.f(i['longTitle'])
+                tit = i['titleFormat']
+                tit2 = i['longTitle']
                 if tit2 != "":
-                    tit = f"{bstr.f(mediaInfo['title'])} - {tit} {tit2}"
+                    tit = f"{mediaInfo['title']} - {tit} {tit2}"
                 else:
-                    tit = f"{bstr.f(mediaInfo['title'])} - {tit}"
-                re = os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -metadata id=\"{data['mediaInfo']['id']}\" -metadata ssid=\"{data['mediaInfo']['ssId']}\" -metadata title=\"{tit}\" -metadata series=\"{bstr.f(data['mediaInfo']['series'])}\" -metadata description=\"{bstr.f(data['mediaInfo']['evaluate'])}\" -metadata pubtime=\"{data['mediaInfo']['time']}\" -metadata atitle=\"{bstr.f(data['mediaInfo']['title'])}\" -metadata eptitle=\"{bstr.f(i['longTitle'])}\" -metadata titleformat=\"{bstr.f(i['titleFormat'])}\" -metadata epid=\"{i['id']}\" -metadata aid=\"{i['aid']}\" -metadata bvid=\"{i['bvid']}\" -metadata cid=\"{i['cid']}\" -metadata aq=\"{vqs[1]}\" -metadata vq=\"{vqs[0]}\"{imga} -c copy \"{filen}\"{nss}")
+                    tit = f"{mediaInfo['title']} - {tit}"
+                author = "哔哩哔哩番剧"
+                uid = "928123"
+                if che:
+                    author = mediaInfo['up_info']['uname']
+                    uid = f"{mediaInfo['up_info']['mid']}"
+                with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"id={mediaInfo['id']}\n")
+                    te.write(f"ssid={mediaInfo['ssId']}\n")
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"series={bstr.g(mediaInfo['series'])}\n")
+                    te.write(f"description={bstr.g(mediaInfo['evaluate'])}\n")
+                    te.write(f"pubtime={bstr.g(mediaInfo['time'])}\n")
+                    te.write(f"atitle={bstr.g(mediaInfo['title'])}\n")
+                    te.write(f"eptitle={bstr.g(i['longTitle'])}\n")
+                    te.write(f"titleformat={bstr.g(i['titleFormat'])}\n")
+                    te.write(f"epid={i['id']}\n")
+                    te.write(f"aid={i['aid']}\n")
+                    te.write(f"bvid={i['bvid']}\n")
+                    te.write(f"cid={i['cid']}\n")
+                    te.write(f"aq={bstr.g(vqs[1])}\n")
+                    te.write(f"vq={bstr.g(vqs[0])}\n")
+                    te.write(f"artist={bstr.g(author)}\n")
+                    te.write(f"author={bstr.g(author)}\n")
+                    te.write(f"uid={uid}\n")
+                re = os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\" -map_metadata 2{imga} -c copy \"{filen}\"{nss}")
             elif vf == "mp4":
                 le = 1
                 if 'sections' in data and len(data['sections']) > 1:
@@ -2307,18 +2333,30 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             le2 = len(section['epList'])
                             break
                 mediaInfo = data['mediaInfo']
-                author = "bilibili"
-                uid = ""
+                author = "哔哩哔哩番剧"
+                uid = ",UID928123"
                 if che:
-                    author = bstr.f(mediaInfo['up_info']['uname'])
+                    author = mediaInfo['up_info']['uname']
                     uid = f",UID{mediaInfo['up_info']['mid']}"
-                tit = bstr.f(i['titleFormat'])
-                tit2 = bstr.f(i['longTitle'])
+                tit = i['titleFormat']
+                tit2 = i['longTitle']
                 if tit2 != "":
-                    tit = f"{bstr.f(mediaInfo['title'])} - {tit} {tit2}"
+                    tit = f"{mediaInfo['title']} - {tit} {tit2}"
                 else:
-                    tit = f"{bstr.f(mediaInfo['title'])} - {tit}"
-                re = os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\"{imga} -metadata title=\"{tit}\" -metadata comment=\"{bstr.f(mediaInfo['evaluate'])}\" -metadata album=\"{bstr.f(mediaInfo['title'])}\" -metadata artist={author} -metadata album_artist={author} -metadata track={i['i'] + 1}/{le2} -metadata disc={sectionType + 1}/{le} -metadata episode_id=\"AV{i['aid']},EP{i['id']}\" -metadata date={mediaInfo['time'][:10]} -metadata description=\"{vqs[0]},{vqs[1]}{uid},SS{mediaInfo['ssId']}\" -c copy{imga2} \"{filen}\"{nss}")
+                    tit = f"{mediaInfo['title']} - {tit}"
+                with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                    te.write(';FFMETADATA1\n')
+                    te.write(f"title={bstr.g(tit)}\n")
+                    te.write(f"comment={bstr.g(mediaInfo['evaluate'])}\n")
+                    te.write(f"album={bstr.g(mediaInfo['title'])}\n")
+                    te.write(f"artist={bstr.g(author)}\n")
+                    te.write(f"album_artist={bstr.g(author)}\n")
+                    te.write(f"track={i['i'] + 1}/{le2}\n")
+                    te.write(f"disc={sectionType + 1}/{le}\n")
+                    te.write(f"episode_id=AV{i['aid']},EP{i['id']}\n")
+                    te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
+                    te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])}{uid},SS{mediaInfo['ssId']}\n")
+                re = os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 2 -c copy{imga2} \"{filen}\"{nss}")
             de=False
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
@@ -2351,6 +2389,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     os.remove(getfn2(i,j,fdir,vqs,hzm,fin))
                 if not che and imgs==0 and not bp:
                     os.remove(imgf)
+            os.remove(f"Temp/{i['aid']}_{tt}_metadata.txt")
     elif 'data' in re and 'durl' in re['data'] :
         vq=re["data"]["quality"]
         vqd = getqualitytransl(re["data"]["accept_description"])
@@ -4042,7 +4081,7 @@ def getfn2(i,i2,f,vqs,hzm,fin) :
             return f"{f}/{i['i']+1}.{file.filtern(i['longTitle'])}({file.filtern(vqs[i2])}).{hzm[i2]}"
     else :
         if fin:
-            return '%s/%s'%(f,file.filtern('%s.%s(%s%s,AV%s,%s,ID%s,%s,%s).%s'%(i['title'],i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],vqs[i2],hzm[i2])))
+            return '%s/%s' % (f, file.filtern(f"{i['title']}{i['i']+1}.{i['longTitle']}({i['titleFormat']},AV{i['aid']},{i['bvid']},ID{i['id']},{i['cid']},{vqs[i2]}).{hzm[i2]}"))
         else :
             return f"{f}/{file.filtern(i['title'])}{i['i']+1}.{file.filtern(i['longTitle'])}({file.filtern(vqs[i2])}).{hzm[i2]}"
 def streamgetlength(r:requests.Session,uri):
