@@ -34,3 +34,7 @@ msgstr ""
 msgctxt "ERROR2"
 msgid "Failed to write to the file \"<filename>\"."
 msgstr ""
+
+msgctxt "OUTPUT3"
+msgid "<languagename> lyrics for part <number> download complete."
+msgstr ""

@@ -72,5 +72,22 @@ def tostr4(s):
         return strftime('%Y-%m-%d',getDate(s))
 
 
+def tostr5(i: int):
+    "转换为适合lrc的时间"
+    return "%02d:%02d.%02d" % (floor(i / 60), floor(i % 60), floor(i * 100 % 100))
+
+
+def comlrct(i: int, i2: int) -> int:
+    "i大1，i2大-1，相等0"
+    e = floor(i * 100)
+    e2 = floor(i2 * 100)
+    if e > e2:
+        return 1
+    elif e == e2:
+        return 0
+    else:
+        return -1
+
+
 if __name__=='__main__' :
     print(getNowDate())

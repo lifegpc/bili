@@ -38,3 +38,7 @@ msgstr "\"<filename>\" の保存に失敗しました。"
 msgctxt "ERROR2"
 msgid "Failed to write to the file \"<filename>\"."
 msgstr "ファイル \"<filename>\"  への書き込みに失敗しました。"
+
+msgctxt "OUTPUT3"
+msgid "<languagename> lyrics for part <number> download complete."
+msgstr ""

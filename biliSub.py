@@ -15,7 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from file import spfn
 from requests import Session
-from biliTime import tostr3
+from biliTime import tostr3, tostr5, comlrct
 import os
 from lang import getlan,getdict
 import sys
@@ -117,7 +117,7 @@ def assrt(fn:str,b:list):
         i=i+1
     f.close()
     return 0
-def ffinputstr(i:list,n:int) ->(str,str):
+def ffinputstr(i: list, n: int, m: int=-1) -> (str, str):
     "分别解析出ffmpeg输入参数和元数据参数"
     s=""
     r=""
@@ -129,7 +129,8 @@ def ffinputstr(i:list,n:int) ->(str,str):
         z=z+1
         c = c + 1
     for i in range(z) :
-        r=r+' -map %s'%(i)
+        if i != m:
+            r = r + f' -map {i}'
     return s,r
 
 
@@ -163,5 +164,64 @@ def asass(fn: str, b: dict, width: int, height: int):
         print(lan['ERROR2'].replace('<filename>', fn))  # 写入到文件"<filename>"时失败！
         f.close()
         return -1
+    f.close()
+    return 0
+
+
+def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: bool=False,pi: int=1):
+    global lan
+    fq = spfn(fn)[0]
+    fn = f"{fq}.{i['lan']}.lrc"
+    i['fn'] = fn
+    if os.path.exists(fn):
+        fg = False
+        bs = True
+        if 's' in ip:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip :
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f'{lan["INPUT1"]}(y/n)'.replace("<filename>", fn))  # "<filename>"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove('%s'%(fn))
+            except:
+                print(lan['OUTPUT1'])  # 删除原有文件失败，跳过下载
+                return 0
+    re = r.get(i['url'])
+    re.encoding = 'utf8'
+    re = re.json()
+    if aslrc(fn, re['body']) == 0 and pr:
+        print(lan['OUTPUT3'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>歌词下载完毕！
+    return 0
+
+
+def aslrc(fn: str, b: list):
+    try :
+        f = open(fn, 'w', encoding="utf8")
+    except :
+        print(lan['ERROR1'].replace('<filename>', fn))  # 保存"<filename>"失败！
+        return -1
+    et = -1
+    for k in b:
+        if et != -1 and comlrct(et, k['from']) == -1:
+            f.write(f"[{tostr5(et)}]\n")
+        con = k['content']
+        col = con.split('\n')
+        for s in col:
+            s = s.replace('\r', '')
+            f.write(f"[{tostr5(k['from'])}]{s}\n")
+        et = k['to']
     f.close()
     return 0
