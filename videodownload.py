@@ -24,7 +24,7 @@ from re import search
 from requests.structures import CaseInsensitiveDict
 from biliTime import tostr2, tostr4
 import bstr
-from biliSub import downsub,ffinputstr
+from biliSub import downsub, ffinputstr, downlrc
 from file import mkdir
 from dict import delli,dellk
 import platform
@@ -1571,6 +1571,12 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             return -2
     else:
         return -2
+    rr = r2.get(f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][i-1]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}")
+    rr.encoding = 'utf8'
+    rs2 = search(r'<subtitle>(.+)</subtitle>', rr.text)
+    if rs2 is not None:
+        rs2 = json.loads(rs2.groups()[0])
+        JSONParser2.getsub(rs2, data)
     if F:
         print(f"{lan['OUTPUT8'].replace('<number>', str(i))}{data['page'][i - 1]['part']}")#第<number>P
     if 'data' in re and 'durl' in re['data']:
@@ -1748,6 +1754,9 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                     bs2 = True
                 else:
                     return -3
+        if 'sub' in data:
+            for s in data['sub']:
+                downlrc(r2, f'{filen}.m4a', s, ip, se, data, ns, i)
         imgf = file.spfn(filen + ".m4a")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
         imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
         if ffmpeg:
