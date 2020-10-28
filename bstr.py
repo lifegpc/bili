@@ -25,10 +25,10 @@ def f(i:str):
 
 def g(i: str):
     s = str(i)
-    re = rsearch(r'[^[:print:\r\n]]', s)
+    re = rsearch(r'[^[:print:]\r\n]', s)
     while re is not None:
         s = s.replace(re.group(), '_')
-        re = rsearch(r'[^[:print:]]', s)
+        re = rsearch(r'[^[:print:]\r\n]', s)
     s = s.replace('#', '\\#')
     s = s.replace('\\', '\\\\')
     s = s.replace('=', '\\=')
