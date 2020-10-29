@@ -250,5 +250,5 @@ msgid ""
 msgstr "直播还没有开始。程序会在30秒后检查直播状态。"
 
 msgctxt "SPERROR"
-msgid "Please open \"<url>\" in a broswer and pass the captcha."
+msgid "Please open \"<url>\" in a browser and pass the captcha."
 msgstr "请在浏览器中打开\"<url>\"并且通过验证。"

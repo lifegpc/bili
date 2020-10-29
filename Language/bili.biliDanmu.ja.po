@@ -176,4 +176,4 @@ msgstr "ダウンロードが完了しました。 "
 
 msgctxt "NOLIVEDM"
 msgid "This live record do not have any barrage."
-msgstr ""
+msgstr "この配信映像記録には弾幕がありません。"

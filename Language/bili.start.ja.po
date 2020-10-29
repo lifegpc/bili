@@ -256,5 +256,5 @@ msgid ""
 msgstr "ライブが開始されていません。30秒後にライブの状態を確認します。"
 
 msgctxt "SPERROR"
-msgid "Please open \"<url>\" in a broswer and pass the captcha."
-msgstr ""
+msgid "Please open \"<url>\" in a browser and pass the captcha."
+msgstr "ブラウザで \"<url>\" を開いてパスをキャプチャしてください。"

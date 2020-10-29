@@ -176,5 +176,5 @@ msgid "The live has not started. The program will check the live status after 30
 msgstr ""
 
 msgctxt "SPERROR"
-msgid "Please open \"<url>\" in a broswer and pass the captcha."
+msgid "Please open \"<url>\" in a browser and pass the captcha."
 msgstr ""

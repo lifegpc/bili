@@ -100,4 +100,4 @@ msgstr "ユーザー名とパスワードを使ってログインする (Web API
 
 msgctxt "BUGWARN"
 msgid "This login method now have bugs, some contents may not available."
-msgstr ""
+msgstr "このログイン方法は現在バグがあり、一部のコンテンツが利用できない場合があります。"
