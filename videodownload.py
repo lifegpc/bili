@@ -300,6 +300,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         vf = se['vf']
     if 'vf' in ip:
         vf = ip['vf']
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
@@ -1540,6 +1542,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
     except:
         print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败
         return -5
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
     r2 = requests.Session()
     r2.headers = copydict(r.headers)
     if nte:
@@ -1869,6 +1873,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         vf = se['vf']
     if 'vf' in ip:
         vf = ip['vf']
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
@@ -3034,6 +3040,8 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
         fin = False
     if 'in' in ip:
         fin = ip['in']
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
     r2 = requests.Session()
     r2.headers = copydict(r.headers)
     if nte:
@@ -3373,6 +3381,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         vf = se['vf']
     if 'vf' in ip:
         vf = ip['vf']
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
     r2=requests.session()
     r2.headers=copydict(r.headers)
     r2.proxies=r.proxies
@@ -3619,6 +3629,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
         vf = se['vf']
     if 'vf' in ip:
         vf = ip['vf']
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
@@ -4017,6 +4029,8 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
         sv = False
     if 'sv' in ip:
         sv = ip['sv']
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
     if 'play_url' in data2 and data2['play_url'] is not None:
         play_url = data2['play_url']
     else:
