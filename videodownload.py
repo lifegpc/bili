@@ -682,6 +682,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"atitle={bstr.g(data['title'])}\n")
                     te.write(f"part={bstr.g(data['page'][i-1]['part'])}\n")
                     te.write(f"vq={bstr.g(vqs)}\n")
+                    te.write(f"purl={bstr.g(url)}\n")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['aid']}_{tt}.txt\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
             elif vf == "mkv":
                 tit = data['title']
@@ -704,6 +705,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"atitle={bstr.g(data['title'])}\n")
                     te.write(f"part={bstr.g(data['page'][i-1]['part'])}\n")
                     te.write(f"vq={bstr.g(vqs)}\n")
+                    te.write(f"purl={bstr.g(url)}\n")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
             elif len(durl) > 1:
                 te = open('Temp/%s_%s.txt' % (file.filtern('%s' % (data['aid'])), tt), 'wt', encoding='utf8')
@@ -727,7 +729,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"disc=1/1\n")
                     te.write(f"episode_id=AV{data['aid']}\n")
                     te.write(f"date={tostr4(data['pubdate'])}\n")
-                    te.write(f"description={bstr.g(vqs)},{data['uid']}\n")
+                    te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
+                    te.write(f"{bstr.g(url)}\n")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['aid']}_{tt}.txt\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}.mp4\"{nss}"
             else:
                 tit = data['title']
@@ -745,7 +748,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"disc=1/1\n")
                     te.write(f"episode_id=AV{data['aid']}\n")
                     te.write(f"date={tostr4(data['pubdate'])}\n")
-                    te.write(f"description={bstr.g(vqs)},{data['uid']}\n")
+                    te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
+                    te.write(f"{bstr.g(url)}\n")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}.mp4\"{nss}"
             re=os.system(ml)
             if re==0:
@@ -1219,6 +1223,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"part={bstr.g(data['page'][i-1]['part'])}\n")
                     te.write(f"vq={bstr.g(vqs[0])}\n")
                     te.write(f"aq={bstr.g(vqs[1])}\n")
+                    te.write(f"purl={bstr.g(url)}\n")
                 re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 2{sb}{imga} -c copy \"{filen}\"{nss}")
             elif vf == "mkv":
                 tit = data['title']
@@ -1241,6 +1246,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"p={i}P/{data['videos']}P\n")
                     te.write(f"part={bstr.g(data['page'][i-1]['part'])}\n")
                     te.write(f"vq={bstr.g(vqs[0])}\n")
+                    te.write(f"purl={bstr.g(url)}\n")
                 re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}\"{nss}")
             elif not nau:
                 tit = data['title']
@@ -1258,7 +1264,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"disc=1/1\n")
                     te.write(f"episode_id=AV{data['aid']}\n")
                     te.write(f"date={tostr4(data['pubdate'])}\n")
-                    te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])},{data['uid']}\n")
+                    te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])},{data['uid']}\\\n")
+                    te.write(f"{bstr.g(url)}\n")
                 re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 2{sb} -c copy -c:s mov_text{imga2} \"{filen}\"{nss}")
             else:
                 tit = data['title']
@@ -1276,7 +1283,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"disc=1/1\n")
                     te.write(f"episode_id=AV{data['aid']}\n")
                     te.write(f"date={tostr4(data['pubdate'])}\n")
-                    te.write(f"description={bstr.g(vqs[0])},{data['uid']}\n")
+                    te.write(f"description={bstr.g(vqs[0])},{data['uid']}\\\n")
+                    te.write(f"{bstr.g(url)}\n")
                 re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}\"{nss}")
             de=False
             if re==0 :
@@ -1788,7 +1796,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 te.write(f"disc=1/1\n")
                 te.write(f"episode_id=AV{data['aid']}\n")
                 te.write(f"date={tostr4(data['pubdate'])}\n")
-                te.write(f"description={bstr.g(vqs)},{data['uid']}\n")
+                te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
+                te.write(f"{bstr.g(url)}\n")
             re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}.m4a\"{nss}")
             if re == 0:
                 print(lan['COM_CONV'])
@@ -2335,6 +2344,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"artist={bstr.g(author)}\n")
                     te.write(f"author={bstr.g(author)}\n")
                     te.write(f"uid={uid}\n")
+                    te.write(f"purl={bstr.g(url2)}\n")
                 re = os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\" -map_metadata 2{imga} -c copy \"{filen}\"{nss}")
             elif vf == "mp4":
                 le = 1
@@ -2370,7 +2380,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"disc={sectionType + 1}/{le}\n")
                     te.write(f"episode_id=AV{i['aid']},EP{i['id']}\n")
                     te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
-                    te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])}{uid},SS{mediaInfo['ssId']}\n")
+                    te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])}{uid},SS{mediaInfo['ssId']}\\\n")
+                    te.write(f"{bstr.g(url2)}\n")
                 re = os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 2 -c copy{imga2} \"{filen}\"{nss}")
             de=False
             if re==0 :
@@ -2735,6 +2746,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"artist={bstr.g(author)}\n")
                     te.write(f"author={bstr.g(author)}\n")
                     te.write(f"uid={uid}\n")
+                    te.write(f"purl={bstr.g(url2)}\n")
                 ml=f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(i['id']))}_{tt}.txt\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\" -map_metadata 1{imga} -c copy \"{filen}.mkv\"{nss}"
             elif vf == "mkv":
                 mediaInfo = data['mediaInfo']
@@ -2768,6 +2780,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"artist={bstr.g(author)}\n")
                     te.write(f"author={bstr.g(author)}\n")
                     te.write(f"uid={uid}\n")
+                    te.write(f"purl={bstr.g(url2)}\n")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\" -map_metadata 1{imga} -c copy \"{filen}.mkv\"{nss}"
             elif len(durl) > 1:
                 te = open('Temp/%s_%s.txt' % (file.filtern('%s'%(i['id'])), tt), 'wt',encoding='utf8')
@@ -2809,7 +2822,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"disc={sectionType + 1}/{le}\n")
                     te.write(f"episode_id=AV{i['aid']},EP{i['id']}\n")
                     te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
-                    te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\n")
+                    te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\\\n")
+                    te.write(f"{bstr.g(url2)}\n")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(i['id']))}_{tt}.txt\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}\"{nss}"
             else:
                 le = 1
@@ -2845,7 +2859,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"disc={sectionType + 1}/{le}\n")
                     te.write(f"episode_id=AV{i['aid']},EP{i['id']}\n")
                     te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
-                    te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\n")
+                    te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\\\n")
+                    te.write(f"{bstr.g(url2)}\n")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}\"{nss}"
             re=os.system(ml)
             if re==0:
@@ -3300,7 +3315,8 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                 te.write(f"disc={sectionType + 1}/{le}\n")
                 te.write(f"episode_id=AV{i['aid']},EP{i['id']}\n")
                 te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
-                te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\n")
+                te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\\\n")
+                te.write(f"{bstr.g(url2)}\n")
             re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}.m4a\"{nss}")
             if re == 0:
                 print(lan['COM_CONV'])
@@ -3555,7 +3571,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 te.write(f"artist={bstr.g(i['name'])}\n")
                 te.write(f"episode_id={i['id']}\n")
                 te.write(f"date={i['upload_time'][:10]}\n")
-                te.write(f"description=UID{i['uid']},{i['width']}x{i['height']},{bstr.g(bstr.gettags(i['tags']))}\n")
+                te.write(f"description=UID{i['uid']},{i['width']}x{i['height']},{bstr.g(bstr.gettags(i['tags']))}\\\n")
+                te.write(f"https://vc.bilibili.com/video/{i['id']}\n")
             ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['id']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
         re=os.system(ml)
         if re==0:
@@ -3899,6 +3916,7 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write(f"sex={bstr.g(data['sex'])}\n")
                     te.write(f"sign={bstr.g(data['sign'])}\n")
                     te.write(f"vq={bstr.g(vqs)}\n")
+                    te.write(f"purl=https://live.bilibili.com/record/{data['rid']}\n")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['rid']}_{tt}.txt\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
             elif vf == "mkv":
                 with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
@@ -3921,6 +3939,7 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write(f"sex={bstr.g(data['sex'])}\n")
                     te.write(f"sign={bstr.g(data['sign'])}\n")
                     te.write(f"vq={bstr.g(vqs)}\n")
+                    te.write(f"purl=https://live.bilibili.com/record/{data['rid']}\n")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
             elif len(durl) > 1:
                 te = open('Temp/%s_%s.txt' % (file.filtern('%s' % (data['rid'])), tt), 'wt', encoding='utf8')
@@ -3936,7 +3955,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write(f"artist={bstr.g(data['name'])}\n")
                     te.write(f"episode_id=rid{data['rid']}\n")
                     te.write(f"date={tostr2(data['st'])[:10]}\n")
-                    te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\n")
+                    te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\\\n")
+                    te.write(f"https://live.bilibili.com/record/{data['rid']}\n")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['rid']}_{tt}.txt\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
             else:
                 with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
@@ -3946,7 +3966,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write(f"artist={bstr.g(data['name'])}\n")
                     te.write(f"episode_id=rid{data['rid']}\n")
                     te.write(f"date={tostr2(data['st'])[:10]}\n")
-                    te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\n")
+                    te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\\\n")
+                    te.write(f"https://live.bilibili.com/record/{data['rid']}\n")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
             re=os.system(ml)
             if re==0:
@@ -4175,6 +4196,7 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
                 te.write(f"pareaname={bstr.g(data['pareaname'])}\n")
                 te.write(f"tags={bstr.g(data['tags'])}\n")
                 te.write(f"hotwords={bstr.g(bstr.gettags(data['hotwords']))}\n")
+                te.write(f"purl={bstr.g(r.headers['referer'])}\n")
             nss = ""
             if not ns:
                 nss = getnul()
