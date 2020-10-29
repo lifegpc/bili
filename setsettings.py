@@ -290,4 +290,22 @@ if __name__=='__main__' :
                     ne['vf'] = 'mp4'
         else:
             b = False
+    lmd = 10
+    if 'lmd' in se:
+        lmd = se['lmd']
+    print(la['INPUT38'].replace('<value>', '10ms').replace('<value2>', f'{lmd}ms'))
+    inp = input(la['INPUT14'].replace('<min>', '0'))
+    bs = True
+    while bs:
+        if len(inp) == 0:
+            bs = False
+        elif inp.isnumeric():
+            tem = int(inp)
+            if tem >= 0:
+                lmd = tem
+                bs = False
+        else:
+            inp = input(la['INPUT14'].replace('<min>', '0'))
+    if lmd != 10:
+        ne['lmd'] = lmd
     saveset(ne)

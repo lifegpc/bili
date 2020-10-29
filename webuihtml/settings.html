@@ -238,6 +238,9 @@ $if fontname is not None:
             <option value="mp4"$:getsel('vf', 'mp4')>mp4</option>
         </select>
         <br/>
+        <label class="trans" trans="webui.settings TIMELMD" value="10">当把字幕转换为LRC文件时，具有相同时间的多行的后一行应延迟的时间（默认：）：</label>
+        <input class="form df" type="number" id="lmd" min="0" df="10"$:getse2('lmd')>ms
+        <br/>
         <label class="trans" trans="webui.settings MAINPS">注：这里的设置保存后将覆盖原有的settings.json。</label>
     </form>
     <button class="form trans abs" id="submit" trans="webui.settings SUBMIT">提交</button>

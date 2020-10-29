@@ -202,26 +202,34 @@ def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: boo
     re = r.get(i['url'])
     re.encoding = 'utf8'
     re = re.json()
-    if aslrc(fn, re['body']) == 0 and pr:
+    if aslrc(fn, re['body'], se, ip) == 0 and pr:
         print(lan['OUTPUT3'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>歌词下载完毕！
     return 0
 
 
-def aslrc(fn: str, b: list):
+def aslrc(fn: str, b: list, se: dict, ip: dict):
     try :
         f = open(fn, 'w', encoding="utf8")
     except :
         print(lan['ERROR1'].replace('<filename>', fn))  # 保存"<filename>"失败！
         return -1
+    lmd = 10
+    if 'lmd' in se:
+        lmd = se['lmd']
+    if 'lmd' in ip:
+        lmd = se['ip']
+    lmd = lmd / 1000
     et = -1
     for k in b:
         if et != -1 and comlrct(et, k['from']) == -1:
             f.write(f"[{tostr5(et)}]\n")
         con = k['content']
         col = con.split('\n')
+        t = 0
         for s in col:
             s = s.replace('\r', '')
-            f.write(f"[{tostr5(k['from'])}]{s}\n")
+            f.write(f"[{tostr5(k['from'] + lmd * t)}]{s}\n")
+            t = t + 1
         et = k['to']
     f.close()
     return 0
