@@ -262,3 +262,11 @@ msgid ""
 msgstr ""
 "字幕をLRCファイルに変換する際に、同じタイムスタンプを持つ複数行のうち、後者の行の時間を遅らせる必要があります。(デフォルト:<value> , "
 "現在: <value2>):"
+
+msgctxt "INPUT39"
+msgid "Do you want to not add language code to LRC file name?"
+msgstr ""
+
+msgctxt "INPUT40"
+msgid "(Only works when there is only one subtitle available.)"
+msgstr ""

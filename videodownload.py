@@ -1775,8 +1775,16 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 else:
                     return -3
         if 'sub' in data:
-            for s in data['sub']:
-                downlrc(r2, f'{filen}.m4a', s, ip, se, data, ns, i)
+            nal = False
+            if 'nal' in se:
+                nal = se['nal']
+            if 'nal' in ip:
+                nal = ip['nal']
+            if len(data['sub']) == 1 and nal:
+                downlrc(r2, f'{filen}.m4a', data['sub'][0], ip, se, data, ns, i, nal)
+            else:
+                for s in data['sub']:
+                    downlrc(r2, f'{filen}.m4a', s, ip, se, data, ns, i)
         imgf = file.spfn(filen + ".m4a")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
         imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
         if ffmpeg:

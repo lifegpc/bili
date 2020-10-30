@@ -427,3 +427,13 @@ msgid ""
 msgstr ""
 "字幕をLRCファイルに変換する際に、同じタイムスタンプを持つ複数の行の後段の時間を遅らせる必要があります。 可能な値: <value>, 単位: "
 "<value2>"
+
+msgctxt "O79"
+msgid ""
+"Remove language code from LRC file name.(Only works when there is only one "
+"subtitle available.)"
+msgstr ""
+
+msgctxt "O80"
+msgid "Add language code to LRC file name."
+msgstr ""

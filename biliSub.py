@@ -171,10 +171,13 @@ def asass(fn: str, b: dict, width: int, height: int):
     return 0
 
 
-def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: bool=False, pi: int=1):
+def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: bool=False, pi: int=1, nal: bool=False):
     global lan
     fq = spfn(fn)[0]
-    fn = f"{fq}.{i['lan']}.lrc"
+    if nal:
+        fn = f"{fq}.lrc"
+    else:
+        fn = f"{fq}.{i['lan']}.lrc"
     i['fn'] = fn
     if os.path.exists(fn):
         fg = False
@@ -222,13 +225,13 @@ def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int):
     if 'lmd' in ip:
         lmd = se['ip']
     lmd = lmd / 1000
-    f.write("[re:Made by bili. https://github.com/lifegpc/bili]")
+    f.write("[re:Made by bili. https://github.com/lifegpc/bili]\n")
     tit = data['page'][pi - 1]['part']
     if tit == "":
         tit = data['title']
-    f.write(f"[ti:{lg(tit)}]")
-    f.write(f"[ar:{lg(data['name'])}]")
-    f.write(f"[al:{lg(data['title'])}]")
+    f.write(f"[ti:{lg(tit)}]\n")
+    f.write(f"[ar:{lg(data['name'])}]\n")
+    f.write(f"[al:{lg(data['title'])}]\n")
     et = -1
     for k in b:
         if et != -1 and comlrct(et, k['from']) == -1:

@@ -330,3 +330,11 @@ msgstr ""
 msgctxt "O78"
 msgid "The time latter line of multiple lines which have same timestamps should be delayed when converting subtitles to LRC file. Possible Values: <value>, Unit: <value2>"
 msgstr ""
+
+msgctxt "O79"
+msgid "Remove language code from LRC file name.(Only works when there is only one subtitle available.)"
+msgstr ""
+
+msgctxt "O80"
+msgid "Add language code to LRC file name."
+msgstr ""
