@@ -24,6 +24,9 @@ import JSONParser
 from ASSWriter import ASSScript, parsefromCSSHex, ASSScriptEvent
 import traceback
 from iso639 import languages
+from bstr import lg
+
+
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -168,7 +171,7 @@ def asass(fn: str, b: dict, width: int, height: int):
     return 0
 
 
-def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: bool=False,pi: int=1):
+def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: bool=False, pi: int=1):
     global lan
     fq = spfn(fn)[0]
     fn = f"{fq}.{i['lan']}.lrc"
@@ -202,12 +205,12 @@ def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: boo
     re = r.get(i['url'])
     re.encoding = 'utf8'
     re = re.json()
-    if aslrc(fn, re['body'], se, ip) == 0 and pr:
+    if aslrc(fn, re['body'], se, ip, data, pi) == 0 and pr:
         print(lan['OUTPUT3'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>歌词下载完毕！
     return 0
 
 
-def aslrc(fn: str, b: list, se: dict, ip: dict):
+def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int):
     try :
         f = open(fn, 'w', encoding="utf8")
     except :
@@ -219,6 +222,13 @@ def aslrc(fn: str, b: list, se: dict, ip: dict):
     if 'lmd' in ip:
         lmd = se['ip']
     lmd = lmd / 1000
+    f.write("[re:Made by bili. https://github.com/lifegpc/bili]")
+    tit = data['page'][pi - 1]['part']
+    if tit == "":
+        tit = data['title']
+    f.write(f"[ti:{lg(tit)}]")
+    f.write(f"[ar:{lg(data['name'])}]")
+    f.write(f"[al:{lg(data['title'])}]")
     et = -1
     for k in b:
         if et != -1 and comlrct(et, k['from']) == -1:

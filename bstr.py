@@ -38,6 +38,17 @@ def g(i: str):
     return s
 
 
+def lg(i: str):
+    s = str(i)
+    re = rsearch(r'[^[:print:]]', s)
+    if re is not None:
+        s = s.replace(re.group(), '_')
+        re = rsearch(r'[^[:print:]]', s)
+    s = s.replace('[', '_')
+    s = s.replace(']', '_')
+    return s
+
+
 def gettags(t:list) -> str:
     "将tag列表转换为文字"
     f=True
