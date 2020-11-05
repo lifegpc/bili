@@ -43,6 +43,11 @@ def Myparser(s) :
         t['duration'] = i['duration']
         page.append(t)
     data['page']=page
+    tags = []
+    if 'tags' in obj and obj['tags'] is not None:
+        for i in obj['tags']:
+            tags.append(i['tag_name'])
+    data['tags'] = tags
     return data
 def Myparser2(s) :
     "解析SS视频信息"

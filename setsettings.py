@@ -308,4 +308,8 @@ if __name__=='__main__' :
             inp = input(la['INPUT14'].replace('<min>', '0'))
     if lmd != 10:
         ne['lmd'] = lmd
+    print(f"{la['INPUT39']}{la['INPUT40']}{la['NTN']}")
+    r = gk(se, 'nal')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'nal', se)
     saveset(ne)

@@ -251,3 +251,11 @@ msgid ""
 "delayed when converting subtitles to LRC file (Default:<value>, "
 "Now:<value2>):"
 msgstr "当把字幕转换为LRC文件时，具有相同时间的多行的后一行应延迟的时间（默认：<value>，当前：<value2>）："
+
+msgctxt "INPUT39"
+msgid "Do you want to not add language code to LRC file name?"
+msgstr "您想移除LRC文件名中的语言代码吗？"
+
+msgctxt "INPUT40"
+msgid "(Only works when there is only one subtitle available.)"
+msgstr "（只在仅有一个字幕可用时生效。）"
