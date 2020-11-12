@@ -77,7 +77,7 @@ if __name__=='__main__' :
     ne={}
     se=loadset()
     if not isinstance(se,dict) :
-        se=None
+        se = {}
     r=[]
     print(la['OUTPUT1'])#选项前的x指明了当前选中的设置，直接回车会保持当前设置
     if se :
