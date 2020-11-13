@@ -210,3 +210,7 @@ msgstr ""
 msgctxt "INPUT40"
 msgid "(Only works when there is only one subtitle available.)"
 msgstr ""
+
+msgctxt "INPUT41"
+msgid "Do you want to enable logging to file?"
+msgstr ""

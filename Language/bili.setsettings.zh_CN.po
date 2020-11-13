@@ -259,3 +259,7 @@ msgstr "您想移除LRC文件名中的语言代码吗？"
 msgctxt "INPUT40"
 msgid "(Only works when there is only one subtitle available.)"
 msgstr "（只在仅有一个字幕可用时生效。）"
+
+msgctxt "INPUT41"
+msgid "Do you want to enable logging to file?"
+msgstr "您想要将日志写入文件吗？"

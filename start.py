@@ -38,7 +38,9 @@ from lang import getlan,getdict
 import JSONParser2
 from threading import Thread
 from biliVersion import checkver
-from time import sleep
+from time import sleep, time
+from Logger import Logger
+from inspect import currentframe
 
 # 远程调试用代码
 # import ptvsd
@@ -52,6 +54,11 @@ if se==-1 or se==-2 :
     se={}
 ip={}
 def main(ip={}):
+    log = False
+    logg: Logger = None
+    if 'logg' in ip:
+        log = True
+        logg: Logger = ip['logg']
     global se
     global lan
     uc = True  # 是否检测更新
@@ -60,7 +67,7 @@ def main(ip={}):
     if 'uc' in ip:
         uc = ip['uc']
     if uc:
-        checkver()
+        checkver(logg)
     ns=True
     if 's' in ip :
         ns=False
@@ -80,6 +87,8 @@ def main(ip={}):
         print(f'{lan["ERROR1"]}')
         return -1
     inpl=inp.split(',')
+    if log:
+        logg.write(f"inp = '{inp}'\ninpl = {json.dumps(inpl, ensure_ascii=False)}", currentframe(), 'Input URL')
     mt=False
     if JSONParser.getset(se,'mt') == True :
         mt=True
@@ -90,6 +99,8 @@ def main(ip={}):
             ip2=copydict(ip)
             ip2['i']=inp2
             ip2['uc'] = False  # 禁用重复检测
+            if log:
+                logg.write(f"ip2 = {json.dumps(ip2, ensure_ascii=False)}", currentframe(), 'multi-input parameters')
             if mt:
                 ru=mains(ip2)
                 ru.start()
@@ -125,22 +136,34 @@ def main(ip={}):
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
+        if log and not logg.hasf():
+            logg.openf(f"log/SS{inp[2:]}_{round(time())}.log")
     elif inp[0:2].lower()=='ep' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ep"+inp[2:]
         ep=True
+        if log and not logg.hasf():
+            logg.openf(f"log/EP{inp[2:]}_{round(time())}.log")
     elif inp[0:2].lower()=='av' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/video/av"+inp[2:]
         av=True
+        if log and not logg.hasf():
+            logg.openf(f"log/AV{inp[2:]}_{round(time())}.log")
     elif inp[0:2].lower()=='bv' :
         inp=str(biliBv.debv(inp))
         s="https://www.bilibili.com/video/av"+inp
         av=True
+        if log and not logg.hasf():
+            logg.openf(f"log/AV{inp}_{round(time())}.log")
     elif inp[0:2].lower()=='md' and inp[2:].isnumeric() :
         md=True
         mid=int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/MD{inp}_{round(time())}.log")
     elif inp.isnumeric() :
         s="https://www.bilibili.com/video/av"+inp
         av=True
+        if log and not logg.hasf():
+            logg.openf(f"log/AV{inp}_{round(time())}.log")
     else :
         re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?',inp,I)
         if re==None :
@@ -159,22 +182,32 @@ def main(ip={}):
                     return -1
             else :
                 re=re.groups()
+                if log:
+                    logg.write(f"re = {json.dumps(re, ensure_ascii=False)}", currentframe(), "INPUT REGEX 2")
                 if re[3] :
                     inp=re[3]
                     s="https://www.bilibili.com/video/av"+inp
                     av=True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/AV{inp}_{round(time())}.log")
                 elif re[4] :
                     inp=str(biliBv.debv(re[4]))
                     s="https://www.bilibili.com/video/av"+inp
                     av=True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/AV{inp}_{round(time())}.log")
                 elif re[5] :
                     inp=re[5]
                     s="https://www.bilibili.com/bangumi/play/"+inp
                     ss=True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/SS{inp}_{round(time())}.log")
                 elif re[6] :
                     inp=re[6]
                     s="https://www.bilibili.com/bangumi/play/"+inp
                     ep=True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/EP{inp}_{round(time())}.log")
                 else :
                     re=search(r"[^:]+://",inp)
                     if re==None :
@@ -189,22 +222,32 @@ def main(ip={}):
                         return -1
         else :
             re=re.groups()
+            if log:
+                logg.write(f"re = {json.dumps(re, ensure_ascii=False)}", currentframe(), "INPUT REGEX 1")
             if re[7] :
                 inp=re[7]
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
+                if log and not logg.hasf():
+                    logg.openf(f"log/AV{inp}_{round(time())}.log")
             elif re[9] :
                 inp=str(biliBv.debv(re[9]))
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
+                if log and not logg.hasf():
+                    logg.openf(f"log/AV{inp}_{round(time())}.log")
             elif re[11] :
                 inp=re[11]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ss=True
+                if log and not logg.hasf():
+                    logg.openf(f"log/SS{inp}_{round(time())}.log")
             elif re[13] :
                 inp=re[13]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ep=True
+                if log and not logg.hasf():
+                    logg.openf(f"log/EP{inp}_{round(time())}.log")
             elif re[15] :
                 pl=True
                 uid=int(re[15])
@@ -222,11 +265,25 @@ def main(ip={}):
                                 pld['k']=rep[3]
                             if rep[4]:
                                 pld['t']=int(rep[5])
+                if log and not logg.hasf():
+                    if fid == -1:
+                        logg.openf(f"log/UID{uid}_FAV_{round(time())}.log")
+                    else:
+                        logg.openf(f"log/FAV{fid}_{round(time())}.log")
+                if log:
+                    logg.write(f"uid = {uid}\nfid = {fid}\npld = {json.dumps(pld, ensure_ascii=False)}", currentframe(), "FAVLIST Parser")
             elif re[18]:
                 ch=True
                 uid=int(re[19])
                 if re[22] :
                     cid=int(re[22])
+                if log and not logg.hasf():
+                    if cid == -1:
+                        logg.openf(f"log/UID{uid}_CHID_{round(time())}.log")
+                    else:
+                        logg.openf(f"log/CHID{cid}_{round(time())}.log")
+                if log:
+                    logg.write(f"uid = {uid}\ncid = {cid}", currentframe(), "CHANNEL Parser")
             elif re[23]:
                 uv=True
                 uid=int(re[24])
@@ -245,31 +302,49 @@ def main(ip={}):
                                 uvd['k']=rep[3]
                             elif rep[5]:
                                 uvd['o']=rep[5]
+                if log and not logg.hasf():
+                    logg.openf(f"log/UID{uid}_{round(time())}.log")
+                if log:
+                    logg.write(f"uid = {uid}\nuvd = {json.dumps(uvd, ensure_ascii=False)}", currentframe(), "UPLOADER VIDEO Parser")
             elif re[27] :
                 md=True
                 mid=int(re[28])
+                if log and not logg.hasf():
+                    logg.openf(f"log/MD{mid}_{round(time())}.log")
             elif re[29] :
                 sm=True
                 sid=int(re[30])
+                if log and not logg.hasf():
+                    logg.openf(f"log/SID{sid}_{round(time())}.log")
             elif re[31]:
                 sm=True
                 sid=int(re[32])
+                if log and not logg.hasf():
+                    logg.openf(f"log/SID{sid}_{round(time())}.log")
             elif re[33] :
                 lr=True
                 rid=re[34]
+                if log and not logg.hasf():
+                    logg.openf(f"log/RID{rid}_{round(time())}.log")
             elif re[35] :
                 ss=True
                 che=True
                 ssid=int(re[36])
+                if log and not logg.hasf():
+                    logg.openf(f"log/SS{ssid}_{round(time())}.log")
             elif re[37]:
                 ep=True
                 che=True
                 epid=int(re[38])
+                if log and not logg.hasf():
+                    logg.openf(f"log/EP{epid}_{round(time())}.log")
             elif re[39] or re[40]:
                 chel=True
             elif re[5] and re[41]:
                 live = True
                 roomid = int(re[41])
+                if log and not logg.hasf():
+                    logg.openf(f"log/LIVEROOM{roomid}_{round(time())}.log")
             else :
                 print(f'{lan["ERROR2"]}')
                 exit()
@@ -284,11 +359,11 @@ def main(ip={}):
         section.proxies=pr
     if nte:
         section.trust_env=False
-    read=JSONParser.loadcookie(section)
+    read = JSONParser.loadcookie(section, logg)
     ud={}
     login=0
     if read==0 :
-        read=biliLogin.tryok(section,ud)
+        read = biliLogin.tryok(section, ud, logg)
         if read==True :
             if ns:
                 print(f"{lan['OUTPUT1']}") #登录校验成功！
@@ -307,7 +382,7 @@ def main(ip={}):
     if login==2 :
         if os.path.exists('cookies.json') :
             os.remove('cookies.json')
-        read=biliLogin.login(section,ud,ip)
+        read = biliLogin.login(section, ud, ip, logg)
         if read==0 :
             login=1
         elif read==1 :
@@ -317,14 +392,22 @@ def main(ip={}):
     if not 'd' in ud:
         return -1
     ud['vip']=ud['d']['vipStatus']
+    if log:
+        logg.write(f"read = {read}\nlogin = {login}\nud = {json.dumps(ud, ensure_ascii=False)}", currentframe(), "VERIFY LOGIN 2")
     if sm :
+        if log:
+            logg.write(f"GET https://api.vc.bilibili.com/clip/v1/video/detail?video_id={sid}&need_playurl=1", currentframe(), "GET SMALL VIDEO INFO")
         re=section.get('https://api.vc.bilibili.com/clip/v1/video/detail?video_id=%s&need_playurl=1'%(sid))
         re.encoding="utf8"
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "SMALL VIDEO INFO RESULT")
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
         inf=JSONParser2.getsmi(re)
+        if log:
+            logg.write(f"inf = {json.dumps(inf, ensure_ascii=False)}", currentframe(), "READ SMALL VIDEO INFO")
         if ns:
             PrintInfo.printInfo9(inf)
         cho5=False
@@ -352,6 +435,8 @@ def main(ip={}):
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
+        if log:
+            logg.write(f"cho5 = {cho5}", currentframe(), "SMALL VIDEO para")
         videodownload.smdownload(section,inf,cho5,se,ip)
         return 0
     if md :
@@ -1605,6 +1690,16 @@ if len(sys.argv)>1 :
     if 'SHOW' in ip:
         PrintInfo.prc()
         exit()
+log = False
+if 'log' in se and se['log']:
+    log = True
+if 'log' in ip:
+    log = ip['log']
+if log:
+    seipt = f"Settings: {json.dumps(se, ensure_ascii=False)}\nCommand Line parameters: {json.dumps(ip, ensure_ascii=False)}"
+    logg = Logger()
+    ip['logg'] = logg
+    logg.write(seipt)
 lan=getdict('start',getlan(se,ip))
 class mains(Thread) :
     def __init__(self,ip:dict) :
@@ -1614,6 +1709,17 @@ class mains(Thread) :
         main(self.ip)
 if __name__=="__main__" :
     PrintInfo.pr()
-    main(ip)
+    if not log:
+        main(ip)
+    else:
+        try:
+            main(ip)
+        except:
+            te = traceback.format_exc()
+            print(te)
+            logg.write(te, currentframe(), "Main Function Except")
+            if not logg.hasf():
+                logg.openf(f'log/{round(time())}.log')
+            logg.closef()
 else :
     print(lan['OUTPUT11'])#请运行start.py

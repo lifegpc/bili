@@ -32,6 +32,8 @@ from command import gopt
 from lang import getlan,getdict
 import sys
 import JSONParser2
+from inspect import currentframe
+from traceback import format_exc
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -87,7 +89,7 @@ def geth(h:CaseInsensitiveDict) :
     for i in h.keys() :
         s=s+' --header "'+i+': '+h[i]+'"'
     return s
-def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
+def dwaria2(r, fn, url, size, d2, ip, se, i=1, n=1, d=False, logg=None) :
     if d :
         print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件
     else :
@@ -154,6 +156,8 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
             s=""
         bs=True
         fg=False
+        if logg is not None:
+            logg.write(f"d2 = {d2}\noa = {oa}", currentframe(), "DWARIA2 ARIA2")
         if d2 and not oa :
             print(lan['OUTPUT6'])#未找到aria2文件，跳过下载
             return 0
@@ -181,6 +185,8 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
             try :
                 os.remove(fn)
             except :
+                if logg is not None:
+                    logg.write(format_exc(), currentframe(), "DWARIA2 REMOVE FILE FAILED")
                 print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 return 0
         elif not d2:
@@ -190,7 +196,11 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
     elif isinstance(url,list) :
         for i in url :
             cm=cm+' "'+i+'"'
+    if logg is not None:
+        logg.write(f"cm = {cm}", currentframe(), "DWARIA2 COMMAND LINE")
     re=os.system(cm)
+    if logg is not None:
+        logg.write(f"re = {re}", currentframe(), "DWARIA2 RESULT")
     if re==0 :
         return 0
     elif re==28 :
@@ -3381,6 +3391,11 @@ def chepicdownload(url:str,r:requests.session,fdir:str,i:int,ns:bool) :
 def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     """下载小视频
     c 继续下载"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip:
         ns=False
@@ -3399,6 +3414,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "ERROR MKDIR")
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -5
     F=False
@@ -3416,13 +3433,15 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         vf = ip['vf']
     if not os.path.exists('Temp/'):
         mkdir('Temp/')
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'\nnte = {nte}\nF = {F}\nfin = {fin}\nvf = '{vf}'", currentframe(), "SMDOWNLOAD PARAMETERS")
     r2=requests.session()
     r2.headers=copydict(r.headers)
     r2.proxies=r.proxies
     if nte:
         r2.trust_env=False
     r2.headers.update({'referer':'https://vc.bilibili.com/video/%s'%(i['id'])})
-    fz=streamgetlength(r2,i['video_playurl'])
+    fz = streamgetlength(r2, i['video_playurl'], logg)
     if ns or(not ns and F):
         print(lan['OUTPUT15'])#画质：
         print('%sx%s,%s(%sB,%s)'%(i['width'],i['height'],file.info.size(fz),fz,file.cml(fz,i['video_time']*1000)))
@@ -3464,6 +3483,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         ma=True
     if 'ma' in ip:
         ma=ip['ma']
+    if log:
+        logg.write(f"sv = {sv}\nslt = {slt}\nsn = {sn}\nfilen = {filen}\nff = {ff}\nma = {ma}", currentframe(), "SMDOWNLOAD PARAMETERS 2")
     if ff and ma and os.path.exists(f'{filen}.{vf}') and os.system('ffmpeg -h%s'%(getnul()))==0 :
         fg=False
         bs=True
@@ -3488,6 +3509,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
             try :
                 os.remove(f'{filen}.{vf}')
             except :
+                if log:
+                    logg.write(format_exc(), currentframe(), "SMDOWNLOAD REMOVE FILE FAILED")
                 print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 return 0
         else:
@@ -3496,6 +3519,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     if ma and ff and os.system(f'ffmpeg -h{getnul()}') == 0 and vf == "mp4":
         hzm = "temp.mp4"
     fn='%s.%s'%(filen,hzm)
+    if log:
+        logg.write(f"fn = {fn}", currentframe(), "SMDOWNLOAD FILENAME")
     bs2=True
     while bs2:
         bs2=False
@@ -3507,6 +3532,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 ar=True
             else :
                 ar=False
+        if log:
+            logg.write(f"ar = {ar}", currentframe(), "SMDOWNLOAD AR")
         if os.system('aria2c -h%s'%(getnul()))==0 and ar :
             ab=True
             if JSONParser.getset(se,'ab')==False :
@@ -3516,16 +3543,24 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                     ab=True
                 else :
                     ab=False
+            if log:
+                logg.write(f"ab = {ab}", currentframe(), "SMDOWNLOAD AB")
             if ab:
-                read=dwaria2(r2,fn,geturll(i),fz,c,ip,se)
+                read = dwaria2(r2, fn, geturll(i), fz, c, ip, se, logg=logg)
             else :
-                read=dwaria2(r2,fn,i['video_playurl'],fz,c,ip,se)
+                read = dwaria2(r2, fn, i['video_playurl'], fz, c, ip, se, logg=logg)
             if read==-3 :
                 print(f"{lan['ERROR4']}{lan['ERROR5']}")#aria2c 参数错误
                 return -4
         else :
+            if log:
+                logg.write(f"GET {i['video_playurl']}", currentframe(), "SMDOWNLOAD GET STREAM")
             re=r2.get(i['video_playurl'],stream=True)
-            read=downloadstream(nte,ip,i['video_playurl'],r2,re,fn,fz,c)
+            if log:
+                logg.write(f"status = {re.status_code}", currentframe(), "SMDOWNLOAD DOWNLOAD URL STATUS")
+            read = downloadstream(nte, ip, i['video_playurl'], r2, re, fn, fz, c, logg=logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "SMDOWNLOAD DOWNLOAD RESULT")
         if read==-1 :
             return -1
         elif read==-2 :
@@ -3539,6 +3574,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 rc=True
             elif read==False :
                 bs=False
+            if log:
+                logg.write(f"rc = {rc}", currentframe(), "SMDOWNLOAD RC")
             if 'r' in ip:
                 if ip['r']:
                     rc=True
@@ -3579,6 +3616,9 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 te.write(f"vq={i['width']}x{i['height']}\n")
                 te.write(f"tags={bstr.g(bstr.gettags(i['tags']))}\n")
                 te.write(f"purl=https://vc.bilibili.com/video/{i['id']}\n")
+            if log:
+                with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADATAFILE 'Temp/{i['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "SMDOWNLOAD METADATAFILE")
             ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['id']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
         elif vf == "mp4":
             with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
@@ -3590,8 +3630,15 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 te.write(f"date={i['upload_time'][:10]}\n")
                 te.write(f"description=UID{i['uid']},{i['width']}x{i['height']},{bstr.g(bstr.gettags(i['tags']))}\\\n")
                 te.write(f"https://vc.bilibili.com/video/{i['id']}\n")
+            if log:
+                with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADATAFILE 'Temp/{i['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "SMDOWNLOAD METADATAFILE")
             ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['id']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
+        if log:
+            logg.write(f"ml = {ml}", currentframe(), "SMDOWNLOAD FFMPEG COMMAND LINE")
         re=os.system(ml)
+        if log:
+            logg.write(f"re = {re}", currentframe(), "SMDOWNLOAD FFMPEG RESULT")
         if re==0:
             print(lan['OUTPUT14'])#合并完成！
         de=False
@@ -4231,13 +4278,15 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
     return 0
 
 
-def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
+def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1, logg=None):
     if d :
         print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件
     else :
         print(lan['OUTPUT2'])#正在开始下载
     if os.path.exists(fn) :
         fsize=file.getinfo({'a':fn,'f':''})['s']
+        if logg is not None:
+            logg.write(f"fsize = {fsize}\nsize = {size}", currentframe(), "DOWNLOADSTREAM FILESIZE")
         if fsize!=size and size!=-1:
             s=lan['OUTPUT19']#(文件大小不一致，建议覆盖)
         else :
@@ -4255,11 +4304,17 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                 r2.trust_env=False
             r2.proxies=r.proxies
             r2.headers.update({'Range':'bytes=%s-%s'%(fsize,size-1)})
+            if logg is not None:
+                logg.write(f"Update HTTP Header: Range: bytes={fsize}-{size-1}", currentframe(), "DOWNLOADSTREAM UPDATE HTTP HEADER")
             read=JSONParser.loadcookie(r2)
             if read!=0 :
                 print(lan['ERROR2'])#读取cookies.json出现错误
                 return -1
+            if logg is not None:
+                logg.write(f"GET {uri}", currentframe(), "DOWNLOADSTREAM REGET STREAM")
             re=r2.get(uri,stream=True)
+            if logg is not None:
+                logg.write(f"status = {re.status_code}", currentframe(), "DOWNLOADSTREAM REGET STATUS")
             s=fsize
         if not d2 and ('y' in ip or 's' in ip):
             if 's' in ip:
@@ -4286,6 +4341,8 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             try :
                 os.remove(fn)
             except :
+                if logg is not None:
+                    logg.write(format_exc(), currentframe(), "DOWNLOADSTREAM REMOVE FILE FAILED")
                 print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 re.close()
                 return 0
@@ -4314,6 +4371,8 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                     t2=t1
     print()
     if s!= size and size!=-1 :
+        if logg is not None:
+            logg.write(f"s = {s}\nsize = {size}", currentframe(), "DOWNLOADSTREAM LENGTH CHANGED")
         print(lan['ERROR9'])#文件大小不匹配
         return -2
     f.close()
@@ -4344,11 +4403,13 @@ def getfn2(i,i2,f,vqs,hzm,fin) :
             return '%s/%s' % (f, file.filtern(f"{i['title']}{i['i']+1}.{i['longTitle']}({i['titleFormat']},AV{i['aid']},{i['bvid']},ID{i['id']},{i['cid']},{vqs[i2]}).{hzm[i2]}"))
         else :
             return f"{f}/{file.filtern(i['title'])}{i['i']+1}.{file.filtern(i['longTitle'])}({file.filtern(vqs[i2])}).{hzm[i2]}"
-def streamgetlength(r:requests.Session,uri):
+def streamgetlength(r:requests.Session, uri, logg = None):
     bs=True
     while bs:
         bs=False
         try :
+            if logg is not None:
+                logg.write(f"GETLENGTH {uri}", currentframe(), "STREAMGETLENGTH")
             re=r.get(uri,stream=True)
             try :
                 if re.headers.get('Content-Length')!=None :
@@ -4356,12 +4417,18 @@ def streamgetlength(r:requests.Session,uri):
                 else :
                     a=-1#无法获取长度，什么神必服务器
                 re.close()
+                if logg is not None:
+                    logg.write(f"headers = {re.headers}\nsize = {a}", currentframe(), "STREAMLENGTH")
                 return a
             except :
+                if logg is not None:
+                    logg.write(format_exc(), currentframe(), "RETRY GET STREAM LENGTH")
                 re.close()
                 print(lan['OUTPUT21'])#获取文件大小失败。尝试重新获取……
                 bs=True
         except :
+            if logg is not None:
+                logg.write(format_exc(), currentframe(), "RETRY GET STREAM LENGTH 2")
             print(lan['OUTPUT21'])#获取文件大小失败。尝试重新获取……
             bs=True
 if __name__=="__main__" :
