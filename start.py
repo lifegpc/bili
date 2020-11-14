@@ -1369,24 +1369,40 @@ def main(ip={}):
                 return -1
         return 0
     if not che:
+        if log:
+            logg.write(f"GET {s}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE")
         re=section.get(s)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE RESULT")
         rtry = 0
         while re.status_code == 412 and rtry < 3:
-            biliLogin.dealwithcap(section, s)
+            biliLogin.dealwithcap(section, s, logg)
+            if log:
+                logg.write(f"GET {s}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE2")
             re = section.get(s)
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE2 RESULT")
             rtry = rtry + 1
         if re.status_code == 412:
             print(lan['SPERROR'].replace('<url>', s))
             return -1
         parser=HTMLParser.Myparser()
         parser.feed(re.text)
+        if log:
+            logg.write(f"parser.videodata = {parser.videodata}", currentframe(), "NORMAL/BANGUMI VIDEO DATA")
         try :
             vd=json.loads(parser.videodata,strict=False)
         except Exception:
+            if log:
+                logg.write(traceback.format_exc(), currentframe(), "NORMAL/BANGUMI VIDEO DATA INVALID")
             if av:
                 re=search(r"av([0-9]+)",s,I).groups()[0]
+                if log:
+                    logg.write(f"GET https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid={re}&jsonp=jsonp", currentframe(), "GET NORMAL VIDEO INFO")
                 re=section.get("https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid=%s&jsonp=jsonp"%(re))
                 re.encoding='utf8'
+                if log:
+                    logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET NORMAL VIDEO INFO RESULT")
                 re=re.json()
                 if re['code']!=0 :
                     print('%s %s'%(re['code'],re['message']))
@@ -1397,10 +1413,12 @@ def main(ip={}):
                     ip2['uc'] = False
                     if 'p' in ip :
                         ip2['p']=ip['p']
+                    if log:
+                        logg.write(f"ip2 = {ip2}", currentframe(), "NORMAL VIDEO DIRECT PARA")
                     read=main(ip2)
-                    if read!= 0 :
-                        return read
-                    return 0
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "NORMAL VIDEO DIRECT RETURN")
+                    return read
                 print(traceback.format_exc())
                 return -1
             elif ss or ep:
@@ -1410,7 +1428,12 @@ def main(ip={}):
                     print(lan['OUTPUT12'].replace('<link>',s))#尝试重定向至"<link>"。
                     ip['i']=s
                     ip['uc'] = False
-                    return main(ip)
+                    if log:
+                        logg.write(f"ip = {ip}", currentframe(), "BANGUMI VIDEO DIRECT PARA")
+                    read = main(ip)
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "BANGUMI VIDEO DIRECT RETURN")
+                    return read
                 print(traceback.format_exc())
                 return -1
             else :
@@ -1421,6 +1444,30 @@ def main(ip={}):
             return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
+        if data == -1:
+            re = search(r"av([0-9]+)", s, I).groups()[0]
+            if log:
+                logg.write(f"GET https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid={re}&jsonp=jsonp", currentframe(), "GET NORMAL VIDEO INFO2")
+            re = section.get(f"https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid={re}&jsonp=jsonp")
+            re.encoding = 'utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET NORMAL VIDEO INFO2 RESULT")
+            re = re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+                return -1
+            if 'data' in re and 'View' in re['data'] and 'redirect_url' in re['data']['View']:
+                ip2 = copyip(ip)
+                ip2['i'] = re['data']['View']['redirect_url']
+                ip2['uc'] = False
+                if 'p' in ip:
+                    ip2['p'] = ip['p']
+                if log:
+                    logg.write(f"ip2 = {ip2}", currentframe(), "NORMAL VIDEO DIRECT2 PARA")
+                read = main(ip2)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "NORMAL VIDEO DIRECT2 RETURN")
+                return read
         if data['videos']!=len(data['page']) :
             r=requests.Session()
             r.headers=copydict(section.headers)

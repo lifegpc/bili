@@ -175,7 +175,7 @@ def scap(r:requests.session,image):
     return re['message'] if re and re["code"]==0 else None
 
 
-def dealwithcap(r:requests.Session, uri:str):
+def dealwithcap(r:requests.Session, uri:str, logg=None):
     "尝试通过验证"
     try:
         driver = webdriver.Chrome()
@@ -190,6 +190,10 @@ def dealwithcap(r:requests.Session, uri:str):
             try:
                 driver.find_element_by_class_name('error-panel server-error')
             except:
+                if logg is not None:
+                    logg.write(traceback.format_exc(), currentframe(), "DEAL WITH CAP ERROR1")
                 aa = False
     except Exception:
+        if logg is not None:
+            logg.write(traceback.format_exc(), currentframe(), "DEAL WITH CAP ERROR2")
         print(traceback.format_exc())

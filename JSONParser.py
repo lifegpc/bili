@@ -27,6 +27,8 @@ from inspect import currentframe
 def Myparser(s) :
     "解析普通AV视频信息"
     obj=loads(s)
+    if 'ssList' in obj:
+        return -1
     data={}
     data['aid']=obj['aid']
     data['bvid']=obj['videoData']['bvid']
