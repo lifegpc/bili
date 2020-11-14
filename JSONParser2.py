@@ -18,6 +18,10 @@ from JSONParser import loadset
 import sys
 from lang import getdict,getlan
 from command import gopt
+from inspect import currentframe
+from traceback import format_exc
+
+
 lan=None
 se=loadset()
 if se==-1 or se==-2 :
@@ -38,7 +42,9 @@ def getplinfo(d:dict) :
     r['mtime']=t['mtime']
     r['count']=t['media_count']
     return r
-def getpli(r,f,i,d:dict):
+def getpli(r, f, i, d: dict, logg=None):
+    if logg is not None:
+        logg.write(f"GET https://api.bilibili.com/x/v3/fav/resource/list?media_id={f}&pn={i}&ps=20&keyword={d['k']}&order=mtime&type={d['t']}&tid=0&jsonp=jsonp", currentframe(), "GET PLI INFO")
     uri='https://api.bilibili.com/x/v3/fav/resource/list?media_id=%s&pn=%s&ps=20&keyword=%s&order=mtime&type=%s&tid=0&jsonp=jsonp'%(f,i,d['k'],d['t'])
     bs=True
     while bs :
@@ -46,8 +52,12 @@ def getpli(r,f,i,d:dict):
             re=r.get(uri)
             bs=False
         except :
+            if logg is not None:
+                logg.write(format_exc(), currentframe(), "GET PLI INFO ERROR")
             print(lan['OUTPUT1'].replace('<number>',str(i)))#获取收藏夹第%s页失败，正在重试……
     re.encoding='utf8'
+    if logg is not None:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PLI INFO RESULT")
     re=re.json()
     if re['code']!=0 :
         print('%s %s'%(re['code'],re['message']))
@@ -81,7 +91,9 @@ def getchl(d:dict)->list:
         t['count']=i['count']
         r.append(t)
     return r
-def getchi(r:Session,u:int,c:int,n:int):
+def getchi(r:Session, u: int, c: int, n: int, logg=None):
+    if logg is not None:
+        logg.write(f"GET https://api.bilibili.com/x/space/channel/video?mid={u}&cid={c}&pn={n}&ps=30&order=0&jsonp=jsonp", currentframe(), "GET CHANNLE VIDEO LIST")
     uri="https://api.bilibili.com/x/space/channel/video?mid=%s&cid=%s&pn=%s&ps=30&order=0&jsonp=jsonp"%(u,c,n)
     bs=True
     while bs :
@@ -89,8 +101,12 @@ def getchi(r:Session,u:int,c:int,n:int):
             re=r.get(uri)
             bs=False
         except :
+            if logg is not None:
+                logg.write(format_exc(), currentframe(), "GET CHANNLE VIDEO LIST ERROR")
             print(lan['OUTPUT2'].replace('<number>',str(n)))#获取频道第%s页失败，正在重试……
     re.encoding='utf8'
+    if logg is not None:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET CHANNLE VIDEO LIST RESULT")
     re=re.json()
     if re['code']!=0 :
         print('%s %s'%(re['code'],re['message']))

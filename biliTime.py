@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from time import gmtime,strftime,time,strptime,timezone,mktime,struct_time
+from time import gmtime, strftime, time, strptime, timezone, mktime, struct_time, localtime
 from math import floor
 def getDate(s) :
     "获取时间戳对应日期 UTF+8"
@@ -55,8 +55,10 @@ def checktime(s:str) :
 def mkt(t) :
     "将UTC+8 时间返回为UTC时间戳（忽略本地）"
     return mktime(t)-timezone-8*3600
-def tostr2(s):
-    if isinstance(s,struct_time) :
+def tostr2(s = None):
+    if s is None:
+        return strftime('%Y-%m-%d %H:%M:%S', localtime())
+    elif isinstance(s,struct_time) :
         return strftime('%Y-%m-%d %H:%M:%S',s)
     else :
         return strftime('%Y-%m-%d %H:%M:%S',getDate(s))

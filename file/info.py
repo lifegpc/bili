@@ -88,6 +88,8 @@ def geturlfe(uri) ->str:
 def spfn(fn:str) -> (str,str):
     "分离文件名为文件名和扩展名"
     r=fn.split('.')
+    if len(r) == 1:
+        return fn, ''
     h=r[-1]
     s=""
     f=True

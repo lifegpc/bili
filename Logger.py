@@ -13,14 +13,14 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from file import filtern, spfln, mkdir, filterd
+from file import filtern, spfln, mkdir, filterd, spfn
 from os.path import exists, abspath
 from os import remove
 from biliVersion import getversion
 import sys
-from json import dumps
 from typing import TextIO
 from inspect import getframeinfo
+from biliTime import tostr2
 try:
     import winreg
 except ModuleNotFoundError:
@@ -30,12 +30,19 @@ except ModuleNotFoundError:
 class Logger:
     __f: TextIO = None
     __temstr = None
+    __index = None
+    __fn = None
+    __fsize = None
+    __tsize = None
+    limit_size = 20 * 2 ** 20
+    temp_limit = 2 ** 10
 
     def __init__(self, s: str = None, fn: str = None):
         if fn is not None:
             self.openf(fn)
         self.__temstr = []
         self.__initinfo()
+        self.__index = 1
         if s is not None:
             pass
 
@@ -43,11 +50,15 @@ class Logger:
         if c is not None:
             t = getframeinfo(c)
             self.__temstr.append(
-                f"LOG File \"{t.filename}\" Line {t.lineno} Function {t.function}:")
+                f"LOG {tostr2()} File \"{t.filename}\" Line {t.lineno} Function {t.function}:")
         elif c is not None:
-            self.__temstr.append(f"LOG {c2}:")
+            self.__temstr.append(f"LOG {tostr2()} {c2}:")
+        else:
+            self.__temstr.append(f"LOG {tostr2()}:")
         self.__temstr.append(s)
         self.__writetof()
+        if self.__f and self.__tsize > self.temp_limit:
+            self.flush()
 
     def openf(self, fn: str):
         if self.__f is not None:
@@ -59,6 +70,10 @@ class Logger:
         if not exists(rfd):
             mkdir(rfd)
         self.__f = open(f"{rfd}{rfn}", 'w', encoding='utf8')
+        if self.__index == 1:
+            self.__fn = f"{rfd}{rfn}"
+        self.__fsize = 0
+        self.__tsize = 0
 
     def closef(self):
         if self.__f is not None:
@@ -75,6 +90,7 @@ class Logger:
             return False
         self.__writetof()
         self.__f.flush()
+        self.__tsize = 0
         return True
 
     def hasf(self):
@@ -84,7 +100,16 @@ class Logger:
         if self.__f is None:
             return
         for s in self.__temstr:
-            self.__f.write(f'{s}\n')
+            i = self.__f.write(f'{s}\n')
+            self.__fsize = self.__fsize + i
+            self.__tsize = self.__tsize + i
+            if self.__fsize >= self.limit_size:
+                fn, fd = spfn(self.__fn)
+                self.__index = self.__index + 1
+                fn = f"{fn}_{self.__index}"
+                if fd != "":
+                    fn = f"{fn}.{fd}"
+                self.openf(fn)
         self.__temstr = []
 
     def __issetupbili(self):
@@ -130,4 +155,4 @@ class Logger:
                 f"Windows Version: Windows {wv.major}.{wv.minor} build {wv.build} platform {wv.platform} pack {wv.service_pack}")
             self.__issetupbili()
         self.__temstr.append(f"Current Directory: {abspath('.')}")
-        self.__temstr.append(f"Argv: {dumps(sys.argv)}")
+        self.__temstr.append(f"Argv: {sys.argv}")
