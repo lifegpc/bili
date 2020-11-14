@@ -48,9 +48,10 @@ class Logger:
 
     def write(self, s: str, c=None, c2: str = None):
         if c is not None:
+            z = '' if c2 is None else f" ({c2})"
             t = getframeinfo(c)
             self.__temstr.append(
-                f"LOG {tostr2()} File \"{t.filename}\" Line {t.lineno} Function {t.function}:")
+                f"LOG {tostr2()} File \"{t.filename}\" Line {t.lineno} Function {t.function}{z}:")
         elif c is not None:
             self.__temstr.append(f"LOG {tostr2()} {c2}:")
         else:

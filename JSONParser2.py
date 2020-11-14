@@ -254,11 +254,15 @@ def getlr3(d:dict,r:dict):
     r['name']=t['name']
     r['sex']=t['sex']
     r['sign']=t['sign']
-def getchel(r:Session) -> list:
+def getchel(r:Session, logg=None) -> list:
     """获得已购课程列表
     -1 获取出错"""
+    if logg is not None:
+        logg.write("GET https://api.bilibili.com/pugv/pay/web/my/paid?ps=10&pn=1", currentframe(),"GET PAID COURSES LIST 1")
     re=r.get("https://api.bilibili.com/pugv/pay/web/my/paid?ps=10&pn=1")
     re.encoding='utf8'
+    if logg is not None:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PAID COURSES LIST 1 RESULT")
     re=re.json()
     if re['code']!=0:
         print(f"{re['code']} {re['message']}")
@@ -271,11 +275,17 @@ def getchel(r:Session) -> list:
         bs=True
         while bs:
             try :
+                if logg is not None:
+                    logg.write(f"GET https://api.bilibili.com/pugv/pay/web/my/paid?ps=10&pn={i}", currentframe(), "GET PAID COURSES LIST")
                 re=r.get(f"https://api.bilibili.com/pugv/pay/web/my/paid?ps=10&pn={i}")
                 bs=False
             except :
+                if logg is not None:
+                    logg.write(format_exc(), currentframe(), "GET PAID COURSES LIST FAILED")
                 print(lan['OUTPUT3'].replace('<number>',str(i)))#获取第%s页失败，正在重试……
             re.encoding='utf8'
+            if logg is not None:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PAID COURSES LIST RESULT")
             re=re.json()
             if re['code']!=0:
                 print(f"{re['code']} {re['message']}")

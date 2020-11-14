@@ -1137,7 +1137,7 @@ def main(ip={}):
         r.proxies=section.proxies
         if nte:
             r.trust_env=False
-        read=JSONParser.loadcookie(r)
+        read = JSONParser.loadcookie(r, logg)
         if read!=0 :
             print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
@@ -1146,7 +1146,9 @@ def main(ip={}):
         r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
         r.headers.update({'referer':'https://www.bilibili.com/v/cheese/mine/list'})
-        chep=JSONParser2.getchel(r)
+        chep = JSONParser2.getchel(r, logg)
+        if log:
+            logg.write(f"chep = {chep}", currentframe(), "PAID COURSES LIST")
         if chep==-1:
             return -1
         if ns:
@@ -1215,13 +1217,19 @@ def main(ip={}):
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
+        if log:
+            logg.write(f"c1 = {c1}", currentframe(), "PAID COURSES LIST PARA")
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=f"https://www.bilibili.com/cheese/play/ss{chep[i-1]['id']}"
             ip2['uc'] = False
             if c1:
                 ip2['p']='a'
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), "PAID COURSES LIST PARA 2")
             read=main(ip2)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "PAID COURSES LIST RETURN")
             if read!=0 :
                 return read
         return 0
@@ -1230,18 +1238,24 @@ def main(ip={}):
             uri=f"https://api.bilibili.com/pugv/view/web/season?ep_id={epid}"
         else :
             uri=f"https://api.bilibili.com/pugv/view/web/season?season_id={ssid}"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET PAID COURSES INFO")
         re=section.get(uri)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PAID COURSES INFO RESULT")
         re=re.json()
         if re['code']!=0:
             print(f"{re['code']} {re['message']}")
         vd=JSONParser.parseche(re)
+        if log:
+            logg.write(f"vd = {vd}", currentframe(), "PAID COURSES INFO")
     if live:
         r = requests.Session()
         r.headers = copydict(section.headers)
         r.proxies = section.proxies
         if nte:
             r.trust_env = False
-        read = JSONParser.loadcookie(r)
+        read = JSONParser.loadcookie(r, logg)
         if read != 0:
             print(lan['ERROR10'])  # 读取cookies.json出现错误
             return -1
@@ -1250,8 +1264,12 @@ def main(ip={}):
         r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
         r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
         uri = f"https://live.bilibili.com/{roomid}"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET LIVE ROOM WEBPAGE")
         re = r.get(uri)
         re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE ROOM WEBPAGE RESULT")
         r.headers.update({'referer': uri})
         rs = search(r'window\.__NEPTUNE_IS_MY_WAIFU__=({[^<]+})', re.text, I)
         if rs is not None:
@@ -1260,17 +1278,27 @@ def main(ip={}):
         else:
             live_info = None
             uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "GET LIVE ROOM INFO")
             re = r.get(uri)
             re.encoding = 'utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}")
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
                 return -1
             room_info = re['data']
         info = JSONParser2.getliveinfo1(room_info)
+        if log:
+            logg.write(f"live_info = {live_info}\nroom_info = {room_info}", currentframe(), "LIVE ROOM INFO")
         uri = f"https://api.bilibili.com/x/space/acc/info?mid={info['uid']}&jsonp=jsonp"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET LIVE UPLOADER INFO")
         re = r.get(uri)
         re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE UPLOADER INFO RESULT")
         re = re.json()
         if re['code'] != 0:
             print(f"{re['code']} {re['message']}")
@@ -1281,6 +1309,8 @@ def main(ip={}):
         roomInitRes = None
         if live_info is not None:
             roomInitRes = live_info['roomInitRes']['data']
+        if log:
+            logg.write(f"uploader_info = {uploader_info}\ninfo = {info}\nroomInitRes = {roomInitRes}", currentframe(), "LIVE INFO")
         bs = True
         cho = False
         if not ns:
@@ -1302,8 +1332,12 @@ def main(ip={}):
                     bs = False
                 elif inp[0].lower() == 'n':
                     bs = False
+        if log:
+            logg.write(f"cho = {cho}", currentframe(), "LIVE PARA")
         if info['livestatus'] > 0:
             read = videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE VIDEO RETURN")
             if read != 0:
                 return -1
         else:
@@ -1312,8 +1346,12 @@ def main(ip={}):
             while bs:
                 sleep(30)  # 30秒后继续检测
                 uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+                if log:
+                    logg.write(f"GET {uri}", currentframe(), "GET ROOM INFO 2")
                 re = r.get(uri)
                 re.encoding = 'utf8'
+                if log:
+                    logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET ROOM INFO 2 RESULT")
                 re = re.json()
                 if re['code'] != 0:
                     print(f"{re['code']} {re['message']}")
@@ -1325,6 +1363,8 @@ def main(ip={}):
                 elif ns:
                     print(lan['LIVE_NOT_START'])
             read = videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE VIDEO RETURN 2")
             if read != 0:
                 return -1
         return 0
