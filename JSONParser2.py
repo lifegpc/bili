@@ -144,7 +144,9 @@ def getsub(d:dict,z:dict):
             e['url']="https:%s"%(i['subtitle_url'])
             r.append(e)
         z['sub']=r
-def getuvi(u:int,n:int,d:dict,r:Session):
+def getuvi(u: int, n: int, d: dict, r: Session, logg=None):
+    if logg is not None:
+        logg.write(f"GET https://api.bilibili.com/x/space/arc/search?mid={u}&ps=30&tid={d['t']}&pn={n}&keyword={d['k']}&order={d['o']}&jsonp=jsonp", currentframe(), "GET UPLOAD VIDEO LIST")
     uri="https://api.bilibili.com/x/space/arc/search?mid=%s&ps=30&tid=%s&pn=%s&keyword=%s&order=%s&jsonp=jsonp"%(u,d['t'],n,d['k'],d['o'])
     bs=True
     while bs:
@@ -152,7 +154,11 @@ def getuvi(u:int,n:int,d:dict,r:Session):
             re=r.get(uri)
             bs=False
         except :
+            if logg is not None:
+                logg.write(format_exc(), currentframe(), "GET UPLOAD VIDEO LIST FAILED")
             print(lan['OUTPUT3'].replace('<number>',str(n)))#获取第%s页失败，正在重试……
+    if logg is not None:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET UPLOADER VIDEO LIST RESULT")
     re=re.json()
     if re['code']!=0 :
         print('%s %s'%(re['code'],re['message']))
@@ -167,7 +173,9 @@ def getuvl(d:dict,l:list):
         r['description']=t['description']
         r['ctime']=t['created']
         l.append(r)
-def getup(u:int,r:Session) :
+def getup(u: int, r: Session, logg=None):
+    if logg is not None:
+        logg.write(f"GET https://api.bilibili.com/x/space/acc/info?mid={u}&jsonp=jsonp", currentframe(), "GET UPLOADER INFO")
     uri="https://api.bilibili.com/x/space/acc/info?mid=%s&jsonp=jsonp"%(u)
     bs=True
     while bs:
@@ -175,7 +183,11 @@ def getup(u:int,r:Session) :
             re=r.get(uri)
             bs=False
         except :
+            if logg is not None:
+                logg.write(format_exc(), currentframe(), "GET UPLOADER INFO ERROR")
             print(lan['OUTPUT4'])#获取UP主信息失败，正在重试……
+    if logg is not None:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET UPLOADER INFO RESULT")
     re=re.json()
     if re['code']!=0 :
         print('%s %s'%(re['code'],re['message']))

@@ -864,11 +864,13 @@ def main(ip={}):
                 return read
         return 0
     if uv:
-        re=JSONParser2.getup(uid,section)
+        re = JSONParser2.getup(uid, section, logg)
         if re==-1 :
             return -1
         up=JSONParser2.getupi(re)
-        re=JSONParser2.getuvi(uid,1,uvd,section)
+        if log:
+            logg.write(f"up = {up}", currentframe(), "UPLOADER INFO")
+        re = JSONParser2.getuvi(uid, 1, uvd, section, logg)
         if re==-1:
             return -1
         vn=re['data']['page']['count']
@@ -878,10 +880,12 @@ def main(ip={}):
         JSONParser2.getuvl(re,vl)
         while i<n :
             i=i+1
-            re=JSONParser2.getuvi(uid,i,uvd,section)
+            re = JSONParser2.getuvi(uid, i, uvd, section, logg)
             if re==-1 :
                 return -1
             JSONParser2.getuvl(re,vl)
+        if log:
+            logg.write(f"vl = {vl}", currentframe(), "UPLOAD VIDEO LIST RESULT")
         if len(vl) !=vn :
             print(lan['ERROR8'])#视频数量与预计数量不符，貌似BUG了。
             return -1
@@ -950,13 +954,19 @@ def main(ip={}):
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
+        if log:
+            logg.write(f"c1 = {c1}", currentframe(), "UPLOADER VIDEO PARAMETERS")
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(vl[i-1]['aid'])
             ip2['uc'] = False
             if c1:
                 ip2['p']='a'
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), "UPLOADER VIDEO PARAMETERS 2")
             read=main(ip2)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "UPLOADER VIDEO RETURN")
             if read!=0 :
                 return read
         return 0
@@ -992,13 +1002,15 @@ def main(ip={}):
             if yn[0].lower() =='n' :
                 bs=False
                 xml=2
+    if log:
+        logg.write(f"xml = {xml}\nxmlc = {xmlc}", currentframe(), "BARRAGE FILTER PARAMETERS")
     if lr: #直播回放
         r=requests.Session()
         r.headers=copydict(section.headers)
         r.proxies=section.proxies
         if nte:
             r.trust_env=False
-        read=JSONParser.loadcookie(r)
+        read = JSONParser.loadcookie(r, logg)
         if read!=0 :
             print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
@@ -1006,24 +1018,38 @@ def main(ip={}):
         r.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
         r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+        if log:
+            logg.write(f"GET https://api.live.bilibili.com/xlive/web-room/v1/record/getInfoByLiveRecord?rid={rid}", currentframe(), "GET LIVE RECORD INFO")
         re=r.get('https://api.live.bilibili.com/xlive/web-room/v1/record/getInfoByLiveRecord?rid=%s'%(rid)) #直播回放信息
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE RECORD INFO RESULT")
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
         ri=JSONParser2.getlr1(re)
+        if log:
+            logg.write(f"GET https://api.live.bilibili.com/room/v1/Room/get_info?room_id={ri['roomid']}&from=room", currentframe(), "GET LIVE ROOM INFO")
         re=r.get('https://api.live.bilibili.com/room/v1/Room/get_info?room_id=%s&from=room'%(ri['roomid'])) #直播房间信息
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE ROOM INFO RESULT")
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
         JSONParser2.getlr2(re,ri)
+        if log:
+            logg.write(f"GET https://api.bilibili.com/x/space/acc/info?mid={ri['uid']}&jsonp=jsonp", currentframe(), "GET LIVE UPLOADER INFO")
         re=r.get('https://api.bilibili.com/x/space/acc/info?mid=%s&jsonp=jsonp'%(ri['uid'])) #UP主信息
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE UPLOADER INFO RESULT")
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
         JSONParser2.getlr3(re,ri)
+        if log:
+            logg.write(f"ri = {ri}", currentframe(), "LIVE RECORD INFO RESULT")
         if ns:
             PrintInfo.printlr(ri)
         bs=True
@@ -1042,6 +1068,8 @@ def main(ip={}):
                 bs=False
         if cho>1 :
             read=biliLiveDanmu.lrdownload(ri,section,ip,se,xml,xmlc)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE RECORD BARRAGE RETURN")
             if read==-1 :
                 return -1
         if cho==1 or cho==3 :
@@ -1095,7 +1123,11 @@ def main(ip={}):
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
+            if log:
+                logg.write(f"cho3 = {cho3}\ncho5 = {cho5}", currentframe(), "LIVE RECORD VIDEO PARA")
             read=videodownload.lrvideodownload(ri,section,cho3,cho5,se,ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE RECORD VIDEO RETURN")
             if read==-5 :
                 return -1
         return 0
