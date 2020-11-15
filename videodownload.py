@@ -1437,6 +1437,11 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
     -1 文件夹创建失败
     -2 封面文件下载失败
     -3 覆盖文件失败"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip:
         ns=False
@@ -1463,10 +1468,14 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
             o = f"{o}{file.filtern(data['title'])}/"
         else:
             o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Normal Video Download Pic Para")
     try :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Normal Video Download Pic Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -1
     if fn==None :
@@ -1477,6 +1486,8 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
         else:
             te = file.filtern(f"cover.{file.geturlfe(data['pic'])}")
         fn=f"{o}{te}"
+    if log:
+        logg.write(f"fn = {fn}", currentframe(), "Normal Video Download Pic Var")
     if os.path.exists(fn) :
         fg=False
         bs=True
@@ -1501,9 +1512,15 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
             try :
                 os.remove(fn)
             except :
+                if log:
+                    logg.write(format_exc(), currentframe(), "Normal Video Download Pic Remove File Failed")
                 print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 return -3
+    if log:
+        logg.write(f"GET {data['pic']}", currentframe(), "Normal Video Download Pic Request")
     re=r.get(data['pic'])
+    if log:
+        logg.write(f"status = {re.status_code}", currentframe(), "Normal Video Download Pic Request Result")
     if re.status_code==200 :
         f=open(fn,'wb')
         f.write(re.content)
@@ -1526,6 +1543,11 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
     -6 缺少必要参数
     -7 不支持durl
     -8 不存在音频流"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns = True
     if 's' in ip:
         ns = False
@@ -1565,10 +1587,14 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             o = f"{o}{file.filtern(data['title'])}/"
         else:
             o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+    if log:
+        logg.write(f"ns = {ns}\nnte = {nte}\nbp = {bp}\no = '{o}'\ndmp = {dmp}\nF = {F}\nfin = {fin}", currentframe(), "Normal Video Audio Download Para")
     try:
         if not os.path.exists(o):
             mkdir(o)
     except:
+        if log:
+            logg.write(format_exc(), currentframe(), "Normal Video Audio Download Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败
         return -5
     if not os.path.exists('Temp/'):
@@ -1578,7 +1604,9 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
     if nte:
         r2.trust_env = False
     r2.proxies = r.proxies
-    read = JSONParser.loadcookie(r2)
+    read = JSONParser.loadcookie(r2, logg)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Normal Video Audio Download Var1")
     if read != 0:
         print(lan['ERROR2'])  # 读取cookies.json出现错误
         return -1
@@ -1589,26 +1617,43 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
     r2.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
     r2.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
     r2.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
+    if log:
+        logg.write(f"GET {url}", currentframe(), "Audio Download Get Normal Video Webpage")
     re = r2.get(url)
     re.encoding = 'utf8'
+    if log:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Download Get Normal Video Webpage Result")
     rs = search(r'__playinfo__=([^<]+)', re.text)
     if rs is not None:
         re = json.loads(rs.groups()[0])
+        if log:
+            logg.write(f"re = {re}", currentframe(), "Audio Download Webpage Regex")
     elif data['videos'] >= 1:
         uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i - 1]['cid']}&qn=125&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Audio Download Get Playurl")
         re = r2.get(uri)
         re.encoding = "utf8"
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Download Get Playurl Result")
         re = re.json()
         if re["code"] != 0:
             print({"code": re["code"], "message": re["message"]})
             return -2
     else:
         return -2
-    rr = r2.get(f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][i-1]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}")
+    uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][i-1]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}"
+    if log:
+        logg.write(f"GET {uri}", currentframe(), "Audio Download Get Player.so")
+    rr = r2.get(uri)
     rr.encoding = 'utf8'
+    if log:
+        logg.write(f"status = {rr.status_code}\n{rr.text}", currentframe(), "Audio Download Get Player.so Result")
     rs2 = search(r'<subtitle>(.+)</subtitle>', rr.text)
     if rs2 is not None:
         rs2 = json.loads(rs2.groups()[0])
+        if log:
+            logg.write(f"rs2 = {rs2}", currentframe(), "Normal Video Audio Download Var2")
         JSONParser2.getsub(rs2, data)
     if F:
         print(f"{lan['OUTPUT8'].replace('<number>', str(i))}{data['page'][i - 1]['part']}")#第<number>P
@@ -1625,12 +1670,14 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             dash[j['id']] = j
             accept_audio_quality.append(j['id'])
         accept_audio_quality.sort(reverse=True)
+        if log:
+            logg.write(f"accept_audio_quality = {accept_audio_quality}\ndash.keys() = {dash.keys()}", currentframe(), "Normal Video Audio Download Var3")
         if c and not F:
             dash = dash[accept_audio_quality[0]]
             if ns:
                 print(lan['OUTPUT16'])  # 音频轨
                 print(f"ID:{dash['id']}")
-            dash['size'] = streamgetlength(r2, dash['base_url'])
+            dash['size'] = streamgetlength(r2, dash['base_url'], logg)
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(dash['size'])}({dash['size']}B,{file.cml(dash['size'], re['data']['timelength'])})")  # 大小：
             vqs = accept_audio_quality[0]
@@ -1641,7 +1688,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             for j in accept_audio_quality:
                 if ns or (not ns and F):
                     print(f"{k + 1}.ID:{j}")
-                dash[j]['size'] = streamgetlength(r2, dash[j]['base_url'])
+                dash[j]['size'] = streamgetlength(r2, dash[j]['base_url'], logg)
                 if ns or (not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash[j]['size'])}({dash[j]['size']}B,{file.cml(dash[j]['size'], re['data']['timelength'])})")  # 大小：
                 k = k + 1
@@ -1669,6 +1716,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             else:
                 dash = dash[accept_audio_quality[0]]
                 vqs = accept_audio_quality[0]
+        if log:
+            logg.write(f"dash = {dash}\nvqs = {vqs}", currentframe(), "Normal Video Audio Download Var4")
         sv = True
         if JSONParser.getset(se, 'sv') == False:
             sv = False
@@ -1702,6 +1751,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             ffmpeg = ip['yf']
         if ffmpeg and os.system(f'ffmpeg -h{getnul()}') != 0:
             ffmpeg = False
+        if log:
+            logg.write(f"sv = {sv}\nfilen = {filen}\nhzm = {hzm}\nffmpeg = {ffmpeg}", currentframe(), "Normal Video Audio Download Var4")
         if ffmpeg and os.path.exists(f"{filen}.m4a"):
             overwrite = False
             bs = True
@@ -1726,6 +1777,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 try:
                     os.remove(f"{filen}.m4a")
                 except:
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Normal Video Audio Download Error")
                     print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                     return 0
             else:
@@ -1744,6 +1797,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 ab = False
             if 'ab' in ip:
                 ab = ip['ab']
+        if log:
+            logg.write(f"aria2c = {aria2c}", currentframe(), "Normal Video Audio Download Var5")
         while bs2:
             bs2 = False
             if aria2c:
@@ -1751,12 +1806,16 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                     read = dwaria2(r2, f"{filen}.{hzm}", geturll(dash), dash['size'], c3, ip, se)
                 else:
                     read = dwaria2(r2, f"{filen}.{hzm}", dash['base_url'], dash['size'], c3, ip, se)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Normal Video Audio Download Aria2c Return")
                 if read == -3:
                     print(lan['ERROR4'])  # aria2c 参数错误
                     return -4
             else:
                 re = r2.get(dash['base_url'], stream=True)
-                read = downloadstream(nte, ip, dash['base_url'], r2, re, f"{filen}.{hzm}", dash['size'], c3)
+                read = downloadstream(nte, ip, dash['base_url'], r2, re, f"{filen}.{hzm}", dash['size'], c3, logg=logg)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Normal Video Audio Download Return")
             if read == -1:
                 return -1
             elif read == -2:
@@ -1793,13 +1852,19 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 nal = se['nal']
             if 'nal' in ip:
                 nal = ip['nal']
+            if log:
+                logg.write(f"nal = {nal}", currentframe(), "Normal Video Audio Download Var6")
             if len(data['sub']) == 1 and nal:
                 downlrc(r2, f'{filen}.m4a', data['sub'][0], ip, se, data, ns, i, nal)
             else:
                 for s in data['sub']:
                     downlrc(r2, f'{filen}.m4a', s, ip, se, data, ns, i)
         imgf = file.spfn(filen + ".m4a")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
+        if log:
+            logg.write(f"imgf = {imgf}", currentframe(), "Normal Video Audio Download Var7")
         imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
+        if log:
+            logg.write(f"imgs = {imgs}", currentframe(), "Normal Video Audio Download Var8")
         if ffmpeg:
             print(lan['CONV_M4S_TO_M4A'])
             tt = int(time.time())
@@ -1828,7 +1893,15 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                 te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                 te.write(f"{bstr.g(url)}\n")
-            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}.m4a\"{nss}")
+            if log:
+                with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Audio Download Metadata")
+            cm = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}.m4a\"{nss}"
+            if log:
+                logg.write(f"cm = {cm}", currentframe(), "Normal Video Audio Download Ffmpeg Commandline")
+            re = os.system(cm)
+            if log:
+                logg.write(f"re = {re}", currentframe(), "Normal Video Audio Download Ffmpeg Return")
             if re == 0:
                 print(lan['COM_CONV'])
                 delete = False

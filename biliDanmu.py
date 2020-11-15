@@ -875,10 +875,14 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
         pubt=biliTime.mkt(time.strptime(pubt,'%Y-%m-%d'))
         da=int(pubt)
         pat=o+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
+        if log:
+            logg.write(f"da = {da}\npat = {pat}", currentframe(), "Bangumi Video All Barrage Var")
         try :
             if not exists(pat) :
                 mkdir(pat)
         except :
+            if log:
+                logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Mkdir Failed")
             print(lan['ERROR3'].replace('<dirname>',pat))#创建文件夹<dirname>失败。
             return -1
         if c['s']=='e' :
@@ -891,6 +895,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                 filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
             else :
                 filen='%s/%s'%(pat,file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
+        if log:
+            logg.write(f"filen = {filen}", currentframe(), "Bangumi Video All Barrage Var2")
         if exists(filen) :
             fg=False
             bs=True
@@ -914,6 +920,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                 try :
                     remove(filen)
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Remove File Failed")
                     print(lan['ERROR4'])#删除原有文件失败，跳过下载
                     return -2
             else :
@@ -925,11 +933,13 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
         now2=now
         if ns:
             print(lan['OUTPUT5'])#正在抓取最新弹幕……
-        d2=biliDanmuDown.downloadn(c['cid'],r)
+        d2 = biliDanmuDown.downloadn(c['cid'], r, logg)
         if d2==-1 :
+            if log:
+                logg.write(f"d2 = {d2}", currentframe(), "Bangumi Video All Barrage Var3")
             print(lan['ERROR1'])#网络错误！
-            exit()
-        filen2="Temp/a_"+str(c['cid'])+".xml"
+            return -1
+        filen2 = f"Temp/a_{c['cid']}.xml"
         if exists(filen2) :
             remove(filen2)
         try :
@@ -937,11 +947,15 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
             f.write(d2)
             f.close()
         except :
+            if log:
+                logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error")
             print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
             return -3
         d3=biliDanmuXmlParser.loadXML(filen2)
         remove(filen2)
         ma=int(d3['maxlimit'])
+        if log:
+            logg.write(f"ma = {ma}", currentframe(), "Bangumi Video All Barrage Var4")
         allok=False
         if len(d3['list'])<ma-10 :
             bs=True
@@ -955,6 +969,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                     elif sts[0].lower()=='n' :
                         allok=True
                         bs=False
+        if log:
+            logg.write(f"allok = {allok}", currentframe(), "Bangumi Video All Barrage Var5")
         if not allok :
             d2=d3
             if ns:
@@ -962,6 +978,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
         try :
             f2=open(filen,mode='w',encoding='utf8')
         except :
+            if log:
+                logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error2")
             print(lan['ERROR5'].replace('<filename>',filen))#打开文件"<filename>"失败
             return -3
         if not allok :
@@ -969,6 +987,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                 f2.write('<?xml version="1.0" encoding="UTF-8"?>')
                 f2.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d2['chatserver'],d2['chatid'],d2['mission'],d2['maxlimit'],d2['state'],d2['real_name'],d2['source']))
             except :
+                if log:
+                    logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error3")
                 print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
                 return -3
         mri=0
@@ -979,6 +999,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
         fir=True
         while not allok and biliTime.equal(biliTime.getDate(da),biliTime.getNowDate())<0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da+now*24*3600),biliTime.getNowDate())<0)) :
             t1=time.time()
+            if log:
+                logg.write(f"mri = {mri}\nmri2 = {mri2}\nt1 = {t1}\nt2 = {t2}\ntem.keys() = {tem.keys()}\nfir = {fir}\nda = {da}\nnow = {now}\nnow2 = {now2}", currentframe(), "Normal Video All Barrage Var6")
             if (not at2) or fir :
                 if ns:
                     print(lan['OUTPUT7'].replace('<date>',biliTime.tostr(biliTime.getDate(da))))#正在抓取<date>的弹幕……
@@ -986,11 +1008,15 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                 ts=300
                 rec=0
                 while bs :
-                    read=downloadh(filen2,r,c['cid'],da)
+                    read = downloadh(filen2, r, c['cid'], da, logg)
                     if read==-1 :
+                        if log:
+                            logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var7")
                         return -3
                     elif read==-3:
                         rec=rec+1
+                        if log:
+                            logg.write(f"read = {read}\nrec = {rec}", currentframe(), "Normal Video All Barrage Var8")
                         if rec%5!=0 :
                             time.sleep(5)
                             print(lan['OUTPUT8'].replace('<number>',str(rec)))#正在进行第<number>次重连
@@ -1004,13 +1030,17 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                                 elif len(inn)>0 and inn[0].lower()=='n' :
                                     exit()
                     elif 'status' in read and read['status']==-2 :
+                        if log:
+                            logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var9")
                         obj=json.loads(read['d'])
                         if obj['code']==-101 :
                             if obj['message']=='账户未登录' :
                                 ud={}
-                                read=biliLogin.login(r,ud,ip)
+                                read = biliLogin.login(r, ud, ip, logg)
+                                if log:
+                                    logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var10")
                                 if read>1 :
-                                    exit()
+                                    return -1
                             else :
                                 print(obj)
                                 print(lan['OUTPUT9'].replace('<number>',str(ts)))#休眠<number>s
@@ -1037,6 +1067,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                             try :
                                 f2.write(biliDanmuCreate.objtoxml(i))
                             except :
+                                if log:
+                                    logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error4")
                                 print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                                 return -3
                         elif xml==1 :
@@ -1047,6 +1079,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                                 try :
                                     f2.write(biliDanmuCreate.objtoxml(i))
                                 except :
+                                    if log:
+                                        logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error5")
                                     print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                                     return -3
             else :
@@ -1059,10 +1093,14 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                     rr=True
                     if read['z']==read['l'] and read['z']>ma-10 and now>1 :
                         rr2=True
+                if log:
+                    logg.write(f"rr = {rr}\nrr2 = {rr2}", currentframe(), "Normal Video All Barrage Var11")
                 if (not rr) or (rr and rr2) :
                     if (not rr) :
                         read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,c['cid'],mri,ip)
                         if read==-1 :
+                            if log:
+                                logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var12")
                             return -3
                     while read['z']==read['l'] and read['z']>ma-10 and now>1 :
                         #if ns:
@@ -1073,6 +1111,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                             now=1
                         read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,c['cid'],mri,ip)
                         if read==-1 :
+                            if log:
+                                logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var13")
                             return -3
                         now2=now
                     if read['l']<ma*0.5 :
@@ -1089,6 +1129,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                         try :
                             f2.write(biliDanmuCreate.objtoxml(i))
                         except :
+                            if log:
+                                logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error6")
                             print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                             return -3
                     elif xml==1:
@@ -1099,6 +1141,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                             try :
                                 f2.write(biliDanmuCreate.objtoxml(i))
                             except :
+                                if log:
+                                    logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error7")
                                 print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
                                 return -3
                 bs2=True
@@ -1145,6 +1189,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                         try :
                             f2.write(biliDanmuCreate.objtoxml(i))
                         except :
+                            if log:
+                                logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error8")
                             print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                             return -3
                     elif xml==1 :
@@ -1155,12 +1201,16 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                             try :
                                 f2.write(biliDanmuCreate.objtoxml(i))
                             except :
+                                if log:
+                                    logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error9")
                                 print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                                 return -3
             try :
                 f2.write('</i>')
                 f2.close()
             except :
+                if log:
+                    logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error10")
                 print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
                 return -3
             m=l-g
@@ -1183,6 +1233,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                     f2.write(d2)
                     f2.close()
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error11")
                     print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                     return -3
             if xml==1 :
@@ -1196,11 +1248,15 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                         try :
                             f2.write(biliDanmuCreate.objtoxml(i))
                         except :
+                            if log:
+                                logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error12")
                             print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                             return -3
                 try :
                     f2.close()
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error13")
                     print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                     return -3
                 m=z-g

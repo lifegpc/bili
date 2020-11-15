@@ -25,6 +25,8 @@ from ASSWriter import ASSScript, parsefromCSSHex, ASSScriptEvent
 import traceback
 from iso639 import languages
 from bstr import lg
+from inspect import currentframe
+from traceback import format_exc
 
 
 lan=None
@@ -172,12 +174,19 @@ def asass(fn: str, b: dict, width: int, height: int):
 
 
 def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: bool=False, pi: int=1, nal: bool=False):
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     global lan
     fq = spfn(fn)[0]
     if nal:
         fn = f"{fq}.lrc"
     else:
         fn = f"{fq}.{i['lan']}.lrc"
+    if log:
+        logg.write(f"fn = {fn}", currentframe(), "Download Lyrics Var1")
     i['fn'] = fn
     if os.path.exists(fn):
         fg = False
@@ -203,10 +212,16 @@ def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: boo
             try:
                 os.remove('%s'%(fn))
             except:
+                if log:
+                    logg.write(format_exc(), currentframe(), "Download Lyrics Remove File Failed")
                 print(lan['OUTPUT1'])  # 删除原有文件失败，跳过下载
                 return 0
+    if log:
+        logg.write(f"GET {i['url']}", currentframe(), "Download Lyrics JSON")
     re = r.get(i['url'])
     re.encoding = 'utf8'
+    if log:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Download Lyrics JSON Result")
     re = re.json()
     if aslrc(fn, re['body'], se, ip, data, pi) == 0 and pr:
         print(lan['OUTPUT3'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>歌词下载完毕！
@@ -214,9 +229,16 @@ def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: boo
 
 
 def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int):
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     try :
         f = open(fn, 'w', encoding="utf8")
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Convert To Lyrics Open File Failed")
         print(lan['ERROR1'].replace('<filename>', fn))  # 保存"<filename>"失败！
         return -1
     lmd = 10
@@ -225,6 +247,8 @@ def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int):
     if 'lmd' in ip:
         lmd = se['ip']
     lmd = lmd / 1000
+    if log:
+        logg.write(f"lmd = {lmd}", currentframe(), "Convert To Lyrics Var")
     f.write("[re:Made by bili. https://github.com/lifegpc/bili]\n")
     tit = data['page'][pi - 1]['part']
     if tit == "":
