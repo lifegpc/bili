@@ -37,11 +37,21 @@ def downloadn(cid, r, logg=None):
     return re.text if re.ok else -1
 
 
-def downloadh(cid,r,date) :
+def downloadh(cid, r, date, logg=None):
     "下载历史弹幕"
+    uri = f"https://api.bilibili.com/x/v2/dm/history?type=1&date={date}&oid={cid}"
+    if logg is not None:
+        logg.write(f"GET {uri}", currentframe(), "Download History Barrage Request")
     try :
-        re=r.get('https://api.bilibili.com/x/v2/dm/history?type=1&date=%s&oid=%s' % (date,cid))
+        re=r.get(uri)
     except :
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "Download History Barrage Failed")
         return -1
+    if logg is not None:
+        if re.ok:
+            logg.write(f"status = {re.status_code}", currentframe(), "Download History Barrage Result")
+        else:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Download History Barrage Result2")
     re.encoding='utf8'
-    return re.text
+    return re.text if re.ok else -1
