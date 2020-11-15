@@ -1444,6 +1444,8 @@ def main(ip={}):
             return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
+        if log:
+            logg.write(f"data = {data}", currentframe(), "NORMAL VIDEO FILTERED DATA")
         if data == -1:
             re = search(r"av([0-9]+)", s, I).groups()[0]
             if log:
@@ -1474,7 +1476,7 @@ def main(ip={}):
             r.proxies=section.proxies
             if nte:
                 r.trust_env=False
-            read=JSONParser.loadcookie(r)
+            read = JSONParser.loadcookie(r, logg)
             if read!=0 :
                 print(lan['ERROR10'])#读取cookies.json出现错误
                 return -1
@@ -1483,17 +1485,26 @@ def main(ip={}):
             r.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
             r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
             r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
-            re=r.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][0]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
+            uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][0]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "GET PLAYER.SO")
+            re = r.get(uri)
             re.encoding='utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PLAYER.SO RESULT")
             rs=search(r"<interaction>(.+)</interaction>",re.text,I)
             if rs!=None :
                 rs=rs.groups()[0]
+                if log:
+                    logg.write(f"rs = {rs}", currentframe(), "PLAYER.SO REGEX")
                 if rs!="" :
                     rs=json.loads(rs)
                     data['gv']=rs['graph_version']
                     hd=True
         if hd:
-            read=getninfo(r,data)
+            read = getninfo(r, data, logg)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Parse HD Video Return")
             if read==-1 :
                 return -1
         if ns:
