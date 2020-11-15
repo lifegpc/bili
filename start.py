@@ -347,7 +347,7 @@ def main(ip={}):
                     logg.openf(f"log/LIVEROOM{roomid}_{round(time())}.log")
             else :
                 print(f'{lan["ERROR2"]}')
-                exit()
+                return -1
     section=requests.session()
     section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36","Connection": "keep-alive","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","Accept-Language": "zh-CN,zh;q=0.8"})
     if 'httpproxy' in ip or 'httpsproxy' in ip:
@@ -370,7 +370,7 @@ def main(ip={}):
             login=1
         elif read==False :
             print(f'{lan["ERROR3"]}') #网络错误！校验失败！
-            exit()
+            return -1
         else :
             print(f"{lan['WARN1']}") #登录信息已过期！
             login=2
@@ -386,9 +386,9 @@ def main(ip={}):
         if read==0 :
             login=1
         elif read==1 :
-            exit()
+            return -1
         else :
-            exit()
+            return -1
     if not 'd' in ud:
         return -1
     ud['vip']=ud['d']['vipStatus']
@@ -1573,17 +1573,19 @@ def main(ip={}):
         if cho2==1 or cho2==4 :
             for i in cho :
                 read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc,ip,se)
-                if read==-1 or read==-4 :
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Normal Video Download Barrage Return")
+                if read == -1 or read == -4 or read == -2:
                     pass
                 elif read==0 :
                     print(lan['OUTPUT9'].replace('<number>',str(i)))#<number>P下载完成
                 else :
-                    exit()
+                    return -1
         if cho2==2 or cho2==5 :
             read=biliTime.equal(biliTime.getDate(data['pubdate']),biliTime.getNowDate())
             if read==0 or read==1 :
                 print(lan['ERROR12'])#该视频不支持全弹幕！
-                exit()
+                return -1
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc,ip,se)
                 if read==-2 :
@@ -1591,7 +1593,7 @@ def main(ip={}):
                 elif read==0 :
                     print(lan['OUTPUT9'].replace('<number>',str(i)))#<number>P下载完成
                 else :
-                    exit()
+                    return -1
         if (cho2 > 2 and cho2 < 6) or cho2 == 8:
             bs=True
             cho3=False
@@ -1804,7 +1806,7 @@ def main(ip={}):
                 elif read==0 :
                     print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
                 else :
-                    exit()
+                    return -1
         if cho2==2 or cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se,che)

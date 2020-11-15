@@ -100,19 +100,40 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
     dm=[]
     ot={'chatserver':'api.live.bilibili.com','chatid':data['rid'],'mission':0,'maxlimit':8000,'state':0,'real_name':0,'source':'k-v'}
     ot['list']=[]
-    for i in data['dm']['index_info']:
-        if log:
-            logg.write(f"GET https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid={data['rid']}&index={i['index']}", currentframe(), "GET LIVE RECORD BARRAGE")
-        re=r.get('https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid=%s&index=%s'%(data['rid'],i['index']))
-        if log:
-            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE RECORD BARRAGE RESULT")
-        re=re.json()
-        if re['code']!=0 :
-            print('%s %s'%(re['code'],re['message']))
-            return -2
-        if re['data']['dm']['dm_info'] is not None:
-            for j in re['data']['dm']['dm_info']:
-                dm.append(j)
+    if 'dm' in data and data['dm'] is not None:
+        for i in data['dm']['index_info']:
+            uri = f"https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid={data['rid']}&index={i['index']}"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "GET LIVE RECORD BARRAGE")
+            re = r.get(uri)
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE RECORD BARRAGE RESULT")
+            re=re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+                return -2
+            if re['data']['dm']['dm_info'] is not None:
+                for j in re['data']['dm']['dm_info']:
+                    dm.append(j)
+    else:
+        ind = 0
+        while True:
+            uri = f"https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid={data['rid']}&index={ind}"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "GET LIVE RECORD BARRAGE2")
+            re = r.get(uri)
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE RECORD BARRAGE2 RESULT")
+            re = re.json()
+            if re['code'] == 10002:
+                break
+            elif re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+                return -2
+            if re['data']['dm']['dm_info'] is not None:
+                for j in re['data']['dm']['dm_info']:
+                    dm.append(j)
+            ind = ind + 1
     if len(dm) == 0:
         print(lan['NOLIVEDM'])  # 该直播回放没有任何弹幕。
         return 0
