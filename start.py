@@ -38,7 +38,9 @@ from lang import getlan,getdict
 import JSONParser2
 from threading import Thread
 from biliVersion import checkver
-from time import sleep
+from time import sleep, time
+from Logger import Logger
+from inspect import currentframe
 
 # 远程调试用代码
 # import ptvsd
@@ -52,6 +54,11 @@ if se==-1 or se==-2 :
     se={}
 ip={}
 def main(ip={}):
+    log = False
+    logg: Logger = None
+    if 'logg' in ip:
+        log = True
+        logg: Logger = ip['logg']
     global se
     global lan
     uc = True  # 是否检测更新
@@ -60,7 +67,7 @@ def main(ip={}):
     if 'uc' in ip:
         uc = ip['uc']
     if uc:
-        checkver()
+        checkver(logg)
     ns=True
     if 's' in ip :
         ns=False
@@ -80,6 +87,8 @@ def main(ip={}):
         print(f'{lan["ERROR1"]}')
         return -1
     inpl=inp.split(',')
+    if log:
+        logg.write(f"inp = '{inp}'\ninpl = {inpl}", currentframe(), 'Input URL')
     mt=False
     if JSONParser.getset(se,'mt') == True :
         mt=True
@@ -90,6 +99,8 @@ def main(ip={}):
             ip2=copydict(ip)
             ip2['i']=inp2
             ip2['uc'] = False  # 禁用重复检测
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), 'multi-input parameters')
             if mt:
                 ru=mains(ip2)
                 ru.start()
@@ -125,22 +136,34 @@ def main(ip={}):
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
+        if log and not logg.hasf():
+            logg.openf(f"log/SS{inp[2:]}_{round(time())}.log")
     elif inp[0:2].lower()=='ep' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ep"+inp[2:]
         ep=True
+        if log and not logg.hasf():
+            logg.openf(f"log/EP{inp[2:]}_{round(time())}.log")
     elif inp[0:2].lower()=='av' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/video/av"+inp[2:]
         av=True
+        if log and not logg.hasf():
+            logg.openf(f"log/AV{inp[2:]}_{round(time())}.log")
     elif inp[0:2].lower()=='bv' :
         inp=str(biliBv.debv(inp))
         s="https://www.bilibili.com/video/av"+inp
         av=True
+        if log and not logg.hasf():
+            logg.openf(f"log/AV{inp}_{round(time())}.log")
     elif inp[0:2].lower()=='md' and inp[2:].isnumeric() :
         md=True
         mid=int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/MD{inp}_{round(time())}.log")
     elif inp.isnumeric() :
         s="https://www.bilibili.com/video/av"+inp
         av=True
+        if log and not logg.hasf():
+            logg.openf(f"log/AV{inp}_{round(time())}.log")
     else :
         re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?',inp,I)
         if re==None :
@@ -159,22 +182,32 @@ def main(ip={}):
                     return -1
             else :
                 re=re.groups()
+                if log:
+                    logg.write(f"re = {re}", currentframe(), "INPUT REGEX 2")
                 if re[3] :
                     inp=re[3]
                     s="https://www.bilibili.com/video/av"+inp
                     av=True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/AV{inp}_{round(time())}.log")
                 elif re[4] :
                     inp=str(biliBv.debv(re[4]))
                     s="https://www.bilibili.com/video/av"+inp
                     av=True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/AV{inp}_{round(time())}.log")
                 elif re[5] :
                     inp=re[5]
                     s="https://www.bilibili.com/bangumi/play/"+inp
                     ss=True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/SS{inp}_{round(time())}.log")
                 elif re[6] :
                     inp=re[6]
                     s="https://www.bilibili.com/bangumi/play/"+inp
                     ep=True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/EP{inp}_{round(time())}.log")
                 else :
                     re=search(r"[^:]+://",inp)
                     if re==None :
@@ -189,22 +222,32 @@ def main(ip={}):
                         return -1
         else :
             re=re.groups()
+            if log:
+                logg.write(f"re = {re}", currentframe(), "INPUT REGEX 1")
             if re[7] :
                 inp=re[7]
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
+                if log and not logg.hasf():
+                    logg.openf(f"log/AV{inp}_{round(time())}.log")
             elif re[9] :
                 inp=str(biliBv.debv(re[9]))
                 s="https://www.bilibili.com/video/av"+inp
                 av=True
+                if log and not logg.hasf():
+                    logg.openf(f"log/AV{inp}_{round(time())}.log")
             elif re[11] :
                 inp=re[11]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ss=True
+                if log and not logg.hasf():
+                    logg.openf(f"log/SS{inp}_{round(time())}.log")
             elif re[13] :
                 inp=re[13]
                 s="https://www.bilibili.com/bangumi/play/"+inp
                 ep=True
+                if log and not logg.hasf():
+                    logg.openf(f"log/EP{inp}_{round(time())}.log")
             elif re[15] :
                 pl=True
                 uid=int(re[15])
@@ -222,11 +265,25 @@ def main(ip={}):
                                 pld['k']=rep[3]
                             if rep[4]:
                                 pld['t']=int(rep[5])
+                if log and not logg.hasf():
+                    if fid == -1:
+                        logg.openf(f"log/UID{uid}_FAV_{round(time())}.log")
+                    else:
+                        logg.openf(f"log/FAV{fid}_{round(time())}.log")
+                if log:
+                    logg.write(f"uid = {uid}\nfid = {fid}\npld = {pld}", currentframe(), "FAVLIST Parser")
             elif re[18]:
                 ch=True
                 uid=int(re[19])
                 if re[22] :
                     cid=int(re[22])
+                if log and not logg.hasf():
+                    if cid == -1:
+                        logg.openf(f"log/UID{uid}_CHID_{round(time())}.log")
+                    else:
+                        logg.openf(f"log/CHID{cid}_{round(time())}.log")
+                if log:
+                    logg.write(f"uid = {uid}\ncid = {cid}", currentframe(), "CHANNEL Parser")
             elif re[23]:
                 uv=True
                 uid=int(re[24])
@@ -245,34 +302,52 @@ def main(ip={}):
                                 uvd['k']=rep[3]
                             elif rep[5]:
                                 uvd['o']=rep[5]
+                if log and not logg.hasf():
+                    logg.openf(f"log/UID{uid}_{round(time())}.log")
+                if log:
+                    logg.write(f"uid = {uid}\nuvd = {uvd}", currentframe(), "UPLOADER VIDEO Parser")
             elif re[27] :
                 md=True
                 mid=int(re[28])
+                if log and not logg.hasf():
+                    logg.openf(f"log/MD{mid}_{round(time())}.log")
             elif re[29] :
                 sm=True
                 sid=int(re[30])
+                if log and not logg.hasf():
+                    logg.openf(f"log/SID{sid}_{round(time())}.log")
             elif re[31]:
                 sm=True
                 sid=int(re[32])
+                if log and not logg.hasf():
+                    logg.openf(f"log/SID{sid}_{round(time())}.log")
             elif re[33] :
                 lr=True
                 rid=re[34]
+                if log and not logg.hasf():
+                    logg.openf(f"log/RID{rid}_{round(time())}.log")
             elif re[35] :
                 ss=True
                 che=True
                 ssid=int(re[36])
+                if log and not logg.hasf():
+                    logg.openf(f"log/SS{ssid}_{round(time())}.log")
             elif re[37]:
                 ep=True
                 che=True
                 epid=int(re[38])
+                if log and not logg.hasf():
+                    logg.openf(f"log/EP{epid}_{round(time())}.log")
             elif re[39] or re[40]:
                 chel=True
             elif re[5] and re[41]:
                 live = True
                 roomid = int(re[41])
+                if log and not logg.hasf():
+                    logg.openf(f"log/LIVEROOM{roomid}_{round(time())}.log")
             else :
                 print(f'{lan["ERROR2"]}')
-                exit()
+                return -1
     section=requests.session()
     section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36","Connection": "keep-alive","Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8","Accept-Language": "zh-CN,zh;q=0.8"})
     if 'httpproxy' in ip or 'httpsproxy' in ip:
@@ -284,18 +359,18 @@ def main(ip={}):
         section.proxies=pr
     if nte:
         section.trust_env=False
-    read=JSONParser.loadcookie(section)
+    read = JSONParser.loadcookie(section, logg)
     ud={}
     login=0
     if read==0 :
-        read=biliLogin.tryok(section,ud)
+        read = biliLogin.tryok(section, ud, logg)
         if read==True :
             if ns:
                 print(f"{lan['OUTPUT1']}") #登录校验成功！
             login=1
         elif read==False :
             print(f'{lan["ERROR3"]}') #网络错误！校验失败！
-            exit()
+            return -1
         else :
             print(f"{lan['WARN1']}") #登录信息已过期！
             login=2
@@ -307,24 +382,32 @@ def main(ip={}):
     if login==2 :
         if os.path.exists('cookies.json') :
             os.remove('cookies.json')
-        read=biliLogin.login(section,ud,ip)
+        read = biliLogin.login(section, ud, ip, logg)
         if read==0 :
             login=1
         elif read==1 :
-            exit()
+            return -1
         else :
-            exit()
+            return -1
     if not 'd' in ud:
         return -1
     ud['vip']=ud['d']['vipStatus']
+    if log:
+        logg.write(f"read = {read}\nlogin = {login}\nud = {ud}", currentframe(), "VERIFY LOGIN 2")
     if sm :
+        if log:
+            logg.write(f"GET https://api.vc.bilibili.com/clip/v1/video/detail?video_id={sid}&need_playurl=1", currentframe(), "GET SMALL VIDEO INFO")
         re=section.get('https://api.vc.bilibili.com/clip/v1/video/detail?video_id=%s&need_playurl=1'%(sid))
         re.encoding="utf8"
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "SMALL VIDEO INFO RESULT")
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
         inf=JSONParser2.getsmi(re)
+        if log:
+            logg.write(f"inf = {inf}", currentframe(), "READ SMALL VIDEO INFO")
         if ns:
             PrintInfo.printInfo9(inf)
         cho5=False
@@ -352,26 +435,48 @@ def main(ip={}):
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
+        if log:
+            logg.write(f"cho5 = {cho5}", currentframe(), "SMALL VIDEO para")
         videodownload.smdownload(section,inf,cho5,se,ip)
         return 0
     if md :
+        if log:
+            logg.write(f"GET https://www.bilibili.com/bangumi/media/md{mid}", currentframe(), "GET MD WEBPAGE")
         re=section.get('https://www.bilibili.com/bangumi/media/md%s'%(mid))
         re.encoding="utf8"
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "MD WEBPAGE CONTENT")
         rs=search(r'__INITIAL_STATE__=([^;]+)',re.text,I)
         if rs!=None :
             rs=rs.groups()[0]
+            if log:
+                logg.write(f"rs = {rs}", currentframe(), "MD WEBPAGE REGEX CONTENT")
             try:
                 re = json.loads(rs)
             except json.JSONDecodeError:
+                if log:
+                    logg.write(traceback.format_exc(), currentframe(), "MD WEBPAGE LOAD JSON ERROR")
                 pa = HTMLParser.Myparser3()
                 pa.feed(re.text)
-                re = json.loads(pa.videodata)
+                if log:
+                    logg.write(f"pa.videodata = {pa.videodata}", currentframe(), "MD WABPAGE JSON CONTENT")
+                try:
+                    re = json.loads(pa.videodata)
+                except json.JSONDecodeError:
+                    if log:
+                        logg.write(traceback.format_exc(), currentframe(), "MD WEBPAGE LOAD JSON ERROR 2")
+                    print(f'{lan["ERROR5"]}')  # md号解析失败
+                    return -1
             ip2=copyip(ip)
             if 'p' in ip :
                 ip2['p']=ip['p']
             ip2['i']='ss%s'%(re['mediaInfo']['season_id'])
             ip2['uc'] = False
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), "MD REDIRECT PARAMETERS")
             read=main(ip2)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "MD REDIRECT RETURN")
             if read!=0 :
                 return read
         else :
@@ -385,8 +490,12 @@ def main(ip={}):
                 af=True
             if 'af' in ip :
                 af=ip['af']
+            if log:
+                logg.write(f"af = {af}\nGET https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid={uid}&jsonp=jsonp", currentframe(), "PL PARAMETERS & GET LIST")
             re=section.get('https://api.bilibili.com/x/v3/fav/folder/created/list-all?up_mid=%s&jsonp=jsonp'%(uid))
             re.encoding='utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "PL GET LIST RETURN")
             re=re.json()
             if re['code']!=0 :
                 print('%s %s'%(re['code'],re['message']))
@@ -445,20 +554,28 @@ def main(ip={}):
                             ip2=copyip(ip)
                             ip2['i']="https://space.bilibili.com/%s/favlist?fid=%s"%(uid,re['data']['list'][i-1]['id'])
                             ip2['uc'] = False
+                            if log:
+                                logg.write(f"ip2 = {ip2}", currentframe(), "PL MULTPLY-PL PRARMETERS")
                             read=main(ip2)
                             if read!=0 :
                                 return read
+                            if log:
+                                logg.write(f"read = {read}", currentframe(), "PL MULTPLY-PL RETURN")
                         return 0
                     else:
                         fid=re['data']['list'][0]['id']
                 else :
                     print(lan["ERROR7"])
                     return -1
+        if log:
+            logg.write(f"fid = {fid}", currentframe(), "PL FID OUT")
         i=1
-        re=JSONParser2.getpli(section,fid,i,pld)
+        re = JSONParser2.getpli(section, fid, i, pld, logg)
         if re==-1 :
             return -1
         pli=JSONParser2.getplinfo(re)
+        if log:
+            logg.write(f"pli = {pli}", currentframe(), "PL INFO RESULT")
         if ns:
             PrintInfo.printInfo3(pli)
         n=ceil(pli['count']/20)
@@ -466,10 +583,12 @@ def main(ip={}):
         JSONParser2.getpliv(plv,re)
         while i<n :
             i=i+1
-            re=JSONParser2.getpli(section,fid,i,pld)
+            re = JSONParser2.getpli(section, fid, i, pld, logg)
             if re==-1 :
                 return -1
             JSONParser2.getpliv(plv,re)
+        if log:
+            logg.write(f"plv = {plv}", currentframe(), "PL VIDEO LIST RESULT")
         if len(plv)!=pli['count'] :
             print(lan['ERROR8']) #视频数量与预计数量不符，貌似BUG了。
             return -1
@@ -538,13 +657,19 @@ def main(ip={}):
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
+        if log:
+            logg.write(f"c1 = {c1}", currentframe(), "PLI PARAMETERS")
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(plv[i-1]['id'])
             ip2['uc'] = False
             if c1:
                 ip2['p']='a'
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), "PLI PARAMETERS 2")
             read=main(ip2)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "PLI RETURN")
             if read!=0 :
                 return read
         return 0
@@ -554,7 +679,7 @@ def main(ip={}):
         r.proxies=section.proxies
         if nte:
             r.trust_env=False
-        read=JSONParser.loadcookie(r)
+        read = JSONParser.loadcookie(r, logg)
         if read!=0 :
             print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
@@ -564,13 +689,19 @@ def main(ip={}):
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
         if cid ==-1 :
             r.headers.update({'referer':'https://space.bilibili.com/%s/channel/index'%(uid)})
+            if log:
+                logg.write(f"GET https://api.bilibili.com/x/space/channel/list?mid={uid}&guest=false&jsonp=jsonp", currentframe(), "GET CHANNEL LIST")
             re=r.get("https://api.bilibili.com/x/space/channel/list?mid=%s&guest=false&jsonp=jsonp"%(uid))
             re.encoding='utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET CHANNEL LIST RESULT")
             re=re.json()
             if re['code']!=0 :
                 print('%s %s'%(re['code'],re['message']))
                 return -1
             chl=JSONParser2.getchl(re)
+            if log:
+                logg.write(f"chl = {chl}", currentframe(), "CHANNEL LIST RESULT")
             if ns:
                 PrintInfo.printInfo5(chl)
             bs=True
@@ -621,25 +752,33 @@ def main(ip={}):
                     ip2=copyip(ip)
                     ip2['i']='https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,chl[i-1]['cid'])
                     ip2['uc'] = False
+                    if log:
+                        logg.write(f"ip2 = {ip2}", currentframe(), "CHANNLE LIST PARAMETERS")
                     read=main(ip2)
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "CHANNLE LIST RESULT")
                     if read!=0 :
                         return read
             return 0
         r.headers.update({'referer':'https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,cid)})
-        re=JSONParser2.getchi(r,uid,cid,1)
+        re = JSONParser2.getchi(r, uid, cid, 1, logg)
         if re == -1:
             return -1
         chi=JSONParser2.getchn(re)
+        if log:
+            logg.write(f"chi = {chi}", currentframe(), "CHANNLE INFO RESULT")
         n=ceil(chi['count']/30)
         i=1
         chv=[]
         JSONParser2.getchs(chv,re)
         while i<n :
             i=i+1
-            re=JSONParser2.getchi(r,uid,cid,i)
+            re = JSONParser2.getchi(r, uid, cid, i, logg)
             if re==-1 :
                 return -1
             JSONParser2.getchs(chv,re)
+        if log:
+            logg.write(f"chv = {chv}", currentframe(), "CHANNLE VIDEO LIST RESULT")
         if chi['count'] != len(chv) :
             print(lan['ERROR8'])#视频数量与预计数量不符，貌似BUG了。
             return -1
@@ -708,22 +847,30 @@ def main(ip={}):
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
+        if log:
+            logg.write(f"c1 = {c1}", currentframe(), "CHANNLE VIDEO PARAMETERS")
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(chv[i-1]['aid'])
             ip2['uc'] = False
             if c1:
                 ip2['p']='a'
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), "CHANNLE VIDEO PARAMETERS 2")
             read=main(ip2)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "CHANNLE VIDEO RESULT")
             if read!=0 :
                 return read
         return 0
     if uv:
-        re=JSONParser2.getup(uid,section)
+        re = JSONParser2.getup(uid, section, logg)
         if re==-1 :
             return -1
         up=JSONParser2.getupi(re)
-        re=JSONParser2.getuvi(uid,1,uvd,section)
+        if log:
+            logg.write(f"up = {up}", currentframe(), "UPLOADER INFO")
+        re = JSONParser2.getuvi(uid, 1, uvd, section, logg)
         if re==-1:
             return -1
         vn=re['data']['page']['count']
@@ -733,10 +880,12 @@ def main(ip={}):
         JSONParser2.getuvl(re,vl)
         while i<n :
             i=i+1
-            re=JSONParser2.getuvi(uid,i,uvd,section)
+            re = JSONParser2.getuvi(uid, i, uvd, section, logg)
             if re==-1 :
                 return -1
             JSONParser2.getuvl(re,vl)
+        if log:
+            logg.write(f"vl = {vl}", currentframe(), "UPLOAD VIDEO LIST RESULT")
         if len(vl) !=vn :
             print(lan['ERROR8'])#视频数量与预计数量不符，貌似BUG了。
             return -1
@@ -805,13 +954,19 @@ def main(ip={}):
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
+        if log:
+            logg.write(f"c1 = {c1}", currentframe(), "UPLOADER VIDEO PARAMETERS")
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=str(vl[i-1]['aid'])
             ip2['uc'] = False
             if c1:
                 ip2['p']='a'
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), "UPLOADER VIDEO PARAMETERS 2")
             read=main(ip2)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "UPLOADER VIDEO RETURN")
             if read!=0 :
                 return read
         return 0
@@ -847,13 +1002,15 @@ def main(ip={}):
             if yn[0].lower() =='n' :
                 bs=False
                 xml=2
+    if log:
+        logg.write(f"xml = {xml}\nxmlc = {xmlc}", currentframe(), "BARRAGE FILTER PARAMETERS")
     if lr: #直播回放
         r=requests.Session()
         r.headers=copydict(section.headers)
         r.proxies=section.proxies
         if nte:
             r.trust_env=False
-        read=JSONParser.loadcookie(r)
+        read = JSONParser.loadcookie(r, logg)
         if read!=0 :
             print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
@@ -861,24 +1018,38 @@ def main(ip={}):
         r.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
         r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+        if log:
+            logg.write(f"GET https://api.live.bilibili.com/xlive/web-room/v1/record/getInfoByLiveRecord?rid={rid}", currentframe(), "GET LIVE RECORD INFO")
         re=r.get('https://api.live.bilibili.com/xlive/web-room/v1/record/getInfoByLiveRecord?rid=%s'%(rid)) #直播回放信息
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE RECORD INFO RESULT")
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
         ri=JSONParser2.getlr1(re)
+        if log:
+            logg.write(f"GET https://api.live.bilibili.com/room/v1/Room/get_info?room_id={ri['roomid']}&from=room", currentframe(), "GET LIVE ROOM INFO")
         re=r.get('https://api.live.bilibili.com/room/v1/Room/get_info?room_id=%s&from=room'%(ri['roomid'])) #直播房间信息
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE ROOM INFO RESULT")
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
         JSONParser2.getlr2(re,ri)
+        if log:
+            logg.write(f"GET https://api.bilibili.com/x/space/acc/info?mid={ri['uid']}&jsonp=jsonp", currentframe(), "GET LIVE UPLOADER INFO")
         re=r.get('https://api.bilibili.com/x/space/acc/info?mid=%s&jsonp=jsonp'%(ri['uid'])) #UP主信息
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE UPLOADER INFO RESULT")
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
             return -1
         JSONParser2.getlr3(re,ri)
+        if log:
+            logg.write(f"ri = {ri}", currentframe(), "LIVE RECORD INFO RESULT")
         if ns:
             PrintInfo.printlr(ri)
         bs=True
@@ -897,6 +1068,8 @@ def main(ip={}):
                 bs=False
         if cho>1 :
             read=biliLiveDanmu.lrdownload(ri,section,ip,se,xml,xmlc)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE RECORD BARRAGE RETURN")
             if read==-1 :
                 return -1
         if cho==1 or cho==3 :
@@ -950,7 +1123,11 @@ def main(ip={}):
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
+            if log:
+                logg.write(f"cho3 = {cho3}\ncho5 = {cho5}", currentframe(), "LIVE RECORD VIDEO PARA")
             read=videodownload.lrvideodownload(ri,section,cho3,cho5,se,ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE RECORD VIDEO RETURN")
             if read==-5 :
                 return -1
         return 0
@@ -960,7 +1137,7 @@ def main(ip={}):
         r.proxies=section.proxies
         if nte:
             r.trust_env=False
-        read=JSONParser.loadcookie(r)
+        read = JSONParser.loadcookie(r, logg)
         if read!=0 :
             print(lan['ERROR10'])#读取cookies.json出现错误
             return -1
@@ -969,7 +1146,9 @@ def main(ip={}):
         r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
         r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
         r.headers.update({'referer':'https://www.bilibili.com/v/cheese/mine/list'})
-        chep=JSONParser2.getchel(r)
+        chep = JSONParser2.getchel(r, logg)
+        if log:
+            logg.write(f"chep = {chep}", currentframe(), "PAID COURSES LIST")
         if chep==-1:
             return -1
         if ns:
@@ -1038,13 +1217,19 @@ def main(ip={}):
                     bs=False
                 elif inp[0].lower()=='n' :
                     bs=False
+        if log:
+            logg.write(f"c1 = {c1}", currentframe(), "PAID COURSES LIST PARA")
         for i in cho:
             ip2=copyip(ip)
             ip2['i']=f"https://www.bilibili.com/cheese/play/ss{chep[i-1]['id']}"
             ip2['uc'] = False
             if c1:
                 ip2['p']='a'
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), "PAID COURSES LIST PARA 2")
             read=main(ip2)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "PAID COURSES LIST RETURN")
             if read!=0 :
                 return read
         return 0
@@ -1053,18 +1238,24 @@ def main(ip={}):
             uri=f"https://api.bilibili.com/pugv/view/web/season?ep_id={epid}"
         else :
             uri=f"https://api.bilibili.com/pugv/view/web/season?season_id={ssid}"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET PAID COURSES INFO")
         re=section.get(uri)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PAID COURSES INFO RESULT")
         re=re.json()
         if re['code']!=0:
             print(f"{re['code']} {re['message']}")
         vd=JSONParser.parseche(re)
+        if log:
+            logg.write(f"vd = {vd}", currentframe(), "PAID COURSES INFO")
     if live:
         r = requests.Session()
         r.headers = copydict(section.headers)
         r.proxies = section.proxies
         if nte:
             r.trust_env = False
-        read = JSONParser.loadcookie(r)
+        read = JSONParser.loadcookie(r, logg)
         if read != 0:
             print(lan['ERROR10'])  # 读取cookies.json出现错误
             return -1
@@ -1073,8 +1264,12 @@ def main(ip={}):
         r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
         r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
         uri = f"https://live.bilibili.com/{roomid}"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET LIVE ROOM WEBPAGE")
         re = r.get(uri)
         re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE ROOM WEBPAGE RESULT")
         r.headers.update({'referer': uri})
         rs = search(r'window\.__NEPTUNE_IS_MY_WAIFU__=({[^<]+})', re.text, I)
         if rs is not None:
@@ -1083,17 +1278,27 @@ def main(ip={}):
         else:
             live_info = None
             uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "GET LIVE ROOM INFO")
             re = r.get(uri)
             re.encoding = 'utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}")
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
                 return -1
             room_info = re['data']
         info = JSONParser2.getliveinfo1(room_info)
+        if log:
+            logg.write(f"live_info = {live_info}\nroom_info = {room_info}", currentframe(), "LIVE ROOM INFO")
         uri = f"https://api.bilibili.com/x/space/acc/info?mid={info['uid']}&jsonp=jsonp"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET LIVE UPLOADER INFO")
         re = r.get(uri)
         re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE UPLOADER INFO RESULT")
         re = re.json()
         if re['code'] != 0:
             print(f"{re['code']} {re['message']}")
@@ -1104,6 +1309,8 @@ def main(ip={}):
         roomInitRes = None
         if live_info is not None:
             roomInitRes = live_info['roomInitRes']['data']
+        if log:
+            logg.write(f"uploader_info = {uploader_info}\ninfo = {info}\nroomInitRes = {roomInitRes}", currentframe(), "LIVE INFO")
         bs = True
         cho = False
         if not ns:
@@ -1125,8 +1332,12 @@ def main(ip={}):
                     bs = False
                 elif inp[0].lower() == 'n':
                     bs = False
+        if log:
+            logg.write(f"cho = {cho}", currentframe(), "LIVE PARA")
         if info['livestatus'] > 0:
             read = videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE VIDEO RETURN")
             if read != 0:
                 return -1
         else:
@@ -1135,8 +1346,12 @@ def main(ip={}):
             while bs:
                 sleep(30)  # 30秒后继续检测
                 uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+                if log:
+                    logg.write(f"GET {uri}", currentframe(), "GET ROOM INFO 2")
                 re = r.get(uri)
                 re.encoding = 'utf8'
+                if log:
+                    logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET ROOM INFO 2 RESULT")
                 re = re.json()
                 if re['code'] != 0:
                     print(f"{re['code']} {re['message']}")
@@ -1148,28 +1363,46 @@ def main(ip={}):
                 elif ns:
                     print(lan['LIVE_NOT_START'])
             read = videodownload.livevideodownload(info, roomInitRes, r, cho, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE VIDEO RETURN 2")
             if read != 0:
                 return -1
         return 0
     if not che:
+        if log:
+            logg.write(f"GET {s}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE")
         re=section.get(s)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE RESULT")
         rtry = 0
         while re.status_code == 412 and rtry < 3:
-            biliLogin.dealwithcap(section, s)
+            biliLogin.dealwithcap(section, s, logg)
+            if log:
+                logg.write(f"GET {s}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE2")
             re = section.get(s)
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE2 RESULT")
             rtry = rtry + 1
         if re.status_code == 412:
             print(lan['SPERROR'].replace('<url>', s))
             return -1
         parser=HTMLParser.Myparser()
         parser.feed(re.text)
+        if log:
+            logg.write(f"parser.videodata = {parser.videodata}", currentframe(), "NORMAL/BANGUMI VIDEO DATA")
         try :
             vd=json.loads(parser.videodata,strict=False)
         except Exception:
+            if log:
+                logg.write(traceback.format_exc(), currentframe(), "NORMAL/BANGUMI VIDEO DATA INVALID")
             if av:
                 re=search(r"av([0-9]+)",s,I).groups()[0]
+                if log:
+                    logg.write(f"GET https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid={re}&jsonp=jsonp", currentframe(), "GET NORMAL VIDEO INFO")
                 re=section.get("https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid=%s&jsonp=jsonp"%(re))
                 re.encoding='utf8'
+                if log:
+                    logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET NORMAL VIDEO INFO RESULT")
                 re=re.json()
                 if re['code']!=0 :
                     print('%s %s'%(re['code'],re['message']))
@@ -1180,10 +1413,12 @@ def main(ip={}):
                     ip2['uc'] = False
                     if 'p' in ip :
                         ip2['p']=ip['p']
+                    if log:
+                        logg.write(f"ip2 = {ip2}", currentframe(), "NORMAL VIDEO DIRECT PARA")
                     read=main(ip2)
-                    if read!= 0 :
-                        return read
-                    return 0
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "NORMAL VIDEO DIRECT RETURN")
+                    return read
                 print(traceback.format_exc())
                 return -1
             elif ss or ep:
@@ -1193,7 +1428,12 @@ def main(ip={}):
                     print(lan['OUTPUT12'].replace('<link>',s))#尝试重定向至"<link>"。
                     ip['i']=s
                     ip['uc'] = False
-                    return main(ip)
+                    if log:
+                        logg.write(f"ip = {ip}", currentframe(), "BANGUMI VIDEO DIRECT PARA")
+                    read = main(ip)
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "BANGUMI VIDEO DIRECT RETURN")
+                    return read
                 print(traceback.format_exc())
                 return -1
             else :
@@ -1204,13 +1444,39 @@ def main(ip={}):
             return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
+        if log:
+            logg.write(f"data = {data}", currentframe(), "NORMAL VIDEO FILTERED DATA")
+        if data == -1:
+            re = search(r"av([0-9]+)", s, I).groups()[0]
+            if log:
+                logg.write(f"GET https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid={re}&jsonp=jsonp", currentframe(), "GET NORMAL VIDEO INFO2")
+            re = section.get(f"https://api.bilibili.com/x/web-interface/view/detail?bvid=&aid={re}&jsonp=jsonp")
+            re.encoding = 'utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET NORMAL VIDEO INFO2 RESULT")
+            re = re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+                return -1
+            if 'data' in re and 'View' in re['data'] and 'redirect_url' in re['data']['View']:
+                ip2 = copyip(ip)
+                ip2['i'] = re['data']['View']['redirect_url']
+                ip2['uc'] = False
+                if 'p' in ip:
+                    ip2['p'] = ip['p']
+                if log:
+                    logg.write(f"ip2 = {ip2}", currentframe(), "NORMAL VIDEO DIRECT2 PARA")
+                read = main(ip2)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "NORMAL VIDEO DIRECT2 RETURN")
+                return read
         if data['videos']!=len(data['page']) :
             r=requests.Session()
             r.headers=copydict(section.headers)
             r.proxies=section.proxies
             if nte:
                 r.trust_env=False
-            read=JSONParser.loadcookie(r)
+            read = JSONParser.loadcookie(r, logg)
             if read!=0 :
                 print(lan['ERROR10'])#读取cookies.json出现错误
                 return -1
@@ -1219,17 +1485,26 @@ def main(ip={}):
             r.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
             r.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
             r.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
-            re=r.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][0]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
+            uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][0]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "GET PLAYER.SO")
+            re = r.get(uri)
             re.encoding='utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PLAYER.SO RESULT")
             rs=search(r"<interaction>(.+)</interaction>",re.text,I)
             if rs!=None :
                 rs=rs.groups()[0]
+                if log:
+                    logg.write(f"rs = {rs}", currentframe(), "PLAYER.SO REGEX")
                 if rs!="" :
                     rs=json.loads(rs)
                     data['gv']=rs['graph_version']
                     hd=True
         if hd:
-            read=getninfo(r,data)
+            read = getninfo(r, data, logg)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Parse HD Video Return")
             if read==-1 :
                 return -1
         if ns:
@@ -1298,17 +1573,19 @@ def main(ip={}):
         if cho2==1 or cho2==4 :
             for i in cho :
                 read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc,ip,se)
-                if read==-1 or read==-4 :
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Normal Video Download Barrage Return")
+                if read == -1 or read == -4 or read == -2:
                     pass
                 elif read==0 :
                     print(lan['OUTPUT9'].replace('<number>',str(i)))#<number>P下载完成
                 else :
-                    exit()
+                    return -1
         if cho2==2 or cho2==5 :
             read=biliTime.equal(biliTime.getDate(data['pubdate']),biliTime.getNowDate())
             if read==0 or read==1 :
                 print(lan['ERROR12'])#该视频不支持全弹幕！
-                exit()
+                return -1
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc,ip,se)
                 if read==-2 :
@@ -1316,7 +1593,7 @@ def main(ip={}):
                 elif read==0 :
                     print(lan['OUTPUT9'].replace('<number>',str(i)))#<number>P下载完成
                 else :
-                    exit()
+                    return -1
         if (cho2 > 2 and cho2 < 6) or cho2 == 8:
             bs=True
             cho3=False
@@ -1529,7 +1806,7 @@ def main(ip={}):
                 elif read==0 :
                     print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
                 else :
-                    exit()
+                    return -1
         if cho2==2 or cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se,che)
@@ -1605,6 +1882,16 @@ if len(sys.argv)>1 :
     if 'SHOW' in ip:
         PrintInfo.prc()
         exit()
+log = False
+if 'log' in se and se['log']:
+    log = True
+if 'log' in ip:
+    log = ip['log']
+if log:
+    seipt = f"Settings: {se}\nCommand Line parameters: {ip}"
+    logg = Logger()
+    ip['logg'] = logg
+    logg.write(seipt)
 lan=getdict('start',getlan(se,ip))
 class mains(Thread) :
     def __init__(self,ip:dict) :
@@ -1614,6 +1901,17 @@ class mains(Thread) :
         main(self.ip)
 if __name__=="__main__" :
     PrintInfo.pr()
-    main(ip)
+    if not log:
+        main(ip)
+    else:
+        try:
+            main(ip)
+        except:
+            te = traceback.format_exc()
+            print(te)
+            logg.write(te, currentframe(), "Main Function Except")
+            if not logg.hasf():
+                logg.openf(f'log/{round(time())}.log')
+            logg.closef()
 else :
     print(lan['OUTPUT11'])#请运行start.py

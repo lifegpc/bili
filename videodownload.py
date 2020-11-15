@@ -32,6 +32,8 @@ from command import gopt
 from lang import getlan,getdict
 import sys
 import JSONParser2
+from inspect import currentframe
+from traceback import format_exc
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -87,7 +89,10 @@ def geth(h:CaseInsensitiveDict) :
     for i in h.keys() :
         s=s+' --header "'+i+': '+h[i]+'"'
     return s
-def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
+def dwaria2(r, fn, url, size, d2, ip, se, i=1, n=1, d=False):
+    logg = None
+    if 'logg' in ip:
+        logg = ip['logg']
     if d :
         print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件
     else :
@@ -154,6 +159,8 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
             s=""
         bs=True
         fg=False
+        if logg is not None:
+            logg.write(f"d2 = {d2}\noa = {oa}", currentframe(), "DWARIA2 ARIA2")
         if d2 and not oa :
             print(lan['OUTPUT6'])#未找到aria2文件，跳过下载
             return 0
@@ -181,6 +188,8 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
             try :
                 os.remove(fn)
             except :
+                if logg is not None:
+                    logg.write(format_exc(), currentframe(), "DWARIA2 REMOVE FILE FAILED")
                 print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 return 0
         elif not d2:
@@ -190,7 +199,11 @@ def dwaria2(r,fn,url,size,d2,ip,se,i=1,n=1,d=False) :
     elif isinstance(url,list) :
         for i in url :
             cm=cm+' "'+i+'"'
+    if logg is not None:
+        logg.write(f"cm = {cm}", currentframe(), "DWARIA2 COMMAND LINE")
     re=os.system(cm)
+    if logg is not None:
+        logg.write(f"re = {re}", currentframe(), "DWARIA2 RESULT")
     if re==0 :
         return 0
     elif re==28 :
@@ -3381,6 +3394,11 @@ def chepicdownload(url:str,r:requests.session,fdir:str,i:int,ns:bool) :
 def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     """下载小视频
     c 继续下载"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip:
         ns=False
@@ -3399,6 +3417,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "ERROR MKDIR")
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -5
     F=False
@@ -3416,13 +3436,15 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         vf = ip['vf']
     if not os.path.exists('Temp/'):
         mkdir('Temp/')
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'\nnte = {nte}\nF = {F}\nfin = {fin}\nvf = '{vf}'", currentframe(), "SMDOWNLOAD PARAMETERS")
     r2=requests.session()
     r2.headers=copydict(r.headers)
     r2.proxies=r.proxies
     if nte:
         r2.trust_env=False
     r2.headers.update({'referer':'https://vc.bilibili.com/video/%s'%(i['id'])})
-    fz=streamgetlength(r2,i['video_playurl'])
+    fz = streamgetlength(r2, i['video_playurl'], logg)
     if ns or(not ns and F):
         print(lan['OUTPUT15'])#画质：
         print('%sx%s,%s(%sB,%s)'%(i['width'],i['height'],file.info.size(fz),fz,file.cml(fz,i['video_time']*1000)))
@@ -3464,6 +3486,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
         ma=True
     if 'ma' in ip:
         ma=ip['ma']
+    if log:
+        logg.write(f"sv = {sv}\nslt = {slt}\nsn = {sn}\nfilen = {filen}\nff = {ff}\nma = {ma}", currentframe(), "SMDOWNLOAD PARAMETERS 2")
     if ff and ma and os.path.exists(f'{filen}.{vf}') and os.system('ffmpeg -h%s'%(getnul()))==0 :
         fg=False
         bs=True
@@ -3488,6 +3512,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
             try :
                 os.remove(f'{filen}.{vf}')
             except :
+                if log:
+                    logg.write(format_exc(), currentframe(), "SMDOWNLOAD REMOVE FILE FAILED")
                 print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 return 0
         else:
@@ -3496,6 +3522,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
     if ma and ff and os.system(f'ffmpeg -h{getnul()}') == 0 and vf == "mp4":
         hzm = "temp.mp4"
     fn='%s.%s'%(filen,hzm)
+    if log:
+        logg.write(f"fn = {fn}", currentframe(), "SMDOWNLOAD FILENAME")
     bs2=True
     while bs2:
         bs2=False
@@ -3507,6 +3535,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 ar=True
             else :
                 ar=False
+        if log:
+            logg.write(f"ar = {ar}", currentframe(), "SMDOWNLOAD AR")
         if os.system('aria2c -h%s'%(getnul()))==0 and ar :
             ab=True
             if JSONParser.getset(se,'ab')==False :
@@ -3516,16 +3546,24 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                     ab=True
                 else :
                     ab=False
+            if log:
+                logg.write(f"ab = {ab}", currentframe(), "SMDOWNLOAD AB")
             if ab:
-                read=dwaria2(r2,fn,geturll(i),fz,c,ip,se)
+                read = dwaria2(r2, fn, geturll(i), fz, c, ip, se)
             else :
-                read=dwaria2(r2,fn,i['video_playurl'],fz,c,ip,se)
+                read = dwaria2(r2, fn, i['video_playurl'], fz, c, ip, se)
             if read==-3 :
                 print(f"{lan['ERROR4']}{lan['ERROR5']}")#aria2c 参数错误
                 return -4
         else :
+            if log:
+                logg.write(f"GET {i['video_playurl']}", currentframe(), "SMDOWNLOAD GET STREAM")
             re=r2.get(i['video_playurl'],stream=True)
-            read=downloadstream(nte,ip,i['video_playurl'],r2,re,fn,fz,c)
+            if log:
+                logg.write(f"status = {re.status_code}", currentframe(), "SMDOWNLOAD DOWNLOAD URL STATUS")
+            read = downloadstream(nte, ip, i['video_playurl'], r2, re, fn, fz, c, logg=logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "SMDOWNLOAD DOWNLOAD RESULT")
         if read==-1 :
             return -1
         elif read==-2 :
@@ -3539,6 +3577,8 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 rc=True
             elif read==False :
                 bs=False
+            if log:
+                logg.write(f"rc = {rc}", currentframe(), "SMDOWNLOAD RC")
             if 'r' in ip:
                 if ip['r']:
                     rc=True
@@ -3579,6 +3619,9 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 te.write(f"vq={i['width']}x{i['height']}\n")
                 te.write(f"tags={bstr.g(bstr.gettags(i['tags']))}\n")
                 te.write(f"purl=https://vc.bilibili.com/video/{i['id']}\n")
+            if log:
+                with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADATAFILE 'Temp/{i['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "SMDOWNLOAD METADATAFILE")
             ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['id']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
         elif vf == "mp4":
             with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
@@ -3590,8 +3633,15 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
                 te.write(f"date={i['upload_time'][:10]}\n")
                 te.write(f"description=UID{i['uid']},{i['width']}x{i['height']},{bstr.g(bstr.gettags(i['tags']))}\\\n")
                 te.write(f"https://vc.bilibili.com/video/{i['id']}\n")
+            if log:
+                with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADATAFILE 'Temp/{i['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "SMDOWNLOAD METADATAFILE")
             ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['id']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
+        if log:
+            logg.write(f"ml = {ml}", currentframe(), "SMDOWNLOAD FFMPEG COMMAND LINE")
         re=os.system(ml)
+        if log:
+            logg.write(f"re = {re}", currentframe(), "SMDOWNLOAD FFMPEG RESULT")
         if re==0:
             print(lan['OUTPUT14'])#合并完成！
         de=False
@@ -3630,6 +3680,11 @@ def lrvideodownload(data,r,c,c3,se,ip):
     -3 下载错误
     -4 aria2c参数错误
     -5 文件夹创建失败"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip:
         ns=False
@@ -3651,6 +3706,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "LIVE RECORD VIDEO MKDIR FAILED")
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -5
     fin=True
@@ -3665,12 +3722,14 @@ def lrvideodownload(data,r,c,c3,se,ip):
         vf = ip['vf']
     if not os.path.exists('Temp/'):
         mkdir('Temp/')
+    if log:
+        logg.write(f"ns = {ns}\nnte = {nte}\no = '{o}'\nF = {F}\nfin = {fin}\nvf = '{vf}'", currentframe(), "LIVE RECORD VIDEO PARA")
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
         r2.trust_env=False
     r2.proxies=r.proxies
-    read=JSONParser.loadcookie(r2)
+    read = JSONParser.loadcookie(r2, logg)
     if read!=0 :
         print(lan['ERROR2'])#读取cookies.json出现错误
         return -1
@@ -3679,7 +3738,11 @@ def lrvideodownload(data,r,c,c3,se,ip):
     r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+    if log:
+        logg.write(f"GET https://api.live.bilibili.com/xlive/web-room/v1/record/getLiveRecordUrl?rid={data['rid']}&platform=html5", currentframe(), "GET LIVE RECORD VIDEO URL")
     re=r2.get('https://api.live.bilibili.com/xlive/web-room/v1/record/getLiveRecordUrl?rid=%s&platform=html5'%(data['rid']))
+    if log:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE RECORD VIDEO URL RETURN")
     re=re.json()
     if re['code']!=0 :
         print('%s %s'%(re['code'],re['message']))
@@ -3725,6 +3788,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
             ma=True
         if 'ma' in ip:
             ma=ip['ma']
+        if log:
+            logg.write(f"sv = {sv}\nfilen = '{filen}'\nff = {ff}\nma = {ma}", currentframe(), "LIVE RECORD VIDEO PARA 2")
         if ff and (len(durl)>1 or ma) and os.path.exists(f'{filen}.{vf}') and os.system('ffmpeg -h%s'%(getnul()))==0 :
             fg=False
             bs=True
@@ -3749,6 +3814,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                 try :
                     os.remove(f'{filen}.{vf}')
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "LIVE RECORD VIDEO REMOVE FILE FAILED")
                     print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                     return 0
             else:
@@ -3761,6 +3828,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
         for k in durl :
             if len(durl)==1 :
                 fn='%s.%s' % (filen,hzm)
+                if log:
+                    logg.write(f"fn = '{fn}'", currentframe(), "LIVE RECORD VIDEO TEMP FILE NAME")
                 bs2=True
                 while bs2:
                     bs2=False
@@ -3772,6 +3841,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                             ar=True
                         else :
                             ar=False
+                    if log:
+                        logg.write(f"ar = {ar}", currentframe(), "LIVE RECORD VIDEO AR")
                     if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
@@ -3781,16 +3852,20 @@ def lrvideodownload(data,r,c,c3,se,ip):
                                 ab=True
                             else :
                                 ab=False
+                        if log:
+                            logg.write(f"ab = {ab}", currentframe(), "LIVE RECORD VIDEO AB")
                         if ab :
-                            read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se)
+                            read = dwaria2(r2, fn, geturll(k), k['size'], c3, ip, se)
                         else :
-                            read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se)
+                            read = dwaria2(r2, fn, k['url'], k['size'], c3, ip, se)
                         if read==-3 :
                             print(f"{lan['ERROR4']}{lan['ERROR5']}")#aria2c 参数错误
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3)
+                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, logg=logg)
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "LIVE RRCORD VIDEO DOWNLOAD RETURN")
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -3827,6 +3902,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                             return -3
             else :
                 fn='%s_%s.%s' %(filen,j,hzm)
+                if log:
+                    logg.write(f"fn = '{fn}'", currentframe(), "LIVE RECORD VIDEO TEMP FILE NAME 2")
                 bs2=True
                 while bs2:
                     bs2=False
@@ -3838,6 +3915,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                             ar=True
                         else :
                             ar=False
+                    if log:
+                        logg.write(f"ar = {ar}", currentframe(), "LIVE RECORD VIDEO AR")
                     if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
@@ -3847,6 +3926,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                                 ab=True
                             else :
                                 ab=False
+                        if log:
+                            logg.write(f"ab = {ab}", currentframe(), "LIVE RECORD VIDEO AB")
                         if ab:
                             read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se,j,len(durl),True)
                         else :
@@ -3856,7 +3937,9 @@ def lrvideodownload(data,r,c,c3,se,ip):
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, j, len(durl), True, durz, com, logg=logg)
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "LIVE RRCORD VIDEO DOWNLOAD RETURN 2")
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -3934,6 +4017,11 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write(f"sign={bstr.g(data['sign'])}\n")
                     te.write(f"vq={bstr.g(vqs)}\n")
                     te.write(f"purl=https://live.bilibili.com/record/{data['rid']}\n")
+                if log:
+                    with open(f"Temp/{data['rid']}_{tt}.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"FFMPEG CONCAT FILE 'Temp/{data['rid']}_{tt}.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO FFMPEG CONCAT")
+                    with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['rid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO METADATAFILE")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['rid']}_{tt}.txt\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
             elif vf == "mkv":
                 with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
@@ -3957,6 +4045,9 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write(f"sign={bstr.g(data['sign'])}\n")
                     te.write(f"vq={bstr.g(vqs)}\n")
                     te.write(f"purl=https://live.bilibili.com/record/{data['rid']}\n")
+                if log:
+                    with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['rid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO METADATAFILE")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mkv\"{nss}"
             elif len(durl) > 1:
                 te = open('Temp/%s_%s.txt' % (file.filtern('%s' % (data['rid'])), tt), 'wt', encoding='utf8')
@@ -3974,6 +4065,11 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write(f"date={tostr2(data['st'])[:10]}\n")
                     te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\\\n")
                     te.write(f"https://live.bilibili.com/record/{data['rid']}\n")
+                if log:
+                    with open(f"Temp/{data['rid']}_{tt}.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"FFMPEG CONCAT FILE 'Temp/{data['rid']}_{tt}.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO FFMPEG CONCAT")
+                    with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['rid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO METADATAFILE")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['rid']}_{tt}.txt\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
             else:
                 with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
@@ -3985,8 +4081,15 @@ def lrvideodownload(data,r,c,c3,se,ip):
                     te.write(f"date={tostr2(data['st'])[:10]}\n")
                     te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\\\n")
                     te.write(f"https://live.bilibili.com/record/{data['rid']}\n")
+                if log:
+                    with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['rid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO METADATAFILE")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['rid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}.mp4\"{nss}"
+            if log:
+                logg.write(f"ml = {ml}", currentframe(), "LIVE RECORD VIDEO FFMPEG COMMAND LINE")
             re=os.system(ml)
+            if log:
+                logg.write(f"re = {re}", currentframe(), "LIVE RECORD VIDEO FFMPEG RETURN")
             if re==0:
                 print(lan['OUTPUT14'])#合并完成！
             de=False
@@ -4025,6 +4128,7 @@ def lrvideodownload(data,r,c,c3,se,ip):
             os.remove(f"Temp/{data['rid']}_{tt}_metadata.txt")
             if len(durl)>1:
                 os.remove('Temp/%s_%s.txt'%(file.filtern('%s'%(data['rid'])),tt))
+    return 0
 
 
 def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se: dict, ip: dict):
@@ -4034,6 +4138,11 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
     -5 文件夹创建失败
     -6 缺少必要参数
     -7 参数错误"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns = True
     if 's' in ip:
         ns = False
@@ -4050,6 +4159,8 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
         if not os.path.exists(o):
             mkdir(o)
     except:
+        if log:
+            logg.write(format_exc(), currentframe(), "LIVE VIDEO MKDIR FAILED")
         print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
         return -5
     nte = False  # requests是否信任环境变量
@@ -4069,17 +4180,25 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
         sv = ip['sv']
     if not os.path.exists('Temp/'):
         mkdir('Temp/')
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'\nF = {F}\nnte = {nte}\nfin = {fin}\nsv = {sv}", currentframe(), "LIVE VIDEO PARA 2")
     if 'play_url' in data2 and data2['play_url'] is not None:
         play_url = data2['play_url']
     else:
         uri = f"https://api.live.bilibili.com/xlive/web-room/v1/playUrl/playUrl?cid={data['roomid']}&qn=10000&platform=web&https_url_req=1&ptype=16"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET LIVE VIDEO PLAYURL")
         re = r.get(uri)
         re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE VIDEO PLAYURL RESULT")
         re = re.json()
         if re['code'] != 0:
             print(f"{re['code']} {re['message']}")
             return -2
         play_url = re['data']
+    if log:
+        logg.write(f"play_url = {play_url}", currentframe(), "LIVE VIDEO PLAYURL")
     quality_description = play_url['quality_description']
     accept_quality_list = []
     quality_des_dict = {}
@@ -4087,6 +4206,8 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
         accept_quality_list.append(i['qn'])
         quality_des_dict[i['qn']] = getqualitytrans(i['desc'])
     current_qn = play_url['current_qn']
+    if log:
+        logg.write(f"quality_description = {quality_description}\naccept_quality_list = {accept_quality_list}\nquality_des_dict = {quality_des_dict}\ncurrent_qn = {current_qn}", currentframe(), "LIVE VIDEO PLAYVAR")
     if 'durl' in play_url:
         durl = {}
         durl[current_qn] = play_url['durl']
@@ -4094,20 +4215,30 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
             for quality in accept_quality_list:
                 if quality not in durl:
                     uri = f"https://api.live.bilibili.com/xlive/web-room/v1/playUrl/playUrl?cid={data['roomid']}&qn={quality}&platform=web&https_url_req=1&ptype=16"
+                    if log:
+                        logg.write(f"GET {uri}", currentframe(), "GET LIVE VIDEO PLAYURL2")
                     re = r.get(uri)
                     re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE VIDEO PLAYURL2 RESULT")
                     re = re.json()
                     if re['code'] != 0:
                         print(f"{re['code']} {re['message']}")
                         return -2
                     play_url = re['data']
                     current_qn = play_url['current_qn']
+                    if log:
+                        logg.write(f"play_url = {play_url}\ncurrent_qn = {current_qn}", currentframe(), "LIVE VIDEO PLAYVAR2")
                     if quality == current_qn:
                         if 'durl' in play_url:
                             durl[quality] = play_url['durl']
                     else:
                         accept_quality_list.remove(quality)
+                        if log:
+                            logg.write(f"Remove quality {quality}.", currentframe(), "LIVE VIDEO PLAYURL NOT FOUND")
                         print(lan['NOT_GET_QUA'].replace('<quality>', str(quality)))  # 无法获取画质为<quality>的播放地址。
+            if log:
+                logg.write(f"accept_quality_list = {accept_quality_list}\ndurl = {durl}", currentframe(), "LIVE VIDEO PLAYVAR3")
             if ns or (not ns and F):
                 ii = 1
                 for quality in accept_quality_list:
@@ -4138,8 +4269,12 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
             quality = accept_quality_list[0]
             if quality != current_qn:
                 uri = f"https://api.live.bilibili.com/xlive/web-room/v1/playUrl/playUrl?cid={data['roomid']}&qn={quality}&platform=web&https_url_req=1&ptype=16"
+                if log:
+                    logg.write(f"GET {uri}", currentframe(), "GET LIVE VIDEO PLAYURL3")
                 re = r.get(uri)
                 re.encoding = 'utf8'
+                if log:
+                    logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE VIDEO PLAYURL3 RESULT")
                 re = re.json()
                 if re['code'] != 0:
                     print(f"{re['code']} {re['message']}")
@@ -4148,9 +4283,13 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
                 if play_url['current_qn'] == quality and 'durl' in play_url:
                     durl[quality] = play_url['durl']
             durl = durl[quality]
+            if log:
+                logg.write(f"durl = {durl}", currentframe(), "LIVE VIDEO PLAYVAR4")
             if ns:
                 print(f"{lan['OUTPUT9']}{quality},{quality_des_dict[quality]}{lan['ALL_URL_COUNT'].replace('<number>', str(len(durl)))}")
             video_quality = quality
+        if log:
+            logg.write(f"video_quality = {video_quality}", currentframe(), "LIVE VIDEO PLAYVAR5")
         link_index = 0
         if 'vi' in ip:
             if ip['vi'] < len(durl):
@@ -4161,6 +4300,8 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
                 return -7
         link = durl[link_index]
         url = link['url']
+        if log:
+            logg.write(f"link_index = {link_index}\nlink = {link}\nurl = {url}", currentframe(), "LIVE VIDEO PLAYVAR6")
         ffmpeg = True  # 是否使用ffmpeg
         if JSONParser.getset(se, 'nf') == True:
             ffmpeg = False
@@ -4187,6 +4328,8 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
         else:
             fn = file.filtern(f"{data['title']}({data['roomid']},UID{data['uid']},{tostr2(now)}).flv")
         filen = f"{o}{fn}"
+        if log:
+            logg.write(f"ffmpeg = {ffmpeg}\naria2c = {aria2c}\nfilen = {filen}", currentframe(), "LIVE VIDEO PLAYVAR7")
         if ffmpeg:
             lrh = True  # 是否进行去HTML化
             if JSONParser.getset(se, 'lrh') == False:
@@ -4214,30 +4357,43 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
                 te.write(f"tags={bstr.g(data['tags'])}\n")
                 te.write(f"hotwords={bstr.g(bstr.gettags(data['hotwords']))}\n")
                 te.write(f"purl={bstr.g(r.headers['referer'])}\n")
+            if log:
+                with open(f"Temp/{data['roomid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADATAFILE 'Temp/{data['roomid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "LIVE VIDEO FFMPEG METADATA")
             nss = ""
             if not ns:
                 nss = getnul()
             cm = f"ffmpeg -user_agent \"{r.headers['User-Agent']}\" -referer \"{r.headers['referer']}\" -i \"{url}\" -i \"Temp/{data['roomid']}_{tt}_metadata.txt\" -map_metadata 1 -c copy \"{filen}\"{nss}"
-            os.system(cm)
+            if log:
+                logg.write(f"cm = {cm}", currentframe(), "LIVE VIDEO FFMPEG COMMAND LINE")
+            read = os.system(cm)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE VIDEO FFMPEG RETURN")
             os.remove(f"Temp/{data['roomid']}_{tt}_metadata.txt")
         elif aria2c:
             read = dwaria2(r, filen, url, -1, False, ip, se)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE VIDEO ARIA2C RETURN")
             if read == -3:
                 print(f"{lan['ERROR4']}{lan['ERROR5']}")  # aria2c 参数错误
                 return -4
         else:
             re = r.get(url, stream=True)
-            read = downloadstream(nte, ip, url, r, re, filen, -1, False)
+            read = downloadstream(nte, ip, url, r, re, filen, -1, False, logg=logg)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "LIVE VIDEO NORMAL RETURN")
     return 0
 
 
-def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
+def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1, logg=None):
     if d :
         print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件
     else :
         print(lan['OUTPUT2'])#正在开始下载
     if os.path.exists(fn) :
         fsize=file.getinfo({'a':fn,'f':''})['s']
+        if logg is not None:
+            logg.write(f"fsize = {fsize}\nsize = {size}", currentframe(), "DOWNLOADSTREAM FILESIZE")
         if fsize!=size and size!=-1:
             s=lan['OUTPUT19']#(文件大小不一致，建议覆盖)
         else :
@@ -4255,11 +4411,17 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                 r2.trust_env=False
             r2.proxies=r.proxies
             r2.headers.update({'Range':'bytes=%s-%s'%(fsize,size-1)})
+            if logg is not None:
+                logg.write(f"Update HTTP Header: Range: bytes={fsize}-{size-1}", currentframe(), "DOWNLOADSTREAM UPDATE HTTP HEADER")
             read=JSONParser.loadcookie(r2)
             if read!=0 :
                 print(lan['ERROR2'])#读取cookies.json出现错误
                 return -1
+            if logg is not None:
+                logg.write(f"GET {uri}", currentframe(), "DOWNLOADSTREAM REGET STREAM")
             re=r2.get(uri,stream=True)
+            if logg is not None:
+                logg.write(f"status = {re.status_code}", currentframe(), "DOWNLOADSTREAM REGET STATUS")
             s=fsize
         if not d2 and ('y' in ip or 's' in ip):
             if 's' in ip:
@@ -4286,6 +4448,8 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
             try :
                 os.remove(fn)
             except :
+                if logg is not None:
+                    logg.write(format_exc(), currentframe(), "DOWNLOADSTREAM REMOVE FILE FAILED")
                 print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 re.close()
                 return 0
@@ -4314,6 +4478,8 @@ def downloadstream(nte,ip,uri,r,re,fn,size,d2,i=1,n=1,d=False,durz=-1,pre=-1) :
                     t2=t1
     print()
     if s!= size and size!=-1 :
+        if logg is not None:
+            logg.write(f"s = {s}\nsize = {size}", currentframe(), "DOWNLOADSTREAM LENGTH CHANGED")
         print(lan['ERROR9'])#文件大小不匹配
         return -2
     f.close()
@@ -4344,11 +4510,13 @@ def getfn2(i,i2,f,vqs,hzm,fin) :
             return '%s/%s' % (f, file.filtern(f"{i['title']}{i['i']+1}.{i['longTitle']}({i['titleFormat']},AV{i['aid']},{i['bvid']},ID{i['id']},{i['cid']},{vqs[i2]}).{hzm[i2]}"))
         else :
             return f"{f}/{file.filtern(i['title'])}{i['i']+1}.{file.filtern(i['longTitle'])}({file.filtern(vqs[i2])}).{hzm[i2]}"
-def streamgetlength(r:requests.Session,uri):
+def streamgetlength(r:requests.Session, uri, logg = None):
     bs=True
     while bs:
         bs=False
         try :
+            if logg is not None:
+                logg.write(f"GETLENGTH {uri}", currentframe(), "STREAMGETLENGTH")
             re=r.get(uri,stream=True)
             try :
                 if re.headers.get('Content-Length')!=None :
@@ -4356,12 +4524,18 @@ def streamgetlength(r:requests.Session,uri):
                 else :
                     a=-1#无法获取长度，什么神必服务器
                 re.close()
+                if logg is not None:
+                    logg.write(f"headers = {re.headers}\nsize = {a}", currentframe(), "STREAMLENGTH")
                 return a
             except :
+                if logg is not None:
+                    logg.write(format_exc(), currentframe(), "RETRY GET STREAM LENGTH")
                 re.close()
                 print(lan['OUTPUT21'])#获取文件大小失败。尝试重新获取……
                 bs=True
         except :
+            if logg is not None:
+                logg.write(format_exc(), currentframe(), "RETRY GET STREAM LENGTH 2")
             print(lan['OUTPUT21'])#获取文件大小失败。尝试重新获取……
             bs=True
 if __name__=="__main__" :

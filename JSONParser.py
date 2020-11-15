@@ -20,9 +20,15 @@ from requests import Session
 from biliBv import enbv
 import sys
 from biliTime import tostr2
+from traceback import format_exc
+from inspect import currentframe
+
+
 def Myparser(s) :
     "解析普通AV视频信息"
     obj=loads(s)
+    if 'ssList' in obj:
+        return -1
     data={}
     data['aid']=obj['aid']
     data['bvid']=obj['videoData']['bvid']
@@ -124,11 +130,13 @@ def savecookie(data) :
     obj=open('cookies.json',mode='w')
     obj.write(jsObj)
     obj.close()
-def loadcookie(r) :
+def loadcookie(r, logg = None):
     '读取cookie信息'
     try :
         obj=open('cookies.json',mode='r')
     except :
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "READ cookies.json FAILED 1")
         return -1
     try :
         obj.seek(0,2)
@@ -137,6 +145,8 @@ def loadcookie(r) :
         s=obj.read(si)
         o=loads(s)
     except :
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "READ cookies.json FAILED 2")
         return -2
     for i in o :
         r.cookies.set(i['name'],i['value'],domain=i['domain'],path=i['path'])

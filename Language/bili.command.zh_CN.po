@@ -415,3 +415,11 @@ msgstr "移除LRC文件名中的语言代码。（只在仅有一个字幕可用
 msgctxt "O80"
 msgid "Add language code to LRC file name."
 msgstr "添加语言代码至LRC文件名。"
+
+msgctxt "O81"
+msgid "Enable logging to file."
+msgstr "启用将日志写入文件。"
+
+msgctxt "O82"
+msgid "Disable logging to file."
+msgstr "禁用将日志写入文件。"

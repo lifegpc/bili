@@ -437,3 +437,11 @@ msgstr ""
 msgctxt "O80"
 msgid "Add language code to LRC file name."
 msgstr ""
+
+msgctxt "O81"
+msgid "Enable logging to file."
+msgstr ""
+
+msgctxt "O82"
+msgid "Disable logging to file."
+msgstr ""

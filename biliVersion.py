@@ -21,6 +21,8 @@ from JSONParser import loadset
 import sys
 from lang import getlan, getdict
 from command import gopt
+from traceback import format_exc
+from inspect import currentframe
 
 lan = None
 se = loadset()
@@ -97,7 +99,7 @@ class version:
         return 0
 
 
-def checkver():
+def checkver(logg=None):
     git = False  # 是否存在git
     ver = None
     f = popen('git --version 2>&1', 'r', 10)
@@ -122,9 +124,15 @@ def checkver():
             try:
                 re = requests.get(uri, timeout=5)
             except:
+                if logg is not None:
+                    logg.write(format_exc(), currentframe(),
+                               "Update checker network error 1")
                 try:
                     re = requests.get(backup_uri, timeout=5)
                 except:
+                    if logg is not None:
+                        logg.write(format_exc(), currentframe(),
+                                   "Update checker network error 2")
                     print(lan['NETWORK_ERROR'])  # 网络错误：无法获取最新稳定版本字符串
                     return
             if re.ok:
@@ -135,6 +143,8 @@ def checkver():
             else:
                 print(f"{lan['HTTP_STATUS_ERROR']}{re.status_code}")
     except UnknownVersionString as e:
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "UnknownCurrentVerion")
         print(f"{lan['UNKNOWN_VER_STR']}{e.s}")
 
 

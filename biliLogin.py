@@ -26,6 +26,10 @@ import base64
 from lang import getlan,getdict
 import sys
 from command import gopt
+from inspect import currentframe
+from json import dumps
+
+
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -34,11 +38,13 @@ ip={}
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
 lan=getdict('biliLogin',getlan(se,ip))
-def login(r,ud:dict,ip:dict):
+def login(r, ud: dict, ip: dict, logg = None):
     '登录至B站'
     global lan
     try :
         driver=webdriver.Chrome()
+        if logg is not None:
+            logg.write("OEPN https://passport.bilibili.com/ajax/miniLogin/minilogin in ChromeDriver", currentframe(), "OPEN WEB")
         driver.get('https://passport.bilibili.com/ajax/miniLogin/minilogin')
         aa=True
         while aa :
@@ -52,14 +58,16 @@ def login(r,ud:dict,ip:dict):
             sa.append(t)
         driver.close()
     except Exception:
+        if logg is not None:
+            logg.write(traceback.format_exc(), currentframe(), "CHROME DRIVER FAILED")
         print(traceback.format_exc())
         print(lan['ERROR1'])#使用ChromeDriver登录发生错误，尝试采用用户名、密码登录
-        read=login2(r)
+        read = login2(r, logg)
         if read==-1 :
             print(lan['ERROR2'])#登录失败！
             return 2
         sa=read
-    rr=tryok(r,ud)
+    rr = tryok(r, ud , logg)
     if rr==True :
         if not 's' in ip:
             print(lan['OUTPUT1'])#登录成功！
@@ -71,27 +79,37 @@ def login(r,ud:dict,ip:dict):
     else :
         print(lan['ERROR4']+str(rr['code'])+","+str(rr['message']))#登录失败：
         return 2
-def tryok(r,ud:dict) :
+def tryok(r, ud: dict, logg = None):
     '验证是否登录成功'
     try :
+        if logg is not None:
+            logg.write(f"GET https://api.bilibili.com/x/web-interface/nav", currentframe(), "VERIFY LOGIN")
         re=r.get('https://api.bilibili.com/x/web-interface/nav')
     except :
+        if logg is not None:
+            logg.write(traceback.format_exc(), currentframe(), "VERIFY LOGIN FAILED 1")
         return False
     re.encoding='utf8'
     try :
+        if logg is not None:
+            logg.write(re.text, currentframe(), "VERIFY API RETURN")
         obj=re.json()
         if obj['code']==0 and 'data' in obj and obj['data']['isLogin']:
             ud['d']=obj['data']
             return True
         return obj
     except :
+        if logg is not None:
+            logg.write(traceback.format_exc(), currentframe(), "VERIFY LOGIN FAILED 2")
         return re.text
-def login2(r:requests.Session):
+def login2(r: requests.Session, logg = None):
     "使用用户名密码登录"
     username=input(lan['INPUT1'])#请输入用户名：
     password=getpass(lan['INPUT2'])#请输入密码：
     appkey="bca7e84c2d947ac6"
     def getk():
+        if logg is not None:
+            logg.write("GET https://passport.bilibili.com/api/oauth2/getKey", currentframe(), "GETPUBKEY")
         re=r.post('https://passport.bilibili.com/api/oauth2/getKey',{'appkey':appkey,'sign':cal_sign("appkey=%s"%(appkey))})
         re=re.json()
         if re['code']!=0 :
@@ -100,6 +118,8 @@ def login2(r:requests.Session):
     keyhash,pubkey=getk()
     if keyhash==-1:
         return -1
+    if logg is not None:
+        logg.write("POST https://passport.bilibili.com/api/v2/oauth2/login", currentframe(), "TRY V3 INTERFACE")
     pm=f"appkey={appkey}&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(), pubkey)))}&username={parse.quote_plus(username)}"
     pm2=f"{pm}&sign={cal_sign(pm)}"
     re=r.post('https://passport.bilibili.com/api/v2/oauth2/login',pm2,headers={'Content-type': "application/x-www-form-urlencoded"})
@@ -107,12 +127,16 @@ def login2(r:requests.Session):
     sa=[]
     while True:
         if re and re["code"]!=None:
+            if logg is not None and re['code'] != 0:
+                logg.write(dumps(re, ensure_ascii=False), currentframe(), "RETURN")
             if re['code']==0 :
                 for i in re['data']['cookie_info']['cookies'] :
                     r.cookies.set(i['name'],i['value'],domain='.bilibili.com',path='/')
                     sa.append({'name':i['name'],'value':i['value'],'domain':'.bilibili.com','path':'/'})
                 return sa
             elif re['code']==-105 :
+                if logg is not None:
+                    logg.write("GET https://passport.bilibili.com/captcha", currentframe(), "GETCAPTCHA")
                 re=r.get('https://passport.bilibili.com/captcha',headers={'Host': "passport.bilibili.com"}).content
                 cp=scap(r,re)
                 if cp:
@@ -128,6 +152,8 @@ def login2(r:requests.Session):
                     return -1
             elif re['code']==-449:
                 print(lan['ERROR6'])#服务繁忙, 尝试使用V3接口登录
+                if logg is not None:
+                    logg.write("POST https://passport.bilibili.com/api/v3/oauth2/login", currentframe(), "TRY V3 INTERFACE")
                 pm=f"access_key=&actionKey=appkey&appkey={appkey}&build=6040500&captcha=&challenge=&channel=bili&cookies=&device=phone&mobi_app=android&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(),pubkey)))}&permission=ALL&platform=android&seccode=&subid=1&ts={int(time.time())}&username={parse.quote_plus(username)}&validate="
                 re=r.post('https://passport.bilibili.com/api/v3/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
                 re=re.json()
@@ -149,7 +175,7 @@ def scap(r:requests.session,image):
     return re['message'] if re and re["code"]==0 else None
 
 
-def dealwithcap(r:requests.Session, uri:str):
+def dealwithcap(r:requests.Session, uri:str, logg=None):
     "尝试通过验证"
     try:
         driver = webdriver.Chrome()
@@ -164,6 +190,10 @@ def dealwithcap(r:requests.Session, uri:str):
             try:
                 driver.find_element_by_class_name('error-panel server-error')
             except:
+                if logg is not None:
+                    logg.write(traceback.format_exc(), currentframe(), "DEAL WITH CAP ERROR1")
                 aa = False
     except Exception:
+        if logg is not None:
+            logg.write(traceback.format_exc(), currentframe(), "DEAL WITH CAP ERROR2")
         print(traceback.format_exc())

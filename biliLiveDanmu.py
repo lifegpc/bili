@@ -23,6 +23,10 @@ import file
 import sys
 from command import gopt
 from lang import getdict,getlan
+from inspect import currentframe
+from traceback import format_exc
+
+
 lan=None
 se=loadset()
 if se==-1 or se==-2 :
@@ -36,6 +40,11 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
     -1 文件夹创建失败
     -2 API解析失败
     -3 打开文件失败"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip :
         ns=False
@@ -49,6 +58,8 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "LIVE RECORD BARRAGE MKDIR FAILED")
         print(lan['ERROR3'].replace('<dirname>',o))#创建文件夹<dirname>失败。
         return -1
     fin=True
@@ -60,6 +71,8 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         filen='%s%s.xml'%(o,file.filtern('%s(%s,%s)'%(data['title'],data['rid'],data['roomid'])))
     else :
         filen=f"{o}{file.filtern(data['title'])}.xml"
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\nfilen = {filen}\n", currentframe(), "LIVE RECORD BARRAGE PARA")
     if os.path.exists(filen) :
         fg=False
         bs=True
@@ -87,15 +100,40 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
     dm=[]
     ot={'chatserver':'api.live.bilibili.com','chatid':data['rid'],'mission':0,'maxlimit':8000,'state':0,'real_name':0,'source':'k-v'}
     ot['list']=[]
-    for i in data['dm']['index_info']:
-        re=r.get('https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid=%s&index=%s'%(data['rid'],i['index']))
-        re=re.json()
-        if re['code']!=0 :
-            print('%s %s'%(re['code'],re['message']))
-            return -2
-        if re['data']['dm']['dm_info'] is not None:
-            for j in re['data']['dm']['dm_info']:
-                dm.append(j)
+    if 'dm' in data and data['dm'] is not None:
+        for i in data['dm']['index_info']:
+            uri = f"https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid={data['rid']}&index={i['index']}"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "GET LIVE RECORD BARRAGE")
+            re = r.get(uri)
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE RECORD BARRAGE RESULT")
+            re=re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+                return -2
+            if re['data']['dm']['dm_info'] is not None:
+                for j in re['data']['dm']['dm_info']:
+                    dm.append(j)
+    else:
+        ind = 0
+        while True:
+            uri = f"https://api.live.bilibili.com/xlive/web-room/v1/dM/getDMMsgByPlayBackID?rid={data['rid']}&index={ind}"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "GET LIVE RECORD BARRAGE2")
+            re = r.get(uri)
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET LIVE RECORD BARRAGE2 RESULT")
+            re = re.json()
+            if re['code'] == 10002:
+                break
+            elif re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+                return -2
+            if re['data']['dm']['dm_info'] is not None:
+                for j in re['data']['dm']['dm_info']:
+                    dm.append(j)
+            ind = ind + 1
     if len(dm) == 0:
         print(lan['NOLIVEDM'])  # 该直播回放没有任何弹幕。
         return 0
@@ -118,6 +156,8 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         f.write('<?xml version="1.0" encoding="UTF-8"?>')
         f.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (ot['chatserver'],ot['chatid'],ot['mission'],ot['maxlimit'],ot['state'],ot['real_name'],ot['source']))
     except:
+        if log:
+            logg.write(format_exc(), currentframe(), "LIVE RECORD BARRAGE ERROR 1")
         print(lan['ERROR5'].replace('<filename>',filen))#打开文件"<filename>"失败
         return -3
     if xml==1 :
@@ -131,6 +171,8 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
                 try :
                     f.write(objtoxml(i))
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "LIVE RECORD BARRAGE ERROR 2")
                     print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
                     return -3
         if ns:
@@ -143,6 +185,8 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
         f.write('</i>')
         f.close()
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "LIVE RECORD BARRAGE ERROR 3")
         print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
         return -3
     print(lan['OUTPUT20'])#下载完毕！

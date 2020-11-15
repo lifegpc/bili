@@ -77,7 +77,7 @@ if __name__=='__main__' :
     ne={}
     se=loadset()
     if not isinstance(se,dict) :
-        se=None
+        se = {}
     r=[]
     print(la['OUTPUT1'])#选项前的x指明了当前选中的设置，直接回车会保持当前设置
     if se :
@@ -312,4 +312,8 @@ if __name__=='__main__' :
     r = gk(se, 'nal')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'nal', se)
+    print(f"{la['INPUT41']}{la['NTN']}")
+    r = gk(se, 'log')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'log', se)
     saveset(ne)
