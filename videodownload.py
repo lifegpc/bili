@@ -346,14 +346,22 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         logg.write(f"GET {url}", currentframe(), "Get Normal Video Webpage")
     re=r2.get(url)
     re.encoding='utf8'
+    if log:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Webpage Result")
     rs=search('__playinfo__=([^<]+)',re.text)
     napi=True #新api
     if rs!=None :
         re=json.loads(rs.groups()[0])
+        if log:
+            logg.write(f"re = {re}", currentframe(), "Get Normal Video Webpage Regex")
     elif data['videos']>=1 :
         uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=80&session="%(data['page'][i-1]['cid'],125,data['bvid'])
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Get Normal Video Playurl")
         re=r2.get(uri)
         re.encoding="utf8"
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Playurl Result")
         re=re.json()
         if re["code"]!=0 :
             print({"code":re["code"],"message":re["message"]})
@@ -361,13 +369,20 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         napi=False
     else :
         return -2
-    rr=r2.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][i-1]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
+    uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][i-1]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}"
+    if log:
+        logg.write(f"GET {uri}", currentframe(), "Get Normal Video Player.so")
+    rr = r2.get(uri)
     rr.encoding='utf8'
+    if log:
+        logg.write(f"status = {rr.status_code}\n{rr.text}", currentframe(), "Get Normal Video Player.so Result")
     rs2=search(r'<subtitle>(.+)</subtitle>',rr.text)
     if F:
         print(f"{lan['OUTPUT8'].replace('<number>',str(i))}{data['page'][i-1]['part']}")#第<number>P：
     if rs2!=None :
         rs2=json.loads(rs2.groups()[0])
+        if log:
+            logg.write(f"rs2 = {rs2}", currentframe(), "Get Normal Video Player.so Sub Regex")
         JSONParser2.getsub(rs2,data)
     if "data" in re and "durl" in re['data']:
         vq=re["data"]["quality"]
@@ -376,23 +391,35 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         durl={vq:re["data"]['durl']}
         durz={}
         vqs=""
+        if log:
+            logg.write(f"vq = {vq}\nvqd = {vqd}\navq = {avq}\nvqs = {vqs}", currentframe(), "Normal Video Download Var3")
         if not c or F:
             j=0
             for l in avq :
                 if not l in durl :
                     if napi:
                         r2.cookies.set('CURRENT_QUALITY',str(l),domain='.bilibili.com',path='/')
+                        if log:
+                            logg.write(f"Current request quality: {l}\nGET {url}", currentframe(), "Get Normal Video Webpage2")
                         re=r2.get(url)
                         re.encoding='utf8'
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Webpage2 Result")
                         rs=search('__playinfo__=([^<]+)',re.text)
                         if rs!=None :
                             re=json.loads(rs.groups()[0])
+                            if log:
+                                logg.write(f"re = {re}", currentframe(), "Get Normal Video Webpage2 Regex")
                         else :
                             return -2
                     else :
                         uri="https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=80"%(data['page'][i-1]['cid'],l,data['bvid'])
+                        if log:
+                            logg.write(f"GET {uri}", currentframe(), "Get Normal Video Playurl2")
                         re=r2.get(uri)
                         re.encoding='utf8'
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Playurl2 Result")
                         re=re.json()
                         if re["code"]!=0 :
                             print({"code":re["code"],"message":re["message"]})
@@ -412,6 +439,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 durz[l]=size
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(size)}({size}B,{file.cml(size,re['data']['timelength'])})")#大小：
+            if log:
+                logg.write(f"durl.keys() = {durl.keys()}\ndurz = {durz}\nvqs = {vqs}", currentframe(), "Normal Video Download Var4")
             r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
             if F :
                 return 0
@@ -449,6 +478,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(durz)}({durz}B,{file.cml(durz,re['data']['timelength'])})")#大小：
             durl=durl[vq]
+        if log:
+            logg.write(f"vq = {vq}\ndurl = {durl}\ndurz = {durz}\nvqs = {vqs}", currentframe(), "Normal Video Download Var5")
         sv=True
         if JSONParser.getset(se,'sv')==False :
             sv=False
@@ -487,6 +518,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             ma=True
         if 'ma' in ip:
             ma=ip['ma']
+        if log:
+            logg.write(f"sv = {sv}\nfilen = {filen}\nff = {ff}\nma = {ma}", currentframe(), "Normal Video Download Var6")
         if ff and (len(durl) > 1 or ma) and os.path.exists(f'{filen}.{vf}') and os.system(f'ffmpeg -h{getnul()}')==0:
             fg=False
             bs=True
@@ -511,6 +544,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 try :
                     os.remove(f'{filen}.{vf}')
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Normal Video Download Remove File Failed")
                     print(lan['OUTPUT7'])
                     return 0
             else:
@@ -534,6 +569,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             ar=True
                         else :
                             ar=False
+                    if log:
+                        logg.write(f"fn = {fn}\nar = {ar}", currentframe(), "Normal Video Download Var7")
                     if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
@@ -543,6 +580,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                                 ab=True
                             else :
                                 ab=False
+                        if log:
+                            logg.write(f"ab = {ab}", currentframe(), "Normal Video Download Var8")
                         if ab :
                             read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se)
                         else :
@@ -551,8 +590,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             print(f"{lan['ERROR4']}{lan['ERROR5']}")#aria2c 参数错误
                             return -4
                     else :
+                        if log:
+                            logg.write(f"GET {k['url']}", currentframe(), "Normal Video Download Video Request")
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3)
+                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, logg=logg)
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "Normal Video Download Var9")
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -600,6 +643,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             ar=True
                         else :
                             ar=False
+                    if log:
+                        logg.write(f"fn = {fn}\nar = {ar}\nj = {j}", currentframe(), "Normal Video Download Var10")
                     if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
@@ -609,6 +654,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                                 ab=True
                             else :
                                 ab=False
+                        if log:
+                            logg.write(f"ab = {ab}", currentframe(), "Normal Video Download Var11")
                         if ab:
                             read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se,j,len(durl),True)
                         else :
@@ -617,8 +664,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             print(f"{lan['ERROR4']}{lan['ERROR5']}")#aria2c 参数错误
                             return -4
                     else :
+                        if log:
+                            logg.write(f"GET {k['url']}", currentframe(), "Normal Video Download Video Request2")
                         re=r2.get(k['url'],stream=True)
-                        read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, j, len(durl), True, durz, com, logg=logg)
+                    if log:
+                        logg.write(f"read = {read}", currentframe(), "Normal Video Download Var12")
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -660,6 +711,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 downsub(r2, filen + "." + vf, s, ip, se, data, ns, i)
         imgf = file.spfn(filen + "." + vf)[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
         imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
+        if log:
+            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var13")
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt=int(time.time())
@@ -710,6 +763,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"vq={bstr.g(vqs)}\n")
                     te.write(f"purl={bstr.g(url)}\n")
                     te.write(f"tags={bstr.g(bstr.gettags(data['tags']))}\n")
+                if log:
+                    with open(f"Temp/{data['aid']}_{tt}.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"INPUT FILE 'Temp/{data['aid']}_{tt}.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Temp File")
+                    with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['aid']}_{tt}.txt\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
             elif vf == "mkv":
                 tit = data['title']
@@ -734,6 +792,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"vq={bstr.g(vqs)}\n")
                     te.write(f"purl={bstr.g(url)}\n")
                     te.write(f"tags={bstr.g(bstr.gettags(data['tags']))}\n")
+                if log:
+                    with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata2")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}.mkv\"{nss}"
             elif len(durl) > 1:
                 te = open('Temp/%s_%s.txt' % (file.filtern('%s' % (data['aid'])), tt), 'wt', encoding='utf8')
@@ -760,6 +821,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                if log:
+                    with open(f"Temp/{data['aid']}_{tt}.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"INPUT FILE 'Temp/{data['aid']}_{tt}.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Temp File2")
+                    with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata3")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{data['aid']}_{tt}.txt\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}.mp4\"{nss}"
             else:
                 tit = data['title']
@@ -780,8 +846,15 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                if log:
+                    with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata4")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}.mp4\"{nss}"
+            if log:
+                logg.write(f"ml = {ml}", currentframe(), "Normal Video Download FFmpeg Command Line")
             re=os.system(ml)
+            if log:
+                logg.write(f"re = {re}", currentframe(), "Normal Video Download FFmpeg Return")
             if re==0:
                 print(lan['OUTPUT14'])#合并完成！
             de=False
@@ -839,6 +912,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             avq.append(str(j['id'])+j['codecs'])
             if j['id'] not in avq3 :
                 avq3[j['id']]=0
+        if log:
+            logg.write(f"vq = {vq}\nvqd = {vqd}\navq2 = {avq2}\navq3 = {avq3}\navq = {avq}", currentframe(), "Normal Video Download Var14")
         bs=True
         while bs:
             bs=False
@@ -849,11 +924,17 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     elif ud['vip']>0 :
                         bs=True #大会员一旦强制获取所有
                     r2.cookies.set('CURRENT_QUALITY',str(j),domain='.bilibili.com',path='/')
+                    if log:
+                        logg.write(f"Current request quality: {j}\nGET {url}", currentframe(), "Get Normal Video Webpage3")
                     re=r2.get(url)
                     re.encoding='utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Webpage3 Result")
                     rs=search('__playinfo__=([^<]+)',re.text)
                     if rs!=None :
                         re=json.loads(rs.groups()[0])
+                        if log:
+                            logg.write(f"re = {re}", currentframe(), "Get Normal Video Webpage3 Regex")
                     else :
                         return -2
                     if "data" in re and "dash" in re['data'] :
@@ -863,6 +944,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                                 avq.append(str(j['id'])+j['codecs'])
                                 avq3[j['id']]=0
                                 bs=True
+                        if log:
+                            logg.write(f"avq = {avq}\navq3 = {avq3}", currentframe(), "Normal Video Download Var15")
                         break
                     else :
                         return -2
@@ -870,11 +953,15 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         nau=False #不存在音频
         if not 'audio' in re['data']['dash'] or re['data']['dash']['audio']==None :
             nau=True
+        if log:
+            logg.write(f"nau = {nau}", currentframe(), "Normal Video Download Var16")
         if not nau:
             for j in re['data']['dash']['audio']:
                 dash['audio'][j['id']]=j
                 aaq.append(j['id'])
             aaq.sort(reverse=True)
+            if log:
+                logg.write(f"aaq = {aaq}", currentframe(), "Normal Video Download Var17")
         if c and not F:
             p=0 #0 第一个 1 avc 2 hev
             read=JSONParser.getset(se,'mpc')
@@ -990,6 +1077,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             else :
                 if F:
                     return 0
+        if log:
+            logg.write(f"vqs = {vqs}\ndash = {dash}", currentframe(), "Normal Video Download Var18")
         sv=True
         if JSONParser.getset(se,'sv')==False :
             sv=False
@@ -1059,6 +1148,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 try :
                     os.remove('%s'%(filen))
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Normal Video Download Remove File Failed")
                     print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                     return 0
             else:
@@ -1066,6 +1157,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         durz=dash['video']['size']
         if not nau :
             durz=durz+dash['audio']['size']
+        if log:
+            logg.write(f"sv = {sv}\nfilen = {filen}\nhzm = {hzm}\nff = {ff}\ndurz = {durz}", currentframe(), "Normal Video Download Var19")
         bs2=True
         while bs2:
             bs2=False
@@ -1077,6 +1170,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     ar=True
                 else :
                     ar=False
+            if log:
+                logg.write(f"ar = {ar}", currentframe(), "Normal Video Download Var20")
             if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                 ab=True
                 if JSONParser.getset(se,'ab')==False :
@@ -1086,6 +1181,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         ab=True
                     else :
                         ab=False
+                if log:
+                    logg.write(f"ab = {ab}", currentframe(), "Normal Video Download Var21")
                 if ab:
                     read = dwaria2(r2, getfn(0, i, data, vqs, hzm, o, fin, dmp), geturll(dash['video']), dash['video']['size'], c3, ip, se, 1, 2, True)
                 else :
@@ -1094,8 +1191,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     print(lan['ERROR4'])#aria2c 参数错误
                     return -4
             else :
+                if log:
+                    logg.write(f"GET {dash['video']['base_url']}", currentframe(), "Normal Video Download Video Request3")
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read = downloadstream(nte, ip, dash['video']['base_url'], r2, re, getfn(0, i, data, vqs, hzm, o, fin, dmp), dash['video']['size'], c3, 1, 2, True, durz, 0)
+                read = downloadstream(nte, ip, dash['video']['base_url'], r2, re, getfn(0, i, data, vqs, hzm, o, fin, dmp), dash['video']['size'], c3, 1, 2, True, durz, 0, logg=logg)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Normal Video Download Var22")
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -1143,6 +1244,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     ar=True
                 else :
                     ar=False
+            if log:
+                logg.write(f"ar = {ar}", currentframe(), "Normal Video Download Var23")
             if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                 ab=True
                 if JSONParser.getset(se,'ab')==False :
@@ -1152,6 +1255,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         ab=True
                     else :
                         ab=False
+                if log:
+                    logg.write(f"ab = {ab}", currentframe(), "Normal Video Download Var24")
                 if ab:
                     read = dwaria2(r2, getfn(1, i, data, vqs, hzm, o, fin, dmp), geturll(dash['audio']), dash['audio']['size'], c3, ip, se, 2, 2, True)
                 else :
@@ -1160,8 +1265,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     print(lan['ERROR4'])#aria2c 参数错误
                     return -4
             else :
+                if log:
+                    logg.write(f"GET {dash['audio']['base_url']}", currentframe(), "Normal Video Download Video Audio Request")
                 re=r2.get(dash['audio']['base_url'],stream=True)
-                read = downloadstream(nte, ip, dash['audio']['base_url'], r2, re, getfn(1, i, data, vqs, hzm, o, fin, dmp), dash['audio']['size'], c3, 2, 2, True, durz, dash['video']['size'])
+                read = downloadstream(nte, ip, dash['audio']['base_url'], r2, re, getfn(1, i, data, vqs, hzm, o, fin, dmp), dash['audio']['size'], c3, 2, 2, True, durz, dash['video']['size'], logg=logg)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Normal Video Download Var25")
             if read==-1:
                 return -1
             elif read==-2 :
@@ -1201,6 +1310,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 downsub(r2, filen, s, ip, se, data, ns, i, dash['video']['width'], dash['video']['height'])
         imgf=file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
         imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
+        if log:
+            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var26")
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt = int(time.time())
@@ -1255,7 +1366,10 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"aq={bstr.g(vqs[1])}\n")
                     te.write(f"purl={bstr.g(url)}\n")
                     te.write(f"tags={bstr.g(bstr.gettags(data['tags']))}\n")
-                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 2{sb}{imga} -c copy \"{filen}\"{nss}")
+                if log:
+                    with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata5")
+                ml = f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 2{sb}{imga} -c copy \"{filen}\"{nss}"
             elif vf == "mkv":
                 tit = data['title']
                 tit2 = data['page'][i - 1]['part']
@@ -1279,7 +1393,10 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"vq={bstr.g(vqs[0])}\n")
                     te.write(f"purl={bstr.g(url)}\n")
                     te.write(f"tags={bstr.g(bstr.gettags(data['tags']))}\n")
-                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}\"{nss}")
+                if log:
+                    with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata6")
+                ml = f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{sa} -map_metadata 1{sb}{imga} -c copy \"{filen}\"{nss}"
             elif not nau:
                 tit = data['title']
                 tit2 = data['page'][i - 1]['part']
@@ -1299,7 +1416,10 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
-                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 2{sb} -c copy -c:s mov_text{imga2} \"{filen}\"{nss}")
+                if log:
+                    with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata7")
+                ml = f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"{getfn(1,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 2{sb} -c copy -c:s mov_text{imga2} \"{filen}\"{nss}"
             else:
                 tit = data['title']
                 tit2 = data['page'][i - 1]['part']
@@ -1319,7 +1439,15 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     te.write(f"description={bstr.g(vqs[0])},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
-                re = os.system(f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}\"{nss}")
+                if log:
+                    with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata8")
+                ml = f"ffmpeg -i \"{getfn(0,i,data,vqs,hzm,o,fin,dmp)}\" -i \"Temp/{data['aid']}_{tt}_metadata.txt\"{imga}{sa} -map_metadata 1{sb} -c copy -c:s mov_text{imga2} \"{filen}\"{nss}"
+            if log:
+                logg.write(f"ml = {ml}", currentframe(), "Normal Video Download FFmpeg Command Line2")
+            re = os.system(ml)
+            if log:
+                logg.write(f"re = {re}", currentframe(), "Normal Video Download FFmpeg Return2")
             de=False
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
