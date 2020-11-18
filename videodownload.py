@@ -258,6 +258,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     -4 aria2c参数错误
     -5 文件夹创建失败
     -6 缺少必要参数"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip:
         ns=False
@@ -297,10 +302,14 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             o = f"{o}{file.filtern(data['title'])}/"
         else:
             o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+    if log:
+        logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\ndmp = {dmp}\nF = {F}\nfin = {fin}", currentframe(), "Normal Video Download Var1")
     try :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Normal Video Download Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败
         return -5
     nbd=True
@@ -313,6 +322,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         vf = se['vf']
     if 'vf' in ip:
         vf = ip['vf']
+    if log:
+        logg.write(f"nbd = {nbd}\nvf = {vf}", currentframe(), "Normal Video Download Var2")
     if not os.path.exists('Temp/'):
         mkdir('Temp/')
     r2=requests.Session()
@@ -320,7 +331,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     if nte:
         r2.trust_env=False
     r2.proxies=r.proxies
-    read=JSONParser.loadcookie(r2)
+    read = JSONParser.loadcookie(r2, logg)
     if read!=0 :
         print(lan['ERROR2'])#读取cookies.json出现错误
         return -1
@@ -331,6 +342,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
+    if log:
+        logg.write(f"GET {url}", currentframe(), "Get Normal Video Webpage")
     re=r2.get(url)
     re.encoding='utf8'
     rs=search('__playinfo__=([^<]+)',re.text)
@@ -892,7 +905,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 dash['audio']=dash['audio'][aaq[0]]
             if ns:
                 print(lan['OUTPUT15'])#视频轨：
-                print(f"{lan['OUTPUT9']}{vqd[0]}({dash['video']['width']}x{dash['video']['height']},{getfps(dash['video']['frame_rate'])})")#图质：
+                print(f"{lan['OUTPUT9']}{vqd[0]}({dash['video']['width']}x{dash['video']['height']},{dash['video']['codecs']},{getfps(dash['video']['frame_rate'])})")#图质：
             dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(dash['video']['size'])}({dash['video']['size']}B,{file.cml(dash['video']['size'],re['data']['timelength'])})")#大小：
@@ -2136,7 +2149,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             dash['audio']=dash['audio'][aaq[0]]
             if ns:
                 print(lan['OUTPUT15'])#视频轨：
-                print(f"{lan['OUTPUT9']}{vqd[0]}({dash['video']['width']}x{dash['video']['height']},{getfps(dash['video']['frame_rate'])})")#图质：
+                print(f"{lan['OUTPUT9']}{vqd[0]}({dash['video']['width']}x{dash['video']['height']},{dash['video']['codecs']},{getfps(dash['video']['frame_rate'])})")#图质：
             dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(dash['video']['size'])}({dash['video']['size']}B,{file.cml(dash['video']['size'],re['data']['timelength'])})")#大小
