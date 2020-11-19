@@ -23,10 +23,6 @@ from os import listdir, remove, system
 from requests import Session
 from file import mkdir
 from platform import system as systemname
-from re import search
-from selenium.webdriver import Chrome, ChromeOptions
-from traceback import format_exc
-from time import sleep
 
 la = None
 se = loadset()
