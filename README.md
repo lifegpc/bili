@@ -71,7 +71,8 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 
 ### prepare.py
 运行后可以取得运行WEB用户界面必须的一些文件。  
-运行时确保可以直接访问```java```。
+运行时确保可以直接访问```java```。  
+由于死🐴的Cloudflare的防BOT检测，现在已经无法自动更新/下载```compiler.jar```，请去[这里](https://mvnrepository.com/artifact/com.google.javascript/closure-compiler/latest)下载```compiler.jar```，没有该文件将无法进行编译。
 
 ### WEB用户界面
 运行**startwebui.py**后，可以在浏览器访问。  

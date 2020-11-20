@@ -1585,10 +1585,12 @@ def main(ip={}):
             read=biliTime.equal(biliTime.getDate(data['pubdate']),biliTime.getNowDate())
             if read==0 or read==1 :
                 print(lan['ERROR12'])#该视频不支持全弹幕！
-                return -1
+                pass
             for i in cho :
-                read=biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc,ip,se)
-                if read==-2 :
+                read = biliDanmu.DanmuGeta(i,data,section,'av',xml,xmlc,ip,se)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Normal Video Download All Barrage Return")
+                if read == -2 or read == -1 or read == -3:
                     pass
                 elif read==0 :
                     print(lan['OUTPUT9'].replace('<number>',str(i)))#<number>P下载完成
@@ -1645,12 +1647,16 @@ def main(ip={}):
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
+            if log:
+                logg.write(f"cho3 = {cho3}\ncho5 = {cho5}", currentframe(), "Normal Video Download Video/Audio Para")
             if cho2 == 8:
                 for i in cho:
                     read = videodownload.avaudiodownload(data, section, i, ip, se, s, cho3, cho5, ud)
             else:
                 for i in cho:
                     read = videodownload.avvideodownload(i, s, data, section, cho3, cho5, se, ip, ud)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Normal Video Download Video/Audio Return")
             if read == -5 or read == -6:
                 return -1
         if cho2==6:

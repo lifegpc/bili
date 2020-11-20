@@ -25,6 +25,8 @@ from ASSWriter import ASSScript, parsefromCSSHex, ASSScriptEvent
 import traceback
 from iso639 import languages
 from bstr import lg
+from inspect import currentframe
+from traceback import format_exc
 
 
 lan=None
@@ -48,6 +50,11 @@ def getiso6392t(s: str) -> str:
 
 def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = False,pi: int = 1, width: int = None, height: int = None):
     "下载字幕"
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ass = False
     if JSONParser.getset(se, 'ass') == True:
         ass = True
@@ -59,6 +66,8 @@ def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = F
         fn = f"{fq}.{i['lan']}.srt"
     else:
         fn = f"{fq}.{i['lan']}.ass"
+    if log:
+        logg.write(f"ass = {ass}\nfn = {fn}\ni = {i}", currentframe(), "Normal Video Subtitle Download Var")
     i['fn']=fn
     if os.path.exists(fn) :
         fg=False
@@ -84,27 +93,37 @@ def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = F
             try :
                 os.remove('%s'%(fn))
             except :
+                if log:
+                    logg.write(format_exc(), currentframe(), "Normal Video Subtitle Download Remove File Failed")
                 print(lan['OUTPUT1'])#删除原有文件失败，跳过下载
                 return 0
+    if log:
+        logg.write(f"GET {i['url']}", currentframe(), "Normal Video Subtitle Download Request")
     re=r.get(i['url'])
     re.encoding='utf8'
+    if log:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Video Subtitle Download Result")
     re=re.json()
     if not ass:
-        if assrt(fn, re['body']) == 0 and pr :
+        if assrt(fn, re['body'], logg) == 0 and pr:
             print(lan['OUTPUT2'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>字幕下载完毕！
     else:
         if width is None:
             width = 1920
         if height is None:
             height = 1080
-        if asass(fn, re, width, height) == 0 and pr :
+        if asass(fn, re, width, height, logg) == 0 and pr:
             print(lan['OUTPUT2'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>字幕下载完毕！
     return 0
-def assrt(fn:str,b:list):
+
+
+def assrt(fn: str, b: list, logg=None):
     "保存至srt格式"
     try :
         f=open(fn,'w',encoding="utf8")
     except :
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "Convert To SRT Open File Failed")
         print(lan['ERROR1'].replace('<filename>',fn))#保存"<filename>"失败！
         return -1
     i=1
@@ -114,6 +133,8 @@ def assrt(fn:str,b:list):
             f.write('%s --> %s\n'%(tostr3(k['from']),tostr3(k['to'])))
             f.write('%s\n\n'%(k['content']))
         except :
+            if logg is not None:
+                logg.write(format_exc(), currentframe(), "Convert To SRT Write File Failed")
             print(lan['ERROR2'].replace('<filename>',fn))#写入到文件"<filename>"时失败！
             f.close()
             return -1
@@ -137,7 +158,7 @@ def ffinputstr(i: list, n: int, m: int=-1) -> (str, str):
     return s,r
 
 
-def asass(fn: str, b: dict, width: int, height: int):
+def asass(fn: str, b: dict, width: int, height: int, logg=None):
     d = ASSScript()
     d.Script_Info.Title = fn
     d.Script_Info.PlayResX = width
@@ -147,6 +168,8 @@ def asass(fn: str, b: dict, width: int, height: int):
     try:
         d.V4_Styles[0].PrimaryColour = parsefromCSSHex(b['font_color'])
     except:
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "Invalid Color When Parsing CSS Color")
         print(traceback.format_exc())
     d.Events = []
     loc = 2
@@ -159,11 +182,15 @@ def asass(fn: str, b: dict, width: int, height: int):
     try:
         f = open(fn, 'w', encoding = "utf8")
     except:
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "Convert To ASS Open File Failed")
         print(lan['ERROR1'].replace('<filename>' ,fn))  # 保存"<filename>"失败！
         return -1
     try:
         f.write(d.dump())
     except:
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "Convert To ASS Write File Failed")
         print(lan['ERROR2'].replace('<filename>', fn))  # 写入到文件"<filename>"时失败！
         f.close()
         return -1
@@ -172,12 +199,19 @@ def asass(fn: str, b: dict, width: int, height: int):
 
 
 def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: bool=False, pi: int=1, nal: bool=False):
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     global lan
     fq = spfn(fn)[0]
     if nal:
         fn = f"{fq}.lrc"
     else:
         fn = f"{fq}.{i['lan']}.lrc"
+    if log:
+        logg.write(f"fn = {fn}", currentframe(), "Download Lyrics Var1")
     i['fn'] = fn
     if os.path.exists(fn):
         fg = False
@@ -203,10 +237,16 @@ def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: boo
             try:
                 os.remove('%s'%(fn))
             except:
+                if log:
+                    logg.write(format_exc(), currentframe(), "Download Lyrics Remove File Failed")
                 print(lan['OUTPUT1'])  # 删除原有文件失败，跳过下载
                 return 0
+    if log:
+        logg.write(f"GET {i['url']}", currentframe(), "Download Lyrics JSON")
     re = r.get(i['url'])
     re.encoding = 'utf8'
+    if log:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Download Lyrics JSON Result")
     re = re.json()
     if aslrc(fn, re['body'], se, ip, data, pi) == 0 and pr:
         print(lan['OUTPUT3'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>歌词下载完毕！
@@ -214,9 +254,16 @@ def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: boo
 
 
 def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int):
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     try :
         f = open(fn, 'w', encoding="utf8")
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Convert To Lyrics Open File Failed")
         print(lan['ERROR1'].replace('<filename>', fn))  # 保存"<filename>"失败！
         return -1
     lmd = 10
@@ -225,6 +272,8 @@ def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int):
     if 'lmd' in ip:
         lmd = se['ip']
     lmd = lmd / 1000
+    if log:
+        logg.write(f"lmd = {lmd}", currentframe(), "Convert To Lyrics Var")
     f.write("[re:Made by bili. https://github.com/lifegpc/bili]\n")
     tit = data['page'][pi - 1]['part']
     if tit == "":
