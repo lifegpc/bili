@@ -290,6 +290,8 @@ if __name__=='__main__' :
                     ne['vf'] = 'mp4'
         else:
             b = False
+            if 'vf' in se:
+                ne['vf'] = se['vf']
     lmd = 10
     if 'lmd' in se:
         lmd = se['lmd']
