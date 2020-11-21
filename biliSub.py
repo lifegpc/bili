@@ -39,12 +39,14 @@ if len(sys.argv)>1 :
 lan=getdict('biliSub',getlan(se,ip))
 
 
-def getiso6392t(s: str) -> str:
+def getiso6392t(s: str, logg=None) -> str:
     t = s.split('_')[0]
     t = s.split('-')[0]
     try:
         return languages.get(alpha2=t).part2t
     except:
+        if logg is not None:
+            logg.write(format_exc(), currentframe(), "Convert To ISO6392 Failed.")
         return s
 
 
@@ -141,7 +143,7 @@ def assrt(fn: str, b: list, logg=None):
         i=i+1
     f.close()
     return 0
-def ffinputstr(i: list, n: int, m: int=-1) -> (str, str):
+def ffinputstr(i: list, n: int, m: int=-1, logg=None) -> (str, str):
     "分别解析出ffmpeg输入参数和元数据参数"
     s=""
     r=""
@@ -149,7 +151,7 @@ def ffinputstr(i: list, n: int, m: int=-1) -> (str, str):
     c = 0
     for k in i :
         s=s+' -i "%s"'%(k['fn'])
-        r = r + f' -metadata:s:s:{c} language="{getiso6392t(k["lan"])}" -metadata:s:s:{c} title="{k["land"]}" -metadata:s:s:{c} handler_name="{k["land"]}"'
+        r = r + f' -metadata:s:s:{c} language="{getiso6392t(k["lan"], logg)}" -metadata:s:s:{c} title="{k["land"]}" -metadata:s:s:{c} handler_name="{k["land"]}"'
         z=z+1
         c = c + 1
     for i in range(z) :
