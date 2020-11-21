@@ -4885,6 +4885,37 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
     return 0
 
 
+def audownload(data: dict, r: requests.Session, se: dict, ip: dict):
+    """AU号音频下载
+    -1 文件夹创建失败"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
+    ns = True
+    if 's' in ip:
+        ns = False
+    o = 'Download/'
+    read = JSONParser.getset(se, 'o')
+    if read is not None:
+        o = read
+    if 'o' in ip:
+        o = ip['o']
+    F = False  # 仅输出视频信息
+    if 'F' in ip:
+        F = True
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if log:
+            logg.write(format_exc(), currentframe(), "LIVE VIDEO MKDIR FAILED")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
+        return -1
+    return 0
+
+
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):
     logg = None
     if 'logg' in ip:

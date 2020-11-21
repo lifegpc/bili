@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from time import localtime,strftime
-from biliTime import tostr2
+from biliTime import tostr2, tostr6
 from bstr import gettags,rhtml
 from JSONParser import loadset
 import sys
@@ -195,6 +195,28 @@ def printliveInfo(d: dict):
 	print(f"{lan['O40']}{d['pareaname']}-{d['areaname']}")  # 区域：
 	print(f"{lan['O33']}{d['tags']}")  # 标签：
 	print(f"{lan['O41']}{gettags(d['hotwords'])}")  # 房间热词
+
+
+def printAuInfo(d: dict):
+	print(f"{lan['O44']}{d['id']}")  # AU号
+	print(f"{lan['O1']}{d['aid']}")
+	print(f"{lan['O2']}{d['bvid']}")
+	print(f"CID: {d['cid']}")
+	print(f"{lan['O4']}{d['title']}")
+	print(f"{lan['O5']}{tostr2(d['passtime'])}")
+	print(f"{lan['O7']}{d['intro']}")
+	print(f"{lan['O45']}{tostr6(d['duration'])}")
+	print(f"{lan['O33']}{gettags(d['tags'])}")
+	print(f"{lan['O46']}{d['author']}")
+	print(lan['O8'])
+	print(f"UID :{d['uid']}")
+	print(f"{lan['O9']}{d['uname']}")
+	print(lan['O47'])
+	s = d['statistic']
+	print(f"{lan['O48']}{s['play']}")
+	print(f"{lan['O49']}{s['comment']}")
+	print(f"{lan['O50']}{s['share']}")
+	print(f"{lan['O51']}{s['collect']}")
 
 
 def pr() :

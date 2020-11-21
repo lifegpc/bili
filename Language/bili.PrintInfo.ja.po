@@ -191,3 +191,35 @@ msgctxt "O43"
 msgid ""
 "Can't find GNU GPL3 LICENSE file, please see <http://www.gnu.org/licenses/>."
 msgstr "GNU GPL3 LICENSEファイルが見つからない場合は、<http://www.gnu.org/licenses/>をご覧ください。"
+
+msgctxt "O44"
+msgid "AU number: "
+msgstr ""
+
+msgctxt "O45"
+msgid "Duration: "
+msgstr ""
+
+msgctxt "O46"
+msgid "Author: "
+msgstr ""
+
+msgctxt "O47"
+msgid "Statistics :"
+msgstr ""
+
+msgctxt "O48"
+msgid "Played times: "
+msgstr ""
+
+msgctxt "O49"
+msgid "Comment count: "
+msgstr ""
+
+msgctxt "O50"
+msgid "Shared times: "
+msgstr ""
+
+msgctxt "O51"
+msgid "Collected times: "
+msgstr ""

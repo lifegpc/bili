@@ -79,6 +79,14 @@ def tostr5(i: int):
     return "%02d:%02d.%02d" % (floor(i / 60), floor(i % 60), floor(i * 100 % 100))
 
 
+def tostr6(i: int):
+    "时长转换"
+    if i < 0:
+        i = 0
+    if i < 3600:
+        return f"{floor(i / 60):02d}:{i % 60:02d}"
+    return f"{floor(i / 3600):02d}:{floor(i % 3600 / 60):02d}:{floor(i % 60):02d}"
+
 def comlrct(i: int, i2: int) -> int:
     "i大1，i2大-1，相等0"
     e = floor(i * 100)
