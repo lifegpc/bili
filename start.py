@@ -1661,9 +1661,13 @@ def main(ip={}):
                 return -1
         if cho2==6:
             for i in cho:
-                videodownload.avsubdownload(i,s,data,section,se,ip,ud)
+                read = videodownload.avsubdownload(i, s, data, section, se, ip, ud)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Normal Video Download Subtitles Only Return")
         if cho2==7:
-            videodownload.avpicdownload(data,section,ip,se)
+            read = videodownload.avpicdownload(data, section, ip, se)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Normal Video Download Cover Only Return")
     if ss or ep :
         if ep :
             epl=lan['INPUT10']#，仅下载输入的ep号可输入b

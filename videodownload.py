@@ -1490,6 +1490,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
 def avsubdownload(i,url,data,r,se,ip,ud) :
     '''下载普通类视频字幕
     -1 文件夹创建失败'''
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip:
         ns=False
@@ -1509,6 +1514,7 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
         fin = False
     if 'in' in ip:
         fin = ip['in']
+    dmp = False
     if JSONParser.getset(se, 'dmp') == True:
         dmp = True
     if 'dmp' in ip:
@@ -1520,10 +1526,14 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
             o = f"{o}{file.filtern(data['title'])}/"
         else:
             o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Normal Video Download Subtitles Para")
     try :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Normal Video Download Subtitles Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -1
     r2=requests.Session()
@@ -1531,7 +1541,9 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
     if nte:
         r2.trust_env=False
     r2.proxies=r.proxies
-    read=JSONParser.loadcookie(r2)
+    read = JSONParser.loadcookie(r2, logg)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Normal Video Download Subtitles Var")
     if read!=0 :
         print(lan['ERROR2'])#读取cookies.json出现错误
         return -1
@@ -1542,11 +1554,18 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
     r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
-    rr=r2.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][i-1]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
+    uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][i-1]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}"
+    if log:
+        logg.write(f"GET {uri}", currentframe(), "Normal Video Download Subtitles Get Player.so")
+    rr = r2.get(uri)
     rr.encoding='utf8'
+    if log:
+        logg.write(f"status = {rr.status_code}\n{rr.text}", currentframe(), "Normal Video Download Subtitles Get Player.so Result")
     rs2=search(r'<subtitle>(.+)</subtitle>',rr.text)
     if rs2!=None :
         rs2=json.loads(rs2.groups()[0])
+        if log:
+            logg.write(f"rs2 = {rs2}", currentframe(), "Normal Video Download Subtitles Player.so Regex")
         JSONParser2.getsub(rs2,data)
         if data['videos']==1 :
             if fin:
@@ -1562,6 +1581,8 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
                 filen = '%s%s' % (o, file.filtern(f"{i}.{data['page'][i-1]['part']}(P{i},{data['page'][i-1]['cid']})"))
             else:
                 filen=f"{o}{i}.{file.filtern(data['page'][i-1]['part'])}"
+        if log:
+            logg.write(f"filen = {filen}", currentframe(), "Normal Video Download Subtitles Var2")
         if 'sub' in data and len(data['sub'])>0:
             for s in data['sub'] :
                 downsub(r2, filen + ".mkv", s, ip, se, data, True, i)

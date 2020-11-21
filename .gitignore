@@ -1,6 +1,7 @@
 #temp file
 *.pyc
 *.log
+log/
 .vs/
 *.txt
 #download file or config file
@@ -20,6 +21,7 @@ dist/
 build/
 *.bat
 v.py
+python_x86/
 # README.md Convert file
 node_modules/
 converttohtml.js
