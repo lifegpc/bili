@@ -94,11 +94,11 @@ if __name__=='__main__' :
     r=input(la['INPUT2'])#请输入:之前的语言代码：
     if len(r) >0 and (r in lan or r=="null"):
         p=r
-    if p!="null" :
-        ne['lan']=p
-        la = getdict('setsettings', p)
-    else:
-        la = getdict('setsettings', getlan({},{}))
+        if p!="null" :
+            ne['lan']=p
+            la = getdict('setsettings', p)
+        else:
+            la = getdict('setsettings', getlan({},{}))
     print(la['INPUT3'])#是否默认启用弹幕过滤？
     r=gk(se,'dmgl')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
@@ -314,7 +314,7 @@ if __name__=='__main__' :
     r = gk(se, 'nal')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'nal', se)
-    print(f"{la['INPUT41']}{la['NTN']}")
+    print(f"{la['INPUT41']}{la['NTY']}")
     r = gk(se, 'log')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'log', se)

@@ -593,7 +593,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         if log:
                             logg.write(f"GET {k['url']}", currentframe(), "Normal Video Download Video Request")
                         re=r2.get(k['url'],stream=True)
-                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, logg=logg)
+                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3)
                     if log:
                         logg.write(f"read = {read}", currentframe(), "Normal Video Download Var9")
                     if read==-1 :
@@ -667,7 +667,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         if log:
                             logg.write(f"GET {k['url']}", currentframe(), "Normal Video Download Video Request2")
                         re=r2.get(k['url'],stream=True)
-                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, j, len(durl), True, durz, com, logg=logg)
+                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, j, len(durl), True, durz, com)
                     if log:
                         logg.write(f"read = {read}", currentframe(), "Normal Video Download Var12")
                     if read==-1 :
@@ -724,14 +724,14 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if not ns:
                 nss=getnul()
             if 'sub' in data:
-                sa, sb = ffinputstr(data['sub'], 2, 1)
+                sa, sb = ffinputstr(data['sub'], 2, 1, logg=logg)
             if imgs==0 and vf == "mkv":
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             elif imgs == 0 and vf == "mp4":
                 imga = f' -i "{imgf}"'
                 imga2 = f' -disposition:v:1 attached_pic'
                 if 'sub' in data:
-                    sa, sb = ffinputstr(data['sub'], 3, 1)
+                    sa, sb = ffinputstr(data['sub'], 3, 1, logg=logg)
                 else:
                     sb = ' -map 0 -map 2'
             if len(durl) > 1 and vf == "mkv":
@@ -993,14 +993,14 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if ns:
                 print(lan['OUTPUT15'])#视频轨：
                 print(f"{lan['OUTPUT9']}{vqd[0]}({dash['video']['width']}x{dash['video']['height']},{dash['video']['codecs']},{getfps(dash['video']['frame_rate'])})")#图质：
-            dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
+            dash['video']['size'] = streamgetlength(r2, dash['video']['base_url'], logg)
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(dash['video']['size'])}({dash['video']['size']}B,{file.cml(dash['video']['size'],re['data']['timelength'])})")#大小：
                 if not nau:
                     print(lan['OUTPUT16'])#音频轨：
                     print('ID：%s'%(dash['audio']['id']))
             if not nau:
-                dash['audio']['size']=streamgetlength(r2,dash['audio']['base_url'])
+                dash['audio']['size'] = streamgetlength(r2, dash['audio']['base_url'], logg)
                 if ns:
                     print(f"{lan['OUTPUT10']}{file.info.size(dash['audio']['size'])}({dash['audio']['size']}B,{file.cml(dash['audio']['size'],re['data']['timelength'])})")#大小：
                 vqs=[vqd[0]+","+dash['video']['codecs'],aaq[0]]
@@ -1013,7 +1013,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             for j in avq:
                 if ns or(not ns and F):
                     print(f"{k+1}.{lan['OUTPUT9']}{vqd[sea(j,avq2)]}({dash['video'][j]['width']}x{dash['video'][j]['height']},{sev(j)},{getfps(dash['video'][j]['frame_rate'])})")#图质：
-                dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
+                dash['video'][j]['size'] = streamgetlength(r2, dash['video'][j]['base_url'], logg)
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash['video'][j]['size'])}({dash['video'][j]['size']}B,{file.cml(dash['video'][j]['size'],re['data']['timelength'])})")#大小：
                 k=k+1
@@ -1046,7 +1046,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 for j in aaq:
                     if ns or(not ns and F):
                         print("%s.ID：%s"%(k+1,j))
-                    dash['audio'][j]['size']=streamgetlength(r2,dash['audio'][j]['base_url'])
+                    dash['audio'][j]['size'] = streamgetlength(r2, dash['audio'][j]['base_url'], logg)
                     if ns or(not ns and F):
                         print(f"{lan['OUTPUT10']}{file.info.size(dash['audio'][j]['size'])}({dash['audio'][j]['size']}B,{file.cml(dash['audio'][j]['size'],re['data']['timelength'])})")#大小：
                     k=k+1
@@ -1194,7 +1194,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if log:
                     logg.write(f"GET {dash['video']['base_url']}", currentframe(), "Normal Video Download Video Request3")
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read = downloadstream(nte, ip, dash['video']['base_url'], r2, re, getfn(0, i, data, vqs, hzm, o, fin, dmp), dash['video']['size'], c3, 1, 2, True, durz, 0, logg=logg)
+                read = downloadstream(nte, ip, dash['video']['base_url'], r2, re, getfn(0, i, data, vqs, hzm, o, fin, dmp), dash['video']['size'], c3, 1, 2, True, durz, 0)
             if log:
                 logg.write(f"read = {read}", currentframe(), "Normal Video Download Var22")
             if read==-1 :
@@ -1268,7 +1268,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if log:
                     logg.write(f"GET {dash['audio']['base_url']}", currentframe(), "Normal Video Download Video Audio Request")
                 re=r2.get(dash['audio']['base_url'],stream=True)
-                read = downloadstream(nte, ip, dash['audio']['base_url'], r2, re, getfn(1, i, data, vqs, hzm, o, fin, dmp), dash['audio']['size'], c3, 2, 2, True, durz, dash['video']['size'], logg=logg)
+                read = downloadstream(nte, ip, dash['audio']['base_url'], r2, re, getfn(1, i, data, vqs, hzm, o, fin, dmp), dash['audio']['size'], c3, 2, 2, True, durz, dash['video']['size'])
             if log:
                 logg.write(f"read = {read}", currentframe(), "Normal Video Download Var25")
             if read==-1:
@@ -1324,9 +1324,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 nss=getnul()
             if 'sub' in data:
                 if not nau:
-                    sa, sb = ffinputstr(data['sub'], 3, 2)
+                    sa, sb = ffinputstr(data['sub'], 3, 2, logg=logg)
                 else :
-                    sa, sb = ffinputstr(data['sub'], 2, 1)
+                    sa, sb = ffinputstr(data['sub'], 2, 1, logg=logg)
             if imgs == 0 and vf == "mkv":
                 imga=f" -attach \"{imgf}\" -metadata:s:t mimetype=image/jpeg"
             elif imgs == 0 and vf == "mp4":
@@ -1334,9 +1334,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 imga2 = f' -disposition:v:1 attached_pic'
                 if 'sub' in data:
                     if not nau:
-                        sa, sb = ffinputstr(data['sub'], 4, 2)
+                        sa, sb = ffinputstr(data['sub'], 4, 2, logg=logg)
                     else:
-                        sa, sb = ffinputstr(data['sub'], 3, 1)
+                        sa, sb = ffinputstr(data['sub'], 3, 1, logg=logg)
                 else:
                     if not nau:
                         sb = ' -map 0 -map 1 -map 3'
@@ -1490,6 +1490,11 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
 def avsubdownload(i,url,data,r,se,ip,ud) :
     '''下载普通类视频字幕
     -1 文件夹创建失败'''
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip:
         ns=False
@@ -1509,6 +1514,7 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
         fin = False
     if 'in' in ip:
         fin = ip['in']
+    dmp = False
     if JSONParser.getset(se, 'dmp') == True:
         dmp = True
     if 'dmp' in ip:
@@ -1520,10 +1526,14 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
             o = f"{o}{file.filtern(data['title'])}/"
         else:
             o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Normal Video Download Subtitles Para")
     try :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Normal Video Download Subtitles Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -1
     r2=requests.Session()
@@ -1531,7 +1541,9 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
     if nte:
         r2.trust_env=False
     r2.proxies=r.proxies
-    read=JSONParser.loadcookie(r2)
+    read = JSONParser.loadcookie(r2, logg)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Normal Video Download Subtitles Var")
     if read!=0 :
         print(lan['ERROR2'])#读取cookies.json出现错误
         return -1
@@ -1542,11 +1554,18 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
     r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
-    rr=r2.get("https://api.bilibili.com/x/player.so?id=cid:%s&aid=%s&bvid=%s&buvid=%s"%(data['page'][i-1]['cid'],data['aid'],data['bvid'],r.cookies.get('buvid3')))
+    uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][i-1]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}"
+    if log:
+        logg.write(f"GET {uri}", currentframe(), "Normal Video Download Subtitles Get Player.so")
+    rr = r2.get(uri)
     rr.encoding='utf8'
+    if log:
+        logg.write(f"status = {rr.status_code}\n{rr.text}", currentframe(), "Normal Video Download Subtitles Get Player.so Result")
     rs2=search(r'<subtitle>(.+)</subtitle>',rr.text)
     if rs2!=None :
         rs2=json.loads(rs2.groups()[0])
+        if log:
+            logg.write(f"rs2 = {rs2}", currentframe(), "Normal Video Download Subtitles Player.so Regex")
         JSONParser2.getsub(rs2,data)
         if data['videos']==1 :
             if fin:
@@ -1562,6 +1581,8 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
                 filen = '%s%s' % (o, file.filtern(f"{i}.{data['page'][i-1]['part']}(P{i},{data['page'][i-1]['cid']})"))
             else:
                 filen=f"{o}{i}.{file.filtern(data['page'][i-1]['part'])}"
+        if log:
+            logg.write(f"filen = {filen}", currentframe(), "Normal Video Download Subtitles Var2")
         if 'sub' in data and len(data['sub'])>0:
             for s in data['sub'] :
                 downsub(r2, filen + ".mkv", s, ip, se, data, True, i)
@@ -1954,7 +1975,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                     return -4
             else:
                 re = r2.get(dash['base_url'], stream=True)
-                read = downloadstream(nte, ip, dash['base_url'], r2, re, f"{filen}.{hzm}", dash['size'], c3, logg=logg)
+                read = downloadstream(nte, ip, dash['base_url'], r2, re, f"{filen}.{hzm}", dash['size'], c3)
                 if log:
                     logg.write(f"read = {read}", currentframe(), "Normal Video Audio Download Return")
             if read == -1:
@@ -2076,6 +2097,11 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
 
 def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     """下载番剧等视频"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     che=False
     if 'che' in data :
         che=True
@@ -2098,10 +2124,14 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         o=read
     if 'o' in ip:
         o=ip['o']
+    if log:
+        logg.write(f"che = {che}\nns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'", currentframe(), "Bangumi Video Download Var")
     try :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Bangumi Video Download Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>',o))#创建%s文件夹失败
         return -5
     F=False
@@ -2128,12 +2158,16 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         vf = ip['vf']
     if not os.path.exists('Temp/'):
         mkdir('Temp/')
+    if log:
+        logg.write(f"F = {F}\nfdir = {fdir}\nfin = {fin}\nvf = {vf}", currentframe(), "Bangumi Video Download Var2")
     r2=requests.Session()
     r2.headers=copydict(r.headers)
     if nte:
         r2.trust_env=False
     r2.proxies=r.proxies
-    read=JSONParser.loadcookie(r2)
+    read = JSONParser.loadcookie(r2, logg)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Var3")
     if read!=0 :
         print(lan['ERROR2'])#读取cookies.json出现错误
         return -1
@@ -2145,16 +2179,28 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     if not che :
         napi = True
         paok = False
+        if log:
+            logg.write(f"GET {url2}", currentframe(), "Bangumi Video Download Get Webpage")
         re=r2.get(url2)
         re.encoding='utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Webpage Result")
         rs=search('__playinfo__=([^<]+)',re.text)
         rs2=search('__PGC_USERSTATE__=([^<]+)',re.text)
         if rs != None:
             re=json.loads(rs.groups()[0])
+            if log:
+                logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage Regex")
             paok = True
         else:
             napi = False
-            re = r2.get(f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl")
+            re = r2.get(uri)
+            re.encoding = 'utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl Result")
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
@@ -2163,6 +2209,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 paok = True
         if not paok and rs2!=None:
             rs2=json.loads(rs2.groups()[0])
+            if log:
+                logg.write(f"rs2 = {rs2}", currentframe(), "Bangumi Video Download Webpage Regex2")
             if 'dialog' in rs2:
                 print(rs2['dialog']['title'])
             if rs2['area_limit']:
@@ -2171,8 +2219,13 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         elif not paok:
             return -2
     else :
-        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl2")
+        re=r2.get(uri)
         re.encoding='utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl2 Result")
         re=re.json()
     if 'data' in re and 'dash' in re['data']:
         dash={'video':{},'audio':{}}
@@ -2188,6 +2241,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             avq.append(t)
             if j['id'] not in avq3 :
                 avq3[j['id']]=0
+        if log:
+            logg.write(f"vqd = {vqd}\navq = {avq}\navq2 = {avq2}\navq3 = {avq3}", currentframe(), "Bangumi Video Download Var4")
         bs=True
         rtry = 0
         while bs:
@@ -2201,29 +2256,50 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     if not che:
                         if napi:
                             r2.cookies.set('CURRENT_QUALITY', str(j), domain='.bilibili.com', path='/')
+                            if log:
+                                logg.write(f"Current request quality: {j}\nGET {url2}", currentframe(), "Bangumi Video Download Get Webpage2")
                             re = r2.get(url2)
                             re.encoding = 'utf8'
+                            if log:
+                                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Webpage2 Result")
                             rs = search('__playinfo__=([^<]+)', re.text)
                             if rs != None:
                                 re = json.loads(rs.groups()[0])
+                                if log:
+                                    logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage2 Regex")
                             else:
                                 napi = False
-                                re = r2.get(f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+                                uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                                if log:
+                                    logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl3")
+                                re = r2.get(uri)
+                                if log:
+                                    logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl3 Result")
                                 re = re.json()
                                 if re['code'] != 0:
                                     print(f"{re['code']} {re['message']}")
                                     return -2
                                 re['data'] = re['result']
                         else:
-                            re = r2.get(f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                            if log:
+                                logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl4")
+                            re = r2.get(uri)
+                            if log:
+                                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl4 Result")
                             re = re.json()
                             if re['code'] != 0:
                                 print(f"{re['code']} {re['message']}")
                                 return -2
                             re['data'] = re['result']
                     else :
-                        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+                        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                        if log:
+                            logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl5")
+                        re = r2.get(uri)
                         re.encoding='utf8'
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl5 Result")
                         re=re.json()
                     if "data" in re and "dash" in re['data'] :
                         for j in re['data']['dash']['video'] :
@@ -2233,11 +2309,15 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                                 avq.append(t)
                                 avq3[j['id']]=0
                                 bs=True
+                        if log:
+                            logg.write(f"avq = {avq}\navq3 = {avq3}", currentframe(), "Bangumi Video Download Var5")
                         break
                     else :
                         return -2
             if bs:
                 rtry = rtry + 1
+                if log:
+                    logg.write(f"rtry = {rtry}", currentframe(), "Bangumi Video Download Var6")
                 if rtry > 1:
                     napi = False
                 if rtry > 3:
@@ -2248,6 +2328,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             dash['audio'][j['id']]=j
             aaq.append(j['id'])
         aaq.sort(reverse=True)
+        if log:
+            logg.write(f"aaq = {aaq}", currentframe(), "Bangumi Video Download Var7")
         if c and not F:
             p=0 #0 第一个 1 avc 2 hev
             read=JSONParser.getset(se,'mpc')
@@ -2278,12 +2360,12 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if ns:
                 print(lan['OUTPUT15'])#视频轨：
                 print(f"{lan['OUTPUT9']}{vqd[0]}({dash['video']['width']}x{dash['video']['height']},{dash['video']['codecs']},{getfps(dash['video']['frame_rate'])})")#图质：
-            dash['video']['size']=streamgetlength(r2,dash['video']['base_url'])
+            dash['video']['size'] = streamgetlength(r2, dash['video']['base_url'], logg)
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(dash['video']['size'])}({dash['video']['size']}B,{file.cml(dash['video']['size'],re['data']['timelength'])})")#大小
                 print(lan['OUTPUT16'])#音频轨：
                 print('ID：%s'%(dash['audio']['id']))
-            dash['audio']['size']=streamgetlength(r2,dash['audio']['base_url'])
+            dash['audio']['size'] = streamgetlength(r2, dash['audio']['base_url'], logg)
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(dash['audio']['size'])}({dash['audio']['size']}B,{file.cml(dash['audio']['size'],re['data']['timelength'])})")#大小：
             vqs=[vqd[0]+","+dash['video']['codecs'],aaq[0]]
@@ -2294,7 +2376,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             for j in avq:
                 if ns or(not ns and F):
                     print(f"{k+1}.{lan['OUTPUT9']}{vqd[sea(j,avq2)]}({dash['video'][j]['width']}x{dash['video'][j]['height']},{sev(j)},{getfps(dash['video'][j]['frame_rate'])})")#画质：
-                dash['video'][j]['size']=streamgetlength(r2,dash['video'][j]['base_url'])
+                dash['video'][j]['size'] = streamgetlength(r2, dash['video'][j]['base_url'], logg)
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash['video'][j]['size'])}({dash['video'][j]['size']}B,{file.cml(dash['video'][j]['size'],re['data']['timelength'])})")#大小：
                 k=k+1
@@ -2326,7 +2408,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             for j in aaq:
                 if ns or(not ns and F):
                     print("%s.ID：%s"%(k+1,j))
-                dash['audio'][j]['size']=streamgetlength(r2,dash['audio'][j]['base_url'])
+                dash['audio'][j]['size'] = streamgetlength(r2, dash['audio'][j]['base_url'], logg)
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash['audio'][j]['size'])}({dash['audio'][j]['size']}B,{file.cml(dash['audio'][j]['size'],re['data']['timelength'])})")#大小：
                 k=k+1
@@ -2354,6 +2436,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             else :
                 dash['audio']=dash['audio'][aaq[0]]
                 vqs.append(aaq[0])
+        if log:
+            logg.write(f"vqs = {vqs}\ndash = {dash}", currentframe(), "Bangumi Video Download Var8")
         sv=True
         if JSONParser.getset(se,'sv')==False :
             sv=False
@@ -2382,6 +2466,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 ff=True
             else :
                 ff=False
+        if log:
+            logg.write(f"sv = {sv}\nfilen = {filen}\nhzm = {hzm}\nff = {ff}", currentframe(), "Bangumi Video Download Var9")
         if ff and os.path.exists(filen) and os.system('ffmpeg -h%s'%(getnul()))==0 :
             fg=False
             bs=True
@@ -2406,11 +2492,15 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 try :
                     os.remove('%s'%(filen))
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Bangumi Video Download Remove File Failed")
                     print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                     return 0
             else:
                 return 0
         durz=dash['video']['size']+dash['audio']['size']
+        if log:
+            logg.write(f"durz = {durz}", currentframe(), "Bangumi Video Download Var10")
         bs2=True
         while bs2:
             bs2=False
@@ -2422,6 +2512,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     ar=True
                 else :
                     ar=False
+            if log:
+                logg.write(f"ar = {ar}", currentframe(), "Bangumi Video Download Var11")
             if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                 ab=True
                 if JSONParser.getset(se,'ab')==False :
@@ -2431,16 +2523,24 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         ab=True
                     else :
                         ab=False
+                if log:
+                    logg.write(f"ab = {ab}", currentframe(), "Bangumi Video Download Var12")
                 if ab:
                     read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm,fin),geturll(dash['video']),dash['video']['size'],c3,ip,se,1,2,True)
                 else :
                     read=dwaria2(r2,getfn2(i,0,fdir,vqs,hzm,fin),dash['video']['base_url'],dash['video']['size'],c3,ip,se,1,2,True)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Var13")
                 if read==-3 :
                     print(lan['ERROR4'])#aria2c 参数错误
                     return -4
             else :
+                if log:
+                    logg.write(f"GET {dash['video']['base_url']}", currentframe(), "Bangumi Video Download File Download")
                 re=r2.get(dash['video']['base_url'],stream=True)
-                read=downloadstream(nte,ip,dash['video']['base_url'],r2,re,getfn2(i,0,fdir,vqs,hzm,fin),dash['video']['size'],c3,1,2,True,durz,0)
+                read=downloadstream(nte, ip, dash['video']['base_url'], r2, re, getfn2(i,0,fdir,vqs,hzm,fin), dash['video']['size'], c3, 1, 2, True, durz, 0)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Var14")
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -2486,6 +2586,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     ar=True
                 else :
                     ar=False
+            if log:
+                logg.write(f"ar = {ar}", currentframe(), "Bangumi Video Download Var15")
             if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                 ab=True
                 if JSONParser.getset(se,'ab')==False :
@@ -2495,16 +2597,24 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         ab=True
                     else :
                         ab=False
+                if log:
+                    logg.write(f"ab = {ab}", currentframe(), "Bangumi Video Download Var16")
                 if ab:
                     read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm,fin),geturll(dash['audio']),dash['audio']['size'],c3,ip,se,2,2,True)
                 else :
                     read=dwaria2(r2,getfn2(i,1,fdir,vqs,hzm,fin),dash['audio']['base_url'],dash['audio']['size'],c3,ip,se,2,2,True)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Var17")
                 if read==-3 :
                     print(lan['ERROR4'])#aria2c 参数错误
                     return -4
             else :
+                if log:
+                    logg.write(f"GET {dash['audio']['base_url']}", currentframe(), "Bangumi Video Download File Download2")
                 re=r2.get(dash['audio']['base_url'],stream=True)
                 read=downloadstream(nte,ip,dash['audio']['base_url'],r2,re,getfn2(i,1,fdir,vqs,hzm,fin),dash['audio']['size'],c3,2,2,True,durz,dash['video']['size'])
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Var18")
             if read==-1 :
                 return -1
             elif read==-2 :
@@ -2542,6 +2652,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         if not che:
             imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
             imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
+            if log:
+                logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Bangumi Video Download Var19")
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt = int(time.time())
@@ -2589,7 +2701,10 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"author={bstr.g(author)}\n")
                     te.write(f"uid={uid}\n")
                     te.write(f"purl={bstr.g(url2)}\n")
-                re = os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\" -map_metadata 2{imga} -c copy \"{filen}\"{nss}")
+                if log:
+                    with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{i['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Bangumi Video Download Metadata")
+                cm = f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\" -map_metadata 2{imga} -c copy \"{filen}\"{nss}"
             elif vf == "mp4":
                 le = 1
                 if 'sections' in data and len(data['sections']) > 1:
@@ -2626,7 +2741,15 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
                     te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])}{uid},SS{mediaInfo['ssId']}\\\n")
                     te.write(f"{bstr.g(url2)}\n")
-                re = os.system(f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 2 -c copy{imga2} \"{filen}\"{nss}")
+                if log:
+                    with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{i['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Bangumi Video Download Metadata2")
+                cm = f"ffmpeg -i \"{getfn2(i,0,fdir,vqs,hzm,fin)}\" -i \"{getfn2(i,1,fdir,vqs,hzm,fin)}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 2 -c copy{imga2} \"{filen}\"{nss}"
+            if log:
+                logg.write(f"cm = {cm}", currentframe(), "Bangumi Video Download FFmpeg Command Line")
+            re = os.system(cm)
+            if log:
+                logg.write(f"re = {re}", currentframe(), "Bangumi Video Download FFmpeg Return")
             de=False
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
@@ -2667,22 +2790,35 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         durl={vq:re["data"]['durl']}
         durz={}
         vqs=""
+        if log:
+            logg.write(f"vq = {vq}\nvqd = {vqd}\navq = {avq}\ndurl.keys() = {durl.keys()}", currentframe(), "Bangumi Video Download Var20")
         if not c or F:
             j=0
             for l in avq :
                 if not l in durl :
                     if not che :
                         r2.cookies.set('CURRENT_QUALITY',str(l),domain='.bilibili.com',path='/')
+                        if log:
+                            logg.write(f"Current request quality: {l}\nGET {url2}", currentframe(), "Bangumi Video Download Get Webpage3")
                         re=r2.get(url2)
                         re.encoding='utf8'
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Webpage3 Result")
                         rs=search('__playinfo__=([^<]+)',re.text)
                         if rs!=None:
                             re=json.loads(rs.groups()[0])
+                            if log:
+                                logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage3 Regex")
                         else :
                             return -2
                     else :
-                        re=r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+                        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                        if log:
+                            logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download  Get Playurl6")
+                        re=r2.get(uri)
                         re.encoding='utf8'
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl6 Result")
                         re=re.json()
                     durl[re["data"]['quality']]=re['data']['durl']
                 if ud['vip']<1 and (l>80 or l==74) :
@@ -2699,6 +2835,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 durz[l]=size
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(size)}({size}B,{file.cml(size,re['data']['timelength'])})")#大小：
+            if log:
+                logg.write(f"avq = {avq}\nvqd = {vqd}", currentframe(), "Bangumi Video Download Var21")
             r2.cookies.set('CURRENT_QUALITY','125',domain='.bilibili.com',path='/')
             if F:
                 return 0
@@ -2736,6 +2874,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(durz)}({durz}B,{file.cml(durz,re['data']['timelength'])})")#大小：
             durl=durl[vq]
+        if log:
+            logg.write(f"vqs = {vqs}\ndurl = {durl}", currentframe(), "Bangumi Video Download Var21")
         sv=True
         if JSONParser.getset(se,'sv')==False :
             sv=False
@@ -2768,6 +2908,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             ma=True
         if 'ma' in ip:
             ma=ip['ma']
+        if log:
+            logg.write(f"sv = {sv}\nfilen = {filen}\nff = {ff}\nma = {ma}", currentframe(), "Bangumi Video Download Var22")
         if ff and (len(durl)>1 or ma) and os.path.exists('%s.mkv'%(filen)) and os.system('ffmpeg -h%s'%(getnul()))==0 :
             fg=False
             bs=True
@@ -2792,6 +2934,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 try :
                     os.remove(f'{filen}.{vf}')
                 except :
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Bangumi Video Download Remove File Failed2")
                     print(lan['OUTPUT7'])
                     return 0
             else:
@@ -2815,6 +2959,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             ar=True
                         else :
                             ar=False
+                    if log:
+                        logg.write(f"fn = {fn}\nar = {ar}", currentframe(), "Bangumi Video Download Var23")
                     if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
@@ -2824,16 +2970,24 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                                 ab=True
                             else :
                                 ab=False
+                        if log:
+                            logg.write(f"ab = {ab}", currentframe(), "Bangumi Video Download Var24")
                         if ab :
                             read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se)
                         else :
                             read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se)
+                        if log:
+                            logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Video Download Return3")
                         if read==-3 :
                             print(f"{lan['ERROR4']}{lan['ERROR5']}")#aria2c 参数错误
                             return -4
                     else :
+                        if log:
+                            logg.write(f"GET {k['url']}", currentframe(), "Bangumi Video Download Video Download Request")
                         re=r2.get(k['url'],stream=True)
                         read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3)
+                        if log:
+                            logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Video Download Return4")
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -2881,6 +3035,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             ar=True
                         else :
                             ar=False
+                    if log:
+                        logg.write(f"fn = {fn}\nar = {ar}", currentframe(), "Bangumi Video Download Var25")
                     if os.system('aria2c -h%s'%(getnul()))==0 and ar :
                         ab=True
                         if JSONParser.getset(se,'ab')==False :
@@ -2890,16 +3046,24 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                                 ab=True
                             else :
                                 ab=False
+                        if log:
+                            logg.write(f"ab = {ab}", currentframe(), "Bangumi Video Download Var26")
                         if ab:
                             read=dwaria2(r2,fn,geturll(k),k['size'],c3,ip,se,j,len(durl),True)
                         else :
                             read=dwaria2(r2,fn,k['url'],k['size'],c3,ip,se,j,len(durl),True)
+                        if log:
+                            logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Video Download Return5")
                         if read==-3 :
                             print(f"{lan['ERROR4']}{lan['ERROR5']}")#aria2c 参数错误
                             return -4
                     else :
+                        if log:
+                            logg.write(f"GET {k['url']}", currentframe(), "Bangumi Video Download Video Download Request2")
                         re=r2.get(k['url'],stream=True)
                         read=downloadstream(nte,ip,k['url'],r2,re,fn,k['size'],c3,j,len(durl),True,durz,com)
+                        if log:
+                            logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Video Download Return6")
                     if read==-1 :
                         return -1
                     elif read==-2 :
@@ -2939,6 +3103,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         if not che:
             imgf = f"{file.spfn(filen + '.' + vf)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
             imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
+            if log:
+                logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Bangumi Video Download Var27")
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt=int(time.time())
@@ -2991,6 +3157,11 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"author={bstr.g(author)}\n")
                     te.write(f"uid={uid}\n")
                     te.write(f"purl={bstr.g(url2)}\n")
+                if log:
+                    with open(f"Temp/{i['id']}_{tt}.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"INPUT FILE 'Temp/{i['id']}_{tt}.txt'\n{te.read()}", currentframe(), "Bangumi Video Download Input File")
+                    with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{i['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Bangumi Video Download Metadata3")
                 ml=f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(i['id']))}_{tt}.txt\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\" -map_metadata 1{imga} -c copy \"{filen}.mkv\"{nss}"
             elif vf == "mkv":
                 mediaInfo = data['mediaInfo']
@@ -3025,6 +3196,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"author={bstr.g(author)}\n")
                     te.write(f"uid={uid}\n")
                     te.write(f"purl={bstr.g(url2)}\n")
+                if log:
+                    with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{i['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Bangumi Video Download Metadata4")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\" -map_metadata 1{imga} -c copy \"{filen}.mkv\"{nss}"
             elif len(durl) > 1:
                 te = open('Temp/%s_%s.txt' % (file.filtern('%s'%(i['id'])), tt), 'wt',encoding='utf8')
@@ -3068,6 +3242,11 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
                     te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\\\n")
                     te.write(f"{bstr.g(url2)}\n")
+                if log:
+                    with open(f"Temp/{i['id']}_{tt}.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"INPUT FILE 'Temp/{i['id']}_{tt}.txt'\n{te.read()}", currentframe(), "Bangumi Video Download Input File2")
+                    with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{i['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Bangumi Video Download Metadata5")
                 ml = f"ffmpeg -f concat -safe 0 -i \"Temp/{file.filtern('%s'%(i['id']))}_{tt}.txt\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}\"{nss}"
             else:
                 le = 1
@@ -3105,8 +3284,15 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
                     te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\\\n")
                     te.write(f"{bstr.g(url2)}\n")
+                if log:
+                    with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                        logg.write(f"METADATAFILE 'Temp/{i['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Bangumi Video Download Metadata6")
                 ml = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}\"{nss}"
+            if log:
+                logg.write(f"ml = {ml}", currentframe(), "Bangumi Video Download FFmpeg Command Line2")
             re=os.system(ml)
+            if log:
+                logg.write(f"re = {re}", currentframe(), "Bangumi Video Download FFmpeg Return2")
             if re==0:
                 print(lan['OUTPUT14'])#合并完成！
             de=False
@@ -3153,6 +3339,11 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
     -1 文件夹创建失败
     -2 封面文件下载失败
     -3 覆盖文件失败"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     ns=True
     if 's' in ip:
         ns=False
@@ -3162,17 +3353,25 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
         o=read
     if 'o' in ip:
         o=ip['o']
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'", currentframe(), "Bangumi Video Cover Download Var")
     try :
         if not os.path.exists(o) :
             mkdir(o)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Bangumi Video Cover Download Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>',o))#创建文件夹"<dirname>"失败。
         return -1
     fdir=f"{o}{file.filtern('%s(SS%s)'%(data['mediaInfo']['title'],data['mediaInfo']['ssId']))}"#SS文件夹
+    if log:
+        logg.write(f"fdir = {fdir}", currentframe(), "Bangumi Video Cover Download Var2")
     try :
         if not os.path.exists(fdir) :
             mkdir(fdir)
     except :
+        if log:
+            logg.write(format_exc(), currentframe(), "Bangumi Video Cover Download Mkdir Failed2")
         print(lan['ERROR1'].replace('<dirname>',fdir))#创建文件夹"<dirname>"失败。
         return -1
     fin=True
@@ -3182,8 +3381,14 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
         fin=ip['in']
     cf2=data['mediaInfo']['cover']
     fn2=f"{fdir}/cover.{file.geturlfe(cf2)}"
+    if log:
+        logg.write(f"fin = {fin}\ncf2 = {cf2}\nfn2 = {fn2}", currentframe(), "Bangumi Video Cover Download Var3")
     if not os.path.exists(fn2) :
+        if log:
+            logg.write(f"GET {cf2}", currentframe(), "Bangumi Video Cover Download Request")
         re=r.get(cf2)
+        if log:
+            logg.write(f"status = {re.status_code}", currentframe(), "Bangumi Video Cover Download Result")
         if re.status_code==200 :
             f=open(fn2,'wb')
             f.write(re.content)
@@ -3196,7 +3401,7 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
         if 'brief' in data :
             ii=1
             for uri in data['brief'] :
-                chepicdownload(uri,r,fdir,ii,ns)
+                chepicdownload(uri, r, fdir, ii, ns, logg)
                 ii=ii+1
         return 0
     cf=i['cover']
@@ -3205,6 +3410,8 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
             fn=f"{fdir}/{file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).%s'%(i['i']+1,i['longTitle'],i['titleFormat'],i['aid'],i['bvid'],i['id'],i['cid'],file.geturlfe(cf)))}"
         else :
             fn=f"{fdir}/{file.filtern('%s.%s.%s'%(i['i']+1,i['longTitle'],file.geturlfe(cf)))}"
+    if log:
+        logg.write(f"cf = {cf}\nfn = {fn}", currentframe(), "Bangumi Video Cover Download Var4")
     if os.path.exists(fn) :
         fg=False
         bs=True
@@ -3229,9 +3436,15 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
             try :
                 os.remove(fn)
             except :
+                if log:
+                    logg.write(format_exc(), currentframe(), "Bangumi Video Cover Download Remove File Failed")
                 print(lan['OUTPUT7'])#删除原有文件失败，跳过下载
                 return -3
+    if log:
+        logg.write(f"GET {cf}", currentframe(), "Bangumi Video Cover Download Request2")
     re=r.get(cf)
+    if log:
+        logg.write(f"status = {re.status_code}", currentframe(), "Bangumi Video Cover Download Result2")
     if re.status_code==200 :
         f=open(fn,'wb')
         f.write(re.content)
@@ -3254,6 +3467,11 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
     -6 缺少必要参数
     -7 不支持durl
     -8 不存在音频流"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
     che = False
     if 'che' in data:
         che = True
@@ -3276,10 +3494,14 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
         o = read
     if 'o' in ip:
         o = ip['o']
+    if log:
+        logg.write(f"che = {che}\nns = {ns}\nnte = {nte}\nbp = {bp}\no = '{o}'", currentframe(), "Bangumi Download Audio Only Var")
     try:
         if not os.path.exists(o):
             mkdir(o)
     except:
+        if log:
+            logg.write(format_exc(), currentframe(), "Bangumi Download Audio Only Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>', o))  # 创建%s文件夹失败
         return -5
     F = False  # 仅输出音频信息
@@ -3301,12 +3523,24 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
         fin = ip['in']
     if not os.path.exists('Temp/'):
         mkdir('Temp/')
+    if log:
+        logg.write(f"F = {F}\nfdir = {fdir}\nurl2 = {url2}\nfin = {fin}", currentframe(), "Bangumi Download Audio Only Var2")
+    try:
+        if not os.path.exists(fdir):
+            mkdir(fdir)
+    except:
+        if log:
+            logg.write(format_exc(), currentframe(), "Bangumi Download Audio Only Mkdir Failed2")
+        print(lan['ERROR1'].replace('<dirname>', fdir))  # 创建%s文件夹失败
+        return -5
     r2 = requests.Session()
     r2.headers = copydict(r.headers)
     if nte:
         r2.trust_env = False
     r2.proxies = r.proxies
-    read = JSONParser.loadcookie(r2)
+    read = JSONParser.loadcookie(r2, logg)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Bangumi Download Audio Only Var3")
     if read != 0:
         print(lan['ERROR2'])  # 读取cookies.json出现错误
         return -1
@@ -3317,15 +3551,26 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
     r2.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
     if not che:
         paok = False
+        if log:
+            logg.write(f"GET {url2}", currentframe(), "Bangumi Download Audio Only Get Webpage")
         re = r2.get(url2)
         re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Download Audio Only Get Webpage Result")
         rs = search(r'__playinfo__=([^<]+)', re.text)
         rs2 = search(r'__PGC_USERSTATE__=([^<]+)', re.text)
         if rs != None:
             re = json.loads(rs.groups()[0])
             paok = True
+            if log:
+                logg.write(f"re = {re}", currentframe(), "Bangumi Download Audio Only Webpage Regex")
         else:
-            re = r2.get(f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "Bangumi Download Audio Only Get Playurl")
+            re = r2.get(uri)
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Download Audio Only Get Playurl Result")
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
@@ -3334,6 +3579,8 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                 paok = True
         if not paok and rs2!=None:
             rs2 = json.loads(rs2.groups()[0])
+            if log:
+                logg.write(f"rs2 = {rs2}", currentframe(), "Bangumi Download Audio Only Webpage Regex2")
             if 'dialog' in rs2:
                 print(rs2['dialog']['title'])
             if rs2['area_limit']:
@@ -3342,8 +3589,13 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
         elif not paok:
             return -2
     else:
-        re = r2.get(f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session=")
+        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Purchased Courses' Download Audio Only Get Playurl")
+        re = r2.get(uri)
         re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Purchased Courses' Download Audio Only Get Playurl Result")
         re = re.json()
     if 'data' in re and 'durl' in re['data']:
         print(lan['NOT_SUP_DURL'])  # 不支持durl流
@@ -3358,12 +3610,14 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             dash[j['id']] = j
             accept_audio_quality.append(j['id'])
         accept_audio_quality.sort(reverse=True)
+        if log:
+            logg.write(f"accept_audio_quality = {accept_audio_quality}", currentframe(), "Bangumi Download Audio Only Var4")
         if c and not F:
             dash = dash[accept_audio_quality[0]]
             if ns:
                 print(lan['OUTPUT16'])  # 音频轨
                 print(f"ID:{dash['id']}")
-            dash['size'] = streamgetlength(r2, dash['base_url'])
+            dash['size'] = streamgetlength(r2, dash['base_url'], logg)
             if ns:
                 print(f"{lan['OUTPUT10']}{file.info.size(dash['size'])}({dash['size']}B,{file.cml(dash['size'], re['data']['timelength'])})")  # 大小：
             vqs = accept_audio_quality[0]
@@ -3374,7 +3628,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             for j in accept_audio_quality:
                 if ns or (not ns and F):
                     print(f"{k + 1}.ID:{j}")
-                dash[j]['size'] = streamgetlength(r2, dash[j]['base_url'])
+                dash[j]['size'] = streamgetlength(r2, dash[j]['base_url'], logg)
                 if ns or (not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash[j]['size'])}({dash[j]['size']}B,{file.cml(dash[j]['size'], re['data']['timelength'])})")  # 大小：
                 k = k + 1
@@ -3402,6 +3656,8 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             else:
                 dash = dash[accept_audio_quality[0]]
                 vqs = accept_audio_quality[0]
+        if log:
+            logg.write(f"vqs = {vqs}\ndash = {dash}", currentframe(), "Bangumi Download Audio Only Var5")
         sv = True
         if JSONParser.getset(se, 'sv') == False:
             sv = False
@@ -3429,6 +3685,8 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             ffmpeg = ip['yf']
         if ffmpeg and os.system(f'ffmpeg -h{getnul()}') != 0:
             ffmpeg = False
+        if log:
+            logg.write(f"sv = {sv}\nfilen = {filen}\nhzm = {hzm}\nffmpeg = {ffmpeg}", currentframe(), "Bangumi Download Audio Only Var6")
         if ffmpeg and os.path.exists(f"{filen}.m4a"):
             overwrite = False
             bs = True
@@ -3453,6 +3711,8 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                 try:
                     os.remove(f"{filen}.m4a")
                 except:
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Bangumi Download Audio Only Remove File Failed")
                     print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                     return 0
             else:
@@ -3465,12 +3725,16 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             aria2c = ip['ar']
         if aria2c and os.system(f'aria2c -h{getnul()}') != 0:
             aria2c = False
+        if log:
+            logg.write(f"aria2c = {aria2c}", currentframe(), "Bangumi Download Audio Only Var7")
         if aria2c:
             ab = True  # 是否使用备用地址
             if JSONParser.getset(se, 'ab') == False:
                 ab = False
             if 'ab' in ip:
                 ab = ip['ab']
+            if log:
+                logg.write(f"ab = {ab}", currentframe(), "Bangumi Download Audio Only Var8")
         while bs2:
             bs2 = False
             if aria2c:
@@ -3478,12 +3742,18 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                     read = dwaria2(r2, f"{filen}.{hzm}", geturll(dash), dash['size'], c3, ip, se)
                 else:
                     read = dwaria2(r2, f"{filen}.{hzm}", dash['base_url'], dash['size'], c3, ip, se)
+                if log:
+                    logg.write(f"read = {read}", currentframe() ,"Bangumi Download Audio Only Download File Return")
                 if read == -3:
                     print(lan['ERROR4'])  # aria2c 参数错误
                     return -4
             else:
+                if log:
+                    logg.write(f"GET {dash['base_url']}", currentframe(), "Bangumi Download Audio Only Download File")
                 re = r2.get(dash['base_url'], stream=True)
                 read = downloadstream(nte, ip, dash['base_url'], r2, re, f"{filen}.{hzm}", dash['size'], c3)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Bangumi Download Audio Only Download File Return2")
             if read == -1:
                 return -1
             elif read == -2:
@@ -3517,6 +3787,8 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
         if not che:
             imgf = f"{file.spfn(filen + '.m4a')[0]}.{file.geturlfe(i['cover'])}"
             imgs = eppicdownload(i, data, r, ip, se, imgf)
+            if log:
+                logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Bangumi Download Audio Only Var9")
         if ffmpeg:
             print(lan['CONV_M4S_TO_M4A'])
             tt = int(time.time())
@@ -3561,7 +3833,15 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                 te.write(f"date={bstr.g(mediaInfo['time'][:10])}\n")
                 te.write(f"description={bstr.g(vqs)}{uid},SS{mediaInfo['ssId']}\\\n")
                 te.write(f"{bstr.g(url2)}\n")
-            re = os.system(f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}.m4a\"{nss}")
+            if log:
+                with open(f"Temp/{i['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADATAFILE 'Temp/{i['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Bangumi Download Audio Only Metadata")
+            cm = f"ffmpeg -i \"{filen}.{hzm}\" -i \"Temp/{i['aid']}_{tt}_metadata.txt\"{imga} -map_metadata 1 -c copy{imga2} \"{filen}.m4a\"{nss}"
+            if log:
+                logg.write(f"cm = {cm}", currentframe(), "Bangumi Download Audio Only FFmpeg CommandLine")
+            re = os.system(cm)
+            if log:
+                logg.write(f"re = {re}", currentframe(), "Bangumi Download Audio Only FFmpeg Return")
             if re == 0:
                 print(lan['COM_CONV'])
                 delete = False
@@ -3593,10 +3873,16 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
     return 0
 
 
-def chepicdownload(url:str,r:requests.session,fdir:str,i:int,ns:bool) :
+def chepicdownload(url:str, r:requests.session, fdir:str, i:int, ns:bool, logg=None) :
     fn=f"{fdir}/des{i}.{file.geturlfe(url)}"
+    if logg is not None:
+        logg.write(f"fn = {fn}", currentframe(), "Purchased Courses' Cover Download Var")
     if not os.path.exists(fn) :
+        if logg is not None:
+            logg.write(f"GET {url}", currentframe(), "Purchased Courses' Cover Download Request")
         re=r.get(url)
+        if logg is not None:
+            logg.write(f"status = {re.status_code}", currentframe(), "Purchased Courses' Cover Download Result")
         if re.status_code==200 :
             f=open(fn,'wb')
             f.write(re.content)
@@ -3775,7 +4061,7 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
             re=r2.get(i['video_playurl'],stream=True)
             if log:
                 logg.write(f"status = {re.status_code}", currentframe(), "SMDOWNLOAD DOWNLOAD URL STATUS")
-            read = downloadstream(nte, ip, i['video_playurl'], r2, re, fn, fz, c, logg=logg)
+            read = downloadstream(nte, ip, i['video_playurl'], r2, re, fn, fz, c)
         if log:
             logg.write(f"read = {read}", currentframe(), "SMDOWNLOAD DOWNLOAD RESULT")
         if read==-1 :
@@ -4077,7 +4363,7 @@ def lrvideodownload(data,r,c,c3,se,ip):
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, logg=logg)
+                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3)
                     if log:
                         logg.write(f"read = {read}", currentframe(), "LIVE RRCORD VIDEO DOWNLOAD RETURN")
                     if read==-1 :
@@ -4151,7 +4437,7 @@ def lrvideodownload(data,r,c,c3,se,ip):
                             return -4
                     else :
                         re=r2.get(k['url'],stream=True)
-                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, j, len(durl), True, durz, com, logg=logg)
+                        read = downloadstream(nte, ip, k['url'], r2, re, fn, k['size'], c3, j, len(durl), True, durz, com)
                     if log:
                         logg.write(f"read = {read}", currentframe(), "LIVE RRCORD VIDEO DOWNLOAD RETURN 2")
                     if read==-1 :
@@ -4593,13 +4879,16 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
                 return -4
         else:
             re = r.get(url, stream=True)
-            read = downloadstream(nte, ip, url, r, re, filen, -1, False, logg=logg)
+            read = downloadstream(nte, ip, url, r, re, filen, -1, False)
             if log:
                 logg.write(f"read = {read}", currentframe(), "LIVE VIDEO NORMAL RETURN")
     return 0
 
 
-def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1, logg=None):
+def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):
+    logg = None
+    if 'logg' in ip:
+        logg = ip['logg']
     if d :
         print(lan['OUTPUT1'].replace('<i>',str(i)).replace('<count>',str(n)))#正在开始下载第<i>个文件，共<count>个文件
     else :
@@ -4627,7 +4916,9 @@ def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1
             r2.headers.update({'Range':'bytes=%s-%s'%(fsize,size-1)})
             if logg is not None:
                 logg.write(f"Update HTTP Header: Range: bytes={fsize}-{size-1}", currentframe(), "DOWNLOADSTREAM UPDATE HTTP HEADER")
-            read=JSONParser.loadcookie(r2)
+            read = JSONParser.loadcookie(r2, logg)
+            if logg is not None:
+                logg.write(f"read = {read}", currentframe(), "Downloadstream Load Cookies Return")
             if read!=0 :
                 print(lan['ERROR2'])#读取cookies.json出现错误
                 return -1

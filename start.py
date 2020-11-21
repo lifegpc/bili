@@ -1661,9 +1661,13 @@ def main(ip={}):
                 return -1
         if cho2==6:
             for i in cho:
-                videodownload.avsubdownload(i,s,data,section,se,ip,ud)
+                read = videodownload.avsubdownload(i, s, data, section, se, ip, ud)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Normal Video Download Subtitles Only Return")
         if cho2==7:
-            videodownload.avpicdownload(data,section,ip,se)
+            read = videodownload.avpicdownload(data, section, ip, se)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Normal Video Download Cover Only Return")
     if ss or ep :
         if ep :
             epl=lan['INPUT10']#，仅下载输入的ep号可输入b
@@ -1681,6 +1685,8 @@ def main(ip={}):
             rs=search(r'__PGC_USERSTATE__=([^<]+)',re.text)
             if rs!=None:
                 rs=rs.groups()[0]
+                if log:
+                    logg.write(f"rs = {rs}", currentframe(), "Normal Bangumi Data Regex")
                 pgc=json.loads(rs)
                 if 'progress' in pgc and pgc['progress']!=None :
                     if 'last_ep_id' in pgc['progress'] and pgc['progress']['last_ep_id']>-1:
@@ -1807,7 +1813,9 @@ def main(ip={}):
         if cho2==1 or cho2==4 :
             for i in cho:
                 read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc,ip,se)
-                if read==-1 or read==-4 :
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Bagumi Download Barrige Retrun")
+                if read == -1 or read == -4 or read == -2:
                     pass
                 elif read==0 :
                     print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
@@ -1816,8 +1824,12 @@ def main(ip={}):
         if cho2==2 or cho2==5 :
             for i in cho :
                 read=biliDanmu.DanmuGeta(i,data,section,'ss',xml,xmlc,ip,se,che)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Bangumi Download All Barrage Return")
                 if read==0 :
                     print(lan['OUTPUT10'].replace('<title>',i['titleFormat']))#<title>下载完成
+                elif read >= -3:
+                    pass
                 else :
                     return -1
         if (cho2>2 and cho2<6) or cho2 == 8:
@@ -1871,26 +1883,32 @@ def main(ip={}):
                         bs=False
                     elif inp[0].lower()=='n' :
                         bs=False
+            if log:
+                logg.write(f"cho3 = {cho3}\ncho5 = {cho5}", currentframe(), "Bangumi Video Download Para")
             if cho2 == 8:
                 for i in cho:
                     read = videodownload.epaudiodownload(i, f"https://www.bilibili.com/bangumi/play/ss{data['mediaInfo']['ssId']}", data, section, cho3, cho5, se, ip, ud)
             else:
                 for i in cho:
                     read = videodownload.epvideodownload(i, f"https://www.bilibili.com/bangumi/play/ss{data['mediaInfo']['ssId']}", data, section, cho3, cho5, se, ip, ud)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Bangumi Video Download Return")
             if read == -5 or read == -6:
                 return -1
         if cho2==7 :
             for i in cho:
-                videodownload.eppicdownload(i,data,section,ip,se)
+                read = videodownload.eppicdownload(i, data, section, ip, se)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Bangumi Video Cover Download Return")
     return 0
 if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
     if 'SHOW' in ip:
         PrintInfo.prc()
         exit()
-log = False
-if 'log' in se and se['log']:
-    log = True
+log = True
+if 'log' in se:
+    log = se['log']
 if 'log' in ip:
     log = ip['log']
 if log:
