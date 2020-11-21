@@ -19,6 +19,9 @@ import platform
 import ctypes
 dll=None
 lan={'en':'English','ja':'日本語','zh_CN':'中文（中国）'}
+syslan = None
+
+
 def getdict(sn:str,lan:str,sn2:str="bili") -> dict:
     """获取翻译词典
     sn 资源名称
@@ -65,10 +68,13 @@ def getsyslan(d:bool=False) :
     else :
         return "en" #非Windows系统默认英文
 def getlan(se:dict,ip:dict)-> str:
-    try:
-        l=getsyslan()
-    except :
-        l="en"
+    global syslan
+    if syslan is None:
+        try:
+            syslan = getsyslan()
+        except :
+            syslan = "en"
+    l = syslan
     if 'lan' in se:
         l=se['lan']
     if 'lan' in ip:
