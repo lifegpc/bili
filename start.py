@@ -1906,9 +1906,9 @@ if len(sys.argv)>1 :
     if 'SHOW' in ip:
         PrintInfo.prc()
         exit()
-log = False
-if 'log' in se and se['log']:
-    log = True
+log = True
+if 'log' in se:
+    log = se['log']
 if 'log' in ip:
     log = ip['log']
 if log:
