@@ -38,7 +38,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
 如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
 用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。  
-识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。
+~~识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。~~（接口已挂）
 ### JavaScript依赖库
 [jQuery](https://jquery.com/)  
 [js-sha256](https://github.com/emn178/js-sha256)  
