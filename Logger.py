@@ -120,6 +120,8 @@ class Logger:
             "9007D20E-3623-49D5-B70D-3538417517DC", "Have setup bili")
         self.__getsetupinfo(
             "5F2B56DE-6400-4AF2-944A-C740BC1A526B", "Have setup bili x86")
+        self.__getsetupinfo(
+            "B886A88E-C946-411B-A171-6EC7A1752626", "Have setup bili x64")
 
     def __getsetupinfo(self, key: str, out: str):
         if winreg:

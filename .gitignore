@@ -22,6 +22,7 @@ build/
 *.bat
 v.py
 python_x86/
+python_x64/
 # README.md Convert file
 node_modules/
 converttohtml.js
