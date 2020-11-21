@@ -116,23 +116,29 @@ class Logger:
     def __issetupbili(self):
         ue = exists('unins000.exe')
         self.__temstr.append(f'Unins000.exe exists: {ue}')
+        self.__getsetupinfo(
+            "9007D20E-3623-49D5-B70D-3538417517DC", "Have setup bili")
+        self.__getsetupinfo(
+            "5F2B56DE-6400-4AF2-944A-C740BC1A526B", "Have setup bili x86")
+
+    def __getsetupinfo(self, key: str, out: str):
         if winreg:
             localmach = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
             found = False
             try:
                 re = winreg.OpenKey(
-                    localmach, 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{9007D20E-3623-49D5-B70D-3538417517DC}_is1')
+                    localmach, 'SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{%s}_is1' % (key))
                 found = True
             except FileNotFoundError:
                 pass
             if not found:
                 try:
                     re = winreg.OpenKey(
-                        localmach, "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{9007D20E-3623-49D5-B70D-3538417517DC}_is1")
+                        localmach, "SOFTWARE\\WOW6432Node\\Microsoft\\Windows\\CurrentVersion\\Uninstall\\{%s}_is1" % (key))
                     found = True
                 except FileNotFoundError:
                     pass
-            self.__temstr.append(f'Have setup bili: {found}')
+            self.__temstr.append(f'{out}: {found}')
             if found:
                 i = 0
                 bs = True
