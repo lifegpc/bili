@@ -194,32 +194,32 @@ msgstr "GNU GPL3 LICENSEファイルが見つからない場合は、<http://www
 
 msgctxt "O44"
 msgid "AU number: "
-msgstr ""
+msgstr "AU 番号 :"
 
 msgctxt "O45"
 msgid "Duration: "
-msgstr ""
+msgstr "長さ: "
 
 msgctxt "O46"
 msgid "Author: "
-msgstr ""
+msgstr "作成者: "
 
 msgctxt "O47"
 msgid "Statistics :"
-msgstr ""
+msgstr "統計 :"
 
 msgctxt "O48"
 msgid "Played times: "
-msgstr ""
+msgstr "再生回数: "
 
 msgctxt "O49"
 msgid "Comment count: "
-msgstr ""
+msgstr "コメント数: "
 
 msgctxt "O50"
 msgid "Shared times: "
-msgstr ""
+msgstr "シェア数: "
 
 msgctxt "O51"
 msgid "Collected times: "
-msgstr ""
+msgstr "採集時間: "
