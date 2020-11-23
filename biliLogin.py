@@ -130,10 +130,14 @@ def login2(r: requests.Session, logg = None):
             if logg is not None and re['code'] != 0:
                 logg.write(dumps(re, ensure_ascii=False), currentframe(), "RETURN")
             if re['code']==0 :
-                for i in re['data']['cookie_info']['cookies'] :
-                    r.cookies.set(i['name'],i['value'],domain='.bilibili.com',path='/')
-                    sa.append({'name':i['name'],'value':i['value'],'domain':'.bilibili.com','path':'/'})
-                return sa
+                if 'cookie_info' in re['data'] and 'cookies' in re['data']['cookie_info']:
+                    for i in re['data']['cookie_info']['cookies'] :
+                        r.cookies.set(i['name'],i['value'],domain='.bilibili.com',path='/')
+                        sa.append({'name':i['name'],'value':i['value'],'domain':'.bilibili.com','path':'/'})
+                    return sa
+                if logg is not None:
+                    logg.write(f"re['data'].keys() = {re['data'].keys()}", currentframe, "Login info keys")
+                return -1
             elif re['code']==-105 :
                 if logg is not None:
                     logg.write("GET https://passport.bilibili.com/captcha", currentframe(), "GETCAPTCHA")
