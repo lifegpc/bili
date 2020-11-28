@@ -199,9 +199,10 @@ def printliveInfo(d: dict):
 
 def printAuInfo(d: dict):
 	print(f"{lan['O44']}{d['id']}")  # AU号
-	print(f"{lan['O1']}{d['aid']}")
-	print(f"{lan['O2']}{d['bvid']}")
-	print(f"CID: {d['cid']}")
+	if d['aid'] != 0:
+		print(f"{lan['O1']}{d['aid']}")
+		print(f"{lan['O2']}{d['bvid']}")
+		print(f"CID: {d['cid']}")
 	print(f"{lan['O4']}{d['title']}")
 	print(f"{lan['O5']}{tostr2(d['passtime'])}")
 	print(f"{lan['O7']}{d['intro']}")

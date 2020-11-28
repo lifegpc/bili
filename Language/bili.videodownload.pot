@@ -262,3 +262,19 @@ msgstr ""
 msgctxt "真彩 HDR"
 msgid "HDR"
 msgstr ""
+
+msgctxt "AUDOMULQ"
+msgid "This audio has multiple audio qualities but this program not support it. You can continue to download with default audio quality."
+msgstr ""
+
+msgctxt "USEFROMV"
+msgid "Found associated video, try to get audio play url from video page."
+msgstr ""
+
+msgctxt "ADDMETA"
+msgid "Use ffmpeg to add metadata to the m4a file."
+msgstr ""
+
+msgctxt "ADDMECOM"
+msgid "Add completed."
+msgstr ""

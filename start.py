@@ -1272,7 +1272,7 @@ def main(ip={}):
             print(lan['ERROR10'])  # 读取cookies.json出现错误
             return -1
         r.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
-        r.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
+        r.cookies.set('CURRENT_FNVAL', '80', domain='.bilibili.com', path='/')
         r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
         r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
         uri = f"https://live.bilibili.com/{roomid}"
@@ -1394,7 +1394,7 @@ def main(ip={}):
             return -1
         r.headers.update({'referer': f'https://www.bilibili.com/audio/au{auid}'})
         r.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
-        r.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
+        r.cookies.set('CURRENT_FNVAL', '80', domain='.bilibili.com', path='/')
         r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
         r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
         uri = f"https://www.bilibili.com/audio/music-service-c/web/song/info?sid={auid}"
@@ -1425,9 +1425,63 @@ def main(ip={}):
             sd['tags'].append(i['info'])
         if ns:
             PrintInfo.printAuInfo(sd)
-        read = videodownload.audownload(sd, r, se, ip)
-        if log:
-            logg.write(f"read = {read}", currentframe(), "Audio Download Audio Return")
+        cho = 1
+        if cho == 1:
+            bs=True
+            cho3=False
+            if not ns:
+                bs=False
+            read=JSONParser.getset(se,'mp')
+            if read==True :
+                bs=False
+                cho3=True
+            elif read==False :
+                bs=False
+            if 'm' in ip :
+                if ip['m'] :
+                    bs=False
+                    cho3=True
+                else :
+                    bs=False
+                    cho3=False
+            while bs :
+                inp=input(f'{lan["INPUT8"]}(y/n)')#是否要默认下载最高画质（这样将不会询问具体画质）？
+                if len(inp) > 0:
+                    if inp[0].lower()=='y' :
+                        cho3=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            cho5=False
+            bs=True
+            if not ns:
+                bs=False
+            read=JSONParser.getset(se,'cd')
+            if read==True :
+                bs=False
+                cho5=True
+            elif read==False:
+                bs=False
+            if 'ac' in ip :
+                if ip['ac'] :
+                    bs=False
+                    cho5=True
+                else :
+                    bs=False
+                    cho5=False
+            while bs:
+                inp=input(f'{lan["INPUT2"]}(y/n)')
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        cho5=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            if log:
+                logg.write(f"cho3 = {cho3}\ncho5 = {cho5}", currentframe(), "Normal Video Download Video/Audio Para")
+            read = videodownload.audownload(sd, r, se, ip, cho3, cho5)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Audio Download Audio Return")
         return 0
     if not che:
         if log:

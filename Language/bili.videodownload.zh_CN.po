@@ -281,3 +281,21 @@ msgstr "转换完成！"
 msgctxt "真彩 HDR"
 msgid "HDR"
 msgstr "真彩 HDR"
+
+msgctxt "AUDOMULQ"
+msgid ""
+"This audio has multiple audio qualities but this program not support it. You"
+" can continue to download with default audio quality."
+msgstr "该音频有多种音质但程序不支持选择。你可以继续下载默认音质。"
+
+msgctxt "USEFROMV"
+msgid "Found associated video, try to get audio play url from video page."
+msgstr "找到相关联的视频，尝试从视频页面解析音频地址。"
+
+msgctxt "ADDMETA"
+msgid "Use ffmpeg to add metadata to the m4a file."
+msgstr "正在使用ffmpeg将元数据添加到m4a文件。"
+
+msgctxt "ADDMECOM"
+msgid "Add completed."
+msgstr "添加完成。"
