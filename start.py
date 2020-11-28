@@ -1405,7 +1405,10 @@ def main(ip={}):
         if log:
             logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Get Info Result")
         re = re.json()
-        if re['code'] != 0:
+        if re['code'] == 72010027:
+            print(lan['AUAPPERR'])  # 该音频只能在APP上播放。（该程序目前不支持。）
+            return 0
+        elif re['code'] != 0:
             print(f"{re['code']} {re['msg']}")
             return 0
         sd = re['data']

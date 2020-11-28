@@ -182,3 +182,7 @@ msgstr ""
 msgctxt "AUINPUT"
 msgid "Please input the number before \".\" to choose download method:\n1.download audio\n2.download lyrics only\n3.download cover image only"
 msgstr ""
+
+msgctxt "AUAPPERR"
+msgid "This audio can only be played on the APP. (This program do not support it now.)"
+msgstr ""
