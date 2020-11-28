@@ -200,7 +200,7 @@ def asass(fn: str, b: dict, width: int, height: int, logg=None):
     return 0
 
 
-def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: bool=False, pi: int=1, nal: bool=False):
+def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict, pr: bool=False, pi: int=1, nal: bool=False, isau: bool=False):
     log = False
     logg = None
     if 'logg' in ip:
@@ -250,12 +250,15 @@ def downlrc(r: Session, fn: str, i: dict, ip: dict, se: dict, data: dict,pr: boo
     if log:
         logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Download Lyrics JSON Result")
     re = re.json()
-    if aslrc(fn, re['body'], se, ip, data, pi) == 0 and pr:
-        print(lan['OUTPUT3'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>歌词下载完毕！
+    if aslrc(fn, re['body'], se, ip, data, pi, isau) == 0 and pr:
+        if not isau:
+            print(lan['OUTPUT3'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>歌词下载完毕！
+        else:
+            print(lan['AULRCCOM'].replace('<languagename>', i['land']))
     return 0
 
 
-def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int):
+def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int, isau: bool):
     log = False
     logg = None
     if 'logg' in ip:
@@ -277,12 +280,16 @@ def aslrc(fn: str, b: list, se: dict, ip: dict, data: dict, pi: int):
     if log:
         logg.write(f"lmd = {lmd}", currentframe(), "Convert To Lyrics Var")
     f.write("[re:Made by bili. https://github.com/lifegpc/bili]\n")
-    tit = data['page'][pi - 1]['part']
-    if tit == "":
-        tit = data['title']
-    f.write(f"[ti:{lg(tit)}]\n")
-    f.write(f"[ar:{lg(data['name'])}]\n")
-    f.write(f"[al:{lg(data['title'])}]\n")
+    if not isau:
+        tit = data['page'][pi - 1]['part']
+        if tit == "":
+            tit = data['title']
+        f.write(f"[ti:{lg(tit)}]\n")
+        f.write(f"[ar:{lg(data['name'])}]\n")
+        f.write(f"[al:{lg(data['title'])}]\n")
+    else:
+        f.write(f"[ti:{lg(data['title'])}]\n")
+        f.write(f"[ar:{lg(data['author'])}]\n")
     et = -1
     for k in b:
         if et != -1 and comlrct(et, k['from']) == -1:

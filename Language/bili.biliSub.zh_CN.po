@@ -42,3 +42,7 @@ msgstr "写入到文件\"<filename>\"时失败！"
 msgctxt "OUTPUT3"
 msgid "<languagename> lyrics for part <number> download complete."
 msgstr "第<number>P<languagename>歌词下载完毕！"
+
+msgctxt "AULRCCOM"
+msgid "<languagename> lyric download completed."
+msgstr "<languagename>歌词下载完成。"

@@ -122,6 +122,7 @@ def main(ip={}):
     che=False #B站课程
     chel=False #B站课程已购列表
     live = False  # 直播
+    au = False  # 音频区音乐
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
@@ -132,6 +133,7 @@ def main(ip={}):
     rid="" #直播回放id
     ssid=-1 #B站课程SS号
     epid=-1 #B站课程EP号
+    auid = -1  # AU号
     roomid = -1  # 直播房间ID
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
@@ -159,15 +161,20 @@ def main(ip={}):
         mid=int(inp[2:])
         if log and not logg.hasf():
             logg.openf(f"log/MD{inp}_{round(time())}.log")
+    elif inp[0:2].lower() == "au" and inp[2:].isnumeric():
+        au = True
+        auid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/AU{auid}_{round(time())}.log")
     elif inp.isnumeric() :
         s="https://www.bilibili.com/video/av"+inp
         av=True
         if log and not logg.hasf():
             logg.openf(f"log/AV{inp}_{round(time())}.log")
     else :
-        re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?',inp,I)
+        re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?',inp,I)
         if re==None :
-            re=search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?',inp,I)
+            re=search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?',inp,I)
             if re==None :
                 re=search(r"[^:]+://",inp)
                 if re==None :
@@ -208,6 +215,11 @@ def main(ip={}):
                     ep=True
                     if log and not logg.hasf():
                         logg.openf(f"log/EP{inp}_{round(time())}.log")
+                elif re[7]:
+                    au = True
+                    auid = int(re[8])
+                    if log and not logg.hasf():
+                        logg.openf(f"log/AU{auid}_{round(time())}.log")
                 else :
                     re=search(r"[^:]+://",inp)
                     if re==None :
@@ -345,6 +357,11 @@ def main(ip={}):
                 roomid = int(re[41])
                 if log and not logg.hasf():
                     logg.openf(f"log/LIVEROOM{roomid}_{round(time())}.log")
+            elif re[42]:
+                au = True
+                auid = int(re[43])
+                if log and not logg.hasf():
+                    logg.openf(f"log/AU{auid}_{round(time())}.log")
             else :
                 print(f'{lan["ERROR2"]}')
                 return -1
@@ -1260,7 +1277,7 @@ def main(ip={}):
             print(lan['ERROR10'])  # 读取cookies.json出现错误
             return -1
         r.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
-        r.cookies.set('CURRENT_FNVAL', '16', domain='.bilibili.com', path='/')
+        r.cookies.set('CURRENT_FNVAL', '80', domain='.bilibili.com', path='/')
         r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
         r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
         uri = f"https://live.bilibili.com/{roomid}"
@@ -1366,6 +1383,139 @@ def main(ip={}):
             if log:
                 logg.write(f"read = {read}", currentframe(), "LIVE VIDEO RETURN 2")
             if read != 0:
+                return -1
+        return 0
+    if au:
+        r = requests.Session()
+        r.headers = copydict(section.headers)
+        r.proxies = section.proxies
+        if nte:
+            r.trust_env = False
+        read = JSONParser.loadcookie(r, logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "Audio Load Cookies Failed")
+        if read != 0:
+            print(lan['ERROR10'])  # 读取cookies.json出现错误
+            return -1
+        r.headers.update({'referer': f'https://www.bilibili.com/audio/au{auid}'})
+        r.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
+        r.cookies.set('CURRENT_FNVAL', '80', domain='.bilibili.com', path='/')
+        r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
+        r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
+        uri = f"https://www.bilibili.com/audio/music-service-c/web/song/info?sid={auid}"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Audio Get Info")
+        re = r.get(uri)
+        re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Get Info Result")
+        re = re.json()
+        if re['code'] == 72010027:
+            print(lan['AUAPPERR'])  # 该音频只能在APP上播放。（该程序目前不支持。）
+            return 0
+        elif re['code'] != 0:
+            print(f"{re['code']} {re['msg']}")
+            return 0
+        sd = re['data']
+        uri = f"https://www.bilibili.com/audio/music-service-c/web/tag/song?sid={auid}"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Audio Get Tags Info")
+        re = r.get(uri)
+        re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Get Tags Info Result")
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']} {re['msg']}")
+            return 0
+        sd['tags'] = []
+        for i in re['data']:
+            sd['tags'].append(i['info'])
+        if ns:
+            PrintInfo.printAuInfo(sd)
+        cho = 1
+        bs = True
+        if 'd' in ip:
+            bs = False
+            cho = ip['d']
+            if cho < 1 or cho > 3:
+                cho = 1
+                bs = True
+        while bs:
+            if not ns:
+                print(lan['ERROR11'])  # 请使用-d <method>选择下载方式
+                return -1
+            inp = input(lan['AUINPUT'])
+            if inp[0].isnumeric() and int(inp[0]) > 0 and int(inp[0]) < 4:
+                cho = int(inp[0])
+                bs = False
+        if cho == 1:
+            bs=True
+            cho3=False
+            if not ns:
+                bs=False
+            read=JSONParser.getset(se,'mp')
+            if read==True :
+                bs=False
+                cho3=True
+            elif read==False :
+                bs=False
+            if 'm' in ip :
+                if ip['m'] :
+                    bs=False
+                    cho3=True
+                else :
+                    bs=False
+                    cho3=False
+            while bs :
+                inp=input(f'{lan["INPUT8"]}(y/n)')#是否要默认下载最高画质（这样将不会询问具体画质）？
+                if len(inp) > 0:
+                    if inp[0].lower()=='y' :
+                        cho3=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            cho5=False
+            bs=True
+            if not ns:
+                bs=False
+            read=JSONParser.getset(se,'cd')
+            if read==True :
+                bs=False
+                cho5=True
+            elif read==False:
+                bs=False
+            if 'ac' in ip :
+                if ip['ac'] :
+                    bs=False
+                    cho5=True
+                else :
+                    bs=False
+                    cho5=False
+            while bs:
+                inp=input(f'{lan["INPUT2"]}(y/n)')
+                if len(inp)>0 :
+                    if inp[0].lower()=='y' :
+                        cho5=True
+                        bs=False
+                    elif inp[0].lower()=='n' :
+                        bs=False
+            if log:
+                logg.write(f"cho3 = {cho3}\ncho5 = {cho5}", currentframe(), "Normal Video Download Video/Audio Para")
+            read = videodownload.audownload(sd, r, se, ip, cho3, cho5)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Audio Download Audio Return")
+        elif cho == 2:
+            read = videodownload.aulrcdownload(sd, r, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Audio Download Lyrics Retrun")
+            if read == -1 or read == -4:
+                return -1
+        elif cho == 3:
+            read = videodownload.aupicdownload(sd, r, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Audio Download Cover Image Retrun")
+            if read == -1:
                 return -1
         return 0
     if not che:

@@ -188,7 +188,7 @@ if __name__=='__main__' :
     r=gk(se,'sv')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'sv',se)
-    print(f"{la['INPUT19']}{la['NTN']}")#是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）？（不设置情况下为否）
+    print(f"{la['INPUT19']}{la['NTY']}")#是否强制增加视频元数据（这会导致原本不需要转码的视频被转码，转码不会影响画质）？（不设置情况下为是）
     r=gk(se,'ma')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}',r)
     sk(ne,'ma',se)
@@ -318,4 +318,12 @@ if __name__=='__main__' :
     r = gk(se, 'log')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'log', se)
+    print(f"{la['INPUT42']}{la['NTY']}")
+    r = gk(se, 'auf')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'auf', se)
+    print(f"{la['INPUT43']}{la['NTN']}")
+    r = gk(se, 'dwa')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'dwa', se)
     saveset(ne)

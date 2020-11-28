@@ -177,7 +177,7 @@ $if fontname is not None:
         <input class="form nty check" type="checkbox" id="sv"$:getch('sv')>
         <label class="trans" trans="webui.settings MAINSV">在文件名中输出视频画质信息。</label>
         <br/>
-        <input class="form ntn check" type="checkbox" id="ma"$:getch('ma')>
+        <input class="form nty check" type="checkbox" id="ma"$:getch('ma')>
         <label class="trans" trans="webui.settings MAINMA">强制增加视频元数据。（这会使视频被转码，转码不会影响画质）</label>
         <br/>
         <label class="trans" trans="bili.command O28">在使用aria2c时最大总体速度(B/s)（0代表无限制，可以使用K和M为单位（1K=1024，1M=1024K））</label>
@@ -246,6 +246,12 @@ $if fontname is not None:
         <br/>
         <input class="form nty check" type="checkbox" id="log"$:getch('log')>
         <label class="trans" trans="bili.command O81">启用将日志写入文件。</label>
+        <br/>
+        <input class="form nty check" type="checkbox" id="auf"$:getch('auf')>
+        <label class="trans" trans="bili.command O83">在下载AU号音频歌词时启用标准化歌词。</label>
+        <br/>
+        <input class="form ntn check" type="checkbox" id="dwa"$:getch('dwa')>
+        <label class="trans" trans="bili.command O85">当下载所有弹幕时，忽略当前弹幕数量远远少于限制的警告。</label>
         <br/>
         <label class="trans" trans="webui.settings MAINPS">注：这里的设置保存后将覆盖原有的settings.json。</label>
     </form>

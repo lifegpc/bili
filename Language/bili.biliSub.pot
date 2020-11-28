@@ -38,3 +38,7 @@ msgstr ""
 msgctxt "OUTPUT3"
 msgid "<languagename> lyrics for part <number> download complete."
 msgstr ""
+
+msgctxt "AULRCCOM"
+msgid "<languagename> lyric download completed."
+msgstr ""
