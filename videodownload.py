@@ -5214,7 +5214,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         if log:
             logg.write(f"re = {re}", currentframe(), "Normal Audio Download Ffmpeg Return")
         if re == 0:
-            if hzm == "mp4":
+            if hzm == "m4s":
                 print(lan['COM_CONV'])
             else:
                 print(lan['ADDMECOM'])
