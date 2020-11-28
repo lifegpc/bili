@@ -354,3 +354,11 @@ msgstr ""
 msgctxt "O84"
 msgid "Disable standardize lyrics when downloading AU number's lyrics."
 msgstr ""
+
+msgctxt "O85"
+msgid "When downloading all barrages, ignore warning that current barrage's count is much less than the limitation."
+msgstr ""
+
+msgctxt "O86"
+msgid "When downloading all barrages, do not ignore warning that current barrage's count is much less than the limitation."
+msgstr ""

@@ -401,8 +401,13 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
             o = f"{o}{file.filtern(data['title'])}/"
         else:
             o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+    dwa = False
+    if getset(se, 'dwa') == True:
+        dwa = True
+    if 'dwa' in ip:
+        dwa = ip['dwa']
     if log:
-        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "All Barrage Para")
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}\ndwa = {dwa}", currentframe(), "All Barrage Para")
     try :
         if not exists(o) :
             mkdir(o)
@@ -523,7 +528,7 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
         if log:
             logg.write(f"ma = {ma}", currentframe(), "Normal Video All Barrage Var4")
         allok=False
-        if len(d3['list'])<ma-10 :
+        if not dwa and len(d3['list']) < ma - 10:
             bs=True
             if not ns:
                 bs=False
@@ -957,7 +962,7 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
         if log:
             logg.write(f"ma = {ma}", currentframe(), "Bangumi Video All Barrage Var4")
         allok=False
-        if len(d3['list'])<ma-10 :
+        if not dwa and len(d3['list']) < ma - 10:
             bs=True
             if not ns:
                 bs=False
