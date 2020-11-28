@@ -5405,12 +5405,12 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
                 bs = False
             while bs:
                 inp = input(f"{lan['INPUT1'].replace('<filename>', tfn)}(y/n)")  # "%s"文件已存在，是否覆盖？
-            if len(inp) > 0:
-                if inp[0].lower() == 'y':
-                    overwrite = True
-                    bs = False
-                elif inp[0].lower() == 'n':
-                    bs = False
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        overwrite = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
             if overwrite:
                 try:
                     os.remove(tfn)

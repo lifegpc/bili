@@ -178,3 +178,7 @@ msgstr ""
 msgctxt "SPERROR"
 msgid "Please open \"<url>\" in a browser and pass the captcha."
 msgstr ""
+
+msgctxt "AUINPUT"
+msgid "Please input the number before \".\" to choose download method:\n1.download audio\n2.download lyrics only\n3.download cover image only"
+msgstr ""

@@ -258,3 +258,11 @@ msgstr "ライブが開始されていません。30秒後にライブの状態�
 msgctxt "SPERROR"
 msgid "Please open \"<url>\" in a browser and pass the captcha."
 msgstr "ブラウザで \"<url>\" を開いてパスをキャプチャしてください。"
+
+msgctxt "AUINPUT"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download audio\n"
+"2.download lyrics only\n"
+"3.download cover image only"
+msgstr ""

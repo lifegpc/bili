@@ -1426,6 +1426,21 @@ def main(ip={}):
         if ns:
             PrintInfo.printAuInfo(sd)
         cho = 1
+        bs = True
+        if 'd' in ip:
+            bs = False
+            cho = ip['d']
+            if cho < 1 or cho > 3:
+                cho = 1
+                bs = True
+        while bs:
+            if not ns:
+                print(lan['ERROR11'])  # 请使用-d <method>选择下载方式
+                return -1
+            inp = input(lan['AUINPUT'])
+            if inp[0].isnumeric() and int(inp[0]) > 0 and int(inp[0]) < 4:
+                cho = int(inp[0])
+                bs = False
         if cho == 1:
             bs=True
             cho3=False
@@ -1482,6 +1497,18 @@ def main(ip={}):
             read = videodownload.audownload(sd, r, se, ip, cho3, cho5)
             if log:
                 logg.write(f"read = {read}", currentframe(), "Audio Download Audio Return")
+        elif cho == 2:
+            read = videodownload.aulrcdownload(sd, r, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Audio Download Lyrics Retrun")
+            if read == -1 or read == -4:
+                return -1
+        elif cho == 3:
+            read = videodownload.aupicdownload(sd, r, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Audio Download Cover Image Retrun")
+            if read == -1:
+                return -1
         return 0
     if not che:
         if log:
