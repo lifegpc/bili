@@ -423,3 +423,11 @@ msgstr "启用将日志写入文件。"
 msgctxt "O82"
 msgid "Disable logging to file."
 msgstr "禁用将日志写入文件。"
+
+msgctxt "O83"
+msgid "Enable standardize lyrics when downloading AU number's lyrics."
+msgstr "在下载AU号音频歌词时启用标准化歌词。"
+
+msgctxt "O84"
+msgid "Disable standardize lyrics when downloading AU number's lyrics."
+msgstr "在下载AU号音频歌词时禁用标准化歌词。"

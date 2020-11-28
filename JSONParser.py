@@ -179,6 +179,7 @@ def getDefalutSettings():
     t['in'] = True
     t['log'] = True
     t['ma'] = True
+    t['auf'] = True
     return t
 
 

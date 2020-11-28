@@ -34,6 +34,7 @@ import sys
 import JSONParser2
 from inspect import currentframe
 from traceback import format_exc
+from biliLRC import filterLRC
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -5370,8 +5371,13 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
         nte = True
     if 'te' in ip:
         nte = not ip['te']
+    auf = True  # 是否标准化LRC
+    if JSONParser.getset(se, 'auf') == False:
+        auf = False
+    if 'auf' in ip:
+        auf = ip['auf']
     if log:
-        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\nnte = {nte}", currentframe(), "Normal Audio Download Lrc Para")
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\nnte = {nte}\nauf = {auf}", currentframe(), "Normal Audio Download Lrc Para")
     try:
         if not os.path.exists(o):
             mkdir(o)
@@ -5427,7 +5433,13 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
             logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Audio Download Lrc Request Result")
         if re.status_code == 200:
             with open(tfn, 'w', encoding='utf8') as f:
-                f.write(re.text)
+                if auf:
+                    res, read = filterLRC(re.text)
+                    if read > 0:
+                        print(lan['FILLRC'].replace('<count>', str(read)))
+                    f.write(res)
+                else:
+                    f.write(re.text)
             if ns:
                 print(lan['LRCCOM'].replace('<filename>', tfn))  # 歌词下载完成
         else:
