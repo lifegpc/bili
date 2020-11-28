@@ -1554,7 +1554,7 @@ def avsubdownload(i,url,data,r,se,ip,ud) :
     r2.cookies.set('CURRENT_FNVAL','80',domain='.bilibili.com',path='/')
     r2.cookies.set('laboratory','1-1',domain='.bilibili.com',path='/')
     r2.cookies.set('stardustvideo','1',domain='.bilibili.com',path='/')
-    uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][i-1]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r.cookies.get('buvid3')}"
+    uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['page'][i-1]['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r2.cookies.get('buvid3')}"
     if log:
         logg.write(f"GET {uri}", currentframe(), "Normal Video Download Subtitles Get Player.so")
     rr = r2.get(uri)
@@ -5244,6 +5244,9 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 if imgs == 0 and not bp:
                     os.remove(imgf)
         os.remove(f"Temp/AU{data['id']}_{tt}_metadata.txt")
+    read = aulrcdownload(data, r, se, ip, filen)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Normal Audio Download Lrc Down Return")
     return 0
 
 
@@ -5316,7 +5319,7 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
                 os.remove(fn)
             except:
                 if log:
-                    logg.write(format_exc(), currentframe(), "Normal Video Download Pic Remove File Failed")
+                    logg.write(format_exc(), currentframe(), "Normal Aideo Download Pic Remove File Failed")
                 print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                 return -3
     if log:
@@ -5333,6 +5336,134 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
     else:
         print(f"{lan['OUTPUT24']}HTTP {re.status_code}")  # 下载封面图片时发生错误：
         return -2
+
+
+def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=None):
+    """下载AU号歌词
+    fn 指定文件名
+    -1 新建文件夹失败
+    -2 歌词下载失败
+    -3 删除文件失败
+    -4 读取cookies.json错误"""
+    log = False
+    logg = None
+    if 'logg' in ip:
+        log = True
+        logg = ip['logg']
+    ns = True
+    if 's' in ip:
+        ns = False
+    o = 'Download/'
+    read = JSONParser.getset(se, 'o')
+    if read is not None:
+        o = read
+    if 'o' in ip:
+        o = ip['o']
+    fin = True
+    if JSONParser.getset(se, 'in') == False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    nte = True
+    if JSONParser.getset(se, 'te') == False:
+        nte = True
+    if 'te' in ip:
+        nte = not ip['te']
+    if log:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\nnte = {nte}", currentframe(), "Normal Audio Download Lrc Para")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if log:
+            logg.write(format_exc(), currentframe(), "Normal Audio Download Pic Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
+        return -1
+    if fn is None:
+        avi = "" if data['aid'] == 0 else f",AV{data['aid']},{data['bvid']},{data['cid']}"
+        if fin:
+            te = file.filtern(f"{data['title']}(AU{data['id']}{avi})")
+        else:
+            te = file.filtern(f"{data['title']}")
+        fn = f"{o}{te}"
+    if log:
+        logg.write(f"fn = {fn}", currentframe(), "Normal Audio Download Lrc Var")
+    if 'lyric' in data and data['lyric'] != "":
+        tfn = f"{fn}.{file.geturlfe(data['lyric'])}"
+        if os.path.exists(tfn):
+            overwrite = False
+            bs = True
+            if not ns:
+                overwrite = True
+                bs = False
+            if 'y' in se:
+                overwrite = se['y']
+                bs = False
+            if 'y' in ip:
+                overwrite = ip['y']
+                bs = False
+            while bs:
+                inp = input(f"{lan['INPUT1'].replace('<filename>', tfn)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    overwrite = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+            if overwrite:
+                try:
+                    os.remove(tfn)
+                except:
+                    if log:
+                        logg.write(format_exc(), currentframe(), "Normal Aideo Download Lrc Remove File Failed")
+                    print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                    return -3
+        if log:
+            logg.write(f"GET {data['lyric']}", currentframe(), "Normal Audio Download Lrc Request")
+        re = r.get(data['lyric'])
+        re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Audio Download Lrc Request Result")
+        if re.status_code == 200:
+            with open(tfn, 'w', encoding='utf8') as f:
+                f.write(re.text)
+            if ns:
+                print(lan['LRCCOM'].replace('<filename>', tfn))  # 歌词下载完成
+        else:
+            print(f"{lan['LRCERR']}HTTP {re.status_code}")
+            return -2
+    if data['aid'] != 0:
+        if ns:
+            print(lan['USEFROMV2'])  # 发现管理的视频
+        url = f"https://www.bilibili.com/video/av{data['aid']}"
+        r2 = requests.Session()
+        r2.headers.update({'referer': url})
+        if nte:
+            r2.trust_env = False
+        r2.proxies = r.proxies
+        read = JSONParser.loadcookie(r2, logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "Normal Audio Download Lrc Var2")
+        if read != 0:
+            print(lan['ERROR2'])  # 读取cookies.json出现错误
+            return -4
+        uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r2.cookies.get('buvid3')}"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Normal Audio Download Lrc Get Player.so")
+        rr = r2.get(uri)
+        rr.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {rr.status_code}\n{rr.text}", currentframe(), "Normal Audio Download Lrc Get Player.so Result")
+        rs = search(r'<subtitle>(.+)</subtitle>', rr.text)
+        if rs is not None:
+            rs = json.loads(rs.groups()[0])
+            if log:
+                logg.write(f"rs = {rs}", currentframe(), "Normal Audio Download Lrc Player.so Regex")
+            JSONParser2.getsub(rs, data)
+            if 'sub' in data:
+                for s in data['sub']:
+                    downlrc(r2, fn + ".m4a", s, ip, se, data, ns, isau=True)
+    return 0
 
 
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):

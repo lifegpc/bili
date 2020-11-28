@@ -306,3 +306,15 @@ msgstr ""
 msgctxt "ADDMECOM"
 msgid "Add completed."
 msgstr ""
+
+msgctxt "LRCCOM"
+msgid "Lyric \"<filename>\" download completed."
+msgstr ""
+
+msgctxt "LRCERR"
+msgid "An error occurred when downloading lyric: "
+msgstr ""
+
+msgctxt "USEFROMV2"
+msgid "Found associated video, try to get lyrics(subtitles) from video page."
+msgstr ""

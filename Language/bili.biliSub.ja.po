@@ -42,3 +42,7 @@ msgstr "ファイル \"<filename>\"  への書き込みに失敗しました。"
 msgctxt "OUTPUT3"
 msgid "<languagename> lyrics for part <number> download complete."
 msgstr "パート <number> の <languagename> 歌詞のダウンロードが完了しました。"
+
+msgctxt "AULRCCOM"
+msgid "<languagename> lyric download completed."
+msgstr ""

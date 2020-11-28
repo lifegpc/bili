@@ -299,3 +299,15 @@ msgstr "正在使用ffmpeg将元数据添加到m4a文件。"
 msgctxt "ADDMECOM"
 msgid "Add completed."
 msgstr "添加完成。"
+
+msgctxt "LRCCOM"
+msgid "Lyric \"<filename>\" download completed."
+msgstr "歌词\"<filename>\"下载完成。"
+
+msgctxt "LRCERR"
+msgid "An error occurred when downloading lyric: "
+msgstr "下载歌词时产生了一个错误："
+
+msgctxt "USEFROMV2"
+msgid "Found associated video, try to get lyrics(subtitles) from video page."
+msgstr "找到相关联的视频，尝试从视频页面获取歌词（字幕）。"
