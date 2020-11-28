@@ -513,9 +513,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 ff=True
             else :
                 ff=False
-        ma=False
-        if JSONParser.getset(se,"ma")==True :
-            ma=True
+        ma = True
+        if JSONParser.getset(se, "ma") == False:
+            ma = False
         if 'ma' in ip:
             ma=ip['ma']
         if log:
@@ -2903,9 +2903,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 ff=True
             else :
                 ff=False
-        ma=False
-        if JSONParser.getset(se,"ma")==True :
-            ma=True
+        ma = True
+        if JSONParser.getset(se, "ma") == False:
+            ma = False
         if 'ma' in ip:
             ma=ip['ma']
         if log:
@@ -3981,9 +3981,9 @@ def smdownload(r:requests.Session,i:dict,c:bool,se:dict,ip:dict) :
             ff=True
         else :
             ff=False
-    ma=False
-    if JSONParser.getset(se,"ma")==True :
-        ma=True
+    ma = True
+    if JSONParser.getset(se, "ma") == False:
+        ma = False
     if 'ma' in ip:
         ma=ip['ma']
     if log:
@@ -4283,9 +4283,9 @@ def lrvideodownload(data,r,c,c3,se,ip):
                 ff=True
             else :
                 ff=False
-        ma=False
-        if JSONParser.getset(se,"ma")==True :
-            ma=True
+        ma = True
+        if JSONParser.getset(se,"ma") == False:
+            ma = False
         if 'ma' in ip:
             ma=ip['ma']
         if log:
@@ -4927,9 +4927,9 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         aria2c = False
     if 'ar' in ip:
         aria2c = ip['ar']
-    ma = False
-    if JSONParser.getset(se, 'ma') == True:
-        ma = True
+    ma = True
+    if JSONParser.getset(se, 'ma') == False:
+        ma = False
     if 'ma' in ip:
         ma = ip['ma']
     ffmpeg = True
