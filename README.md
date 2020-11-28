@@ -19,8 +19,14 @@
     * [已知BUG](#已知bug)
         + [登录时发生错误（使用ChromeDriver时）](#登录时发生错误使用chromedriver时)
     * [FAQ](#faq)
+        + [Release中每个文件的区别](release中每个文件的区别)
         + [无法输入密码](#无法输入密码)
         + [大会员账号提示仅大会员可以观看](#大会员账号提示仅大会员可以观看)
+        + [默认下载位置在哪](#默认下载位置在哪)
+        + [要不要使用ffmpeg, arai2c](#要不要使用ffmpeg-arai2c)
+        + [如何批量下载](#如何批量下载)
+        + [闪退怎么办](#闪退怎么办)
+        + [aria2c的几个下载设置是什么意思](#aria2c的几个下载设置是什么意思)
 ## 简介
 程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver（有ChromeDriver在登录和解决验证码时较方便，对主要功能不影响）。   
 软件只有控制台界面，萌新不会可以看[这里](easyuse.md)   
@@ -257,9 +263,55 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 
 ## FAQ
 
+### Release中每个文件的区别
+- ```bili_版本.7z``` 最简单的版本，需要自己下载/安装aria2c, chromedriver, ffmpeg, Python3.6+
+- ```bili_版本_linux.7z``` 最简单的版本加上Linux版的chromedriver
+- ```bili_版本_mac.7z``` 最简单的版本加上Mac版的chromedriver
+- ```bili_版本_windows.7z``` 最简单的版本加上Windows版的chromedriver
+- ```bili_版本_windows10_x64.7z``` 编译成exe的版本，可以直接在64位Windows10上运行。自带aria2c, chromedriver, ffmpeg
+- ```bili_版本_windows10_x64.exe``` ```bili_版本_windows10_x64.7z```的安装包版本
+- ```bili_版本_windows_x64.7z``` 自带Python3.8.6, aria2c, chromedriver, ffmpeg，双击bat文件即可直接在windows7及以上的64位系统中运行
+- ```bili_版本_windows_x64.exe``` ```bili_版本_windows_x64.7z```的安装包版本
+- ```bili_版本_windows_x86.7z``` 自带Python3.8.6, aria2c, chromedriver, ffmpeg，双击bat文件即可直接在windows7及以上的32位系统中运行
+- ```bili_版本_windows_x86.exe``` ```bili_版本_windows_x86.7z```的安装包版本
+
+建议选择后4个版本。
+
 ### 无法输入密码
 这是由于输入密码时关闭了输入内容在屏幕上输出（回显）导致的。  
 解决方法是直接正常输入密码后按回车键即可。
 
 ### 大会员账号提示仅大会员可以观看
 先删除```cookies.json```，然后使用Chrome Driver登录，不要使用WEB UI登录。（WEB UI登录目前存在BUG）
+
+### 默认下载位置在哪
+默认下载位置在程序所在目录下的```Download```文件夹。  
+如果使用安装包安装的话，程序所在目录默认在```%appdata%/bili```或```%appdata%/bili x86```或```%appdata%/bili x64```。
+
+### 要不要使用ffmpeg, arai2c
+建议都使用。  
+ffmpeg是用来自动合并分离的视频的。  
+aria2c可以极大地改善下载的体验。
+
+### 如何批量下载
+目前可以使用,隔开多个输入，也可以采用收藏夹等方式批量下载。  
+批量下载时建议配合命令行使用。（命令行的基础知识请自己搜索）  
+例如每次都选择下载方法4，可以使用```py start.py -d4```。  
+更多的命令行指令可以采用```py start.py -h```查看。
+
+### 闪退怎么办
+目前除了windows_x64和windows_x86的batch脚本外，另外的版本都会在运行完毕后直接退出（无论程序是否出现错误）。  
+如果是主程序，可以在设置里启用写入日志到文件，然后去程序所在目录下的```log```文件夹寻找日志。如果出现错误，你可以在最后面看到错误的具体信息。
+
+### aria2c的几个下载设置是什么意思
+aria2c是一个多线程下载工具。  
+多线程下载简单理解就是把1个文件分成n部分，每一部分同时下载。  
+同时下载的部分数越多，一般速度也就越快。  
+有关aria2c的设置：  
+是否启用aria2c：建议是，使用aria2c可以提供更好的下载体验（下载速度快）  
+使用aria2c时单个服务器最大连接数和单个文件最大连接数：这两者共同来限制最多能有多少部分能够同时下载。因此调大这两者可以增加同时下载的部分数，从而使速度加快。  
+使用aria2c时文件分片大小：aria2c是根据文件分片大小来将1个文件分成n部分。假设有1个100M的文件，文件分片大小是20M，因此这个文件将会被分成5部分。当文件大小不足文件分片大小的2倍时，这个文件将不会被分成n部分，而是当作一个整体下载。调小这个可以时文件被分成的部分数加多，一定程度上可以加快速度。  
+注：如果出现0b/s的情况，说明暂时被BiliBili CDN封禁，请适当调整上述参数以降低同时下载的部分数。  
+在使用aria2c下载时使用备用网址：建议开着，这样可以同时从多个CDN服务器下载内容，加快下载速度。  
+使用aria2c下载时文件预分配方式：这个一般建议保持默认值。  
+在使用aria2c时最大总体速度(B/s)：这个根据个人需求设置吧。
