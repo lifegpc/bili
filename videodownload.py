@@ -4999,6 +4999,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             print(lan['USEFROMV'])  # 发现关联的视频
         url = f"https://www.bilibili.com/video/av{data['aid']}"
         r3 = requests.Session()
+        r3.headers = r.headers
         r3.headers.update({'referer': url})
         if nte:
             r3.trust_env = False
@@ -5434,7 +5435,7 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
             return -2
     if data['aid'] != 0:
         if ns:
-            print(lan['USEFROMV2'])  # 发现管理的视频
+            print(lan['USEFROMV2'])  # 发现关联的视频
         url = f"https://www.bilibili.com/video/av{data['aid']}"
         r2 = requests.Session()
         r2.headers.update({'referer': url})

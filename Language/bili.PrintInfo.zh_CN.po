@@ -221,5 +221,5 @@ msgid "Shared times: "
 msgstr "分享次数："
 
 msgctxt "O51"
-msgid "Collected times: "
+msgid "Favorited count: "
 msgstr "收藏次数："

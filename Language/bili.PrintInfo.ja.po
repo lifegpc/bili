@@ -221,5 +221,5 @@ msgid "Shared times: "
 msgstr "シェア数: "
 
 msgctxt "O51"
-msgid "Collected times: "
-msgstr "採集時間: "
+msgid "Favorited count: "
+msgstr ""

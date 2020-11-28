@@ -216,5 +216,5 @@ msgid "Shared times: "
 msgstr ""
 
 msgctxt "O51"
-msgid "Collected times: "
+msgid "Favorited count: "
 msgstr ""
