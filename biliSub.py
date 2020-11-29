@@ -57,6 +57,9 @@ def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = F
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ass = False
     if JSONParser.getset(se, 'ass') == True:
         ass = True
@@ -107,15 +110,21 @@ def downsub(r: Session,fn: str,i: dict,ip: dict,se: dict,data: dict,pr: bool = F
         logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Video Subtitle Download Result")
     re=re.json()
     if not ass:
-        if assrt(fn, re['body'], logg) == 0 and pr:
-            print(lan['OUTPUT2'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>字幕下载完毕！
+        if assrt(fn, re['body'], logg) == 0:
+            if oll:
+                oll.add(fn)
+            if pr:
+                print(lan['OUTPUT2'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>字幕下载完毕！
     else:
         if width is None:
             width = 1920
         if height is None:
             height = 1080
-        if asass(fn, re, width, height, logg) == 0 and pr:
-            print(lan['OUTPUT2'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>字幕下载完毕！
+        if asass(fn, re, width, height, logg) == 0:
+            if oll:
+                oll.add(fn)
+            if pr:
+                print(lan['OUTPUT2'].replace('<number>', str(pi)).replace('<languagename>', i['land']))  # 第<number>P<languagename>字幕下载完毕！
     return 0
 
 

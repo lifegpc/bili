@@ -264,6 +264,9 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns=True
     if 's' in ip:
         ns=False
@@ -706,6 +709,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         else :
                             return -3
                 com=com+k['size']
+            if oll:
+                oll.add(fn)
             j=j+1
         if 'sub' in data :
             for s in data['sub']:
@@ -860,6 +865,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 print(lan['OUTPUT14'])#合并完成！
             de=False
             if re==0:
+                if oll:
+                    oll.add(f"{filen}.{vf}")
                 bs=True
                 if not ns:
                     bs=False
@@ -1232,6 +1239,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     bs2=True
                 else :
                     return -3
+        if oll:
+            oll.add(getfn(0, i, data, vqs, hzm, o, fin, dmp))
         bs2=True
         if nau :
             bs2=False
@@ -1306,6 +1315,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     bs2=True
                 else :
                     return -3
+        if oll:
+            oll.add(getfn(1, i, data, vqs, hzm, o, fin, dmp))
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2, filen, s, ip, se, data, ns, i, dash['video']['width'], dash['video']['height'])
@@ -1453,6 +1464,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
             if re==0:
+                if oll:
+                    oll.add(filen)
                 bs=True
                 if not ns:
                     bs=False
@@ -1605,6 +1618,9 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns=True
     if 's' in ip:
         ns=False
@@ -1688,6 +1704,8 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
         f=open(fn,'wb')
         f.write(re.content)
         f.close()
+        if oll:
+            oll.add(fn)
         if ns:
             print(lan['OUTPUT23'].replace('<filename>',fn))#封面图片下载完成。
         return 0
@@ -1711,6 +1729,9 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns = True
     if 's' in ip:
         ns = False
@@ -2004,11 +2025,13 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                         elif inp[0].lower() == 'n':
                             bs = False
                 if rc:
-                    if os.path.exists(f"{filen}.m4a"):
-                        os.remove(f"{filen}.m4a")
+                    if os.path.exists(f"{filen}.{hzm}"):
+                        os.remove(f"{filen}.{hzm}")
                     bs2 = True
                 else:
                     return -3
+        if oll:
+            oll.add(f"{filen}.{hzm}")
         if 'sub' in data:
             nal = False
             if 'nal' in se:
@@ -2066,6 +2089,8 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             if log:
                 logg.write(f"re = {re}", currentframe(), "Normal Video Audio Download Ffmpeg Return")
             if re == 0:
+                if oll:
+                    oll.add(f"{filen}.m4a")
                 print(lan['COM_CONV'])
                 delete = False
                 bs = True
