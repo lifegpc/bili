@@ -2128,6 +2128,9 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     che=False
     if 'che' in data :
         che=True
@@ -2601,6 +2604,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     bs2=True
                 else :
                     return -3
+        if oll:
+            oll.add(getfn2(i, 0, fdir, vqs, hzm, fin))
         bs2=True
         while bs2:
             bs2=False
@@ -2675,6 +2680,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                     bs2=True
                 else :
                     return -3
+        if oll:
+            oll.add(getfn2(i, 1, fdir, vqs, hzm, fin))
         if not che:
             imgf=f"{file.spfn(filen)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
             imgs=eppicdownload(i,data,r,ip,se,imgf)#封面下载状况
@@ -2780,6 +2787,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             if re==0 :
                 print(lan['OUTPUT14'])#合并完成！
             if re==0:
+                if oll:
+                    oll.add(filen)
                 bs=True
                 if not ns:
                     bs=False
@@ -3125,6 +3134,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                         else :
                             return -3
                 com=com+k['size']
+            if oll:
+                oll.add(fn)
             j=j+1
         if not che:
             imgf = f"{file.spfn(filen + '.' + vf)[0]}.{file.geturlfe(i['cover'])}"#图片文件名
@@ -3323,6 +3334,8 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 print(lan['OUTPUT14'])#合并完成！
             de=False
             if re==0:
+                if oll:
+                    oll.add(filen)
                 bs=True
                 if not ns:
                     bs=False
@@ -3370,6 +3383,9 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns=True
     if 's' in ip:
         ns=False
@@ -3419,6 +3435,8 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
             f=open(fn2,'wb')
             f.write(re.content)
             f.close()
+            if oll:
+                oll.add(fn2)
             if ns:
                 print(lan['OUTPUT23'].replace('<filename>',fn2))#封面图片下载完成。
         else :
@@ -3427,7 +3445,7 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
         if 'brief' in data :
             ii=1
             for uri in data['brief'] :
-                chepicdownload(uri, r, fdir, ii, ns, logg)
+                chepicdownload(uri, r, fdir, ii, ns, logg, oll)
                 ii=ii+1
         return 0
     cf=i['cover']
@@ -3475,6 +3493,8 @@ def eppicdownload(i,data,r:requests.Session,ip,se,fn:str=None)->int :
         f=open(fn,'wb')
         f.write(re.content)
         f.close()
+        if oll:
+            oll.add(fn)
         if ns:
             print(lan['OUTPUT23'].replace('<filename>',fn))#封面图片下载完成。
         return 0
@@ -3498,6 +3518,9 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     che = False
     if 'che' in data:
         che = True
@@ -3805,11 +3828,13 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
                         elif inp[0].lower() == 'n':
                             bs = False
                 if rc:
-                    if os.path.exists(f"{filen}.m4a"):
-                        os.remove(f"{filen}.m4a")
+                    if os.path.exists(f"{filen}.{hzm}"):
+                        os.remove(f"{filen}.{hzm}")
                     bs2 = True
                 else:
                     return -3
+        if oll:
+            oll.add(f"{filen}.{hzm}")
         if not che:
             imgf = f"{file.spfn(filen + '.m4a')[0]}.{file.geturlfe(i['cover'])}"
             imgs = eppicdownload(i, data, r, ip, se, imgf)
@@ -3869,6 +3894,8 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             if log:
                 logg.write(f"re = {re}", currentframe(), "Bangumi Download Audio Only FFmpeg Return")
             if re == 0:
+                if oll:
+                    oll.add(f"{filen}.m4a")
                 print(lan['COM_CONV'])
                 delete = False
                 bs = True
@@ -3899,7 +3926,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
     return 0
 
 
-def chepicdownload(url:str, r:requests.session, fdir:str, i:int, ns:bool, logg=None) :
+def chepicdownload(url:str, r:requests.session, fdir:str, i:int, ns:bool, logg=None, oll=None) :
     fn=f"{fdir}/des{i}.{file.geturlfe(url)}"
     if logg is not None:
         logg.write(f"fn = {fn}", currentframe(), "Purchased Courses' Cover Download Var")
@@ -3913,6 +3940,8 @@ def chepicdownload(url:str, r:requests.session, fdir:str, i:int, ns:bool, logg=N
             f=open(fn,'wb')
             f.write(re.content)
             f.close()
+            if oll:
+                oll.add(fn)
             if ns:
                 print(lan['OUTPUT23'].replace('<filename>',fn))#封面图片下载完成。
         else :
