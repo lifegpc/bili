@@ -4240,6 +4240,9 @@ def lrvideodownload(data,r,c,c3,se,ip):
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns=True
     if 's' in ip:
         ns=False
@@ -4530,6 +4533,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                         else :
                             return -3
                 com=com+k['size']
+            if oll:
+                oll.add(fn)
             j=j+1
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             lrh=True #是否进行去HTML化
@@ -4649,6 +4654,8 @@ def lrvideodownload(data,r,c,c3,se,ip):
                 print(lan['OUTPUT14'])#合并完成！
             de=False
             if re==0:
+                if oll:
+                    oll.add(f"{filen}.{vf}")
                 bs=True
                 if not ns:
                     bs=False
@@ -4698,6 +4705,9 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns = True
     if 's' in ip:
         ns = False
@@ -4924,12 +4934,16 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
             read = os.system(cm)
             if log:
                 logg.write(f"read = {read}", currentframe(), "LIVE VIDEO FFMPEG RETURN")
+            if read == 0:
+                oll.add(filen)
             os.remove(f"Temp/{data['roomid']}_{tt}_metadata.txt")
         elif aria2c:
             read = dwaria2(r, filen, url, -1, False, ip, se)
             if log:
                 logg.write(f"read = {read}", currentframe(), "LIVE VIDEO ARIA2C RETURN")
-            if read == -3:
+            if read == 0:
+                oll.add(filen)
+            elif read == -3:
                 print(f"{lan['ERROR4']}{lan['ERROR5']}")  # aria2c 参数错误
                 return -4
         else:
@@ -4937,6 +4951,8 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
             read = downloadstream(nte, ip, url, r, re, filen, -1, False)
             if log:
                 logg.write(f"read = {read}", currentframe(), "LIVE VIDEO NORMAL RETURN")
+            if read == 0:
+                oll.add(filen)
     return 0
 
 
@@ -4955,6 +4971,9 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns = True
     if 's' in ip:
         ns = False
@@ -5225,11 +5244,13 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                     elif inp[0].lower() == 'n':
                         bs = False
             if rc:
-                if os.path.exists(f"{filen}.m4a"):
-                    os.remove(f"{filen}.m4a")
+                if os.path.exists(f"{filen}.{hzm}"):
+                    os.remove(f"{filen}.{hzm}")
                 bs2 = True
             else:
                 return -6
+    if oll:
+        oll.add(f"{filen}.{hzm}")
     imgf = filen + "." + file.geturlfe(data['cover'])
     if log:
         logg.write(f"imgf = {imgf}", currentframe(), "Normal Audio Download Var4")
@@ -5270,6 +5291,8 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         if log:
             logg.write(f"re = {re}", currentframe(), "Normal Audio Download Ffmpeg Return")
         if re == 0:
+            if oll:
+                oll.add(f"{filen}.m4a")
             if hzm == "m4s":
                 print(lan['COM_CONV'])
             else:
@@ -5317,6 +5340,9 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns = True
     if 's' in ip:
         ns = False
@@ -5386,6 +5412,8 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
     if re.status_code == 200:
         with open(fn, 'wb') as f:
             f.write(re.content)
+        if oll:
+            oll.add(fn)
         if ns:
             print(lan['OUTPUT23'].replace('<filename>', fn))  # 封面图片下载完成。
         return 0
@@ -5406,6 +5434,9 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if oll:
+        oll = ip['oll']
     ns = True
     if 's' in ip:
         ns = False
@@ -5494,6 +5525,8 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
                     f.write(res)
                 else:
                     f.write(re.text)
+            if oll:
+                oll.add(tfn)
             if ns:
                 print(lan['LRCCOM'].replace('<filename>', tfn))  # 歌词下载完成
         else:
