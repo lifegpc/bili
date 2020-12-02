@@ -35,6 +35,7 @@ import JSONParser2
 from inspect import currentframe
 from traceback import format_exc
 from biliLRC import filterLRC
+import biliAudio
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -5088,26 +5089,30 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         r3.cookies.set('CURRENT_FNVAL', '80', domain='.bilibili.com', path='/')
         r3.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
         r3.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
-        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn=125&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
+        read = biliAudio.checkCid(data, r3, logg)
         if log:
-            logg.write(f"GET {uri}", currentframe(), "Normal Audio Video Get Playurl")
-        re = r3.get(uri)
-        re.encoding = 'utf8'
-        if log:
-            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Audio Video Get Playurl Result")
-        re = re.json()
-        if re['code'] != 0:
-            print(f"{re['code']} {re['message']}")
-            return -3
-        if 'data' in re and 'dash' in re['data'] and 'audio' in re['data']['dash'] and re['data']['dash']['audio'] is not None:
-            accept_audio_quality = []
-            for j in re['data']['dash']['audio']:
-                j['r'] = r3
-                dash[j['id']] = j
-                accept_audio_quality.append(j['id'])
-            accept_audio_quality.sort(reverse=True)
-            accept_qualities = accept_qualities + accept_audio_quality
-            timel = re['data']['timelength']
+            logg.write(f"read = {read}", currentframe(), "Normal Audio CID Check")
+        if read:
+            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn=125&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "Normal Audio Video Get Playurl")
+            re = r3.get(uri)
+            re.encoding = 'utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Audio Video Get Playurl Result")
+            re = re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['message']}")
+                return -3
+            if 'data' in re and 'dash' in re['data'] and 'audio' in re['data']['dash'] and re['data']['dash']['audio'] is not None:
+                accept_audio_quality = []
+                for j in re['data']['dash']['audio']:
+                    j['r'] = r3
+                    dash[j['id']] = j
+                    accept_audio_quality.append(j['id'])
+                accept_audio_quality.sort(reverse=True)
+                accept_qualities = accept_qualities + accept_audio_quality
+                timel = re['data']['timelength']
     for quality in accept_qualities:
         dash[quality]['size'] = streamgetlength(dash[quality]['r'], dash[quality]['base_url'], logg)
     if m and not F:
@@ -5435,7 +5440,7 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
         log = True
         logg = ip['logg']
     oll = None
-    if oll:
+    if 'oll' in ip:
         oll = ip['oll']
     ns = True
     if 's' in ip:
@@ -5471,6 +5476,17 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
             logg.write(format_exc(), currentframe(), "Normal Audio Download Pic Mkdir Failed")
         print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
         return -1
+    if data['aid'] != 0:
+        url = f"https://www.bilibili.com/video/av{data['aid']}"
+        r2 = requests.Session()
+        r2.headers.update({'referer': url})
+        if nte:
+            r2.trust_env = False
+        r2.proxies = r.proxies
+        read = JSONParser.loadcookie(r2, logg)
+        cidc = biliAudio.checkCid(data, r2, logg)
+        if log:
+            logg.write(f"cidc = {cidc}", currentframe(), "Normal Audio Download Lrc CID Check")
     if fn is None:
         avi = "" if data['aid'] == 0 else f",AV{data['aid']},{data['bvid']},{data['cid']}"
         if fin:
@@ -5535,18 +5551,13 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
     if data['aid'] != 0:
         if ns:
             print(lan['USEFROMV2'])  # 发现关联的视频
-        url = f"https://www.bilibili.com/video/av{data['aid']}"
-        r2 = requests.Session()
-        r2.headers.update({'referer': url})
-        if nte:
-            r2.trust_env = False
-        r2.proxies = r.proxies
-        read = JSONParser.loadcookie(r2, logg)
         if log:
             logg.write(f"read = {read}", currentframe(), "Normal Audio Download Lrc Var2")
         if read != 0:
             print(lan['ERROR2'])  # 读取cookies.json出现错误
             return -4
+        if not cidc:
+            return 0
         uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r2.cookies.get('buvid3')}"
         if log:
             logg.write(f"GET {uri}", currentframe(), "Normal Audio Download Lrc Get Player.so")
