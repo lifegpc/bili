@@ -2833,20 +2833,44 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
             for l in avq :
                 if not l in durl :
                     if not che :
-                        r2.cookies.set('CURRENT_QUALITY',str(l),domain='.bilibili.com',path='/')
-                        if log:
-                            logg.write(f"Current request quality: {l}\nGET {url2}", currentframe(), "Bangumi Video Download Get Webpage3")
-                        re=r2.get(url2)
-                        re.encoding='utf8'
-                        if log:
-                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Webpage3 Result")
-                        rs=search('__playinfo__=([^<]+)',re.text)
-                        if rs!=None:
-                            re=json.loads(rs.groups()[0])
+                        if napi:
+                            r2.cookies.set('CURRENT_QUALITY', str(l), domain='.bilibili.com', path='/')
                             if log:
-                                logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage3 Regex")
-                        else :
-                            return -2
+                                logg.write(f"Current request quality: {l}\nGET {url2}", currentframe(), "Bangumi Video Download Get Webpage3")
+                            re = r2.get(url2)
+                            re.encoding = 'utf8'
+                            if log:
+                                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Webpage3 Result")
+                            rs = search('__playinfo__=([^<]+)', re.text)
+                            if rs is not None:
+                                re = json.loads(rs.groups()[0])
+                                if log:
+                                    logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage3 Regex")
+                            else:
+                                napi = False
+                                uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={l}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                                if log:
+                                    logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl7")
+                                re = r2.get(uri)
+                                if log:
+                                    logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl7 Result")
+                                re = re.json()
+                                if re['code'] != 0:
+                                    print(f"{re['code']} {re['message']}")
+                                    return -2
+                                re['data'] = re['result']
+                        else:
+                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={l}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                            if log:
+                                logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl8")
+                            re = r2.get(uri)
+                            if log:
+                                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl8 Result")
+                            re = re.json()
+                            if re['code'] != 0:
+                                print(f"{re['code']} {re['message']}")
+                                return -2
+                            re['data'] = re['result']
                     else :
                         uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
                         if log:
