@@ -45,4 +45,4 @@ msgstr "パート <number> の <languagename> 歌詞のダウンロードが完�
 
 msgctxt "AULRCCOM"
 msgid "<languagename> lyric download completed."
-msgstr ""
+msgstr "<languagename> 歌詞のダウンロードが完了しました。"

@@ -222,4 +222,4 @@ msgstr "シェア数: "
 
 msgctxt "O51"
 msgid "Favorited count: "
-msgstr ""
+msgstr "お気に入り数: "
