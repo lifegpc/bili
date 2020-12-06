@@ -465,3 +465,11 @@ msgid ""
 "When downloading all barrages, do not ignore warning that current barrage's "
 "count is much less than the limitation."
 msgstr ""
+
+msgctxt "O87"
+msgid "Open the last download file's location in windows explorer."
+msgstr ""
+
+msgctxt "O88"
+msgid "Do not open the last download file's location in windows explorer."
+msgstr ""

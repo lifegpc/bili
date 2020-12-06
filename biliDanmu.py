@@ -75,6 +75,9 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns=True
     if 's' in ip:
         ns=False
@@ -181,6 +184,8 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
                     logg.write(format_exc(), currentframe(), "Normal Video Barrage Error1")
                 print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                 return -2
+            if oll:
+                oll.add(filen)
             return 0
         else :
             filen2 = f"Temp/n_{data['page'][c-1]['cid']}.xml"
@@ -239,6 +244,8 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
                     logg.write(format_exc(), currentframe(), "Normal Video Barrage Error6")
                 print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
                 return -2
+            if oll:
+                oll.add(filen)
             return 0
     elif t=='ss' :
         d = biliDanmuDown.downloadn(c['cid'], r, logg)
@@ -309,6 +316,8 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
                     logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error2")
                 print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
                 return -2
+            if oll:
+                oll.add(filen)
             return 0
         else :
             filen2 = f"Temp/n_{c['cid']}.xml"
@@ -367,6 +376,8 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
                     logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error7")
                 print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
                 return -2
+            if oll:
+                oll.add(filen)
             return 0
 def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
     "全弹幕处理"
@@ -375,6 +386,9 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns=True
     if 's' in ip:
         ns=False
@@ -835,6 +849,8 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                     print(lan['OUTPUT13'].replace('<number>',str(z)))#获取了<number>条弹幕。
                     print(lan['OUTPUT14'].replace('<number>',str(g)))#过滤了<number>条弹幕。
                     print(lan['OUTPUT15'].replace('<number>',str(m)))#实际输出了<number>条弹幕。
+        if oll:
+            oll.add(filen)
         return 0
     elif t=='ss' :
         bs=True
@@ -1269,4 +1285,6 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                     print(lan['OUTPUT13'].replace('<number>',str(z)))#获取了<number>条弹幕。
                     print(lan['OUTPUT14'].replace('<number>',str(g)))#过滤了<number>条弹幕。
                     print(lan['OUTPUT15'].replace('<number>',str(m)))#实际输出了<number>条弹幕。
+        if oll:
+            oll.add(filen)
         return 0

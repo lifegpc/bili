@@ -443,3 +443,11 @@ msgid ""
 "When downloading all barrages, do not ignore warning that current barrage's "
 "count is much less than the limitation."
 msgstr "当下载所有弹幕时，不要忽略当前弹幕数量远远少于限制的警告。"
+
+msgctxt "O87"
+msgid "Open the last download file's location in windows explorer."
+msgstr "在windows资源管理器中打开最后一个下载文件的所在位置。"
+
+msgctxt "O88"
+msgid "Do not open the last download file's location in windows explorer."
+msgstr "不要在windows资源管理器中打开最后一个下载文件的所在位置。"

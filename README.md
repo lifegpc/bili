@@ -178,10 +178,10 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```au1```
 - ```bilibili.com/audio/au1```
 - ```b23.tv/au1```
-### 音频下载
+#### 音频下载
 目前只支持下载默认音质，如果有出现其他音质，下载器应该会有提示，请将AU号提交至[issues](https://github.com/lifegpc/bili/issues)。  
 如果音频有关联的普通视频，将会尝试从关联的视频页获取更多的音质。
-### 仅下载歌词
+#### 仅下载歌词
 程序默认会对下载的歌词文件进行过滤修正，从而以适应更多的播放器。  
 如果音频有关联的普通视频，将会尝试从关联的视频页获取更多的歌词（即字幕）。
 ## 依赖库

@@ -31,7 +31,7 @@ from command import gopt
 import json
 from math import ceil
 from dictcopy import copyip,copydict
-from biliHdVideo import getninfo
+from biliHdVideo import HDVideoParser
 import traceback
 import biliLiveDanmu
 from lang import getlan,getdict
@@ -41,6 +41,7 @@ from biliVersion import checkver
 from time import sleep, time
 from Logger import Logger
 from inspect import currentframe
+from autoopenlist import autoopenfilelist
 
 # 远程调试用代码
 # import ptvsd
@@ -1652,7 +1653,8 @@ def main(ip={}):
                     data['gv']=rs['graph_version']
                     hd=True
         if hd:
-            read = getninfo(r, data, logg)
+            p = HDVideoParser(r, data, logg)
+            read = p.parser()
             if log:
                 logg.write(f"read = {read}", currentframe(), "Parse HD Video Return")
             if read==-1 :
@@ -2066,6 +2068,13 @@ if log:
     logg = Logger()
     ip['logg'] = logg
     logg.write(seipt)
+ol = True
+if 'ol' in se:
+    ol = se['ol']
+if 'ol' in ip:
+    ol = ip['ol']
+if ol:
+    ip['oll'] = autoopenfilelist(logg)
 lan=getdict('start',getlan(se,ip))
 class mains(Thread) :
     def __init__(self,ip:dict) :
@@ -2087,5 +2096,7 @@ if __name__=="__main__" :
             if not logg.hasf():
                 logg.openf(f'log/{round(time())}.log')
             logg.closef()
+    if 'oll' in ip:
+        ip['oll'].open()
 else :
     print(lan['OUTPUT11'])#请运行start.py

@@ -45,6 +45,9 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
     if 'logg' in ip:
         log = True
         logg = ip['logg']
+    oll = None
+    if 'oll' in ip:
+        oll = ip['oll']
     ns=True
     if 's' in ip :
         ns=False
@@ -189,5 +192,7 @@ def lrdownload(data:dict,r:Session,ip:dict,se:dict,xml,xmlc:list) :
             logg.write(format_exc(), currentframe(), "LIVE RECORD BARRAGE ERROR 3")
         print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
         return -3
+    if oll:
+        oll.add(filen)
     print(lan['OUTPUT20'])#下载完毕！
     return 0
