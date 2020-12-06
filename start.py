@@ -31,7 +31,7 @@ from command import gopt
 import json
 from math import ceil
 from dictcopy import copyip,copydict
-from biliHdVideo import getninfo
+from biliHdVideo import HDVideoParser
 import traceback
 import biliLiveDanmu
 from lang import getlan,getdict
@@ -1653,7 +1653,8 @@ def main(ip={}):
                     data['gv']=rs['graph_version']
                     hd=True
         if hd:
-            read = getninfo(r, data, logg)
+            p = HDVideoParser(r, data, logg)
+            read = p.parser()
             if log:
                 logg.write(f"read = {read}", currentframe(), "Parse HD Video Return")
             if read==-1 :
