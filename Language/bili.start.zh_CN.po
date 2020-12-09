@@ -270,3 +270,11 @@ msgid ""
 "This audio can only be played on the APP. (This program do not support it "
 "now.)"
 msgstr "该音频只能在APP上播放。（该程序目前不支持。）"
+
+msgctxt "PLITID"
+msgid "Here are all available type id (tid) for this favorites:"
+msgstr "以下是该收藏夹所有可用的类型ID（tid）："
+
+msgctxt "PLITIDNUL"
+msgid "This favorites don't have any available type id (tid)."
+msgstr "该收藏夹没有任何可用的类型ID（tid）。"

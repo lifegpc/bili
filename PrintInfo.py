@@ -220,6 +220,12 @@ def printAuInfo(d: dict):
 	print(f"{lan['O51']}{s['collect']}")
 
 
+def printplitid(d: list):
+    for i in d:
+        print(f"{lan['O52']}{i['tid']}")
+        print(f"{lan['O16']}{i['name']}")
+        print(f"{lan['O22']}{i['count']}")
+
 def pr() :
 	print(f"""    bili  Copyright (C) 2019-2020  lifegpc
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.

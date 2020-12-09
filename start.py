@@ -603,6 +603,16 @@ def main(ip={}):
                     return -1
         if log:
             logg.write(f"fid = {fid}", currentframe(), "PL FID OUT")
+        if 'ltid' in ip:
+            re = JSONParser2.getpltid(section, fid, uid, logg)
+            if re == -1:
+                return -1
+            if len(re) > 0:
+                print(lan['PLITID'])
+                PrintInfo.printplitid(re)
+            else:
+                print(lan['PLITIDNUL'])
+            return 0
         i=1
         re = JSONParser2.getpli(section, fid, i, pld, logg)
         if re==-1 :

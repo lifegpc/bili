@@ -186,3 +186,11 @@ msgstr ""
 msgctxt "AUAPPERR"
 msgid "This audio can only be played on the APP. (This program do not support it now.)"
 msgstr ""
+
+msgctxt "PLITID"
+msgid "Here are all available type id (tid) for this favorites:"
+msgstr ""
+
+msgctxt "PLITIDNUL"
+msgid "This favorites don't have any available type id (tid)."
+msgstr ""

@@ -223,3 +223,7 @@ msgstr "シェア数: "
 msgctxt "O51"
 msgid "Favorited count: "
 msgstr "お気に入り数: "
+
+msgctxt "O52"
+msgid "Type ID (tid): "
+msgstr ""

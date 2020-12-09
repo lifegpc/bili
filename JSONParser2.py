@@ -80,6 +80,23 @@ def getpliv(i:list,d:dict):
         r['pubtime']=t['pubtime']
         r['ftime']=t['fav_time']
         i.append(r)
+
+
+def getpltid(r: Session, fid: int, uid: int, logg=None):
+    uri = f"https://api.bilibili.com/x/v3/fav/resource/partition?up_mid={uid}&media_id={fid}&jsonp=jsonp"
+    if logg:
+        logg.write(f"GET {uri}", currentframe(), "GET Pli Tid List")
+    re = r.get(uri)
+    re.encoding = 'utf8'
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Pli Tid List Result")
+    re = re.json()
+    if re['code'] != 0:
+        print(f"{re['code']} {re['message']}")
+        return -1
+    return re['data']
+
+
 def getchl(d:dict)->list:
     r=[]
     for i in d['data']['list'] :
