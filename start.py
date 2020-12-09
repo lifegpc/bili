@@ -42,6 +42,7 @@ from time import sleep, time
 from Logger import Logger
 from inspect import currentframe
 from autoopenlist import autoopenfilelist
+from urllib.parse import parse_qs
 
 # 远程调试用代码
 # import ptvsd
@@ -267,17 +268,32 @@ def main(ip={}):
                 pld['k']=''
                 pld['t']=0
                 if re[17] :
-                    sl=re[17].split('&')
-                    for us in sl:
-                        rep=search(r'^(fid=([0-9]+))?(keyword=(.+))?(type=([0-9]+))?',us,I)
-                        if rep!=None :
-                            rep=rep.groups()
-                            if rep[0]:
-                                fid=int(rep[1])
-                            if rep[2]:
-                                pld['k']=rep[3]
-                            if rep[4]:
-                                pld['t']=int(rep[5])
+                    sl = parse_qs(re[17])
+                    if 'fid' in sl:
+                        for s in sl['fid']:
+                            if s.isnumeric():
+                                fid = int(s)
+                                break
+                    if 'keyword' in sl:
+                        pld['k'] = sl['keyword'][0]
+                    if 'type' in sl:
+                        for s in sl['type']:
+                            if s.isnumeric():
+                                pld['t'] = int(s)
+                                break
+                    if 'tid' in sl:
+                        for s in sl['tid']:
+                            if s.isnumeric():
+                                pld['tid'] = int(s)
+                                break
+                    if 'order' in sl:
+                        pld['order'] = sl['order'][0]
+                    if 't' not in pld:  # 如果没有指定使用默认值
+                        pld['t'] = 0
+                    if 'tid' not in pld:
+                        pld['tid'] = 0
+                    if 'order' not in pld:
+                        pld['order'] = 'mtime'
                 if log and not logg.hasf():
                     if fid == -1:
                         logg.openf(f"log/UID{uid}_FAV_{round(time())}.log")

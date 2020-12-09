@@ -43,9 +43,9 @@ def getplinfo(d:dict) :
     r['count']=t['media_count']
     return r
 def getpli(r, f, i, d: dict, logg=None):
+    uri = f"https://api.bilibili.com/x/v3/fav/resource/list?media_id={f}&pn={i}&ps=20&keyword={d['k']}&order={d['order']}&type={d['t']}&tid={d['tid']}&jsonp=jsonp"
     if logg is not None:
-        logg.write(f"GET https://api.bilibili.com/x/v3/fav/resource/list?media_id={f}&pn={i}&ps=20&keyword={d['k']}&order=mtime&type={d['t']}&tid=0&jsonp=jsonp", currentframe(), "GET PLI INFO")
-    uri='https://api.bilibili.com/x/v3/fav/resource/list?media_id=%s&pn=%s&ps=20&keyword=%s&order=mtime&type=%s&tid=0&jsonp=jsonp'%(f,i,d['k'],d['t'])
+        logg.write(f"GET {uri}", currentframe(), "GET PLI INFO")
     bs=True
     while bs :
         try :
