@@ -182,6 +182,38 @@ def dealwithauapi(d: dict, d2: dict):
     return d
 
 
+def getaualbuminfo(d: dict) -> (bool, dict):
+    "读取AU号信息中的专辑信息"
+    r = {}
+    if 'pgc_info' not in d or d['pgc_info'] is None or type(d['pgc_info']) != dict:
+        return False, r
+    pgc_info = d['pgc_info']
+    if 'pgc_menu' not in pgc_info or pgc_info['pgc_menu'] is None or type(pgc_info['pgc_menu']) != dict:
+        return False, r
+    pgc_menu = pgc_info['pgc_menu']
+    r['menuId'] = pgc_menu['menuId']
+    r['type'] = pgc_menu['type']
+    r['coverUrl'] = pgc_menu['coverUrl']
+    r['title'] = pgc_menu['title']
+    r['mbnames'] = pgc_menu['mbnames']
+    r['publisher'] = pgc_menu['publisher']
+    r['pubTime'] = pgc_menu['pubTime']
+    if 'tags' in pgc_menu and pgc_menu['tags'] is not None and type(pgc_menu['tags']) == list:
+        r['tags'] = [i['itemVal'] for i in pgc_menu['tags']]
+    else:
+        r['tags'] = []
+    r['passTime'] = pgc_menu['passTime']
+    r['playNum'] = pgc_menu['playNum']
+    r['tryNum'] = pgc_menu['tryNum']
+    r['downloadNum'] = pgc_menu['downloadNum']
+    r['collNum'] = pgc_menu['collNum']
+    r['isOff'] = pgc_menu['isOff']
+    r['uid'] = pgc_menu['uid']
+    r['uname'] = pgc_menu['uname']
+    r['collectionId'] = pgc_menu['collectionId']
+    return True, r
+
+
 def getchl(d:dict)->list:
     r=[]
     for i in d['data']['list'] :
