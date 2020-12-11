@@ -20,8 +20,10 @@ from lang import getdict,getlan
 from command import gopt
 from inspect import currentframe
 from traceback import format_exc
+from typing import Callable, List
 
 
+StrList = List[str]
 lan=None
 se=loadset()
 if se==-1 or se==-2 :
@@ -95,6 +97,89 @@ def getpltid(r: Session, fid: int, uid: int, logg=None):
         print(f"{re['code']} {re['message']}")
         return -1
     return re['data']
+
+
+def dealwithauapi(d: dict, d2: dict):
+    "处理客户端API和网页端API的差异"
+    def add(k: str, v=None, d: dict=d):
+        "增加空值"
+        if k not in d:
+            d[k] = v
+    def rep(k: str, nonev='', k2: str=None, nonev2=None, f: Callable=None, l: StrList=[], l2: StrList=[], strict: bool=False, d: dict=d, d2: dict=d2):
+        "检查是否需要覆盖并覆盖"
+        for s in l:
+            if s not in d or d[s] is None or type(d[s]) != dict:
+                if s not in d or d[s] is None:
+                    d[s] = {}
+                else:
+                    return
+            d = d[s]
+        for s in l2:
+            if s not in d2 or d2[s] is None or type(d2[s]) != dict:
+                    return
+            d2 = d2[s]
+        if k2 is None or k2 == '':
+            k2 = k
+        if nonev2 is None:
+            nonev2 = nonev
+        if f is None:
+            f = lambda s : s
+        if k not in d or d[k] is None or d[k] == nonev:
+            if k2 in d2 and d2[k2] is not None:
+                if (k not in d or d[k] is None) and not strict:
+                    d[k] = f(d2[k2])
+                elif d2[k2] != nonev2:
+                    d[k] = f(d2[k2])
+    rep('activities', [])
+    add('activityId', 0)
+    rep('aid', 0, 'avid', '', lambda s : int(s[2:]) if s[2:] != "" else 0)
+    rep('album_id')
+    rep('attr', 0, 'songAttr')
+    rep('author')
+    rep('bvid')
+    add('cid', 0)
+    rep('coin_num', 0)
+    rep('coinceiling', 0)
+    add('collectIds', [])
+    rep('cover', k2='cover_url')
+    add('crtype', 0)
+    rep('ctime', 0)
+    rep('ctime_str')
+    add('curtime', 0)
+    rep('duration', 0)
+    rep('fans', 0)
+    rep('id', 0)
+    rep('intro')
+    rep('isFromVideo', 0)
+    rep('is_cacheable', False)
+    rep('is_collect', 0)
+    rep('is_off', 0)
+    rep('limit', 0)
+    rep('limitdesc')
+    rep('lyric', k2='lyric_url')
+    rep('memberList', [])
+    rep('menusRespones', [])
+    add('msid', 0)
+    add('passtime', 0)
+    rep('pgc_info')
+    rep('qualities', [])
+    rep('region')
+    rep('relationData')
+    rep('collect', 0, 'collect_count', l=['statistic'])
+    rep('comment', 0, 'reply_count', l=['statistic'])
+    rep('play', 0, 'play_count', l=['statistic'])
+    rep('share', 0, 'snum', l=['statistic'])
+    rep('sid', 0, 'id', l=['statistic'])
+    rep('title')
+    rep('uid', 0, 'mid')
+    rep('uname', k2='up_name')
+    rep('up_cert_info')
+    rep('up_cert_type')
+    rep('up_hit_audios', [])
+    rep('up_img')
+    rep('up_is_follow', 0)
+    rep('videos', [])
+    return d
 
 
 def getchl(d:dict)->list:

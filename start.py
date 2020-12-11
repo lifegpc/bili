@@ -1437,13 +1437,33 @@ def main(ip={}):
         if log:
             logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Get Info Result")
         re = re.json()
-        if re['code'] == 72010027:
-            print(lan['AUAPPERR'])  # 该音频只能在APP上播放。（该程序目前不支持。）
-            return 0
-        elif re['code'] != 0:
+        wapir = False  # 网页端API结果
+        mapir = False  # APP API结果
+        uri = f"https://api.bilibili.com/audio/music-service-c/songs/playing?song_id={auid}"  # build=6140500
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Audio Get Info (APPAPI)")
+        re2 = r.get(uri)
+        re2.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re2.status_code}\n{re2.text}", currentframe(), "Audio Get Info Result (APPAPI)")
+        re2 = re2.json()
+        if re['code'] != 0 and re['code'] != 72010027:
             print(f"{re['code']} {re['msg']}")
+        elif re['code'] == 0:
+            wapir = True
+        if re2['code'] != 0:
+            print(f"{re2['code']} {re2['msg']}")
+        else:
+            mapir = True
+        if not wapir and not mapir:
+            if re['code'] == 72010027:
+                print(lan['AUAPPERR'])  # 该音频只能在APP上播放。（该程序目前不支持。）
             return 0
-        sd = re['data']
+        sd = {}
+        if wapir:
+            sd = re['data']
+        if mapir:
+            sd = JSONParser2.dealwithauapi(sd, re2['data'])
         uri = f"https://www.bilibili.com/audio/music-service-c/web/tag/song?sid={auid}"
         if log:
             logg.write(f"GET {uri}", currentframe(), "Audio Get Tags Info")
@@ -1458,6 +1478,8 @@ def main(ip={}):
         sd['tags'] = []
         for i in re['data']:
             sd['tags'].append(i['info'])
+        if log:
+            logg.write(f"sd = {sd}", currentframe(), 'Audio Info')
         if ns:
             PrintInfo.printAuInfo(sd)
         cho = 1

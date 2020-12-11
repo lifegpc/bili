@@ -202,16 +202,35 @@ def printAuInfo(d: dict):
 	if d['aid'] != 0:
 		print(f"{lan['O1']}{d['aid']}")
 		print(f"{lan['O2']}{d['bvid']}")
-		print(f"CID: {d['cid']}")
+		if d['cid'] != 0: 
+			print(f"CID: {d['cid']}")
 	print(f"{lan['O4']}{d['title']}")
-	print(f"{lan['O5']}{tostr2(d['passtime'])}")
-	print(f"{lan['O7']}{d['intro']}")
+	if 'passtime' in d and d['passtime'] is not None and d['passtime'] != 0:
+		print(f"{lan['O5']}{tostr2(d['passtime'])}")
+	if 'ctime' in d and d['ctime'] is not None and d['ctime'] != 0:
+		print(f"{lan['O6']}{tostr2(d['ctime']/1000)}")
+	if 'uid' in d and d['uid'] is not None and d['uid'] != 0:
+		print(f"{lan['O7']}{d['intro']}")
 	print(f"{lan['O45']}{tostr6(d['duration'])}")
 	print(f"{lan['O33']}{gettags(d['tags'])}")
 	print(f"{lan['O46']}{d['author']}")
-	print(lan['O8'])
-	print(f"UID :{d['uid']}")
-	print(f"{lan['O9']}{d['uname']}")
+	if 'uid' in d and d['uid'] is not None and d['uid'] != 0:
+		print(lan['O8'])
+		print(f"UID :{d['uid']}")
+		print(f"{lan['O9']}{d['uname']}")
+	if 'pgc_info' in d and d['pgc_info'] is not None and type(d['pgc_info']) == dict:
+		pgc_info = d['pgc_info']
+		if 'pgc_menu' in pgc_info and pgc_info['pgc_menu'] is not None and type(pgc_info['pgc_menu']) == dict:
+			pgc_menu = pgc_info['pgc_menu']
+			print(lan['O53'])
+			print(f"{lan['O55']}{pgc_menu['title']}")
+			print(f"{lan['O54']}{pgc_menu['mbnames']}")
+			print(f"{lan['O56']}{pgc_menu['publisher']}")
+			print(f"{lan['O57']}{tostr2(pgc_menu['pubTime'])}")
+			if 'tags' in pgc_menu and pgc_menu['tags'] is not None and type(pgc_menu['tags']) == list:
+				print(f"{lan['O58']}{gettags(pgc_menu['tags'], lambda d: d['itemVal'])}")
+			print(f"{lan['O59']}{pgc_menu['playNum']}")
+			print(f"{lan['O60']}{pgc_menu['collNum']}")
 	print(lan['O47'])
 	s = d['statistic']
 	print(f"{lan['O48']}{s['play']}")
