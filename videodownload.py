@@ -5209,6 +5209,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 print(f"ID:{dash['id']} ({vqq},{ft})")
             print(f"{lan['OUTPUT10']}{file.info.size(dash['size'])}({dash['size']}B,{file.cml(dash['size'], timelength)})")
         vqs = mi
+        vqs = getaudesc(data, vqs)
     else:
         if ns or (not ns and F):
             print(lan['OUTPUT16'])  # 音频轨
@@ -5276,7 +5277,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             overwrite = ip['y']
             bs = False
         while bs:
-            inp = input(f"{lan['INPUT1'].replace('<filename>', filen + '.m4a')}(y/n)")  # "%s"文件已存在，是否覆盖？
+            inp = input(f"{lan['INPUT1'].replace('<filename>', filen + '.' + vf)}(y/n)")  # "%s"文件已存在，是否覆盖？
             if len(inp) > 0:
                 if inp[0].lower() == 'y':
                     overwrite = True
@@ -5354,7 +5355,10 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         if hzm == "m4s":
             print(lan['CONV_M4S_TO_M4A'])
         else:
-            print(lan['ADDMETA'])
+            if vf == "m4a":
+                print(lan['ADDMETA'])
+            elif vf == "flac":
+                print(lan['ADDMETA'].replace("m4a", "flac"))
         tt = int(time.time())
         nss = ""
         imga = ""
@@ -5399,6 +5403,49 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                     logg.write(f"METADTAFILE 'Temp/AU{data['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Audio Download Metadata")
             cm = f"""ffmpeg -i "{filen}.{hzm}" -i "Temp/AU{data['id']}_{tt}_metadata.txt"{imga} -map_metadata 1 -c copy{imga2} "{filen}.m4a"{nss}"""
+        elif vf == "flac":
+            if imgs == 0:
+                imga = f" -i \"{imgf}\""
+                imga2 = " -map 0 -map 2 -disposition:v:0 attached_pic"
+            with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                te.write(';FFMETADATA\n')
+                te.write(f"title={bstr.g(data['title'])}\n")
+                if 'uid' in data and data['uid'] is not None and data['uid'] != 0:
+                    te.write(f"comment={bstr.g(data['intro'])}\n")
+                    te.write(f"description={bstr.g(data['intro'])}\n")
+                    te.write(f"uid={bstr.g(data['uid'])}\n")
+                    te.write(f"uname={bstr.g(data['uname'])}\n")
+                te.write(f"artist={bstr.g(data['author'])}\n")
+                te.write(f"auid={data['id']}\n")
+                if 'aid' in data and data['aid'] is not None and data['aid'] != 0:
+                    te.write(f"aid={bstr.g(data['aid'])}\n")
+                if 'bvid' in data and data['bvid'] is not None and data['bvid'] != '':
+                    te.write(f"bvid={bstr.g(data['bvid'])}\n")
+                if 'cid' in data and data['cid'] is not None and data['cid'] != 0:
+                    te.write(f"cid={bstr.g(data['cid'])}\n")
+                if 'pubTime' in albumdata and albumdata['pubTime'] is not None and albumdata['pubTime'] != 0:
+                    te.write(f"pubtime={tostr2(albumdata['pubTime'])}\n")
+                if 'ctime' in data and data['ctime'] is not None and data['ctime'] != 0:
+                    te.write(f"ctime={tostr2(data['ctime']/1000)}\n")
+                if 'passtime' in data and data['passtime'] is not None and data['passtime'] != 0:
+                    te.write(f"passtime={tostr2(data['passtime'])}\n")
+                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0:
+                    te.write(f"menuid={albumdata['menuId']}\n")
+                te.write(f"aq={bstr.g(vqs)}\n")
+                te.write(f"tags={bstr.g(bstr.gettags(data['tags']))}\n")
+                if 'tags' in albumdata and albumdata['tags'] is not None and albumdata['title'] != '':
+                    te.write(f"album_tags={bstr.g(bstr.gettags(albumdata['tags']))}\n")
+                te.write(f"""purl={bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
+                if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
+                    te.write(f"publisher={albumdata['publisher']}\n")
+                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '':
+                    te.write(f"album={albumdata['title']}\n")
+                if 'mbnames' in albumdata and albumdata['mbnames'] is not None and albumdata['mbnames'] != '':
+                    te.write(f"album_artist={albumdata['mbnames']}")
+            if log:
+                with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADTAFILE 'Temp/AU{data['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Audio Download Metadata")
+            cm = f"""ffmpeg -i "{filen}.{hzm}" -i "Temp/AU{data['id']}_{tt}_metadata.txt"{imga} -map_metadata 1 -c copy{imga2} "{filen}.flac"{nss}"""
         if log:
             logg.write(f"cm = {cm}", currentframe(), "Normal Audio Download Ffmpeg Commandline")
         re = os.system(cm)
