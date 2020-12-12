@@ -1478,6 +1478,25 @@ def main(ip={}):
         sd['tags'] = []
         for i in re['data']:
             sd['tags'].append(i['info'])
+        if 'pgc_info' in sd and sd['pgc_info'] is not None and type(sd['pgc_info']) == dict:
+            pgc_info = sd['pgc_info']
+            if 'pgc_menu' in pgc_info  and pgc_info['pgc_menu'] is not None and type(pgc_info['pgc_menu']) == dict:
+                pgc_menu = pgc_info['pgc_menu']
+                if 'menuId' in pgc_menu and pgc_menu['menuId'] is not None and pgc_menu['menuId'] != 0:
+                    uri = f"https://api.bilibili.com/audio/music-service-c/menus/{pgc_menu['menuId']}"
+                    if log:
+                        logg.write(f"GET {uri}", currentframe(), "Audio Get Album List (APP API)")
+                    re = r.get(uri)
+                    re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Get Album List Result (APP API)")
+                    re = re.json()
+                    if re['code'] != 0:
+                        print(f"{re['code']} {re['msg']}")
+                    else:
+                        re = re['data']
+                        pgc_info['menusRespones'] = re['menusRespones']
+                        pgc_info['songsList'] = re['songsList']
         if log:
             logg.write(f"sd = {sd}", currentframe(), 'Audio Info')
         if ns:

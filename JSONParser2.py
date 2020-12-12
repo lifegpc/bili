@@ -211,7 +211,20 @@ def getaualbuminfo(d: dict) -> (bool, dict):
     r['uid'] = pgc_menu['uid']
     r['uname'] = pgc_menu['uname']
     r['collectionId'] = pgc_menu['collectionId']
+    if 'menusRespones' in pgc_info:
+        r['menusRespones'] = pgc_info['menusRespones']
+    if 'songsList' in pgc_info:
+        r['songsList'] = pgc_info['songsList']
     return True, r
+
+
+def getindexfromsongs(l: list, id: int) -> int:
+    k = 1
+    for song in l:
+        if song['id'] == id:
+            return k
+        k = k + 1
+    return 0
 
 
 def getchl(d:dict)->list:
