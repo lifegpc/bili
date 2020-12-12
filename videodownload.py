@@ -5104,11 +5104,22 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             dash[-1] = {'id': -1, 'base_url': re['cdns'][0], 'r': r2}
             dash[-1]['backup_url'] = re['cdns'][1:] if len(re['cdns']) > 1 else None
     if 'qualities' in data and data['qualities'] is not None:
+        r4 = requests.Session()
+        r4.headers.update({'User-Agent': 'Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36'})
+        if nte:
+            r4.trust_env = False
+        r4.proxies = r.proxies
+        read = JSONParser.loadcookie(r4, logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "Normal Audio Download Var10")
+        if read != 0:
+            print(lan['ERROR2'])  # 读取cookies.json出现错误
+            return -2
         for d in data['qualities']:
-            uri = f"https://api.bilibili.com/audio/music-service-c/url?mid={ud['d']['mid']}&platform=android&privilege=2&quality={d['type']}&songid={data['id']}"
+            uri = f"https://api.bilibili.com/audio/music-service-c/url?build=6140500&mid={ud['d']['mid']}&platform=android&privilege=2&quality={d['type']}&songid={data['id']}"
             if log:
                 logg.write(f"GET {uri}", currentframe(), "Normal Audio Get Playurl (APP API)")
-            re = r2.get(uri)
+            re = r4.get(uri)
             re.encoding = 'utf8'
             if log:
                 logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Audio Get Playurl Result (APP API)")
@@ -5119,7 +5130,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             re = re['data']
             if re['type'] == d['type']:
                 accept_qualities.append(d['type'])
-                dash[d['type']] = {'id': d['type'], 'base_url': re['cdns'][0], 'r': r2, 'size': re['size']}
+                dash[d['type']] = {'id': d['type'], 'base_url': re['cdns'][0], 'r': r4, 'size': re['size']}
                 dash[d['type']]['backup_url'] = re['cdns'][1:] if len(re['cdns']) > 1 else None
     if data['aid'] != 0:
         if ns:
