@@ -59,6 +59,20 @@ def getqualitytrans(t: str) -> str:
     return t
 
 
+def getaudesc(data: dict, id: int):
+    "获取AU号更好的描述"
+    if 'qualities' not in data or data['qualities'] is None or type(data['qualities']) != list:
+        return id
+    templ = [d['desc'] for d in data['qualities'] if d['type'] == id and d['desc'] != ""]
+    if len(templ) == 1:
+        t = templ[0]
+        if f"AU{t}" in lan:
+            return lan[f"AU{t}"]
+        print(lan['NO_QUA_TRANS'].replace('<value>', t))
+        return t
+    return id
+
+
 def getqualitytransl(l: list) -> list:
     r = []
     for i in l:
@@ -4981,7 +4995,7 @@ def livevideodownload(data: dict, data2: dict, r: requests.session, c: bool, se:
     return 0
 
 
-def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: bool):
+def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: bool, ud: dict):
     """AU号音频下载
     m 是否自动选择最高画质
     a 是否自动继续下载
@@ -5041,6 +5055,14 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         fin = False
     if 'in' in ip:
         fin = ip['in']
+    read, albumdata = JSONParser2.getaualbuminfo(data)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
+    if read:
+        if fin:
+            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+        else:
+            o = file.filterd(f"{o}{albumdata['title']}")
     sv = True
     if JSONParser.getset(se, 'sv') == False:
         sv = False
@@ -5075,24 +5097,55 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
     if read != 0:
         print(lan['ERROR2'])  # 读取cookies.json出现错误
         return -2
-    uri = f"https://www.bilibili.com/audio/music-service-c/web/url?sid={data['id']}&privilege=2&quality=2"
-    if log:
-        logg.write(f"GET {uri}", currentframe(), "Normal Audio Get Playurl")
-    re = r2.get(uri)
-    re.encoding = 'utf8'
-    if log:
-        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Audio Get Playurl Result")
-    re = re.json()
-    if re['code'] != 0:
-        print(f"{re['code']} {re['msg']}")
-        return -3
-    re = re['data']
-    if 'qualities' in re and re['qualities'] is not None:
-        input(f"{lan['AUDOMULQ']}\n{lan['ERROR5']}\n{lan['INPUT6']}")  # 不支持多个音质
-    accept_qualities = [2]
     dash = {}
-    dash[2] = {'id': 2, 'base_url': re['cdns'][0], 'r': r2}
-    dash[2]['backup_url'] = re['cdns'][1:] if len(re['cdns']) > 1 else None
+    accept_qualities = []
+    if 'uid' in data and data['uid'] is not None and data['uid'] != 0:
+        uri = f"https://www.bilibili.com/audio/music-service-c/web/url?sid={data['id']}&privilege=2&quality=2"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Normal Audio Get Playurl")
+        re = r2.get(uri)
+        re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Audio Get Playurl Result")
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']} {re['msg']}")
+        else:
+            re = re['data']
+            if 'qualities' in re and re['qualities'] is not None:
+                input(f"{lan['AUDOMULQ']}\n{lan['ERROR5']}\n{lan['INPUT6']}")  # 不支持多个音质
+            accept_qualities.append(-1)
+            dash[-1] = {'id': -1, 'base_url': re['cdns'][0], 'r': r2}
+            dash[-1]['backup_url'] = re['cdns'][1:] if len(re['cdns']) > 1 else None
+    if 'qualities' in data and data['qualities'] is not None:
+        r4 = requests.Session()
+        r4.headers.update({'User-Agent': 'Mozilla/5.0 (Linux; Android 8.0; Pixel 2 Build/OPD3.170816.012) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Mobile Safari/537.36'})
+        if nte:
+            r4.trust_env = False
+        r4.proxies = r.proxies
+        read = JSONParser.loadcookie(r4, logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "Normal Audio Download Var10")
+        if read != 0:
+            print(lan['ERROR2'])  # 读取cookies.json出现错误
+            return -2
+        for d in data['qualities']:
+            uri = f"https://api.bilibili.com/audio/music-service-c/url?build=6140500&mid={ud['d']['mid']}&platform=android&privilege=2&quality={d['type']}&songid={data['id']}"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "Normal Audio Get Playurl (APP API)")
+            re = r4.get(uri)
+            re.encoding = 'utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Normal Audio Get Playurl Result (APP API)")
+            re = re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['msg']}")
+                continue
+            re = re['data']
+            if re['type'] == d['type']:
+                accept_qualities.append(d['type'])
+                dash[d['type']] = {'id': d['type'], 'base_url': re['cdns'][0], 'r': r4, 'size': re['size']}
+                dash[d['type']]['backup_url'] = re['cdns'][1:] if len(re['cdns']) > 1 else None
     if data['aid'] != 0:
         if ns:
             print(lan['USEFROMV'])  # 发现关联的视频
@@ -5127,7 +5180,6 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
-                return -3
             if 'data' in re and 'dash' in re['data'] and 'audio' in re['data']['dash'] and re['data']['dash']['audio'] is not None:
                 accept_audio_quality = []
                 for j in re['data']['dash']['audio']:
@@ -5137,22 +5189,40 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 accept_audio_quality.sort(reverse=True)
                 accept_qualities = accept_qualities + accept_audio_quality
                 timel = re['data']['timelength']
+    if len(accept_qualities) == 0:
+        return -3
     for quality in accept_qualities:
-        dash[quality]['size'] = streamgetlength(dash[quality]['r'], dash[quality]['base_url'], logg)
+        if 'size' not in dash[quality]:
+            dash[quality]['size'] = streamgetlength(dash[quality]['r'], dash[quality]['base_url'], logg)
     if m and not F:
         mi = accept_qualities[0]
         ms = dash[mi]['size']
+        ext_list = ['m4s', 'm4a', 'flac']
+        mext = file.geturlfe(dash[mi]['base_url'])
+        def get_index(ext: str) -> int:
+            try:
+                return ext_list.index(ext)
+            except AttributeError:
+                return -1
         for quality in accept_qualities:
-            if dash[quality]['size'] > ms:
+            text = file.geturlfe(dash[quality]['base_url'])
+            if dash[quality]['size'] > ms or ((dash[quality]['size'] == ms or get_index(text) == 2) and get_index(text) > get_index(mext)):
                 ms = dash[quality]['size']
                 mi = quality
+                mext = text
         dash = dash[mi]
         timelength = data['duration'] * 1000 if mi < 30000 else timel
         if ns:
             print(lan['OUTPUT16'])  # 音频轨
-            print(f"ID:{dash['id']}")
+            vqq = getaudesc(data, dash['id'])
+            ft = file.geturlfe(dash['base_url'])
+            if vqq == dash['id']:
+                print(f"ID:{dash['id']} ({ft})")
+            else:
+                print(f"ID:{dash['id']} ({vqq},{ft})")
             print(f"{lan['OUTPUT10']}{file.info.size(dash['size'])}({dash['size']}B,{file.cml(dash['size'], timelength)})")
         vqs = mi
+        vqs = getaudesc(data, vqs)
     else:
         if ns or (not ns and F):
             print(lan['OUTPUT16'])  # 音频轨
@@ -5160,7 +5230,12 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         for quality in accept_qualities:
             timelength = data['duration'] * 1000 if quality < 30000 else timel
             if ns or (not ns and F):
-                print(f"{k + 1}.ID:{quality}")
+                vqq = getaudesc(data, quality)
+                ft = file.geturlfe(dash[quality]['base_url'])
+                if vqq == quality:
+                    print(f"{k + 1}.ID:{quality} ({ft})")
+                else:
+                    print(f"{k + 1}.ID:{quality} ({vqq},{ft})")
                 print(f"{lan['OUTPUT10']}{file.info.size(dash[quality]['size'])}({dash[quality]['size']}B,{file.cml(dash[quality]['size'], timelength)})")
             k = k + 1
         if F:
@@ -5182,11 +5257,13 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                         bs = False
                         vqs = accept_qualities[int(inp) - 1]
                         dash = dash[vqs]
+                        vqs = getaudesc(data, vqs)
                         if ns:
                             print(lan['OUTPUT17'].replace('<audioquality>', str(vqs)))  # 已选择%s音质
         else:
             vqs = accept_qualities[0]
             dash = dash[vqs]
+            vqs = getaudesc(data, vqs)
     avi = "" if data['aid'] == 0 else f",AV{data['aid']},{data['bvid']},{data['cid']}"
     if not fin:
         filen = f"{o}{file.filtern(data['title'])}"
@@ -5195,11 +5272,12 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
     else:
         filen = f"""{o}{file.filtern(f"{data['title']}(AU{data['id']}{avi})")}"""
     hzm = file.geturlfe(dash['base_url'])
-    if hzm == "m4a" and ma:
-        hzm = "temp.m4a"
+    vf = "flac" if hzm == "flac" else "m4a"
+    if hzm == vf and ma:
+        hzm = f"temp.{hzm}"
     if log:
         logg.write(f"dash = {dash}\nvqs = {vqs}\nfilen = {filen}\nhzm = {hzm}", currentframe(), "Normal Audio Download Var3")
-    if ffmpeg and (ma or hzm != "m4a" ) and os.path.exists(f"{filen}.m4a"):
+    if ffmpeg and (ma or hzm != vf ) and os.path.exists(f"{filen}.{vf}"):
         overwrite = False
         bs = True
         if not ns:
@@ -5212,7 +5290,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             overwrite = ip['y']
             bs = False
         while bs:
-            inp = input(f"{lan['INPUT1'].replace('<filename>', filen + '.m4a')}(y/n)")  # "%s"文件已存在，是否覆盖？
+            inp = input(f"{lan['INPUT1'].replace('<filename>', filen + '.' + vf)}(y/n)")  # "%s"文件已存在，是否覆盖？
             if len(inp) > 0:
                 if inp[0].lower() == 'y':
                     overwrite = True
@@ -5221,7 +5299,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                     bs = False
         if overwrite:
             try:
-                os.remove(f"{filen}.m4a")
+                os.remove(f"{filen}.{vf}")
             except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Normal Audio Download Remove File Error")
@@ -5286,34 +5364,101 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
     imgs = aupicdownload(data, dash['r'], se, ip, imgf)
     if log:
         logg.write(f"imgs = {imgs}", currentframe(), "Normal Audio Download Var5")
-    if ffmpeg and (ma or hzm != "m4a"):
+    if ffmpeg and (ma or hzm != vf):
         if hzm == "m4s":
             print(lan['CONV_M4S_TO_M4A'])
         else:
-            print(lan['ADDMETA'])
+            if vf == "m4a":
+                print(lan['ADDMETA'])
+            elif vf == "flac":
+                print(lan['ADDMETA'].replace("m4a", "flac"))
         tt = int(time.time())
         nss = ""
         imga = ""
         imga2 = ""
         if not ns:
             nss = getnul()
-        if imgs == 0:
-            imga = f" -i \"{imgf}\""
-            imga2 = " -map 0 -map 2 -disposition:v:0 attached_pic"
-        with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
-            te.write(';FFMETADATA\n')
-            te.write(f"title={bstr.g(data['title'])}\n")
-            te.write(f"comment={bstr.g(data['intro'])}\n")
-            te.write(f"artist={bstr.g(data['author'])}\n")
-            te.write(f"episode_id=AU{data['id']}\n")
-            te.write(f"date={tostr4(data['passtime'])}\n")
-            te.write(f"description={bstr.g(vqs)},{data['uid']},{data['uname']}\\\n")
-            te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
-            te.write(f"""{bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
-        if log:
-            with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
-                logg.write(f"METADTAFILE 'Temp/AU{data['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Audio Download Metadata")
-        cm = f"""ffmpeg -i "{filen}.{hzm}" -i "Temp/AU{data['id']}_{tt}_metadata.txt"{imga} -map_metadata 1 -c copy{imga2} "{filen}.m4a"{nss}"""
+        if vf == "m4a":
+            if imgs == 0:
+                imga = f" -i \"{imgf}\""
+                imga2 = " -map 0 -map 2 -disposition:v:0 attached_pic"
+            with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                te.write(';FFMETADATA\n')
+                te.write(f"title={bstr.g(data['title'])}\n")
+                if 'uid' in data and data['uid'] is not None and data['uid'] != 0:
+                    te.write(f"comment={bstr.g(data['intro'])}\n")
+                te.write(f"artist={bstr.g(data['author'])}\n")
+                te.write(f"episode_id=AU{data['id']}\n")
+                if 'pubTime' in albumdata and albumdata['pubTime'] is not None and albumdata['pubTime'] != 0:
+                    te.write(f"date={tostr4(albumdata['pubTime'])}\n")
+                elif 'ctime' in data and data['ctime'] is not None and data['ctime'] != 0:
+                    te.write(f"date={tostr4(data['ctime']/1000)}\n")
+                elif 'passtime' in data and data['passtime'] is not None and data['passtime'] != 0:
+                    te.write(f"date={tostr4(data['passtime'])}\n")
+                menuId = ''
+                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0:
+                    menuId = f",{albumdata['menuId']}"
+                if 'uid' in data and data['uid'] is not None and data['uid'] != 0:
+                    te.write(f"description={bstr.g(vqs)},{data['uid']},{data['uname']}{menuId}\\\n")
+                else:
+                    te.write(f"description={bstr.g(vqs)}{menuId}\\\n")
+                te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
+                if 'tags' in albumdata and albumdata['tags'] is not None and albumdata['title'] != '':
+                    te.write(f"{bstr.g(lan['ALBTAGS'])}{bstr.g(bstr.gettags(albumdata['tags']))}\\\n")
+                te.write(f"""{bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
+                if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
+                    te.write(f"copyright=Publish by {albumdata['publisher']}\n")
+                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '':
+                    te.write(f"album={albumdata['title']}\n")
+                if 'mbnames' in albumdata and albumdata['mbnames'] is not None and albumdata['mbnames'] != '':
+                    te.write(f"album_artist={albumdata['mbnames']}")
+            if log:
+                with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADTAFILE 'Temp/AU{data['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Audio Download Metadata")
+            cm = f"""ffmpeg -i "{filen}.{hzm}" -i "Temp/AU{data['id']}_{tt}_metadata.txt"{imga} -map_metadata 1 -c copy{imga2} "{filen}.m4a"{nss}"""
+        elif vf == "flac":
+            if imgs == 0:
+                imga = f" -i \"{imgf}\""
+                imga2 = " -map 0 -map 2 -disposition:v:0 attached_pic"
+            with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'w', encoding='utf8', newline='\n') as te:
+                te.write(';FFMETADATA\n')
+                te.write(f"title={bstr.g(data['title'])}\n")
+                if 'uid' in data and data['uid'] is not None and data['uid'] != 0:
+                    te.write(f"comment={bstr.g(data['intro'])}\n")
+                    te.write(f"description={bstr.g(data['intro'])}\n")
+                    te.write(f"uid={bstr.g(data['uid'])}\n")
+                    te.write(f"uname={bstr.g(data['uname'])}\n")
+                te.write(f"artist={bstr.g(data['author'])}\n")
+                te.write(f"auid={data['id']}\n")
+                if 'aid' in data and data['aid'] is not None and data['aid'] != 0:
+                    te.write(f"aid={bstr.g(data['aid'])}\n")
+                if 'bvid' in data and data['bvid'] is not None and data['bvid'] != '':
+                    te.write(f"bvid={bstr.g(data['bvid'])}\n")
+                if 'cid' in data and data['cid'] is not None and data['cid'] != 0:
+                    te.write(f"cid={bstr.g(data['cid'])}\n")
+                if 'pubTime' in albumdata and albumdata['pubTime'] is not None and albumdata['pubTime'] != 0:
+                    te.write(f"pubtime={tostr2(albumdata['pubTime'])}\n")
+                if 'ctime' in data and data['ctime'] is not None and data['ctime'] != 0:
+                    te.write(f"ctime={tostr2(data['ctime']/1000)}\n")
+                if 'passtime' in data and data['passtime'] is not None and data['passtime'] != 0:
+                    te.write(f"passtime={tostr2(data['passtime'])}\n")
+                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0:
+                    te.write(f"menuid={albumdata['menuId']}\n")
+                te.write(f"aq={bstr.g(vqs)}\n")
+                te.write(f"tags={bstr.g(bstr.gettags(data['tags']))}\n")
+                if 'tags' in albumdata and albumdata['tags'] is not None and albumdata['title'] != '':
+                    te.write(f"album_tags={bstr.g(bstr.gettags(albumdata['tags']))}\n")
+                te.write(f"""purl={bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
+                if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
+                    te.write(f"publisher={albumdata['publisher']}\n")
+                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '':
+                    te.write(f"album={albumdata['title']}\n")
+                if 'mbnames' in albumdata and albumdata['mbnames'] is not None and albumdata['mbnames'] != '':
+                    te.write(f"album_artist={albumdata['mbnames']}")
+            if log:
+                with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
+                    logg.write(f"METADTAFILE 'Temp/AU{data['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Audio Download Metadata")
+            cm = f"""ffmpeg -i "{filen}.{hzm}" -i "Temp/AU{data['id']}_{tt}_metadata.txt"{imga} -map_metadata 1 -c copy{imga2} "{filen}.flac"{nss}"""
         if log:
             logg.write(f"cm = {cm}", currentframe(), "Normal Audio Download Ffmpeg Commandline")
         re = os.system(cm)
@@ -5321,7 +5466,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             logg.write(f"re = {re}", currentframe(), "Normal Audio Download Ffmpeg Return")
         if re == 0:
             if oll:
-                oll.add(f"{filen}.m4a")
+                oll.add(f"{filen}.{vf}")
             if hzm == "m4s":
                 print(lan['COM_CONV'])
             else:
@@ -5386,6 +5531,14 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
         fin = False
     if 'in' in ip:
         fin = ip['in']
+    read, albumdata = JSONParser2.getaualbuminfo(data)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
+    if read:
+        if fin:
+            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+        else:
+            o = file.filterd(f"{o}{albumdata['title']}")
     if log:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "Normal Audio Download Pic Para")
     try:
@@ -5403,6 +5556,21 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
         else:
             te = file.filtern(f"{data['title']}.{file.geturlfe(data['cover'])}")
         fn = f"{o}{te}"
+    if 'coverUrl' in albumdata and albumdata['coverUrl'] is not None and albumdata['coverUrl'] != '':
+        tfn = f"{file.spfln(fn)[0]}/cover.{file.spfn(albumdata['coverUrl'])[1]}"
+        if not os.path.exists(tfn):
+            if log:
+                logg.write(f"GET {albumdata['coverUrl']}", currentframe(), "Normal Audio Download Pic Album Request")
+            re = r.get(albumdata['coverUrl'])
+            if log:
+                logg.write(f"status = {re.status_code}", currentframe(), "Normal Audio Download Pic Album Request Result")
+            if re.status_code == 200:
+                with open(tfn, 'wb') as f:
+                    f.write(re.content)
+                if oll:
+                    oll.add(tfn)
+                if ns:
+                    print(lan['OUTPUT23'].replace('<filename>', tfn))  # 封面图片下载完成。
     if log:
         logg.write(f"fn = {fn}", currentframe(), "Normal Audio Download Pic Var")
     if os.path.exists(fn):
@@ -5480,6 +5648,14 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
         fin = False
     if 'in' in ip:
         fin = ip['in']
+    read, albumdata = JSONParser2.getaualbuminfo(data)
+    if log:
+        logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
+    if read:
+        if fin:
+            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+        else:
+            o = file.filterd(f"{o}{albumdata['title']}")
     nte = True
     if JSONParser.getset(se, 'te') == False:
         nte = True

@@ -16,6 +16,9 @@
 from re import search,I
 from html.parser import HTMLParser
 from regex import search as rsearch
+from typing import Callable
+
+
 def f(i:str):
     s=i.replace('\r','\\r')
     s=s.replace('\n','\\n')
@@ -49,16 +52,18 @@ def lg(i: str):
     return s
 
 
-def gettags(t:list) -> str:
+def gettags(t: list, fun: Callable=None) -> str:
     "将tag列表转换为文字"
+    if fun is None:
+        fun = lambda s : s
     f=True
     s=""
     for i in t :
         if f:
             f=False
-            s=i
+            s = fun(i)
         else :
-            s=s+","+i
+            s = s + "," + fun(i)
     return s
 def rhtml(s:str)-> str:
     "去HTML化"

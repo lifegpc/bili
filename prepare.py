@@ -23,6 +23,7 @@ from os import listdir, remove, system
 from requests import Session
 from file import mkdir
 from platform import system as systemname
+from re import search
 
 la = None
 se = loadset()
@@ -116,8 +117,9 @@ class main:
                         "https://github.com/eligrey/FileSaver.js/raw/master/dist/FileSaver.min.js", tag)
             if not self._check_java():
                 raise FileNotFoundError('Can not find java.')
-            if not self._check_compiler():
-                raise FileNotFoundError('Can not find compiler.jar.')
+            tag = self._get_compiler_tag()
+            self._check(
+                'compiler.jar', f"https://repo1.maven.org/maven2/com/google/javascript/closure-compiler/{tag}/closure-compiler-{tag}.jar", tag)
             tag = self._get_tag(
                 'https://api.github.com/repos/dankogai/js-base64/tags')
             self._check_with_com('webuihtml/jso/base64.min.js',
@@ -162,8 +164,13 @@ class main:
         re = re.json()
         return re[0]['name']
 
-    def _check_compiler(self) -> bool:
-        return True if exists('compiler.jar') else False
+    def _get_compiler_tag(self) -> str:
+        re = self._r.head(
+            'https://mvnrepository.com/artifact/com.google.javascript/closure-compiler/latest')
+        uri = re.headers['Location']
+        rs = search(
+            r'^https://mvnrepository\.com/artifact/com\.google\.javascript/closure-compiler/(.+)', uri)
+        return rs.groups()[0]
 
     def _get_file(self, uri: str, fn: str):
         re = self._r.get(uri, stream=True)

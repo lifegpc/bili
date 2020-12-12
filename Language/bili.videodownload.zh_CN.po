@@ -320,3 +320,23 @@ msgid ""
 "describe the bug.)"
 msgstr ""
 "标准化了<count>条。如果LRC文件无法使用，请在设置里禁用标准化歌词并且去<https://github.com/lifegpc/bili/issues>提交BUG。（请使用中文或英文描述BUG。）"
+
+msgctxt "ALBTAGS"
+msgid "Album tags: "
+msgstr "专辑标签："
+
+msgctxt "AU流畅"
+msgid "Smooth quality"
+msgstr "流畅"
+
+msgctxt "AU标准"
+msgid "Standard quality"
+msgstr "标准"
+
+msgctxt "AU高品质"
+msgid "High quality"
+msgstr "高品质"
+
+msgctxt "AU无损音质"
+msgid "Lossless quality"
+msgstr "无损音质"

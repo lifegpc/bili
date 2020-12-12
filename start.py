@@ -42,6 +42,7 @@ from time import sleep, time
 from Logger import Logger
 from inspect import currentframe
 from autoopenlist import autoopenfilelist
+from urllib.parse import parse_qs
 
 # 远程调试用代码
 # import ptvsd
@@ -267,17 +268,32 @@ def main(ip={}):
                 pld['k']=''
                 pld['t']=0
                 if re[17] :
-                    sl=re[17].split('&')
-                    for us in sl:
-                        rep=search(r'^(fid=([0-9]+))?(keyword=(.+))?(type=([0-9]+))?',us,I)
-                        if rep!=None :
-                            rep=rep.groups()
-                            if rep[0]:
-                                fid=int(rep[1])
-                            if rep[2]:
-                                pld['k']=rep[3]
-                            if rep[4]:
-                                pld['t']=int(rep[5])
+                    sl = parse_qs(re[17])
+                    if 'fid' in sl:
+                        for s in sl['fid']:
+                            if s.isnumeric():
+                                fid = int(s)
+                                break
+                    if 'keyword' in sl:
+                        pld['k'] = sl['keyword'][0]
+                    if 'type' in sl:
+                        for s in sl['type']:
+                            if s.isnumeric():
+                                pld['t'] = int(s)
+                                break
+                    if 'tid' in sl:
+                        for s in sl['tid']:
+                            if s.isnumeric():
+                                pld['tid'] = int(s)
+                                break
+                    if 'order' in sl:
+                        pld['order'] = sl['order'][0]
+                    if 't' not in pld:  # 如果没有指定使用默认值
+                        pld['t'] = 0
+                    if 'tid' not in pld:
+                        pld['tid'] = 0
+                    if 'order' not in pld:
+                        pld['order'] = 'mtime'
                 if log and not logg.hasf():
                     if fid == -1:
                         logg.openf(f"log/UID{uid}_FAV_{round(time())}.log")
@@ -587,6 +603,16 @@ def main(ip={}):
                     return -1
         if log:
             logg.write(f"fid = {fid}", currentframe(), "PL FID OUT")
+        if 'ltid' in ip:
+            re = JSONParser2.getpltid(section, fid, uid, logg)
+            if re == -1:
+                return -1
+            if len(re) > 0:
+                print(lan['PLITID'])
+                PrintInfo.printplitid(re)
+            else:
+                print(lan['PLITIDNUL'])
+            return 0
         i=1
         re = JSONParser2.getpli(section, fid, i, pld, logg)
         if re==-1 :
@@ -1411,13 +1437,33 @@ def main(ip={}):
         if log:
             logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Get Info Result")
         re = re.json()
-        if re['code'] == 72010027:
-            print(lan['AUAPPERR'])  # 该音频只能在APP上播放。（该程序目前不支持。）
-            return 0
-        elif re['code'] != 0:
+        wapir = False  # 网页端API结果
+        mapir = False  # APP API结果
+        uri = f"https://api.bilibili.com/audio/music-service-c/songs/playing?song_id={auid}"  # build=6140500
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Audio Get Info (APPAPI)")
+        re2 = r.get(uri)
+        re2.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re2.status_code}\n{re2.text}", currentframe(), "Audio Get Info Result (APPAPI)")
+        re2 = re2.json()
+        if re['code'] != 0 and re['code'] != 72010027:
             print(f"{re['code']} {re['msg']}")
+        elif re['code'] == 0:
+            wapir = True
+        if re2['code'] != 0:
+            print(f"{re2['code']} {re2['msg']}")
+        else:
+            mapir = True
+        if not wapir and not mapir:
+            if re['code'] == 72010027:
+                print(lan['AUAPPERR'])  # 该音频只能在APP上播放。（该程序目前不支持。）
             return 0
-        sd = re['data']
+        sd = {}
+        if wapir:
+            sd = re['data']
+        if mapir:
+            sd = JSONParser2.dealwithauapi(sd, re2['data'])
         uri = f"https://www.bilibili.com/audio/music-service-c/web/tag/song?sid={auid}"
         if log:
             logg.write(f"GET {uri}", currentframe(), "Audio Get Tags Info")
@@ -1432,6 +1478,8 @@ def main(ip={}):
         sd['tags'] = []
         for i in re['data']:
             sd['tags'].append(i['info'])
+        if log:
+            logg.write(f"sd = {sd}", currentframe(), 'Audio Info')
         if ns:
             PrintInfo.printAuInfo(sd)
         cho = 1
@@ -1503,7 +1551,7 @@ def main(ip={}):
                         bs=False
             if log:
                 logg.write(f"cho3 = {cho3}\ncho5 = {cho5}", currentframe(), "Normal Video Download Video/Audio Para")
-            read = videodownload.audownload(sd, r, se, ip, cho3, cho5)
+            read = videodownload.audownload(sd, r, se, ip, cho3, cho5, ud)
             if log:
                 logg.write(f"read = {read}", currentframe(), "Audio Download Audio Return")
         elif cho == 2:

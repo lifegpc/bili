@@ -52,7 +52,7 @@ urls = (
     r"^/api/(.+)", "api",
     r"^/page/(.+)$", "page",
     r"^/pic/(.+)$", "pic",
-    r"^/live/(.+)$", "live"
+    r"^/live/(.*)$", "live"
 )
 
 

@@ -855,7 +855,7 @@ window.addEventListener('load', () => {
             pa = $.param(pa);
             var uri = "/live/1.mp4?" + pa;
             var ur = new URL(uri, url.origin);
-            mpc += ("1,video," + ur.href + "\n");
+            mpc += ("1,filename," + ur.href + "\n");
             if (has_audio) {
                 /**@type {DashUrl}*/
                 var ad = dash.data.audio[ai];
@@ -863,7 +863,7 @@ window.addEventListener('load', () => {
                 pa = $.param(pa);
                 uri = "/live/1.m4a?" + pa;
                 var ur = new URL(uri, url.origin);
-                mpc += ("1,audio," + ur.href + "\n");
+                mpc += ("1,filename," + ur.href + "\n");
             }
             var mpcb = new Blob([mpc], { 'type': 'text/plain;charset=utf-8' });
             saveAs(mpcb, data.title + " - " + data.page[p].part + ".mpcpl");
@@ -1094,7 +1094,7 @@ window.addEventListener('load', () => {
                 pa = $.param(pa);
                 var uri = "/live/" + durl.order + ".flv?" + pa;
                 var ur = new URL(uri, url.origin);
-                mpc += ((j + 1) + ",type,0\n" + (j + 1) + ",label," + data.title + " - " + data.page[p].part + " - " + durl.order + "\n" + (j + 1) + ",video," + ur.href + "\n")
+                mpc += ((j + 1) + ",type,0\n" + (j + 1) + ",label," + data.title + " - " + data.page[p].part + " - " + durl.order + "\n" + (j + 1) + ",filename," + ur.href + "\n")
             }
             var mpcb = new Blob([mpc], { 'type': 'text/plain;charset=utf-8' });
             saveAs(mpcb, data.title + " - " + data.page[p].part + ".mpcpl");

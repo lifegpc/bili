@@ -20,8 +20,10 @@ from lang import getdict,getlan
 from command import gopt
 from inspect import currentframe
 from traceback import format_exc
+from typing import Callable, List
 
 
+StrList = List[str]
 lan=None
 se=loadset()
 if se==-1 or se==-2 :
@@ -43,9 +45,9 @@ def getplinfo(d:dict) :
     r['count']=t['media_count']
     return r
 def getpli(r, f, i, d: dict, logg=None):
+    uri = f"https://api.bilibili.com/x/v3/fav/resource/list?media_id={f}&pn={i}&ps=20&keyword={d['k']}&order={d['order']}&type={d['t']}&tid={d['tid']}&jsonp=jsonp"
     if logg is not None:
-        logg.write(f"GET https://api.bilibili.com/x/v3/fav/resource/list?media_id={f}&pn={i}&ps=20&keyword={d['k']}&order=mtime&type={d['t']}&tid=0&jsonp=jsonp", currentframe(), "GET PLI INFO")
-    uri='https://api.bilibili.com/x/v3/fav/resource/list?media_id=%s&pn=%s&ps=20&keyword=%s&order=mtime&type=%s&tid=0&jsonp=jsonp'%(f,i,d['k'],d['t'])
+        logg.write(f"GET {uri}", currentframe(), "GET PLI INFO")
     bs=True
     while bs :
         try :
@@ -80,6 +82,138 @@ def getpliv(i:list,d:dict):
         r['pubtime']=t['pubtime']
         r['ftime']=t['fav_time']
         i.append(r)
+
+
+def getpltid(r: Session, fid: int, uid: int, logg=None):
+    uri = f"https://api.bilibili.com/x/v3/fav/resource/partition?up_mid={uid}&media_id={fid}&jsonp=jsonp"
+    if logg:
+        logg.write(f"GET {uri}", currentframe(), "GET Pli Tid List")
+    re = r.get(uri)
+    re.encoding = 'utf8'
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Pli Tid List Result")
+    re = re.json()
+    if re['code'] != 0:
+        print(f"{re['code']} {re['message']}")
+        return -1
+    return re['data']
+
+
+def dealwithauapi(d: dict, d2: dict):
+    "处理客户端API和网页端API的差异"
+    def add(k: str, v=None, d: dict=d):
+        "增加空值"
+        if k not in d:
+            d[k] = v
+    def rep(k: str, nonev='', k2: str=None, nonev2=None, f: Callable=None, l: StrList=[], l2: StrList=[], strict: bool=False, d: dict=d, d2: dict=d2):
+        "检查是否需要覆盖并覆盖"
+        for s in l:
+            if s not in d or d[s] is None or type(d[s]) != dict:
+                if s not in d or d[s] is None:
+                    d[s] = {}
+                else:
+                    return
+            d = d[s]
+        for s in l2:
+            if s not in d2 or d2[s] is None or type(d2[s]) != dict:
+                    return
+            d2 = d2[s]
+        if k2 is None or k2 == '':
+            k2 = k
+        if nonev2 is None:
+            nonev2 = nonev
+        if f is None:
+            f = lambda s : s
+        if k not in d or d[k] is None or d[k] == nonev:
+            if k2 in d2 and d2[k2] is not None:
+                if (k not in d or d[k] is None) and not strict:
+                    d[k] = f(d2[k2])
+                elif d2[k2] != nonev2:
+                    d[k] = f(d2[k2])
+    rep('activities', [])
+    add('activityId', 0)
+    rep('aid', 0, 'avid', '', lambda s : int(s[2:]) if s[2:] != "" else 0)
+    rep('album_id')
+    rep('attr', 0, 'songAttr')
+    rep('author')
+    rep('bvid')
+    add('cid', 0)
+    rep('coin_num', 0)
+    rep('coinceiling', 0)
+    add('collectIds', [])
+    rep('cover', k2='cover_url')
+    add('crtype', 0)
+    rep('ctime', 0)
+    rep('ctime_str')
+    add('curtime', 0)
+    rep('duration', 0)
+    rep('fans', 0)
+    rep('id', 0)
+    rep('intro')
+    rep('isFromVideo', 0)
+    rep('is_cacheable', False)
+    rep('is_collect', 0)
+    rep('is_off', 0)
+    rep('limit', 0)
+    rep('limitdesc')
+    rep('lyric', k2='lyric_url')
+    rep('memberList', [])
+    rep('menusRespones', [])
+    add('msid', 0)
+    add('passtime', 0)
+    rep('pgc_info')
+    rep('qualities', [])
+    rep('region')
+    rep('relationData')
+    rep('collect', 0, 'collect_count', l=['statistic'])
+    rep('comment', 0, 'reply_count', l=['statistic'])
+    rep('play', 0, 'play_count', l=['statistic'])
+    rep('share', 0, 'snum', l=['statistic'])
+    rep('sid', 0, 'id', l=['statistic'])
+    rep('title')
+    rep('uid', 0, 'mid')
+    rep('uname', k2='up_name')
+    rep('up_cert_info')
+    rep('up_cert_type')
+    rep('up_hit_audios', [])
+    rep('up_img')
+    rep('up_is_follow', 0)
+    rep('videos', [])
+    return d
+
+
+def getaualbuminfo(d: dict) -> (bool, dict):
+    "读取AU号信息中的专辑信息"
+    r = {}
+    if 'pgc_info' not in d or d['pgc_info'] is None or type(d['pgc_info']) != dict:
+        return False, r
+    pgc_info = d['pgc_info']
+    if 'pgc_menu' not in pgc_info or pgc_info['pgc_menu'] is None or type(pgc_info['pgc_menu']) != dict:
+        return False, r
+    pgc_menu = pgc_info['pgc_menu']
+    r['menuId'] = pgc_menu['menuId']
+    r['type'] = pgc_menu['type']
+    r['coverUrl'] = pgc_menu['coverUrl']
+    r['title'] = pgc_menu['title']
+    r['mbnames'] = pgc_menu['mbnames']
+    r['publisher'] = pgc_menu['publisher']
+    r['pubTime'] = pgc_menu['pubTime']
+    if 'tags' in pgc_menu and pgc_menu['tags'] is not None and type(pgc_menu['tags']) == list:
+        r['tags'] = [i['itemVal'] for i in pgc_menu['tags']]
+    else:
+        r['tags'] = []
+    r['passTime'] = pgc_menu['passTime']
+    r['playNum'] = pgc_menu['playNum']
+    r['tryNum'] = pgc_menu['tryNum']
+    r['downloadNum'] = pgc_menu['downloadNum']
+    r['collNum'] = pgc_menu['collNum']
+    r['isOff'] = pgc_menu['isOff']
+    r['uid'] = pgc_menu['uid']
+    r['uname'] = pgc_menu['uname']
+    r['collectionId'] = pgc_menu['collectionId']
+    return True, r
+
+
 def getchl(d:dict)->list:
     r=[]
     for i in d['data']['list'] :

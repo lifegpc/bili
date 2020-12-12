@@ -222,4 +222,40 @@ msgstr "シェア数: "
 
 msgctxt "O51"
 msgid "Favorited count: "
+msgstr "お気に入り数: "
+
+msgctxt "O52"
+msgid "Type ID (tid): "
+msgstr ""
+
+msgctxt "O53"
+msgid "Album info: "
+msgstr ""
+
+msgctxt "O54"
+msgid "Album artist: "
+msgstr ""
+
+msgctxt "O55"
+msgid "Album title: "
+msgstr ""
+
+msgctxt "O56"
+msgid "Album publisher: "
+msgstr ""
+
+msgctxt "O57"
+msgid "Album publish time: "
+msgstr ""
+
+msgctxt "O58"
+msgid "Album tags: "
+msgstr ""
+
+msgctxt "O59"
+msgid "Album played times: "
+msgstr ""
+
+msgctxt "O60"
+msgid "Album favorited times: "
 msgstr ""

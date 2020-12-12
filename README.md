@@ -37,6 +37,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - [x] [自动合并分离的视频](#自动合并分离的视频)
 - [x] [mp4和mkv格式](#mp4和mkv格式)
 - [x] [m4a格式](#m4a格式)
+- [x] [flac格式](#flac格式)
 - [ ] [mp3格式](#mp3格式)
 - [x] [普通AV/BV号视频](#普通avbv号视频)
     * [x] 弹幕下载
@@ -85,6 +86,8 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 本程序支持合并为mp4文件或mkv文件，设置中可以选择视频格式。
 ### m4a格式
 本程序支持直接下载音频文件为m4a文件。
+### flac格式
+部分音频含有无损音质，可以保存为flac文件。
 ### mp3格式
 本程序暂不支持mp3格式。（因为不想转码）
 ### 普通AV/BV号视频
@@ -138,6 +141,8 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```fid```：用来指定是哪一个收藏夹
 - ```keyword```：用来搜索收藏夹
 - ```type```：指定是搜索全部收藏夹还是当前收藏夹。0为当前收藏夹，1为全部收藏夹。
+- ```tid```：用来指定是哪个分区，全部分区是0。可以使用```--ltid```命令行参数来获得当前收藏夹所有可用的tid。
+- ```order```：指定投稿视频列表排序。```mtime```为最近收藏，```view```为最多播放，```pubtime```为最新投稿。
 
 会将所有收藏夹内的视频解析出来以供选择需要下载的视频。
 ### 频道列表
@@ -179,7 +184,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```bilibili.com/audio/au1```
 - ```b23.tv/au1```
 #### 音频下载
-目前只支持下载默认音质，如果有出现其他音质，下载器应该会有提示，请将AU号提交至[issues](https://github.com/lifegpc/bili/issues)。  
+~~目前只支持下载默认音质，如果有出现其他音质，下载器应该会有提示，请将AU号提交至[issues](https://github.com/lifegpc/bili/issues)。~~ 现已支持多种音质，且用且珍惜。  
 如果音频有关联的普通视频，将会尝试从关联的视频页获取更多的音质。
 #### 仅下载歌词
 程序默认会对下载的歌词文件进行过滤修正，从而以适应更多的播放器。  
@@ -230,7 +235,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 ### prepare.py
 运行后可以取得运行WEB用户界面必须的一些文件。  
 运行时确保可以直接访问```java```。  
-由于死🐴的Cloudflare的防BOT检测，现在已经无法自动更新/下载```compiler.jar```，请去[这里](https://mvnrepository.com/artifact/com.google.javascript/closure-compiler/latest)下载```compiler.jar```，没有该文件将无法进行编译。
+~~由于死🐴的Cloudflare的防BOT检测，现在已经无法自动更新/下载```compiler.jar```，请去[这里](https://mvnrepository.com/artifact/com.google.javascript/closure-compiler/latest)下载```compiler.jar```，没有该文件将无法进行编译。~~（貌似目前没有防BOT检测）
 
 ### WEB用户界面
 运行**startwebui.py**后，可以在浏览器访问。  
