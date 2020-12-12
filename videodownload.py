@@ -5193,10 +5193,19 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
     if m and not F:
         mi = accept_qualities[0]
         ms = dash[mi]['size']
+        ext_list = ['m4s', 'm4a', 'flac']
+        mext = file.geturlfe(dash[mi]['base_url'])
+        def get_index(ext: str) -> int:
+            try:
+                return ext_list.index(ext)
+            except AttributeError:
+                return -1
         for quality in accept_qualities:
-            if dash[quality]['size'] > ms:
+            text = file.geturlfe(dash[quality]['base_url'])
+            if dash[quality]['size'] > ms or ((dash[quality]['size'] == ms or get_index(text) == 2) and get_index(text) > get_index(mext)):
                 ms = dash[quality]['size']
                 mi = quality
+                mext = text
         dash = dash[mi]
         timelength = data['duration'] * 1000 if mi < 30000 else timel
         if ns:
