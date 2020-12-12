@@ -328,3 +328,7 @@ msgid ""
 "describe the bug.)"
 msgstr ""
 "<count>エントリを標準化しました。LRCファイルが動作しない場合は、設定で歌詞の標準化を無効にして、<https://github.com/lifegpc/bili/issues>までバグ報告をお願いします。(バグの報告は中国語または英語でお願いします。)"
+
+msgctxt "ALBTAGS"
+msgid "Album tags: "
+msgstr ""

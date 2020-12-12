@@ -294,3 +294,7 @@ msgstr ""
 msgctxt "FILLRC"
 msgid "Standardized <count> entries. If LRC file don't work, disable standardize lyrics in settings and submit a bug report on <https://github.com/lifegpc/bili/issues>. (Please use Chinese or English to describe the bug.)"
 msgstr ""
+
+msgctxt "ALBTAGS"
+msgid "Album tags: "
+msgstr ""
