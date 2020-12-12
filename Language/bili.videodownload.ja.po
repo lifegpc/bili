@@ -332,3 +332,19 @@ msgstr ""
 msgctxt "ALBTAGS"
 msgid "Album tags: "
 msgstr ""
+
+msgctxt "AU流畅"
+msgid "Smooth quality"
+msgstr ""
+
+msgctxt "AU标准"
+msgid "Standard quality"
+msgstr ""
+
+msgctxt "AU高品质"
+msgid "High quality"
+msgstr ""
+
+msgctxt "AU无损音质"
+msgid "Lossless quality"
+msgstr ""

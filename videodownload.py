@@ -60,12 +60,16 @@ def getqualitytrans(t: str) -> str:
 
 
 def getaudesc(data: dict, id: int):
-    "获取AU号更好的翻译"
+    "获取AU号更好的描述"
     if 'qualities' not in data or data['qualities'] is None or type(data['qualities']) != list:
         return id
     templ = [d['desc'] for d in data['qualities'] if d['type'] == id and d['desc'] != ""]
     if len(templ) == 1:
-        return templ[0]
+        t = templ[0]
+        if f"AU{t}" in lan:
+            return lan[f"AU{t}"]
+        print(lan['NO_QUA_TRANS'].replace('<value>', t))
+        return t
     return id
 
 
