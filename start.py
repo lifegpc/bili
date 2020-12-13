@@ -176,7 +176,7 @@ def main(ip={}):
         if log and not logg.hasf():
             logg.openf(f"log/AV{inp}_{round(time())}.log")
     else :
-        re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?(.+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?',inp,I)
+        re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?(.+))?)?((([0-9]+)/video|medialist/play/([0-9]+))(\?.+)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?',inp,I)
             if re==None :
@@ -329,68 +329,67 @@ def main(ip={}):
                     logg.write(f"uid = {uid}\ncid = {cid}", currentframe(), "CHANNEL Parser")
             elif re[23]:
                 uv=True
-                uid=int(re[24])
+                uid = int(re[25]) if re[25] else int(re[26])
                 uvd['t']=0
                 uvd['k']=''
                 uvd['o']='pubdate'
-                if re[26]:
-                    sl=re[26].split('&')
-                    for us in sl:
-                        rep=search(r'^(tid=([0-9]+))?(keyword=(.+)?)?(order=(.+)?)?',us,I)
-                        if rep!=None :
-                            rep=rep.groups()
-                            if rep[0]:
-                                uvd['t']=int(rep[1])
-                            elif rep[3]:
-                                uvd['k']=rep[3]
-                            elif rep[5]:
-                                uvd['o']=rep[5]
+                if re[27]:
+                    sl = parse_qs(re[27][1:])
+                    if 'tid' in sl:
+                        for v in sl['tid']:
+                            if v.isnumeric():
+                                uvd['t'] = int(v)
+                                break
+                    if 'keyword' in sl:
+                        uvd['k'] = sl['keyword'][0]
+                    if 'order' in sl:
+                        uvd['o'] = sl['order'][0]
                 if log and not logg.hasf():
                     logg.openf(f"log/UID{uid}_{round(time())}.log")
                 if log:
                     logg.write(f"uid = {uid}\nuvd = {uvd}", currentframe(), "UPLOADER VIDEO Parser")
-            elif re[27] :
+            elif re[28]:
                 md=True
-                mid=int(re[28])
+                mid = int(re[29])
                 if log and not logg.hasf():
                     logg.openf(f"log/MD{mid}_{round(time())}.log")
-            elif re[29] :
+            elif re[30]:
                 sm=True
-                sid=int(re[30])
+                sid = int(re[31])
                 if log and not logg.hasf():
                     logg.openf(f"log/SID{sid}_{round(time())}.log")
-            elif re[31]:
+            elif re[32]:
                 sm=True
-                sid=int(re[32])
+                sid = int(re[33])
                 if log and not logg.hasf():
                     logg.openf(f"log/SID{sid}_{round(time())}.log")
-            elif re[33] :
+            elif re[34]:
                 lr=True
-                rid=re[34]
+                rid = re[35]
                 if log and not logg.hasf():
                     logg.openf(f"log/RID{rid}_{round(time())}.log")
-            elif re[35] :
+            elif re[36]:
                 ss=True
                 che=True
-                ssid=int(re[36])
+                ssid = int(re[37])
                 if log and not logg.hasf():
                     logg.openf(f"log/SS{ssid}_{round(time())}.log")
-            elif re[37]:
+            elif re[38]:
                 ep=True
                 che=True
-                epid=int(re[38])
+                epid = int(re[39])
                 if log and not logg.hasf():
                     logg.openf(f"log/EP{epid}_{round(time())}.log")
-            elif re[39] or re[40]:
+            elif re[40] or re[41]:
                 chel=True
-            elif re[5] and re[41]:
+            elif re[5] and re[42]:
                 live = True
-                roomid = int(re[41])
+                roomid = int(re[42])
                 if log and not logg.hasf():
                     logg.openf(f"log/LIVEROOM{roomid}_{round(time())}.log")
-            elif re[42]:
+            elif re[43]:
                 au = True
-                auid = int(re[43])
+                auid = int(re[44])
                 if log and not logg.hasf():
                     logg.openf(f"log/AU{auid}_{round(time())}.log")
             else :

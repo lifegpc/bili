@@ -161,6 +161,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 ### 投稿视频列表
 本程序支持以下的输入（以UID1为例）：
 - ```space.bilibili.com/1/video```
+- ```bilibili.com/medialist/play/225910184```
 #### 支持的GET参数
 - ```tid```：用来指明视频类型
 - ```keyword```：用来搜索投稿视频列表
