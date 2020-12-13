@@ -238,10 +238,10 @@ def getchl(d:dict)->list:
         t['count']=i['count']
         r.append(t)
     return r
-def getchi(r:Session, u: int, c: int, n: int, logg=None):
+def getchi(r:Session, u: int, c: int, n: int, chd: dict, logg=None):
+    uri = f"https://api.bilibili.com/x/space/channel/video?mid={u}&cid={c}&pn={n}&ps=95&order={chd['order']}&jsonp=jsonp"
     if logg is not None:
-        logg.write(f"GET https://api.bilibili.com/x/space/channel/video?mid={u}&cid={c}&pn={n}&ps=30&order=0&jsonp=jsonp", currentframe(), "GET CHANNLE VIDEO LIST")
-    uri="https://api.bilibili.com/x/space/channel/video?mid=%s&cid=%s&pn=%s&ps=30&order=0&jsonp=jsonp"%(u,c,n)
+        logg.write(f"GET {uri}", currentframe(), "GET CHANNLE VIDEO LIST")
     bs=True
     while bs :
         try :

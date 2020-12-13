@@ -43,6 +43,7 @@ from Logger import Logger
 from inspect import currentframe
 from autoopenlist import autoopenfilelist
 from urllib.parse import parse_qs
+from bstr import hasPar
 
 # 远程调试用代码
 # import ptvsd
@@ -130,6 +131,7 @@ def main(ip={}):
     cid=-1 #频道id
     uvd={} #投稿查询信息
     pld={} #收藏夹扩展信息
+    chd = {}  # 频道扩展信息
     mid=-1 #md号
     sid=-1 #小视频id
     rid="" #直播回放id
@@ -174,7 +176,7 @@ def main(ip={}):
         if log and not logg.hasf():
             logg.openf(f"log/AV{inp}_{round(time())}.log")
     else :
-        re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?',inp,I)
+        re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?(.+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?',inp,I)
             if re==None :
@@ -301,11 +303,23 @@ def main(ip={}):
                         logg.openf(f"log/FAV{fid}_{round(time())}.log")
                 if log:
                     logg.write(f"uid = {uid}\nfid = {fid}\npld = {pld}", currentframe(), "FAVLIST Parser")
-            elif re[18]:
+            elif re[18] and (re[20] or (re[22] and hasPar(re[22], 'cid', r'^([0-9]+)$'))):
                 ch=True
                 uid=int(re[19])
                 if re[22] :
-                    cid=int(re[22])
+                    ls = parse_qs(re[22])
+                    if 'cid' in ls:
+                        for v in ls['cid']:
+                            if v.isnumeric():
+                                cid = int(v)
+                                break
+                    if 'order' in ls:
+                        for v in ls['order']:
+                            if v.isnumeric():
+                                chd['order'] = int(v)
+                                break
+                if 'order' not in chd:
+                    chd['order'] = 0
                 if log and not logg.hasf():
                     if cid == -1:
                         logg.openf(f"log/UID{uid}_CHID_{round(time())}.log")
@@ -805,7 +819,7 @@ def main(ip={}):
                         return read
             return 0
         r.headers.update({'referer':'https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,cid)})
-        re = JSONParser2.getchi(r, uid, cid, 1, logg)
+        re = JSONParser2.getchi(r, uid, cid, 1, chd, logg)
         if re == -1:
             return -1
         chi=JSONParser2.getchn(re)
@@ -817,7 +831,7 @@ def main(ip={}):
         JSONParser2.getchs(chv,re)
         while i<n :
             i=i+1
-            re = JSONParser2.getchi(r, uid, cid, i, logg)
+            re = JSONParser2.getchi(r, uid, cid, i, chd, logg)
             if re==-1 :
                 return -1
             JSONParser2.getchs(chv,re)

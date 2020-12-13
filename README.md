@@ -155,6 +155,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```space.bilibili.com/928123/channel/detail?cid=42271```
 #### 支持的GET参数
 - ```cid```：用来指明是哪个频道（必须带有cid才能进行解析）
+- ```order```：指明视频排序顺序，0为默认排序，1为倒序排序。
 
 会将一个频道的所有视频解析出来以供选择需要下载的视频。
 ### 投稿视频列表
