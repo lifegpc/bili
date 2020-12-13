@@ -18,6 +18,12 @@ from regex import search, I
 from requests import Session
 
 
+class TooMuchRequestsError(Exception):
+    def __init__(self, url: str):
+        self.url = url
+        Exception.__init__(self)
+
+
 class extractor:
     _VALID_URI = r''
     _groupdict = {}

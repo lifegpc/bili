@@ -24,6 +24,7 @@ import requests
 from re import search, I
 from urllib.parse import unquote_plus
 from urllib3.exceptions import MaxRetryError, NewConnectionError
+from .extractor import TooMuchRequestsError
 
 extractorl = getextractorlist()
 
@@ -91,6 +92,8 @@ class page:
                 return e._handle()
             except InvalidInputEroor:
                 pass
+            except TooMuchRequestsError as e:
+                return {'code': -412, 'errorurl': e.url}
             except Exception:
                 return {'code': -500, 'e': traceback.format_exc()}
         return None

@@ -40,10 +40,11 @@ window.addEventListener('load', () => {
      * @property {errorinfo|undefined} re 错误信息。（仅当code为-1时存在）
      * @property {NormalVideoData|undefined} data 视频信息
      * @typedef {Object} ExtractorInfo
-     * @property {0|-1|-404|-500} code 状态码。0正常，-1需要登录，-404匹配不到相应的解析器，-500程序错误。
+     * @property {0|-1|-404|-412|-500} code 状态码。0正常，-1需要登录，-404匹配不到相应的解析器，-412请求太过频繁被限制，-500程序错误。
      * @property {string|undefined} e 抛出的错误信息（仅code为-500时存在）
      * @property {"normal"|"redirect"|undefined} type 解析器的类型（仅code为0时存在）
      * @property {string|undefined} url 仅当type为redirect时存在，重定向至的地址
+     * @property {string|undefined} errorurl 仅当code为-412时存在，发生请求太过频繁的页面地址
      * @property {number|undefined} vip VIP状态（仅当code为0时并type不为redirect时存在）
      * @property {infodata|undefined} data 数据（仅当code为0时并type不为redirect时存在）
      * @typedef {Object} DurlLink
@@ -394,6 +395,18 @@ window.addEventListener('load', () => {
         }
         main.append(createTransLabel('webui.page NOTEXT'));
         transobj.deal();
+    }
+    else if (info.code == -412) {
+        var uri = new URL(window.location.href);
+        var param = {};
+        var hl = uri.searchParams.get('hl');
+        if (hl != null) param['hl'] = hl;
+        param['url'] = window.location.href;
+        param['errorurl'] = info.errorurl;
+        param = $.param(param);
+        var url = '/dealwithcapcha';
+        if (param != "") url += ("?" + param);
+        window.location.href = url;
     }
     else if (info.code == 0) {
         if (info.type == "redirect") {
