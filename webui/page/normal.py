@@ -99,6 +99,7 @@ class normal(extractor):
         q = []
         if 'questions' in re['data']['edges']:
             q = re['data']['edges']['questions']
+        self.edge_list = []
         e = []
         self._addninfo(re, e)
         for a in q:
@@ -110,6 +111,9 @@ class normal(extractor):
         return 0
 
     def _getnch(self, b: dict, d: dict, e: list):
+        if b['id'] in self.edge_list:
+            return 0
+        self.edge_list.append(b['id'])
         uri = f"https://api.bilibili.com/x/stein/edgeinfo_v2?bvid={d['bvid']}&edge_id={b['id']}&graph_version={d['gv']}&platform=pc&portal=0&screen=0&buvid={self._r.cookies.get('buvid3')}&choice={b['native_action']}"
         re = self._r.get(uri)
         re.encoding = 'utf8'
