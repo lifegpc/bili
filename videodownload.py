@@ -5180,7 +5180,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
-            if 'data' in re and 'dash' in re['data'] and 'audio' in re['data']['dash'] and re['data']['dash']['audio'] is not None:
+            if re['code'] == 0 and 'data' in re and 'dash' in re['data'] and 'audio' in re['data']['dash'] and re['data']['dash']['audio'] is not None:
                 accept_audio_quality = []
                 for j in re['data']['dash']['audio']:
                     j['r'] = r3
