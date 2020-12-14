@@ -29,7 +29,6 @@
         + [aria2c的几个下载设置是什么意思](#aria2c的几个下载设置是什么意思)
 ## 简介
 程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver（有ChromeDriver在登录和解决验证码时较方便，对主要功能不影响）。   
-软件只有控制台界面，萌新不会可以看[这里](easyuse.md)   
 现在已支持命令行  
 RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat)。
 ## 程序功能
