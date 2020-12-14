@@ -279,16 +279,16 @@ msgstr "この音声はAPPでしか再生できません。(現在、このプ�
 
 msgctxt "PLITID"
 msgid "Here are all available type id (tid) for this favorites:"
-msgstr ""
+msgstr "このお気に入りで利用可能なすべてのタイプID(tid)を表示します:"
 
 msgctxt "PLITIDNUL"
 msgid "This favorites don't have any available type id (tid)."
-msgstr ""
+msgstr "このお気に入りには利用可能なタイプID(tid)がありません"
 
 msgctxt "UPLTID"
 msgid "Here are all available type id (tid) for this uploader's videos:"
-msgstr ""
+msgstr "ここでは、このアップローダーの動画に使用可能なすべてのタイプID(Tid)が表示されます:"
 
 msgctxt "UPLTIDNUL"
 msgid "This uploader's video don't have any available type id (tid)."
-msgstr ""
+msgstr "この投稿者の動画には、利用可能なタイプID(tid)がありません"

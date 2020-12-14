@@ -476,4 +476,4 @@ msgstr "最後にダウンロードしたファイルの場所をwindows explore
 
 msgctxt "O89"
 msgid "List all available type id(tid) for Favorites or Uploader's videos."
-msgstr ""
+msgstr "お気に入りやアップローダーの動画で利用可能なタイプID(tid)を一覧表示します"
