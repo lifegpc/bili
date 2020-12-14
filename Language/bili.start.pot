@@ -194,3 +194,11 @@ msgstr ""
 msgctxt "PLITIDNUL"
 msgid "This favorites don't have any available type id (tid)."
 msgstr ""
+
+msgctxt "UPLTID"
+msgid "Here are all available type id (tid) for this uploader's videos:"
+msgstr ""
+
+msgctxt "UPLTIDNUL"
+msgid "This uploader's video don't have any available type id (tid)."
+msgstr ""

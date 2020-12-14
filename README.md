@@ -163,7 +163,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```space.bilibili.com/1/video```
 - ```bilibili.com/medialist/play/225910184```
 #### 支持的GET参数
-- ```tid```：用来指明视频类型
+- ```tid```：用来指明视频类型，全部是0。可以使用```--ltid```命令行参数来获得当前UP主的投稿视频所有可用的tid。
 - ```keyword```：用来搜索投稿视频列表
 - ```order```：指定投稿视频列表排序。```pubdate```为最新发布，```click```为最多播放，```stow```为最多收藏。
 

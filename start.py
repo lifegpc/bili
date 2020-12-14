@@ -930,6 +930,17 @@ def main(ip={}):
         re = JSONParser2.getuvi(uid, 1, uvd, section, logg)
         if re==-1:
             return -1
+        if 'ltid' in ip:
+            tre = re['data']['list']['tlist']
+            re = []
+            for tid in tre.keys():
+                re.append(tre[tid])
+            if len(re) > 0:
+                print(lan['UPLTID'])
+                PrintInfo.printplitid(re)
+            else:
+                print(lan['PLITIDNUL'])
+            return 0
         vn=re['data']['page']['count']
         n=ceil(vn/30)
         i=1
