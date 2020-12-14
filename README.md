@@ -1,3 +1,4 @@
+[English](README.en.md) [日本語](README.ja.md)
 # BiliBili 弹幕/视频下载软件
 - [BiliBili 弹幕/视频下载软件](#bilibili-弹幕视频下载软件)
     * [简介](#简介)
@@ -28,7 +29,7 @@
         + [闪退怎么办](#闪退怎么办)
         + [aria2c的几个下载设置是什么意思](#aria2c的几个下载设置是什么意思)
 ## 简介
-程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver（有ChromeDriver在登录和解决验证码时较方便，对主要功能不影响）。   
+程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver（有ChromeDriver在登录和解决验证码时较方便。如无ChromeDriver对主要功能不影响）。   
 现在已支持命令行  
 RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat)。
 ## 程序功能
@@ -76,8 +77,8 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
     * [x] [仅下载歌词](#仅下载歌词)
     * [x] 仅下载封面
 ### 使用aria2c下载
-本程序支持使用aria2c下载并推荐使用aria2c下载已获得更好的下载体验。  
-启用该功能需要确保能够直接命令行调用aria2c（一般而言放在程序目录即可）并确保在设置里已启用使用aria2c。
+本程序支持使用aria2c下载并推荐使用aria2c下载以获得更好的下载体验。  
+启用该功能需要确保能够直接使用命令行调用aria2c（一般而言放在程序目录即可）并确保在设置里已启用使用aria2c。
 ### 自动合并分离的视频
 本程序使用ffmpeg来自动合并分离的视频。  
 启用该功能需要确保能够直接命令行调用ffmpeg（一般而言放在程序目录即可）并确保在设置里没有**禁用**ffmpeg。
