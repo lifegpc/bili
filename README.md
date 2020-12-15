@@ -95,14 +95,14 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```9```
 - ```av9```
 - ```BV1xx411c7mC```
-- ```bilibili.com/video/av9``` （前面的```https:\\```,```www.```等内容可以加可以不加，后同）
+- ```bilibili.com/video/av9``` （前面的```https://```,```www.```等内容可以加可以不加，后同）
 - ```bilibili.com/video/BV1xx411c7mC```
 - ```b23.tv/av9```
 - ```b23.tv/BV1xx411c7mC```
 - ```bilibili.com/s/video/av9```
 - ```bilibili.com/s/video/BV1xx411c7mC```
 
-如果视频指向的是番剧，将会自动重定向到番剧。
+如果视频指向的是番剧，将会自动重定向到[番剧](#番剧)。
 #### 仅下载音频
 目前只支持DASH流的解析结果。（目前只有极个别的解析结果不是DASH。）
 ### 番剧
@@ -117,7 +117,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```b23.tv/ep259653```
 - ```40240711```等AV/BV号视频输入
 
-如果根据现有的SS或EP号找不到内容，将会尝试使用相同的SS和EP号去访问已购买课程。
+如果根据现有的SS或EP号找不到内容，将会尝试使用相同的SS和EP号去访问[已购买课程](#已购买课程)。
 #### 仅下载音频
 目前只支持DASH流的解析结果。
 #### 仅下载封面
