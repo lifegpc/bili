@@ -31,6 +31,12 @@ If you want to build your own Release, you can find build script on [bili.build.
     * [x] [Only Download Cover](#only-download-cover)
     * [x] 4K
     * [x] HDR (May support, the author can't find test video)
+- [x] [Purchased Courses](#purchased-courses)
+	* Almost same as [Bangumi Video](#bangumi-video).
+	* [x] [Only Download Cover](#only-download-cover-1)
+- [x] [Purchased Courses List](#purchased-courses-list)
+- [x] [Favorites](#favorites)
+	* [x] [Supported GET Parameters](#supported-get-parameters)
 ### Download with aria2c
 The program now supports downloading with aria2c. Download with aria2c is recommended, because aria2c provide faster download speed.  
 If you want to enable this feature, make sure the program can call aria2c by using command line (You can simply put aria2c in program directory.). Also make sure enable this feature in the settings.
@@ -72,8 +78,31 @@ This program supports following input format (Take SS26291 for example. The prog
 - ```b23.tv/ep259653```
 - ```40240711``` and so on (Input as [Normal AV/BV Number Video](#normal-avbv-number-video).)
 
-If the program can't find this season, it will be redirected to Purchased Courses.
+If the program can't find this season, it will be redirected to [Purchased Courses](#purchased-courses).
 #### Only Download Audio
 Only supports DASH stream video.
 #### Only Download Cover
 When downloading an episode's cover of a season, the season's cover will also be downloaded.
+### Purchased Courses
+This program supports following input format (Take SS150 for example. The program ignores case.):
+- ```bilibili.com/cheese/play/ss150```
+- ```bilibili.com/cheese/play/ep2425```
+#### Only Download Cover
+This feature can't download current episode's cover. But it can download courses' cover and description image.
+### Purchased Courses List
+This program supports following input format:
+- ```bilibili.com/cheese/mine/list```
+- ```bilibili.com/v/cheese/mine/list```
+
+This feature can get a list of all purchased courses and let you select courses you want to download.
+### Favorites
+This program supports following input format (Take UID1 for example.):
+- ```space.bilibili.com/1/favlist```
+
+This feature can get a list of videos from Favorites and let you select videos you want to download.
+#### Supported GET Parameters
+- ```fid```: to specify which Favorites you want to parse
+- ```keyword```: the keyword if you want to search in Favorites
+- ```type```: to specify the search range. 0 is current Favorites, 1 is all Favorites.
+- ```tid```: to specify the video type, 0 is all types. You can use ```--ltid```(command line parameter) to get all available tid for current Favorites.
+- ```order```: to specify video's order. ```mtime``` is added time, ```view``` is views, ```pubtime``` is publish time.
