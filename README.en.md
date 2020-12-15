@@ -30,7 +30,7 @@ If you want to build your own Release, you can find build script on [bili.build.
     * [x] [Only Download Audio](#only-download-audio-1)
     * [x] [Only Download Cover](#only-download-cover)
     * [x] 4K
-    * [x] HDR (May support, the author can't find test video)
+    * [ ] HDR (May support, the author can't find test video)
 - [x] [Purchased Courses](#purchased-courses)
 	* Almost same as [Bangumi Video](#bangumi-video).
 	* [x] [Only Download Cover](#only-download-cover-1)
