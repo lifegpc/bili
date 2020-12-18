@@ -82,6 +82,7 @@ class page:
             else:
                 r = re
         r = dumps(r, ensure_ascii=False)
+        web.header('Content-Type', 'text/html; charset=utf-8')
         pag = gettemplate('page')
         return pag(ip, se, r)
 
