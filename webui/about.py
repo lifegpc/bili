@@ -32,6 +32,7 @@ ver2 = f"bili v{ver}"
 
 class about:
     def GET(self, *t):
+        web.header('Content-Type', 'text/html; charset=utf-8')
         abo = gettemplate('about')
         return abo(ip, se, ver)
 

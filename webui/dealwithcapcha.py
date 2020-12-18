@@ -31,6 +31,7 @@ class dealwithcapcha:
         h = web.cookies().get('section')
         if logincheck(h):
             return ''
+        web.header('Content-Type', 'text/html; charset=utf-8')
         et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
         et2 = getEtag(f'webuihtml/dealwithcapcha.html')
         if et == et2 and et2 is not None:

@@ -30,5 +30,6 @@ class index:
         h = web.cookies().get('section')
         if logincheck(h):
             return ''
+        web.header('Content-Type', 'text/html; charset=utf-8')
         ind = gettemplate('index')
         return ind(ip, se)

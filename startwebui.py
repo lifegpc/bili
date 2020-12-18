@@ -58,6 +58,7 @@ urls = (
 
 
 def notfound():
+    web.header('Content-Type', 'text/html; charset=utf-8')
     HTTP404 = gettemplate('HTTP404')
     return web.notfound(HTTP404(ip, se))
 
