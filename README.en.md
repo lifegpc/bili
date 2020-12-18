@@ -37,6 +37,11 @@ If you want to build your own Release, you can find build script on [bili.build.
 - [x] [Purchased Courses List](#purchased-courses-list)
 - [x] [Favorites](#favorites)
 	* [x] [Supported GET Parameters](#supported-get-parameters)
+- [x] [Channel List](#channel-list)
+- [x] [Channel](#channel)
+    * [x] [Supported GET Parameters](#supported-get-parameters-1)
+- [x] [Uploaded Video List](#uploaded-video-list)
+    * [x] [Supported GET Parameters](#supported-get-parameters-2)
 ### Download with aria2c
 The program now supports downloading with aria2c. Download with aria2c is recommended, because aria2c provide faster download speed.  
 If you want to enable this feature, make sure the program can call aria2c by using command line (You can simply put aria2c in program directory.). Also make sure enable this feature in the settings.
@@ -106,3 +111,26 @@ This feature can get a list of videos from Favorites and let you select videos y
 - ```type```: to specify the search range. 0 is current Favorites, 1 is all Favorites.
 - ```tid```: to specify the video type, 0 is all types. You can use ```--ltid```(command line parameter) to get all available tid for current Favorites.
 - ```order```: to specify video's order. ```mtime``` is added time, ```view``` is views, ```pubtime``` is publish time.
+### Channel List
+This program supports following input format (Take UID1 for example.):
+- ```space.bilibili.com/1/channel/index```
+
+This feature can get a list of channels and let you select the channel you want to download.
+### Channel
+This program supports following input format (Take UID928123 for example.):
+- ```space.bilibili.com/928123/channel/detail?cid=42271```
+#### Supported GET Parameters
+- ```cid```: to specify the channel (Must have this parameter).
+- ```order```: to specify the order of videos. 0 is default order, 1 is reverse order.
+
+This feature can get a list of videos from the channel and let you select videos you want to download.
+### Uploaded Video List
+This program supports following input format (Take UID1 for example.):
+- ```space.bilibili.com/1/video```
+- ```bilibili.com/medialist/play/225910184```
+#### Supported GET Parameters
+- ```tid```: to specify the video type, 0 is all types. You can use ```--ltid```(command line parameter) to get all available tid for current uploaded video list.
+- ```keyword```: the keyword if you want to search in uploaded video list
+- ```order```: to specify video's order. ```pubdate``` is publish time, ```click``` is views, ```stow``` is favorited times.
+
+This feature can get a list of videos from a uploader's uploaded video list and let you select videos you want to download.
