@@ -28,5 +28,6 @@ class biliLogin:
         h = web.cookies().get('section')
         if logincheck(h):
             return ''
+        web.header('Content-Type', 'text/html; charset=utf-8')
         bilo = gettemplate('bililogin')
         return bilo(ip, se, pa.https)

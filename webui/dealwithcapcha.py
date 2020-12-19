@@ -13,8 +13,9 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, gopt, logincheck, gettemplate
+from . import web, gettemplate, logincheck, getEtag, gopt, loadset
 import sys
+
 
 
 ip = {}
@@ -25,11 +26,18 @@ if se == -1 or se == -2:
     se = {}
 
 
-class index:
+class dealwithcapcha:
     def GET(self, *t):
         h = web.cookies().get('section')
         if logincheck(h):
             return ''
         web.header('Content-Type', 'text/html; charset=utf-8')
-        ind = gettemplate('index')
-        return ind(ip, se)
+        et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
+        et2 = getEtag(f'webuihtml/dealwithcapcha.html')
+        if et == et2 and et2 is not None:
+            web.HTTPError('304')
+            t = ''
+        else:
+            web.header('Etag', et2)
+            dea = gettemplate('dealwithcapcha')
+            return dea(se, ip)

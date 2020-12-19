@@ -28,6 +28,7 @@ if se == -1 or se == -2:
 
 class login:
     def GET(self, *t):
+        web.header('Content-Type', 'text/html; charset=utf-8')
         log = gettemplate('login')
         return log(ip, se)
 

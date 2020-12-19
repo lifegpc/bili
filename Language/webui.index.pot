@@ -58,3 +58,7 @@ msgstr ""
 msgctxt "ENTTOS"
 msgid "Please press Enter to confirm."
 msgstr ""
+
+msgctxt "TOOMANREQ"
+msgid "Because of too much requests, BiliBili now block your requests, please try again later…… (maybe a few hours)"
+msgstr ""

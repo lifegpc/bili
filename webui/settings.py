@@ -38,6 +38,7 @@ class setting:
         se2 = loadset2()
         if se2 == -1 or se2 == -2:
             se2 = {}
+        web.header('Content-Type', 'text/html; charset=utf-8')
         sett = gettemplate('settings')
         return sett(t[1], lan, se, getdfset(), ip, se2, getDefalutSettings())
 

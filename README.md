@@ -1,3 +1,4 @@
+[English](README.en.md) [日本語](README.ja.md)
 # BiliBili 弹幕/视频下载软件
 - [BiliBili 弹幕/视频下载软件](#bilibili-弹幕视频下载软件)
     * [简介](#简介)
@@ -16,8 +17,6 @@
     * [翻译](#翻译)
     * [其他](#其他)
         + [全弹幕下载问题](#全弹幕下载问题)
-    * [已知BUG](#已知bug)
-        + [登录时发生错误（使用ChromeDriver时）](#登录时发生错误使用chromedriver时)
     * [FAQ](#faq)
         + [Release中每个文件的区别](#release中每个文件的区别)
         + [无法输入密码](#无法输入密码)
@@ -28,8 +27,7 @@
         + [闪退怎么办](#闪退怎么办)
         + [aria2c的几个下载设置是什么意思](#aria2c的几个下载设置是什么意思)
 ## 简介
-程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver（有ChromeDriver在登录和解决验证码时较方便，对主要功能不影响）。   
-软件只有控制台界面，萌新不会可以看[这里](easyuse.md)   
+程序用python(python3)语言编写而成，使用了部分python库和ChromeDriver（有ChromeDriver在登录和解决验证码时较方便。如无ChromeDriver对主要功能不影响）。   
 现在已支持命令行  
 RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat)。
 ## 程序功能
@@ -57,7 +55,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
     * [x] 4K
     * [ ] HDR（可能支持，目前没有可测试的视频）
 - [x] [已购买课程](#已购买课程)
-    * 与番剧几乎相同
+    * 与[番剧](#番剧)几乎相同
     * [仅下载封面](#仅下载封面-1)
 - [x] [已购买课程列表](#已购买课程列表)
 - [x] [收藏夹](#收藏夹)
@@ -76,12 +74,13 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
     * [x] [音频下载](#音频下载)
     * [x] [仅下载歌词](#仅下载歌词)
     * [x] 仅下载封面
+- [x] [歌单](#歌单)
 ### 使用aria2c下载
-本程序支持使用aria2c下载并推荐使用aria2c下载已获得更好的下载体验。  
-启用该功能需要确保能够直接命令行调用aria2c（一般而言放在程序目录即可）并确保在设置里已启用使用aria2c。
+本程序支持使用aria2c下载并推荐使用aria2c下载以获得更好的下载体验。  
+启用该功能需要确保能够直接使用命令行调用aria2c（一般而言放在程序目录即可）并确保在设置里已启用使用aria2c。
 ### 自动合并分离的视频
 本程序使用ffmpeg来自动合并分离的视频。  
-启用该功能需要确保能够直接命令行调用ffmpeg（一般而言放在程序目录即可）并确保在设置里没有**禁用**ffmpeg。
+启用该功能需要确保能够直接使用命令行调用ffmpeg（一般而言放在程序目录即可）并确保在设置里没有**禁用**ffmpeg。
 ### mp4和mkv格式
 本程序支持合并为mp4文件或mkv文件，设置中可以选择视频格式。
 ### m4a格式
@@ -95,14 +94,14 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```9```
 - ```av9```
 - ```BV1xx411c7mC```
-- ```bilibili.com/video/av9``` （前面的```https:\\```,```www.```等内容可以加可以不加，后同）
+- ```bilibili.com/video/av9``` （前面的```https://```,```www.```等内容可以加可以不加，后同）
 - ```bilibili.com/video/BV1xx411c7mC```
 - ```b23.tv/av9```
 - ```b23.tv/BV1xx411c7mC```
 - ```bilibili.com/s/video/av9```
 - ```bilibili.com/s/video/BV1xx411c7mC```
 
-如果视频指向的是番剧，将会自动重定向到番剧。
+如果视频指向的是番剧，将会自动重定向到[番剧](#番剧)。
 #### 仅下载音频
 目前只支持DASH流的解析结果。（目前只有极个别的解析结果不是DASH。）
 ### 番剧
@@ -117,7 +116,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```b23.tv/ep259653```
 - ```40240711```等AV/BV号视频输入
 
-如果根据现有的SS或EP号找不到内容，将会尝试使用相同的SS和EP号去访问已购买课程。
+如果根据现有的SS或EP号找不到内容，将会尝试使用相同的SS和EP号去访问[已购买课程](#已购买课程)。
 #### 仅下载音频
 目前只支持DASH流的解析结果。
 #### 仅下载封面
@@ -137,14 +136,14 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 ### 收藏夹
 本程序支持以下的输入（以UID1为例）：
 - ```space.bilibili.com/1/favlist```
+
+会将所有收藏夹内的视频解析出来以供选择需要下载的视频。
 #### 支持的GET参数
 - ```fid```：用来指定是哪一个收藏夹
 - ```keyword```：用来搜索收藏夹
 - ```type```：指定是搜索全部收藏夹还是当前收藏夹。0为当前收藏夹，1为全部收藏夹。
 - ```tid```：用来指定是哪个分区，全部分区是0。可以使用```--ltid```命令行参数来获得当前收藏夹所有可用的tid。
 - ```order```：指定投稿视频列表排序。```mtime```为最近收藏，```view```为最多播放，```pubtime```为最新投稿。
-
-会将所有收藏夹内的视频解析出来以供选择需要下载的视频。
 ### 频道列表
 本程序支持以下的输入（以UID1为例）：
 - ```space.bilibili.com/1/channel/index```
@@ -155,13 +154,15 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```space.bilibili.com/928123/channel/detail?cid=42271```
 #### 支持的GET参数
 - ```cid```：用来指明是哪个频道（必须带有cid才能进行解析）
+- ```order```：指明视频排序顺序，0为默认排序，1为倒序排序。
 
 会将一个频道的所有视频解析出来以供选择需要下载的视频。
 ### 投稿视频列表
 本程序支持以下的输入（以UID1为例）：
 - ```space.bilibili.com/1/video```
+- ```bilibili.com/medialist/play/225910184```
 #### 支持的GET参数
-- ```tid```：用来指明视频类型
+- ```tid```：用来指明视频类型，全部是0。可以使用```--ltid```命令行参数来获得当前UP主的投稿视频所有可用的tid。
 - ```keyword```：用来搜索投稿视频列表
 - ```order```：指定投稿视频列表排序。```pubdate```为最新发布，```click```为最多播放，```stow```为最多收藏。
 
@@ -184,11 +185,16 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```bilibili.com/audio/au1```
 - ```b23.tv/au1```
 #### 音频下载
-~~目前只支持下载默认音质，如果有出现其他音质，下载器应该会有提示，请将AU号提交至[issues](https://github.com/lifegpc/bili/issues)。~~ 现已支持多种音质，且用且珍惜。  
+现已支持多种音质。  
 如果音频有关联的普通视频，将会尝试从关联的视频页获取更多的音质。
 #### 仅下载歌词
-程序默认会对下载的歌词文件进行过滤修正，从而以适应更多的播放器。  
+程序默认会对下载的歌词文件进行过滤修正，从而适应更多的播放器。  
 如果音频有关联的普通视频，将会尝试从关联的视频页获取更多的歌词（即字幕）。
+### 歌单
+本程序支持以下的输入（以AM29931432为例）：
+- ```am29931432```
+- ```bilibili.com/audio/am29931432```
+- ```bilibili.com/audio/mycollection/29981833```
 ## 依赖库
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)  
@@ -197,15 +203,12 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 [web.py](https://webpy.org/)  
 [regex](https://pypi.org/project/regex/)  
 [iso-639](https://pypi.org/project/iso-639/)  
-自己写的file库   
-如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
-如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
-用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。  
-~~识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。~~（接口已挂）
+[pywin32](https://pypi.org/project/pywin32/)  
+用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。
 ### JavaScript依赖库
 [jQuery](https://jquery.com/)  
 [js-sha256](https://github.com/emn178/js-sha256)  
-[jsbn](http://www-cs-students.stanford.edu/~tjw/jsbn/)（注：已被合并到```webuihtml/js(origin)/rsa.js```）  
+[jsbn](http://www-cs-students.stanford.edu/~tjw/jsbn/)（注：已被合并到[```webuihtml/js(origin)/rsa.js```](webuihtml/js(origin)/rsa.js)）  
 [js-base64](https://github.com/dankogai/js-base64)  
 [QRCode.js](https://github.com/davidshimjs/qrcodejs)  
 [Viewer.js](https://github.com/fengyuanchen/viewerjs)  
@@ -216,7 +219,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用以及下载720P及以上视频使用）   
 
 ### settings.json
-该文件保存了一些默认操作的设置，可以运行**setsettings.py**来设置。
+该文件保存了一些设置，可以运行**setsettings.py**来设置。
 
 ### webui.json
 保存了WEB用户界面的设置。
@@ -225,8 +228,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 当WEB用户界面打开密码验证时，存储会话信息。
 
 ### tv.bilibili.player.xml
-该文件不一定需要   
-主要用来对弹幕进行过滤。   
+该文件包括弹幕过滤规则。
 可以直接将在PC网页端播放器的弹幕过滤设定中导出的文件放至程序目录下，并确保文件名为**tv.bilibili.player.xml**。
 
 ## 开始使用
@@ -258,13 +260,6 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 ### 全弹幕下载问题
 由于B站限制了历史弹幕的调用次数，大概12h内可以调用1000次左右，所以在弹幕较多的时候请设定较大的时间间隔。   
 被限制后大约12h后会恢复正常
-
-## 已知BUG
-### 登录时发生错误（使用ChromeDriver时）
-这是由于你的电脑未安装Chrome或者Chrome版本与Chrome Driver版本不一致导致的，请安装Chrome或下载匹配Chrome版本的Chrome Driver。  
-**可以到这里[下载](https://chromedriver.chromium.org/downloads)Chrome Driver的其他版本**  
-具体的错误提示可以参考[#9](https://github.com/lifegpc/bili/issues/9)和[#11](https://github.com/lifegpc/bili/issues/11)。  
-现在已经支持用户名和密码登录。
 
 ## FAQ
 

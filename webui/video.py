@@ -47,6 +47,7 @@ class video:
                 web.HTTPError('301', {'location': quote(web.ctx.get(
                     'homepath') + web.ctx.get('path') + '/') + web.ctx.get('query')})
                 return ''
+            web.header('Content-Type', 'text/html; charset=utf-8')
             video2 = gettemplate('video')
             return video2(s, se, ip, se2, str)
         elif exists(o + s[1:]) and isfile(o + s[1:]):

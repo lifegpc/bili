@@ -5058,11 +5058,11 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
     read, albumdata = JSONParser2.getaualbuminfo(data)
     if log:
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
-    if read:
+    if 'menuId2' in albumdata:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title2']}(AM{albumdata['menuId2']})")
         else:
-            o = file.filterd(f"{o}{albumdata['title']}")
+            o = file.filterd(f"{o}{albumdata['title2']}")
     sv = True
     if JSONParser.getset(se, 'sv') == False:
         sv = False
@@ -5180,7 +5180,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
-            if 'data' in re and 'dash' in re['data'] and 'audio' in re['data']['dash'] and re['data']['dash']['audio'] is not None:
+            if re['code'] == 0 and 'data' in re and 'dash' in re['data'] and 'audio' in re['data']['dash'] and re['data']['dash']['audio'] is not None:
                 accept_audio_quality = []
                 for j in re['data']['dash']['audio']:
                     j['r'] = r3
@@ -5264,13 +5264,22 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             vqs = accept_qualities[0]
             dash = dash[vqs]
             vqs = getaudesc(data, vqs)
+    ind = ""
+    if 'songsList2' in albumdata:
+        inde = JSONParser2.getindexfromsongs(albumdata['songsList2'], data['id'])
+        if inde != 0:
+            ind = f"{inde}."
+    elif 'songsList' in albumdata:
+        inde = JSONParser2.getindexfromsongs(albumdata['songsList'], data['id'])
+        if inde != 0:
+            ind = f"{inde}."
     avi = "" if data['aid'] == 0 else f",AV{data['aid']},{data['bvid']},{data['cid']}"
     if not fin:
-        filen = f"{o}{file.filtern(data['title'])}"
+        filen = f"{o}{ind}{file.filtern(data['title'])}"
     elif sv:
-        filen = f"""{o}{file.filtern(f"{data['title']}(AU{data['id']}{avi},{vqs})")}"""
+        filen = f"""{o}{ind}{file.filtern(f"{data['title']}(AU{data['id']}{avi},{vqs})")}"""
     else:
-        filen = f"""{o}{file.filtern(f"{data['title']}(AU{data['id']}{avi})")}"""
+        filen = f"""{o}{ind}{file.filtern(f"{data['title']}(AU{data['id']}{avi})")}"""
     hzm = file.geturlfe(dash['base_url'])
     vf = "flac" if hzm == "flac" else "m4a"
     if hzm == vf and ma:
@@ -5396,7 +5405,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 elif 'passtime' in data and data['passtime'] is not None and data['passtime'] != 0:
                     te.write(f"date={tostr4(data['passtime'])}\n")
                 menuId = ''
-                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0:
+                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0 and 'menusRespones' in albumdata:
                     menuId = f",{albumdata['menuId']}"
                 if 'uid' in data and data['uid'] is not None and data['uid'] != 0:
                     te.write(f"description={bstr.g(vqs)},{data['uid']},{data['uname']}{menuId}\\\n")
@@ -5408,10 +5417,15 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 te.write(f"""{bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
                 if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
                     te.write(f"copyright=Publish by {albumdata['publisher']}\n")
-                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '':
+                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '' and 'menusRespones' in albumdata:
                     te.write(f"album={albumdata['title']}\n")
                 if 'mbnames' in albumdata and albumdata['mbnames'] is not None and albumdata['mbnames'] != '':
-                    te.write(f"album_artist={albumdata['mbnames']}")
+                    te.write(f"album_artist={albumdata['mbnames']}\n")
+                if 'songsList' in albumdata:
+                    inde = JSONParser2.getindexfromsongs(albumdata['songsList'], data['id'])
+                    if inde != 0:
+                        te.write(f"track={inde}/{len(albumdata['songsList'])}\n")
+                        te.write(f"disc=1/1\n")
             if log:
                 with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                     logg.write(f"METADTAFILE 'Temp/AU{data['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Audio Download Metadata")
@@ -5436,14 +5450,24 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                     te.write(f"bvid={bstr.g(data['bvid'])}\n")
                 if 'cid' in data and data['cid'] is not None and data['cid'] != 0:
                     te.write(f"cid={bstr.g(data['cid'])}\n")
+                hasdate = False
                 if 'pubTime' in albumdata and albumdata['pubTime'] is not None and albumdata['pubTime'] != 0:
                     te.write(f"pubtime={tostr2(albumdata['pubTime'])}\n")
+                    if not hasdate:
+                        te.write(f"date={tostr4(albumdata['pubTime'])}\n")
+                        hasdate = True
                 if 'ctime' in data and data['ctime'] is not None and data['ctime'] != 0:
                     te.write(f"ctime={tostr2(data['ctime']/1000)}\n")
+                    if not hasdate:
+                        te.write(f"date={tostr4(data['ctime']/1000)}\n")
+                        hasdate = True
                 if 'passtime' in data and data['passtime'] is not None and data['passtime'] != 0:
                     te.write(f"passtime={tostr2(data['passtime'])}\n")
-                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0:
-                    te.write(f"menuid={albumdata['menuId']}\n")
+                    if not hasdate:
+                        te.write(f"date={tostr4(data['passtime'])}\n")
+                        hasdate = True
+                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0 and 'menusRespones' in albumdata:
+                    te.write(f"amid={albumdata['menuId']}\n")
                 te.write(f"aq={bstr.g(vqs)}\n")
                 te.write(f"tags={bstr.g(bstr.gettags(data['tags']))}\n")
                 if 'tags' in albumdata and albumdata['tags'] is not None and albumdata['title'] != '':
@@ -5451,10 +5475,15 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 te.write(f"""purl={bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
                 if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
                     te.write(f"publisher={albumdata['publisher']}\n")
-                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '':
+                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '' and 'menusRespones' in albumdata:
                     te.write(f"album={albumdata['title']}\n")
                 if 'mbnames' in albumdata and albumdata['mbnames'] is not None and albumdata['mbnames'] != '':
-                    te.write(f"album_artist={albumdata['mbnames']}")
+                    te.write(f"album_artist={albumdata['mbnames']}\n")
+                if 'songsList' in albumdata:
+                    inde = JSONParser2.getindexfromsongs(albumdata['songsList'], data['id'])
+                    if inde != 0:
+                        te.write(f"track={inde}/{len(albumdata['songsList'])}\n")
+                        te.write(f"disc=1/1\n")
             if log:
                 with open(f"Temp/AU{data['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                     logg.write(f"METADTAFILE 'Temp/AU{data['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Audio Download Metadata")
@@ -5534,11 +5563,11 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
     read, albumdata = JSONParser2.getaualbuminfo(data)
     if log:
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
-    if read:
+    if 'menuId2' in albumdata:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title2']}(AM{albumdata['menuId2']})")
         else:
-            o = file.filterd(f"{o}{albumdata['title']}")
+            o = file.filterd(f"{o}{albumdata['title2']}")
     if log:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "Normal Audio Download Pic Para")
     try:
@@ -5550,11 +5579,20 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
         print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
         return -1
     if fn is None:
+        ind = ""
+        if 'songsList2' in albumdata:
+            inde = JSONParser2.getindexfromsongs(albumdata['songsList2'], data['id'])
+            if inde != 0:
+                ind = f"{inde}."
+        elif 'songsList' in albumdata:
+            inde = JSONParser2.getindexfromsongs(albumdata['songsList'], data['id'])
+            if inde != 0:
+                ind = f"{inde}."
         avi = "" if data['aid'] == 0 else f",AV{data['aid']},{data['bvid']},{data['cid']}"
         if fin:
-            te = file.filtern(f"{data['title']}(AU{data['id']}{avi}).{file.geturlfe(data['cover'])}")
+            te = file.filtern(f"{ind}{data['title']}(AU{data['id']}{avi}).{file.geturlfe(data['cover'])}")
         else:
-            te = file.filtern(f"{data['title']}.{file.geturlfe(data['cover'])}")
+            te = file.filtern(f"{ind}{data['title']}.{file.geturlfe(data['cover'])}")
         fn = f"{o}{te}"
     if 'coverUrl' in albumdata and albumdata['coverUrl'] is not None and albumdata['coverUrl'] != '':
         tfn = f"{file.spfln(fn)[0]}/cover.{file.spfn(albumdata['coverUrl'])[1]}"
@@ -5651,11 +5689,11 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
     read, albumdata = JSONParser2.getaualbuminfo(data)
     if log:
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
-    if read:
+    if 'menuId2' in albumdata:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title2']}(AM{albumdata['menuId2']})")
         else:
-            o = file.filterd(f"{o}{albumdata['title']}")
+            o = file.filterd(f"{o}{albumdata['title2']}")
     nte = True
     if JSONParser.getset(se, 'te') == False:
         nte = True
@@ -5684,15 +5722,29 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
             r2.trust_env = False
         r2.proxies = r.proxies
         read = JSONParser.loadcookie(r2, logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "Normal Audio Download Lrc Var2")
+        if read != 0:
+            print(lan['ERROR2'])  # 读取cookies.json出现错误
+            return -4
         cidc = biliAudio.checkCid(data, r2, logg)
         if log:
             logg.write(f"cidc = {cidc}", currentframe(), "Normal Audio Download Lrc CID Check")
     if fn is None:
+        ind = ""
+        if 'songsList2' in albumdata:
+            inde = JSONParser2.getindexfromsongs(albumdata['songsList2'], data['id'])
+            if inde != 0:
+                ind = f"{inde}."
+        elif 'songsList' in albumdata:
+            inde = JSONParser2.getindexfromsongs(albumdata['songsList'], data['id'])
+            if inde != 0:
+                ind = f"{inde}."
         avi = "" if data['aid'] == 0 else f",AV{data['aid']},{data['bvid']},{data['cid']}"
         if fin:
-            te = file.filtern(f"{data['title']}(AU{data['id']}{avi})")
+            te = file.filtern(f"{ind}{data['title']}(AU{data['id']}{avi})")
         else:
-            te = file.filtern(f"{data['title']}")
+            te = file.filtern(f"{ind}{data['title']}")
         fn = f"{o}{te}"
     if log:
         logg.write(f"fn = {fn}", currentframe(), "Normal Audio Download Lrc Var")
@@ -5751,11 +5803,6 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
     if data['aid'] != 0:
         if ns:
             print(lan['USEFROMV2'])  # 发现关联的视频
-        if log:
-            logg.write(f"read = {read}", currentframe(), "Normal Audio Download Lrc Var2")
-        if read != 0:
-            print(lan['ERROR2'])  # 读取cookies.json出现错误
-            return -4
         if not cidc:
             return 0
         uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r2.cookies.get('buvid3')}"

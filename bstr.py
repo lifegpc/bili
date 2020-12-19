@@ -17,6 +17,7 @@ from re import search,I
 from html.parser import HTMLParser
 from regex import search as rsearch
 from typing import Callable
+from urllib.parse import parse_qs
 
 
 def f(i:str):
@@ -92,3 +93,18 @@ def getv(l:list) -> (list,list) :
         q.append(i['qn'])
         d.append(i['desc'])
     return q,d
+
+
+def hasPar(s: str, k: str, r: str=None, flags: int=0):
+    t = s
+    if s[0] == '?':
+        t = s[1:]
+    l = parse_qs(t)
+    if r is None:
+        return True if k in l else False
+    else:
+        if k in l:
+            for v in l[k]:
+                if rsearch(r, v, flags) is not None:
+                    return True
+        return False

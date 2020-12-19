@@ -372,5 +372,5 @@ msgid "Do not open the last download file's location in windows explorer."
 msgstr ""
 
 msgctxt "O89"
-msgid "List all available type id(tid) for Favorites."
+msgid "List all available type id(tid) for Favorites or Uploader's videos."
 msgstr ""

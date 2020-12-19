@@ -254,3 +254,15 @@ msgstr ""
 msgctxt "O60"
 msgid "Album favorited times: "
 msgstr ""
+
+msgctxt "O61"
+msgid "AM number: "
+msgstr ""
+
+msgctxt "O62"
+msgid "Collection ID: "
+msgstr ""
+
+msgctxt "O63"
+msgid "Song list: "
+msgstr ""

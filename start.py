@@ -43,6 +43,7 @@ from Logger import Logger
 from inspect import currentframe
 from autoopenlist import autoopenfilelist
 from urllib.parse import parse_qs
+from bstr import hasPar
 
 # 远程调试用代码
 # import ptvsd
@@ -55,7 +56,9 @@ se=JSONParser.loadset()
 if se==-1 or se==-2 :
     se={}
 ip={}
-def main(ip={}):
+def main(ip = {}, menuInfo = None):
+    """ip 命令行参数字典
+    menuInfo AU号专辑/歌单信息"""
     log = False
     logg: Logger = None
     if 'logg' in ip:
@@ -125,11 +128,13 @@ def main(ip={}):
     chel=False #B站课程已购列表
     live = False  # 直播
     au = False  # 音频区音乐
+    ac = False  # 音频区收藏夹/专辑/歌单
     uid=-1 #收藏夹/频道主人id
     fid=-1 #收藏夹id
     cid=-1 #频道id
     uvd={} #投稿查询信息
     pld={} #收藏夹扩展信息
+    chd = {}  # 频道扩展信息
     mid=-1 #md号
     sid=-1 #小视频id
     rid="" #直播回放id
@@ -137,6 +142,8 @@ def main(ip={}):
     epid=-1 #B站课程EP号
     auid = -1  # AU号
     roomid = -1  # 直播房间ID
+    menuid = -1  # 音频区AM号
+    collid = -1  # 音频区收藏夹ID
     if inp[0:2].lower()=='ss' and inp[2:].isnumeric() :
         s="https://www.bilibili.com/bangumi/play/ss"+inp[2:]
         ss=True
@@ -168,13 +175,18 @@ def main(ip={}):
         auid = int(inp[2:])
         if log and not logg.hasf():
             logg.openf(f"log/AU{auid}_{round(time())}.log")
+    elif inp[0:2].lower() == "am" and inp[2:].isnumeric():
+        ac = True
+        menuid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/AM{menuid}_{round(time())}.log")
     elif inp.isnumeric() :
         s="https://www.bilibili.com/video/av"+inp
         av=True
         if log and not logg.hasf():
             logg.openf(f"log/AV{inp}_{round(time())}.log")
     else :
-        re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?cid=([0-9]+))?)?(([0-9]+)/video(\?(.+)?)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?',inp,I)
+        re=search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?(.+))?)?((([0-9]+)/video|medialist/play/([0-9]+))(\?.+)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?(audio/mycollection/([0-9]+))?(audio/am([0-9]+))?',inp,I)
         if re==None :
             re=search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?',inp,I)
             if re==None :
@@ -301,11 +313,23 @@ def main(ip={}):
                         logg.openf(f"log/FAV{fid}_{round(time())}.log")
                 if log:
                     logg.write(f"uid = {uid}\nfid = {fid}\npld = {pld}", currentframe(), "FAVLIST Parser")
-            elif re[18]:
+            elif re[18] and (re[20] or (re[22] and hasPar(re[22], 'cid', r'^([0-9]+)$'))):
                 ch=True
                 uid=int(re[19])
                 if re[22] :
-                    cid=int(re[22])
+                    ls = parse_qs(re[22])
+                    if 'cid' in ls:
+                        for v in ls['cid']:
+                            if v.isnumeric():
+                                cid = int(v)
+                                break
+                    if 'order' in ls:
+                        for v in ls['order']:
+                            if v.isnumeric():
+                                chd['order'] = int(v)
+                                break
+                if 'order' not in chd:
+                    chd['order'] = 0
                 if log and not logg.hasf():
                     if cid == -1:
                         logg.openf(f"log/UID{uid}_CHID_{round(time())}.log")
@@ -315,70 +339,79 @@ def main(ip={}):
                     logg.write(f"uid = {uid}\ncid = {cid}", currentframe(), "CHANNEL Parser")
             elif re[23]:
                 uv=True
-                uid=int(re[24])
+                uid = int(re[25]) if re[25] else int(re[26])
                 uvd['t']=0
                 uvd['k']=''
                 uvd['o']='pubdate'
-                if re[26]:
-                    sl=re[26].split('&')
-                    for us in sl:
-                        rep=search(r'^(tid=([0-9]+))?(keyword=(.+)?)?(order=(.+)?)?',us,I)
-                        if rep!=None :
-                            rep=rep.groups()
-                            if rep[0]:
-                                uvd['t']=int(rep[1])
-                            elif rep[3]:
-                                uvd['k']=rep[3]
-                            elif rep[5]:
-                                uvd['o']=rep[5]
+                if re[27]:
+                    sl = parse_qs(re[27][1:])
+                    if 'tid' in sl:
+                        for v in sl['tid']:
+                            if v.isnumeric():
+                                uvd['t'] = int(v)
+                                break
+                    if 'keyword' in sl:
+                        uvd['k'] = sl['keyword'][0]
+                    if 'order' in sl:
+                        uvd['o'] = sl['order'][0]
                 if log and not logg.hasf():
                     logg.openf(f"log/UID{uid}_{round(time())}.log")
                 if log:
                     logg.write(f"uid = {uid}\nuvd = {uvd}", currentframe(), "UPLOADER VIDEO Parser")
-            elif re[27] :
+            elif re[28]:
                 md=True
-                mid=int(re[28])
+                mid = int(re[29])
                 if log and not logg.hasf():
                     logg.openf(f"log/MD{mid}_{round(time())}.log")
-            elif re[29] :
+            elif re[30]:
                 sm=True
-                sid=int(re[30])
+                sid = int(re[31])
                 if log and not logg.hasf():
                     logg.openf(f"log/SID{sid}_{round(time())}.log")
-            elif re[31]:
+            elif re[32]:
                 sm=True
-                sid=int(re[32])
+                sid = int(re[33])
                 if log and not logg.hasf():
                     logg.openf(f"log/SID{sid}_{round(time())}.log")
-            elif re[33] :
+            elif re[34]:
                 lr=True
-                rid=re[34]
+                rid = re[35]
                 if log and not logg.hasf():
                     logg.openf(f"log/RID{rid}_{round(time())}.log")
-            elif re[35] :
+            elif re[36]:
                 ss=True
                 che=True
-                ssid=int(re[36])
+                ssid = int(re[37])
                 if log and not logg.hasf():
                     logg.openf(f"log/SS{ssid}_{round(time())}.log")
-            elif re[37]:
+            elif re[38]:
                 ep=True
                 che=True
-                epid=int(re[38])
+                epid = int(re[39])
                 if log and not logg.hasf():
                     logg.openf(f"log/EP{epid}_{round(time())}.log")
-            elif re[39] or re[40]:
+            elif re[40] or re[41]:
                 chel=True
-            elif re[5] and re[41]:
+            elif re[5] and re[42]:
                 live = True
-                roomid = int(re[41])
+                roomid = int(re[42])
                 if log and not logg.hasf():
                     logg.openf(f"log/LIVEROOM{roomid}_{round(time())}.log")
-            elif re[42]:
+            elif re[43]:
                 au = True
-                auid = int(re[43])
+                auid = int(re[44])
                 if log and not logg.hasf():
                     logg.openf(f"log/AU{auid}_{round(time())}.log")
+            elif re[45]:
+                ac = True
+                collid = int(re[46])
+                if log and not logg.hasf():
+                    logg.openf(f"log/COLL{collid}_{round(time())}.log")
+            elif re[47]:
+                ac = True
+                menuid == int(re[48])
+                if log and not logg.hasf():
+                    logg.openf(f"log/AM{menuid}_{round(time())}.log")
             else :
                 print(f'{lan["ERROR2"]}')
                 return -1
@@ -805,7 +838,7 @@ def main(ip={}):
                         return read
             return 0
         r.headers.update({'referer':'https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,cid)})
-        re = JSONParser2.getchi(r, uid, cid, 1, logg)
+        re = JSONParser2.getchi(r, uid, cid, 1, chd, logg)
         if re == -1:
             return -1
         chi=JSONParser2.getchn(re)
@@ -817,7 +850,7 @@ def main(ip={}):
         JSONParser2.getchs(chv,re)
         while i<n :
             i=i+1
-            re = JSONParser2.getchi(r, uid, cid, i, logg)
+            re = JSONParser2.getchi(r, uid, cid, i, chd, logg)
             if re==-1 :
                 return -1
             JSONParser2.getchs(chv,re)
@@ -917,6 +950,17 @@ def main(ip={}):
         re = JSONParser2.getuvi(uid, 1, uvd, section, logg)
         if re==-1:
             return -1
+        if 'ltid' in ip:
+            tre = re['data']['list']['tlist']
+            re = []
+            for tid in tre.keys():
+                re.append(tre[tid])
+            if len(re) > 0:
+                print(lan['UPLTID'])
+                PrintInfo.printplitid(re)
+            else:
+                print(lan['PLITIDNUL'])
+            return 0
         vn=re['data']['page']['count']
         n=ceil(vn/30)
         i=1
@@ -1211,7 +1255,7 @@ def main(ip={}):
                 return -1
             cho=[]
             if inp[0]=='a' :
-                if 'ns':
+                if ns:
                     print(lan['OUTPUT5'])#您全选了所有视频
                 for i in range(1,vn+1) :
                     cho.append(i)
@@ -1478,6 +1522,33 @@ def main(ip={}):
         sd['tags'] = []
         for i in re['data']:
             sd['tags'].append(i['info'])
+        if 'pgc_info' in sd and sd['pgc_info'] is not None and type(sd['pgc_info']) == dict:
+            pgc_info = sd['pgc_info']
+            if 'pgc_menu' in pgc_info  and pgc_info['pgc_menu'] is not None and type(pgc_info['pgc_menu']) == dict:
+                pgc_menu = pgc_info['pgc_menu']
+                if 'menuId' in pgc_menu and pgc_menu['menuId'] is not None and pgc_menu['menuId'] != 0:
+                    uri = f"https://api.bilibili.com/audio/music-service-c/menus/{pgc_menu['menuId']}"
+                    if log:
+                        logg.write(f"GET {uri}", currentframe(), "Audio Get Album List (APP API)")
+                    re = r.get(uri)
+                    re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Get Album List Result (APP API)")
+                    re = re.json()
+                    if re['code'] != 0:
+                        print(f"{re['code']} {re['msg']}")
+                    else:
+                        re = re['data']
+                        pgc_info['menusRespones'] = re['menusRespones']
+                        pgc_info['songsList'] = re['songsList']
+                        if menuInfo is not None:
+                            pgc_info['menusRespones2'] = menuInfo['menusRespones']
+                            pgc_info['songsList2'] = menuInfo['songsList']
+        elif menuInfo is not None:
+            pgc_info = {}
+            sd['pgc_info'] = pgc_info
+            pgc_info['menusRespones2'] = menuInfo['menusRespones']
+            pgc_info['songsList2'] = menuInfo['songsList']
         if log:
             logg.write(f"sd = {sd}", currentframe(), 'Audio Info')
         if ns:
@@ -1566,6 +1637,108 @@ def main(ip={}):
                 logg.write(f"read = {read}", currentframe(), "Audio Download Cover Image Retrun")
             if read == -1:
                 return -1
+        return 0
+    if ac:
+        r = requests.Session()
+        r.headers = copydict(section.headers)
+        r.proxies = section.proxies
+        if nte:
+            r.trust_env = False
+        read = JSONParser.loadcookie(r, logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "Audio Album Load Cookies Failed")
+        if read != 0:
+            print(lan['ERROR10'])  # 读取cookies.json出现错误
+            return -1
+        r.headers.update({'referer': f'https://www.bilibili.com/audio/au{auid}'})
+        r.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
+        r.cookies.set('CURRENT_FNVAL', '80', domain='.bilibili.com', path='/')
+        r.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
+        r.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
+        if menuid == -1:
+            uri = f"https://www.bilibili.com/audio/music-service-c/web/collections/info?sid={collid}"
+            if log:
+                logg.write(f"GET {uri}", currentframe(), "Audio Coll Get Info")
+            re = r.get(uri)
+            re.encoding = 'utf8'
+            if log:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Coll Get Info Result")
+            re = re.json()
+            if re['code'] != 0:
+                print(f"{re['code']} {re['msg']}")
+                return -1
+            menuid = re['data']['menuId']
+        uri = f"https://api.bilibili.com/audio/music-service-c/menus/{menuid}"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "Audio Album Get Info (APP API)")
+        re = r.get(uri)
+        re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Audio Album Get Info Result")
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']} {re['msg']}")
+            return -1
+        re = re['data']
+        songsList = re['songsList']
+        an = len(songsList)
+        if ns:
+            PrintInfo.printAmInfo(re)
+        bs = True
+        f = True
+        while bs:
+            if f and 'p' in ip:
+                f = False
+                inp = ip['p']
+            elif ns:
+                inp = input(lan['OUTPUT14'])  # 请输入你想下载的音频编号（每两个编号间用,隔开，全部下载可输入a）：
+            else:
+                print(lan['ERROR13'])  # 请使用-p <number>选择音频编号
+                return -1
+            cho = []
+            if inp[0] == 'a':
+                if ns:
+                    print(lan['OUTPUT15'])  # 您全选了所有音频
+                for i in range(1, an + 1):
+                    cho.append(i)
+                bs = False
+            else:
+                inp = inp.split(',')
+                bb = True
+                for i in inp:
+                    if i.isnumeric() and int(i) > 0 and int(i) <= an and (not (int(i) in cho)):
+                        cho.append(int(i))
+                    else:
+                        rrs = search(r"([0-9]+)-([0-9]+)", i)
+                        if rrs is not None:
+                            rrs = rrs.groups()
+                            i1 = int(rrs[0])
+                            i2 = int(rrs[1])
+                            if i2 < i1:
+                                tt = i1
+                                i1 = i2
+                                i2 = tt
+                            for i in range(i1, i2 + 1):
+                                if i > 0 and i <= an and (not (i in cho)):
+                                    cho.append(i)
+                        else:
+                            bb = False
+                if bb:
+                    bs = False
+                    for i in cho:
+                        if ns:
+                            print(f"{lan['OUTPUT16']}{i},{songsList[i-1]['title']}")
+        for i in cho:
+            ip2 = copyip(ip)
+            ip2['i'] = f"au{songsList[i-1]['song_id']}"
+            ip2['uc'] = False
+            if log:
+                logg.write(f"ip2 = {ip2}", currentframe(), "Audio Album Audio Para")
+            read = main(ip2, menuInfo = re)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "Audio Album Audio Return")
+            if read != 0:
+                return read
         return 0
     if not che:
         if log:
@@ -2132,7 +2305,7 @@ class mains(Thread) :
         main(self.ip)
 if __name__=="__main__" :
     PrintInfo.pr()
-    if not log:
+    if not log or __debug__:
         main(ip)
     else:
         try:

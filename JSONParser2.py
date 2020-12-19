@@ -188,13 +188,23 @@ def getaualbuminfo(d: dict) -> (bool, dict):
     if 'pgc_info' not in d or d['pgc_info'] is None or type(d['pgc_info']) != dict:
         return False, r
     pgc_info = d['pgc_info']
+    if 'menusRespones2' in pgc_info:
+        r['menuId2'] = pgc_info['menusRespones2']['menuId']
+        r['title2'] = pgc_info['menusRespones2']['title']
+        r['menusRespones2'] = pgc_info['menusRespones2']
+    if 'songsList2' in pgc_info:
+        r['songsList2'] = pgc_info['songsList2']
     if 'pgc_menu' not in pgc_info or pgc_info['pgc_menu'] is None or type(pgc_info['pgc_menu']) != dict:
         return False, r
     pgc_menu = pgc_info['pgc_menu']
     r['menuId'] = pgc_menu['menuId']
+    if 'menuId2' not in r:
+        r['menuId2'] = r['menuId']
     r['type'] = pgc_menu['type']
     r['coverUrl'] = pgc_menu['coverUrl']
     r['title'] = pgc_menu['title']
+    if 'title2' not in r:
+        r['title2'] = r['title']
     r['mbnames'] = pgc_menu['mbnames']
     r['publisher'] = pgc_menu['publisher']
     r['pubTime'] = pgc_menu['pubTime']
@@ -211,7 +221,20 @@ def getaualbuminfo(d: dict) -> (bool, dict):
     r['uid'] = pgc_menu['uid']
     r['uname'] = pgc_menu['uname']
     r['collectionId'] = pgc_menu['collectionId']
+    if 'menusRespones' in pgc_info:
+        r['menusRespones'] = pgc_info['menusRespones']
+    if 'songsList' in pgc_info:
+        r['songsList'] = pgc_info['songsList']
     return True, r
+
+
+def getindexfromsongs(l: list, id: int) -> int:
+    k = 1
+    for song in l:
+        if song['id'] == id:
+            return k
+        k = k + 1
+    return 0
 
 
 def getchl(d:dict)->list:
@@ -225,10 +248,10 @@ def getchl(d:dict)->list:
         t['count']=i['count']
         r.append(t)
     return r
-def getchi(r:Session, u: int, c: int, n: int, logg=None):
+def getchi(r:Session, u: int, c: int, n: int, chd: dict, logg=None):
+    uri = f"https://api.bilibili.com/x/space/channel/video?mid={u}&cid={c}&pn={n}&ps=95&order={chd['order']}&jsonp=jsonp"
     if logg is not None:
-        logg.write(f"GET https://api.bilibili.com/x/space/channel/video?mid={u}&cid={c}&pn={n}&ps=30&order=0&jsonp=jsonp", currentframe(), "GET CHANNLE VIDEO LIST")
-    uri="https://api.bilibili.com/x/space/channel/video?mid=%s&cid=%s&pn=%s&ps=30&order=0&jsonp=jsonp"%(u,c,n)
+        logg.write(f"GET {uri}", currentframe(), "GET CHANNLE VIDEO LIST")
     bs=True
     while bs :
         try :

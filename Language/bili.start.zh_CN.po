@@ -278,3 +278,31 @@ msgstr "以下是该收藏夹所有可用的类型ID（tid）："
 msgctxt "PLITIDNUL"
 msgid "This favorites don't have any available type id (tid)."
 msgstr "该收藏夹没有任何可用的类型ID（tid）。"
+
+msgctxt "UPLTID"
+msgid "Here are all available type id (tid) for this uploader's videos:"
+msgstr "以下是该UP主的投稿视频所有可用的类型ID（tid）："
+
+msgctxt "UPLTIDNUL"
+msgid "This uploader's video don't have any available type id (tid)."
+msgstr "该UP主的投稿视频没有任何可用的类型ID（tid）。"
+
+msgctxt "OUTPUT14"
+msgid ""
+"Please enter the number of the audio you want to choose (You can use \",\" "
+"to separate each two numbers. Use \"-\" to separate each two numbers to "
+"select a range.(e.g. 1-25) If you want to select all videos, please enter "
+"\"a\".):"
+msgstr "请输入你想下载的音频编号（每两个编号间用,隔开，全部下载可输入a，可以使用-分开两个数字以选择一个范围（例如：1-25））："
+
+msgctxt "ERROR13"
+msgid "Please use \"-p <number>\" to choose audio."
+msgstr "请使用-p <number>选择音频编号"
+
+msgctxt "OUTPUT15"
+msgid "You have selected all audios."
+msgstr "您全选了所有音频"
+
+msgctxt "OUTPUT16"
+msgid "You have selected the audio:"
+msgstr "您选中了音频："

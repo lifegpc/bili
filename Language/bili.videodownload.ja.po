@@ -331,20 +331,20 @@ msgstr ""
 
 msgctxt "ALBTAGS"
 msgid "Album tags: "
-msgstr ""
+msgstr "アルバムタグ: "
 
 msgctxt "AU流畅"
 msgid "Smooth quality"
-msgstr ""
+msgstr "清画質"
 
 msgctxt "AU标准"
 msgid "Standard quality"
-msgstr ""
+msgstr "標準画質"
 
 msgctxt "AU高品质"
 msgid "High quality"
-msgstr ""
+msgstr "高画質"
 
 msgctxt "AU无损音质"
 msgid "Lossless quality"
-msgstr ""
+msgstr "オリジナル画質"

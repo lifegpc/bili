@@ -44,3 +44,4 @@ from .biliLogin import biliLogin
 from .page import page
 from .pic import pic
 from .live import live
+from .dealwithcapcha import dealwithcapcha

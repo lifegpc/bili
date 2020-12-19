@@ -17,6 +17,7 @@
 
 #third {
     position: absolute;
+    padding-bottom: 10px;
 }
 
 #third * td {

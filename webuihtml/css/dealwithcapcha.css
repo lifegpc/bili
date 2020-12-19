@@ -1,0 +1,9 @@
+#main {
+    position: absolute;
+    width: 99%;
+    text-align: center;
+}
+
+#main label {
+    font-size: 30px;
+}

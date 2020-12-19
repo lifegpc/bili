@@ -453,5 +453,5 @@ msgid "Do not open the last download file's location in windows explorer."
 msgstr "不要在windows资源管理器中打开最后一个下载文件的所在位置。"
 
 msgctxt "O89"
-msgid "List all available type id(tid) for Favorites."
-msgstr "为收藏夹列出所有可用的类型ID（tid）。"
+msgid "List all available type id(tid) for Favorites or Uploader's videos."
+msgstr "为收藏夹或UP主的投稿视频列出所有可用的类型ID（tid）。"
