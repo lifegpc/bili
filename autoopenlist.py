@@ -18,7 +18,7 @@ from platform import system
 from os import system as syst
 from inspect import currentframe
 if system() == "Windows":
-    from win32com.shell import shell
+    from win32com.shell import shell  # pylint: disable=import-error no-name-in-module
 
 
 class autoopenfilelist:
