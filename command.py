@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from getopt import getopt
+from getopt import getopt, GetoptError
 from re import search
 from biliTime import checktime
 from file import filterd
@@ -395,7 +395,13 @@ def gopt(args,d:bool=False) :
                             argv.append(v)
                 if d:
                     print(argv)
-                return gopt(argv)
+                try:
+                    return gopt(argv)
+                except GetoptError:
+                    argv = ['-i', i[1]]
+                    if d:
+                        print(argv)
+                    return gopt(argv)
     if h:
         global la
         la=getdict('command',getlan(se,r))
