@@ -17,12 +17,16 @@ import polib
 from os.path import exists
 import platform
 import ctypes
+from typing import Dict
+
+
+LanDict = Dict[str, str]
 dll=None
 lan={'en':'English','ja':'日本語','zh_CN':'中文（中国）'}
 syslan = None
 
 
-def getdict(sn:str,lan:str,sn2:str="bili") -> dict:
+def getdict(sn:str,lan:str,sn2:str="bili") -> LanDict:
     """获取翻译词典
     sn 资源名称
     lan 语言代码"""
