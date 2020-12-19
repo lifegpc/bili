@@ -13,6 +13,15 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import sys
+import os
+import traceback
+if '-c' in sys.argv:
+    try:
+        os.chdir(os.path.abspath(os.path.split(sys.argv[0])[0]))
+    except:
+        traceback.print_exc()
+        input()
 import requests
 import HTMLParser
 import JSONParser
@@ -25,14 +34,11 @@ import chon
 import videodownload
 import biliBv
 from re import search,I
-import os 
-import sys
 from command import gopt
 import json
 from math import ceil
 from dictcopy import copyip,copydict
 from biliHdVideo import HDVideoParser
-import traceback
 import biliLiveDanmu
 from lang import getlan,getdict
 import JSONParser2
