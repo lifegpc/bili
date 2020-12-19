@@ -17,8 +17,6 @@
     * [翻译](#翻译)
     * [其他](#其他)
         + [全弹幕下载问题](#全弹幕下载问题)
-    * [已知BUG](#已知bug)
-        + [登录时发生错误（使用ChromeDriver时）](#登录时发生错误使用chromedriver时)
     * [FAQ](#faq)
         + [Release中每个文件的区别](#release中每个文件的区别)
         + [无法输入密码](#无法输入密码)
@@ -214,7 +212,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 该文件保存了登录B站后获取到的cookies信息，用于程序保持登录B站（调用历史弹幕接口用以及下载720P及以上视频使用）   
 
 ### settings.json
-该文件保存了一些默认操作的设置，可以运行**setsettings.py**来设置。
+该文件保存了一些设置，可以运行**setsettings.py**来设置。
 
 ### webui.json
 保存了WEB用户界面的设置。
@@ -223,8 +221,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 当WEB用户界面打开密码验证时，存储会话信息。
 
 ### tv.bilibili.player.xml
-该文件不一定需要   
-主要用来对弹幕进行过滤。   
+该文件包括弹幕过滤规则。
 可以直接将在PC网页端播放器的弹幕过滤设定中导出的文件放至程序目录下，并确保文件名为**tv.bilibili.player.xml**。
 
 ## 开始使用
@@ -256,13 +253,6 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 ### 全弹幕下载问题
 由于B站限制了历史弹幕的调用次数，大概12h内可以调用1000次左右，所以在弹幕较多的时候请设定较大的时间间隔。   
 被限制后大约12h后会恢复正常
-
-## 已知BUG
-### 登录时发生错误（使用ChromeDriver时）
-这是由于你的电脑未安装Chrome或者Chrome版本与Chrome Driver版本不一致导致的，请安装Chrome或下载匹配Chrome版本的Chrome Driver。  
-**可以到这里[下载](https://chromedriver.chromium.org/downloads)Chrome Driver的其他版本**  
-具体的错误提示可以参考[#9](https://github.com/lifegpc/bili/issues/9)和[#11](https://github.com/lifegpc/bili/issues/11)。  
-现在已经支持用户名和密码登录。
 
 ## FAQ
 

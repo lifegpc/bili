@@ -5,6 +5,12 @@
     * [Program Features](#program-features)
     * [Dependent Libraries](#dependent-libraries)
         + [JavaScript Dependent Libraries](#javascript-dependent-libraries)
+    * [Configuration Files](#configuration-files)
+        + [cookies.json](#cookiesjson)
+        + [settings.json](#settingsjson)
+        + [webui.json](#webuijson)
+        + [sections.json](#sectionsjson)
+        + [tv.bilibili.player.xml](#tvbilibiliplayerxml)
 ## Introduction
 This program is written in Python (Python3), use some Python libraries and ChromeDriver. (When using ChromeDriver, it is more convenient to log in or pass captcha. The program's main features will not be affected if without ChromeDriver.)  
 The program now supports the command line.  
@@ -186,3 +192,19 @@ The login part refers to the login part of [Bilibili-Toolkit](https://github.com
 [Viewer.js](https://github.com/fengyuanchen/viewerjs)  
 [clipboard.js](https://github.com/zenorocha/clipboard.js)  
 [FileSaver.js](https://github.com/eligrey/FileSaver.js)
+## Configuration Files
+### cookies.json
+This file including the cookies information, which is used by the program to keep logging in.
+
+### settings.json
+This file including some settings. You can run ```setsettings.py``` to configure.
+
+### webui.json
+This file including the settings for WEB User Interface.
+
+### sections.json
+This file including the section information for WEB User Interface if you enable password verification.
+
+### tv.bilibili.player.xml
+This file including the filter rules for barrages.  
+You can export this file from bilibili WEB player.
