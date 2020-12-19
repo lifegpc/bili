@@ -13,10 +13,12 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from os.path import abspath, exists, isfile
+from os.path import abspath, exists, isfile, split
 from platform import system
 from os import system as syst
 from inspect import currentframe
+if system() == "Windows":
+    from win32com.shell import shell
 
 
 class autoopenfilelist:
@@ -45,11 +47,10 @@ class autoopenfilelist:
             i = i - 1
         if r != "":
             if system() == "Windows":
-                cm = f'explorer.exe /select,"{r}"'
+                pa = split(r)[0]
                 if self.__logg is not None:
                     self.__logg.write(
-                        f"Try open '{r}':\ncm = {cm}", currentframe(), "Auto Open File List Open")
-                re = syst(cm)
-                if self.__logg is not None:
-                    self.__logg.write(f"re = {re}", currentframe(
-                    ), "Auto Open File List Open Result")
+                        f"Try open '{r}'.", currentframe(), "Auto Open File List Open")
+                c = shell.SHParseDisplayName(pa, 0)
+                d = shell.SHParseDisplayName(r, 0)
+                shell.SHOpenFolderAndSelectItems(c[0], [d[0]], 0)
