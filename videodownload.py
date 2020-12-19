@@ -5722,6 +5722,11 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
             r2.trust_env = False
         r2.proxies = r.proxies
         read = JSONParser.loadcookie(r2, logg)
+        if log:
+            logg.write(f"read = {read}", currentframe(), "Normal Audio Download Lrc Var2")
+        if read != 0:
+            print(lan['ERROR2'])  # 读取cookies.json出现错误
+            return -4
         cidc = biliAudio.checkCid(data, r2, logg)
         if log:
             logg.write(f"cidc = {cidc}", currentframe(), "Normal Audio Download Lrc CID Check")
@@ -5798,11 +5803,6 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
     if data['aid'] != 0:
         if ns:
             print(lan['USEFROMV2'])  # 发现关联的视频
-        if log:
-            logg.write(f"read = {read}", currentframe(), "Normal Audio Download Lrc Var2")
-        if read != 0:
-            print(lan['ERROR2'])  # 读取cookies.json出现错误
-            return -4
         if not cidc:
             return 0
         uri = f"https://api.bilibili.com/x/player.so?id=cid:{data['cid']}&aid={data['aid']}&bvid={data['bvid']}&buvid={r2.cookies.get('buvid3')}"
