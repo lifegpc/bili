@@ -59,6 +59,7 @@ If you want to build your own Release, you can find build script on [bili.build.
     * [x] [Download Audio](#download-audio)
     * [x] [Only Download Lyrics](#only-download-lyrics)
     * [x] Only Download Cover
+- [x] [Songs List](#songs-list)
 ### Download with aria2c
 The program now supports downloading with aria2c. Download with aria2c is recommended, because aria2c provide faster download speed.  
 If you want to enable this feature, make sure the program can call aria2c by using command line (You can simply put aria2c in program directory.). Also make sure enable this feature in the settings.
@@ -174,6 +175,11 @@ If the audio has the related video, the program will try to get more audio forma
 #### Only Download Lyrics
 The program will standardize lyrics by default. After standardizing, the lyrics can be adapted to more audio players.  
 If the audio has the related video, the program will try to get more lyrics(subtitles) from the related video.
+### Songs List
+This program supports following input format (Take AM29931432 for example.):
+- ```am29931432```
+- ```bilibili.com/audio/am29931432```
+- ```bilibili.com/audio/mycollection/29981833```
 ## Dependent Libraries
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)  

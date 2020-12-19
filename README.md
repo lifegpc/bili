@@ -74,6 +74,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
     * [x] [音频下载](#音频下载)
     * [x] [仅下载歌词](#仅下载歌词)
     * [x] 仅下载封面
+- [x] [歌单](#歌单)
 ### 使用aria2c下载
 本程序支持使用aria2c下载并推荐使用aria2c下载以获得更好的下载体验。  
 启用该功能需要确保能够直接使用命令行调用aria2c（一般而言放在程序目录即可）并确保在设置里已启用使用aria2c。
@@ -189,6 +190,11 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 #### 仅下载歌词
 程序默认会对下载的歌词文件进行过滤修正，从而适应更多的播放器。  
 如果音频有关联的普通视频，将会尝试从关联的视频页获取更多的歌词（即字幕）。
+### 歌单
+本程序支持以下的输入（以AM29931432为例）：
+- ```am29931432```
+- ```bilibili.com/audio/am29931432```
+- ```bilibili.com/audio/mycollection/29981833```
 ## 依赖库
 [requests](https://pypi.org/project/requests/)   
 [selenium](https://pypi.org/project/selenium/)  
