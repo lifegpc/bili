@@ -182,6 +182,7 @@ If the audio has the related video, the program will try to get more lyrics(subt
 [web.py](https://webpy.org/)  
 [regex](https://pypi.org/project/regex/)  
 [iso-639](https://pypi.org/project/iso-639/)  
+[pywin32](https://pypi.org/project/pywin32/)  
 The login part refers to the login part of [Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit).
 ### JavaScript Dependent Libraries
 [jQuery](https://jquery.com/)  

@@ -197,6 +197,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 [web.py](https://webpy.org/)  
 [regex](https://pypi.org/project/regex/)  
 [iso-639](https://pypi.org/project/iso-639/)  
+[pywin32](https://pypi.org/project/pywin32/)  
 用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。
 ### JavaScript依赖库
 [jQuery](https://jquery.com/)  
