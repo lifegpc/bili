@@ -5060,7 +5060,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
     if read:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title']}(AM{albumdata['menuId']})")
         else:
             o = file.filterd(f"{o}{albumdata['title']}")
     sv = True
@@ -5561,7 +5561,7 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
     if read:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title']}(AM{albumdata['menuId']})")
         else:
             o = file.filterd(f"{o}{albumdata['title']}")
     if log:
@@ -5683,7 +5683,7 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
     if read:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(MENUID{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title']}(AM{albumdata['menuId']})")
         else:
             o = file.filterd(f"{o}{albumdata['title']}")
     nte = True
