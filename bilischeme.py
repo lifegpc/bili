@@ -72,13 +72,15 @@ def main():
                 print(lan['CNOTDEL'])
                 return -1
         try:
-            winreg.SetValue(classRoot, 'bili', winreg.REG_SZ, 'URL:Bili Protocol')
+            winreg.SetValue(classRoot, 'bili', winreg.REG_SZ,
+                            'URL:Bili Protocol')
         except OSError:
             traceback.print_exc()
             print(lan['CNOTCRE'].replace('<key>', 'bili'))
             return -2
         try:
-            bili = winreg.OpenKey(classRoot, 'bili', access=winreg.KEY_ALL_ACCESS)
+            bili = winreg.OpenKey(
+                classRoot, 'bili', access=winreg.KEY_ALL_ACCESS)
         except OSError:
             traceback.print_exc()
             print(lan['REGERR'])
