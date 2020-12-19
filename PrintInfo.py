@@ -239,6 +239,42 @@ def printAuInfo(d: dict):
 	print(f"{lan['O51']}{s['collect']}")
 
 
+def printAmInfo(d: dict):
+    m = d['menusRespones']
+    l = d['songsList']
+    print(f"{lan['O61']}{m['menuId']}")  # AM号
+    if m['collectionId'] > 0:
+        print(f"{lan['O62']}{m['collectionId']}")  # 收藏夹ID
+    print(f"{lan['O4']}{m['title']}")  # 标题
+    if 'intro' in m and m['intro'] is not None and m['intro'] != '':
+        print(f"{lan['O7']}{m['intro']}")  # 描述
+    if 'mbnames' in m and m['mbnames'] is not None and m['mbnames'] != '':
+        print(f"{lan['O54']}{m['mbnames']}")  # 专辑艺术家
+    if m['pbtime'] > 0:
+        print(f"{lan['O5']}{tostr2(m['pbtime']/1000)}")  # 发布时间
+    elif m['patime'] > 0:
+        print(f"{lan['O5']}{tostr2(m['patime']/1000)}")
+    if m['ctime'] > 0:
+        print(f"{lan['O6']}{tostr2(m['ctime']/1000)}")  # 创建时间
+    if m['uid'] > 0:
+        print(lan['O8'])  # 上传者信息
+        print(f"UID: {m['uid']}")
+        print(f"{lan['O9']}{m['uname']}")  # 名字
+    print(lan['O47'])
+    print(f"{lan['O51']}{m['collectNum']}")  # 收藏次数
+    print(f"{lan['O49']}{m['commentNum']}")  # 评论数量
+    print(f"{lan['O48']}{m['playNum']}")  # 播放次数
+    print(f"{lan['O50']}{m['snum']}")  # 分享次数
+    print(lan['O63'])
+    k = 1
+    for i in l:
+        print(f"{k}. {lan['O44']}{i['song_id']}")  # AU号
+        print(f"{lan['O4']}{i['title']}")  # 标题
+        print(f"{lan['O46']}{i['author']}")  # 作者
+        print(f"{lan['O45']}{tostr6(i['duration'])}")  # 时长
+        k = k + 1
+
+
 def printplitid(d: list):
     for i in d:
         print(f"{lan['O52']}{i['tid']}")

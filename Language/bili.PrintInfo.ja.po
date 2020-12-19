@@ -259,3 +259,15 @@ msgstr "アルバム再生回数: "
 msgctxt "O60"
 msgid "Album favorited times: "
 msgstr "アルバムお気に入り数: "
+
+msgctxt "O61"
+msgid "AM number: "
+msgstr ""
+
+msgctxt "O62"
+msgid "Collection ID: "
+msgstr ""
+
+msgctxt "O63"
+msgid "Song list: "
+msgstr ""

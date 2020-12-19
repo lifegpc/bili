@@ -259,3 +259,15 @@ msgstr "专辑播放次数："
 msgctxt "O60"
 msgid "Album favorited times: "
 msgstr "专辑收藏次数："
+
+msgctxt "O61"
+msgid "AM number: "
+msgstr "AM号："
+
+msgctxt "O62"
+msgid "Collection ID: "
+msgstr "收藏夹ID："
+
+msgctxt "O63"
+msgid "Song list: "
+msgstr "歌曲列表："

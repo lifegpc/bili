@@ -136,7 +136,7 @@ def login2(r: requests.Session, logg = None):
                         sa.append({'name':i['name'],'value':i['value'],'domain':'.bilibili.com','path':'/'})
                     return sa
                 if logg is not None:
-                    logg.write(f"re['data'].keys() = {re['data'].keys()}", currentframe, "Login info keys")
+                    logg.write(f"re['data'].keys() = {re['data'].keys()}", currentframe(), "Login info keys")
                 return -1
             elif re['code']==-105 :
                 if logg is not None:

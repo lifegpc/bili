@@ -292,3 +292,23 @@ msgstr "ここでは、このアップローダーの動画に使用可能なす
 msgctxt "UPLTIDNUL"
 msgid "This uploader's video don't have any available type id (tid)."
 msgstr "この投稿者の動画には、利用可能なタイプID(tid)がありません"
+
+msgctxt "OUTPUT14"
+msgid ""
+"Please enter the number of the audio you want to choose (You can use \",\" "
+"to separate each two numbers. Use \"-\" to separate each two numbers to "
+"select a range.(e.g. 1-25) If you want to select all videos, please enter "
+"\"a\".):"
+msgstr ""
+
+msgctxt "ERROR13"
+msgid "Please use \"-p <number>\" to choose audio."
+msgstr ""
+
+msgctxt "OUTPUT15"
+msgid "You have selected all audios."
+msgstr ""
+
+msgctxt "OUTPUT16"
+msgid "You have selected the audio:"
+msgstr ""

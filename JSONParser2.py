@@ -188,13 +188,23 @@ def getaualbuminfo(d: dict) -> (bool, dict):
     if 'pgc_info' not in d or d['pgc_info'] is None or type(d['pgc_info']) != dict:
         return False, r
     pgc_info = d['pgc_info']
+    if 'menusRespones2' in pgc_info:
+        r['menuId2'] = pgc_info['menusRespones2']['menuId']
+        r['title2'] = pgc_info['menusRespones2']['title']
+        r['menusRespones2'] = pgc_info['menusRespones2']
+    if 'songsList2' in pgc_info:
+        r['songsList2'] = pgc_info['songsList2']
     if 'pgc_menu' not in pgc_info or pgc_info['pgc_menu'] is None or type(pgc_info['pgc_menu']) != dict:
         return False, r
     pgc_menu = pgc_info['pgc_menu']
     r['menuId'] = pgc_menu['menuId']
+    if 'menuId2' not in r:
+        r['menuId2'] = r['menuId']
     r['type'] = pgc_menu['type']
     r['coverUrl'] = pgc_menu['coverUrl']
     r['title'] = pgc_menu['title']
+    if 'title2' not in r:
+        r['title2'] = r['title']
     r['mbnames'] = pgc_menu['mbnames']
     r['publisher'] = pgc_menu['publisher']
     r['pubTime'] = pgc_menu['pubTime']

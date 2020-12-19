@@ -5058,11 +5058,11 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
     read, albumdata = JSONParser2.getaualbuminfo(data)
     if log:
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
-    if read:
+    if 'menuId2' in albumdata:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(AM{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title2']}(AM{albumdata['menuId2']})")
         else:
-            o = file.filterd(f"{o}{albumdata['title']}")
+            o = file.filterd(f"{o}{albumdata['title2']}")
     sv = True
     if JSONParser.getset(se, 'sv') == False:
         sv = False
@@ -5265,7 +5265,11 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
             dash = dash[vqs]
             vqs = getaudesc(data, vqs)
     ind = ""
-    if 'songsList' in albumdata:
+    if 'songsList2' in albumdata:
+        inde = JSONParser2.getindexfromsongs(albumdata['songsList2'], data['id'])
+        if inde != 0:
+            ind = f"{inde}."
+    elif 'songsList' in albumdata:
         inde = JSONParser2.getindexfromsongs(albumdata['songsList'], data['id'])
         if inde != 0:
             ind = f"{inde}."
@@ -5401,7 +5405,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 elif 'passtime' in data and data['passtime'] is not None and data['passtime'] != 0:
                     te.write(f"date={tostr4(data['passtime'])}\n")
                 menuId = ''
-                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0:
+                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0 and 'menusRespones' in albumdata:
                     menuId = f",{albumdata['menuId']}"
                 if 'uid' in data and data['uid'] is not None and data['uid'] != 0:
                     te.write(f"description={bstr.g(vqs)},{data['uid']},{data['uname']}{menuId}\\\n")
@@ -5413,7 +5417,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 te.write(f"""{bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
                 if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
                     te.write(f"copyright=Publish by {albumdata['publisher']}\n")
-                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '':
+                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '' and 'menusRespones' in albumdata:
                     te.write(f"album={albumdata['title']}\n")
                 if 'mbnames' in albumdata and albumdata['mbnames'] is not None and albumdata['mbnames'] != '':
                     te.write(f"album_artist={albumdata['mbnames']}\n")
@@ -5462,8 +5466,8 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                     if not hasdate:
                         te.write(f"date={tostr4(data['passtime'])}\n")
                         hasdate = True
-                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0:
-                    te.write(f"menuid={albumdata['menuId']}\n")
+                if 'menuId' in albumdata and albumdata['menuId'] is not None and albumdata['menuId'] != 0 and 'menusRespones' in albumdata:
+                    te.write(f"amid={albumdata['menuId']}\n")
                 te.write(f"aq={bstr.g(vqs)}\n")
                 te.write(f"tags={bstr.g(bstr.gettags(data['tags']))}\n")
                 if 'tags' in albumdata and albumdata['tags'] is not None and albumdata['title'] != '':
@@ -5471,7 +5475,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 te.write(f"""purl={bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
                 if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
                     te.write(f"publisher={albumdata['publisher']}\n")
-                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '':
+                if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '' and 'menusRespones' in albumdata:
                     te.write(f"album={albumdata['title']}\n")
                 if 'mbnames' in albumdata and albumdata['mbnames'] is not None and albumdata['mbnames'] != '':
                     te.write(f"album_artist={albumdata['mbnames']}\n")
@@ -5559,11 +5563,11 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
     read, albumdata = JSONParser2.getaualbuminfo(data)
     if log:
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
-    if read:
+    if 'menuId2' in albumdata:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(AM{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title2']}(AM{albumdata['menuId2']})")
         else:
-            o = file.filterd(f"{o}{albumdata['title']}")
+            o = file.filterd(f"{o}{albumdata['title2']}")
     if log:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "Normal Audio Download Pic Para")
     try:
@@ -5576,7 +5580,11 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
         return -1
     if fn is None:
         ind = ""
-        if 'songsList' in albumdata:
+        if 'songsList2' in albumdata:
+            inde = JSONParser2.getindexfromsongs(albumdata['songsList2'], data['id'])
+            if inde != 0:
+                ind = f"{inde}."
+        elif 'songsList' in albumdata:
             inde = JSONParser2.getindexfromsongs(albumdata['songsList'], data['id'])
             if inde != 0:
                 ind = f"{inde}."
@@ -5681,11 +5689,11 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
     read, albumdata = JSONParser2.getaualbuminfo(data)
     if log:
         logg.write(f"read = {read}", currentframe(), "Normal Audio Download Album Info")
-    if read:
+    if 'menuId2' in albumdata:
         if fin:
-            o = file.filterd(f"{o}{albumdata['title']}(AM{albumdata['menuId']})")
+            o = file.filterd(f"{o}{albumdata['title2']}(AM{albumdata['menuId2']})")
         else:
-            o = file.filterd(f"{o}{albumdata['title']}")
+            o = file.filterd(f"{o}{albumdata['title2']}")
     nte = True
     if JSONParser.getset(se, 'te') == False:
         nte = True
@@ -5719,7 +5727,11 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str=N
             logg.write(f"cidc = {cidc}", currentframe(), "Normal Audio Download Lrc CID Check")
     if fn is None:
         ind = ""
-        if 'songsList' in albumdata:
+        if 'songsList2' in albumdata:
+            inde = JSONParser2.getindexfromsongs(albumdata['songsList2'], data['id'])
+            if inde != 0:
+                ind = f"{inde}."
+        elif 'songsList' in albumdata:
             inde = JSONParser2.getindexfromsongs(albumdata['songsList'], data['id'])
             if inde != 0:
                 ind = f"{inde}."
