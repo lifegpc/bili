@@ -398,7 +398,10 @@ def gopt(args,d:bool=False) :
                 try:
                     return gopt(argv)
                 except GetoptError:
-                    argv = ['-i', i[1]]
+                    t = i[1][5:]
+                    if t.startswith('//'):
+                        t = t[2:]
+                    argv = ['-i', t]
                     if d:
                         print(argv)
                     return gopt(argv)
