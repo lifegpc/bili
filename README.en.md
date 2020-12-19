@@ -3,6 +3,8 @@
 - [BiliBili Barrage/Video Downloader](#bilibili-barragevideo-downloader)
     * [Introduction](#introduction)
     * [Program Features](#program-features)
+    * [Dependent Libraries](#dependent-libraries)
+        + [JavaScript Dependent Libraries](#javascript-dependent-libraries)
 ## Introduction
 This program is written in Python (Python3), use some Python libraries and ChromeDriver. (When using ChromeDriver, it is more convenient to log in or pass captcha. The program's main features will not be affected if without ChromeDriver.)  
 The program now supports the command line.  
@@ -42,6 +44,15 @@ If you want to build your own Release, you can find build script on [bili.build.
     * [x] [Supported GET Parameters](#supported-get-parameters-1)
 - [x] [Uploaded Video List](#uploaded-video-list)
     * [x] [Supported GET Parameters](#supported-get-parameters-2)
+- [x] [Live Record](#live-record)
+    * [x] [Download Video](#download-video)
+    * [x] [Download Barrage](#download-barrage)
+- [x] [Live](#live)
+    * [x] [Download Video](#download-video-1)
+- [x] [AU Number Audio](#au-number-audio)
+    * [x] [Download Audio](#download-audio)
+    * [x] [Only Download Lyrics](#only-download-lyrics)
+    * [x] Only Download Cover
 ### Download with aria2c
 The program now supports downloading with aria2c. Download with aria2c is recommended, because aria2c provide faster download speed.  
 If you want to enable this feature, make sure the program can call aria2c by using command line (You can simply put aria2c in program directory.). Also make sure enable this feature in the settings.
@@ -134,3 +145,44 @@ This program supports following input format (Take UID1 for example.):
 - ```order```: to specify video's order. ```pubdate``` is publish time, ```click``` is views, ```stow``` is favorited times.
 
 This feature can get a list of videos from a uploader's uploaded video list and let you select videos you want to download.
+### Live Record
+This program supports following input format (Take R1mx411c7En for example.):
+- ```live.bilibili.com/record/R1mx411c7En```
+#### Download Video
+This feature now only support the default video format (origin quality). If a live record have other video formats, you can see the warning in downloader. If you see that warning, please submit an [issue](https://github.com/lifegpc/bili/issues).
+#### Download Barrage
+This feature now only support normal barrage. The barrage file will be converted from the original format to XML format.
+### Live
+This program supports following input format (Take ROOMID1 for example.):
+- ```live.bilibili.com/1```
+#### Download Video
+This feature supports selecting the video quality. You can also select the URL by using command line.
+### AU Number Audio
+This program supports following input format (Take AU1 for example.):
+- ```au1```
+- ```bilibili.com/audio/au1```
+- ```b23.tv/au1```
+#### Download Audio
+Now support multiply audio quality.  
+If the audio has the related video, the program will try to get more audio formats from the related video.
+#### Only Download Lyrics
+The program will standardize lyrics by default. After standardizing, the lyrics can be adapted to more audio players.  
+If the audio has the related video, the program will try to get more lyrics(subtitles) from the related video.
+## Dependent Libraries
+[requests](https://pypi.org/project/requests/)   
+[selenium](https://pypi.org/project/selenium/)  
+[rsa](https://pypi.org/project/rsa/)  
+[polib](https://pypi.org/project/polib/)  
+[web.py](https://webpy.org/)  
+[regex](https://pypi.org/project/regex/)  
+[iso-639](https://pypi.org/project/iso-639/)  
+The login part refers to the login part of [Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit).
+### JavaScript Dependent Libraries
+[jQuery](https://jquery.com/)  
+[js-sha256](https://github.com/emn178/js-sha256)  
+[jsbn](http://www-cs-students.stanford.edu/~tjw/jsbn/) (PS. It has been merged into [```webuihtml/js(origin)/rsa.js```](webuihtml/js(origin)/rsa.js).)  
+[js-base64](https://github.com/dankogai/js-base64)  
+[QRCode.js](https://github.com/davidshimjs/qrcodejs)  
+[Viewer.js](https://github.com/fengyuanchen/viewerjs)  
+[clipboard.js](https://github.com/zenorocha/clipboard.js)  
+[FileSaver.js](https://github.com/eligrey/FileSaver.js)

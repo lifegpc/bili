@@ -186,10 +186,10 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 - ```bilibili.com/audio/au1```
 - ```b23.tv/au1```
 #### 音频下载
-~~目前只支持下载默认音质，如果有出现其他音质，下载器应该会有提示，请将AU号提交至[issues](https://github.com/lifegpc/bili/issues)。~~ 现已支持多种音质，且用且珍惜。  
+现已支持多种音质。  
 如果音频有关联的普通视频，将会尝试从关联的视频页获取更多的音质。
 #### 仅下载歌词
-程序默认会对下载的歌词文件进行过滤修正，从而以适应更多的播放器。  
+程序默认会对下载的歌词文件进行过滤修正，从而适应更多的播放器。  
 如果音频有关联的普通视频，将会尝试从关联的视频页获取更多的歌词（即字幕）。
 ## 依赖库
 [requests](https://pypi.org/project/requests/)   
@@ -199,15 +199,11 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 [web.py](https://webpy.org/)  
 [regex](https://pypi.org/project/regex/)  
 [iso-639](https://pypi.org/project/iso-639/)  
-自己写的file库   
-如需自动合成视频，需要当前目录内或者环境变量PATH目录内有ffmpeg。   
-如需使用aria2下载视频，需要当前目录内或者环境变量PATH目录内有aria2c。  
-用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。  
-~~识别Captcha使用了[该接口](https://bili.dev:2233/captcha)。~~（接口已挂）
+用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。
 ### JavaScript依赖库
 [jQuery](https://jquery.com/)  
 [js-sha256](https://github.com/emn178/js-sha256)  
-[jsbn](http://www-cs-students.stanford.edu/~tjw/jsbn/)（注：已被合并到```webuihtml/js(origin)/rsa.js```）  
+[jsbn](http://www-cs-students.stanford.edu/~tjw/jsbn/)（注：已被合并到[```webuihtml/js(origin)/rsa.js```](webuihtml/js(origin)/rsa.js)）  
 [js-base64](https://github.com/dankogai/js-base64)  
 [QRCode.js](https://github.com/davidshimjs/qrcodejs)  
 [Viewer.js](https://github.com/fengyuanchen/viewerjs)  
