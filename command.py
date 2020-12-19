@@ -378,6 +378,8 @@ def gopt(args,d:bool=False) :
                 argv = ['-i', unquote_plus(pat)]
                 getp = parse_qs(ree.query, True)
                 for key in getp.keys():
+                    if key == 'b':
+                        continue
                     val = getp[key]
                     if len(key) == 1:
                         key = f"-{key}"
