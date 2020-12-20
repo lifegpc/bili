@@ -137,8 +137,10 @@ if __name__ == "__main__":
                 if main():
                     input()
             else:
-                ctypes.windll.shell32.ShellExecuteW(
-                    None, "runas", sys.executable, abspath(__file__), None, 1)
+                if sys.executable != abspath(sys.argv[0]):
+                    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, abspath(sys.argv[0]), None, 1)
+                else:
+                    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, None, None, 1)
         except:
             traceback.print_exc()
             input()
