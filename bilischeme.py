@@ -13,15 +13,21 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+import sys
+from os import chdir
+from os.path import abspath, exists, split
+import traceback
+try:
+    chdir(abspath(split(sys.argv[0])[0]))
+except:
+    traceback.print_exc()
+    input()
 from platform import system
 from JSONParser import loadset
 from lang import getdict, getlan
-import sys
-from os.path import abspath, exists, split
 if system() == "Windows":
     import winreg
     import ctypes
-import traceback
 
 lan = None
 se = loadset()
