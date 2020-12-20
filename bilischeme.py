@@ -119,9 +119,9 @@ def main():
             return -2
         cm = f'"{sys.executable}"'
         if sys.executable != abspath(sys.argv[0]):
-            fl = split(sys.argv[0])[0]
+            fl = split(abspath(sys.argv[0]))[0]
             fl = f"{fl}\\start.py"
-            cm = f'{cm} "{abspath(fl)}"'
+            cm = f'{cm} "{fl}"'
         else:
             cm = f'"{split(sys.executable)[0]}\\start.exe"'
         cm = f'{cm} -c -b "%1"'
@@ -145,9 +145,11 @@ if __name__ == "__main__":
                     input()
             else:
                 if sys.executable != abspath(sys.argv[0]):
-                    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, abspath(sys.argv[0]), None, 1)
+                    ctypes.windll.shell32.ShellExecuteW(
+                        None, "runas", sys.executable, f'"{abspath(sys.argv[0])}"', None, 1)
                 else:
-                    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, None, None, 1)
+                    ctypes.windll.shell32.ShellExecuteW(
+                        None, "runas", sys.executable, None, None, 1)
         except:
             traceback.print_exc()
             input()
