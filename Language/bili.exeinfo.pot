@@ -30,3 +30,7 @@ msgstr ""
 msgctxt "startwebui"
 msgid "WEB User Interface server"
 msgstr ""
+
+msgctxt "bilischeme"
+msgid "Add bili URI scheme to system."
+msgstr ""

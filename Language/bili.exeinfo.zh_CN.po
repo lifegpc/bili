@@ -34,3 +34,7 @@ msgstr "设置程序"
 msgctxt "startwebui"
 msgid "WEB User Interface server"
 msgstr "web用户界面服务器"
+
+msgctxt "bilischeme"
+msgid "Add bili URI scheme to system."
+msgstr "把bili URI协议增至系统。"

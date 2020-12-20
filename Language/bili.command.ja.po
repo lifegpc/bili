@@ -480,8 +480,8 @@ msgstr "お気に入りやアップローダーの動画で利用可能なタイ
 
 msgctxt "O90"
 msgid "Change working directory to script directory."
-msgstr ""
+msgstr "作業ディレクトリをスクリプトディレクトリに変更する。"
 
 msgctxt "O91"
 msgid "Get input from bili scheme URI."
-msgstr ""
+msgstr "biliスキームのURIから入力を取得します。"
