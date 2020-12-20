@@ -48,7 +48,10 @@ def DeleteKey(key, sub_key):
         DeleteKey(k, v)
         i = i + 1
     winreg.CloseKey(k)
-    winreg.DeleteKey(key, sub_key)
+    try:
+        winreg.DeleteKey(key, sub_key)
+    except:
+        DeleteKey(key, sub_key)
 
 
 def main():
