@@ -97,6 +97,8 @@ def main():
         iconf = sys.executable
         if exists('icon/favicon.ico'):
             iconf = abspath('icon/favicon.ico')
+        elif sys.executable == abspath(sys.argv[0]):
+            iconf = f"{split(sys.executable)[0]}\\start.exe"
         try:
             winreg.SetValue(bili, 'DefaultIcon', winreg.REG_SZ, f'"{iconf},1"')
         except OSError:
@@ -116,10 +118,12 @@ def main():
             print(lan['CNOTCRE'].replace('<key>', 'bili/shell/open'))
             return -2
         cm = f'"{sys.executable}"'
-        if sys.executable != sys.argv[0]:
+        if sys.executable != abspath(sys.argv[0]):
             fl = split(sys.argv[0])[0]
             fl = f"{fl}\\start.py"
             cm = f'{cm} "{abspath(fl)}"'
+        else:
+            cm = f'"{split(sys.executable)[0]}\\start.exe"'
         cm = f'{cm} -c -b "%1"'
         try:
             winreg.SetValue(ropen, 'command', winreg.REG_SZ, cm)
