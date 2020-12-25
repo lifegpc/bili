@@ -37,4 +37,4 @@ msgstr "WEBユーザーインターフェースサーバー"
 
 msgctxt "bilischeme"
 msgid "Add bili URI scheme to system."
-msgstr ""
+msgstr "システムにbili URIスキームを追加する。"
