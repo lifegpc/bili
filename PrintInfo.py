@@ -282,7 +282,7 @@ def printplitid(d: list):
         print(f"{lan['O22']}{i['count']}")
 
 def pr() :
-	print(f"""    bili  Copyright (C) 2019-2020  lifegpc
+	print(f"""    bili  Copyright (C) 2019-2021  lifegpc
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.
