@@ -25,7 +25,7 @@ import chon
 import videodownload
 import biliBv
 from re import search,I
-import os 
+import os
 import sys
 from command import gopt
 import json
@@ -110,7 +110,9 @@ def main(ip = {}, menuInfo = None):
                 ru=mains(ip2)
                 ru.start()
             else :
-                read=main(ip2)
+                read = main(ip2)
+                if read == 62002:
+                    continue
                 if read!=0 :
                     return read
         return 0
@@ -747,7 +749,7 @@ def main(ip = {}, menuInfo = None):
             read=main(ip2)
             if log:
                 logg.write(f"read = {read}", currentframe(), "PLI RETURN")
-            if read!=0 :
+            if read!=0 and read != 62002:
                 return read
         return 0
     if ch :
@@ -1812,7 +1814,9 @@ def main(ip = {}, menuInfo = None):
                 print(traceback.format_exc())
                 return -1
         if 'error' in vd and 'code' in vd['error'] and 'message' in vd['error'] :
-            print('%s %s'%(vd['error']['code'],vd['error']['message']))
+            print('%s %s' % (vd['error']['code'], vd['error']['message']))
+            if(vd['error']['trueCode'] == 62002 or vd['error']['trueCode'] == -404):
+                return 62002
             return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
@@ -1941,8 +1945,8 @@ def main(ip = {}, menuInfo = None):
                 return -1
             inp=input(lan['INPUT9'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n6.仅字幕下载\n7.仅封面图片下载
             if inp[0].isnumeric() and int(inp[0])>0 and int(inp[0])<9 :
-            	cho2=int(inp[0])
-            	bs=False
+                cho2=int(inp[0])
+                bs=False
         if cho2==1 or cho2==4 :
             for i in cho :
                 read=biliDanmu.DanmuGetn(i,data,section,'av',xml,xmlc,ip,se)
@@ -2163,7 +2167,7 @@ def main(ip = {}, menuInfo = None):
                                     for i in range(i1,i2+1) :
                                         if i > 0 and i <= le and (not (i in cho)):
                                             cho.append(i)
-                                else :  
+                                else :
                                     bb=False
                         if bb:
                             bs=False
@@ -2181,8 +2185,8 @@ def main(ip = {}, menuInfo = None):
                 return -1
             inp=input(lan['INPUT12'])#请输入你要下载的方式：\n1.当前弹幕下载\n2.全弹幕下载（可能需要大量时间）\n3.视频下载\n4.当前弹幕+视频下载\n5.全弹幕+视频下载\n7.仅封面图片下载
             if inp[0].isnumeric() and ((int(inp[0]) > 0 and int(inp[0]) < 6) or int(inp[0]) == 7 or int(inp[0]) == 8):
-            	cho2=int(inp[0])
-            	bs=False
+                cho2=int(inp[0])
+                bs=False
         if cho2==1 or cho2==4 :
             for i in cho:
                 read=biliDanmu.DanmuGetn(i,data,section,'ss',xml,xmlc,ip,se)
