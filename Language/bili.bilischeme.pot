@@ -1,4 +1,4 @@
-# bili - The exe versioninfo Strings
+# bili - bilischeme.py Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU Affero General Public License
@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
-"POT-Creation-Date: 2020-10-04 01:37:00+0000\n"
+"POT-Creation-Date: 2020-07-11 06:34:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,22 +15,18 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
 
-msgctxt "start"
-msgid "Download video/barrage from BiliBili"
+msgctxt "UNSPT"
+msgid "This program does not support URI scheme on <platform>."
 msgstr ""
 
-msgctxt "filter"
-msgid "Filter the barrage file"
+msgctxt "REGERR"
+msgid "Unable to access HKEY_CLASSES_ROOT."
 msgstr ""
 
-msgctxt "setsettings"
-msgid "Set settings for program"
+msgctxt "CNOTDEL"
+msgid "Unable to delete the old registry."
 msgstr ""
 
-msgctxt "startwebui"
-msgid "WEB User Interface server"
-msgstr ""
-
-msgctxt "bilischeme"
-msgid "Add bili URI scheme to system."
+msgctxt "CNOTCRE"
+msgid "Unable to create key \"<key>\"."
 msgstr ""

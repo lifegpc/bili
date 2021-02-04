@@ -1330,7 +1330,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     bs2=True
                 else :
                     return -3
-        if oll:
+        if oll and not nau:
             oll.add(getfn(1, i, data, vqs, hzm, o, fin, dmp))
         if 'sub' in data :
             for s in data['sub']:

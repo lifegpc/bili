@@ -47,10 +47,8 @@ class autoopenfilelist:
             i = i - 1
         if r != "":
             if system() == "Windows":
-                pa = split(r)[0]
                 if self.__logg is not None:
                     self.__logg.write(
                         f"Try open '{r}'.", currentframe(), "Auto Open File List Open")
-                c = shell.SHParseDisplayName(pa, 0)
                 d = shell.SHParseDisplayName(r, 0)
-                shell.SHOpenFolderAndSelectItems(c[0], [d[0]], 0)
+                shell.SHOpenFolderAndSelectItems(d[0], [], 0)

@@ -477,3 +477,11 @@ msgstr "最後にダウンロードしたファイルの場所をwindows explore
 msgctxt "O89"
 msgid "List all available type id(tid) for Favorites or Uploader's videos."
 msgstr "お気に入りやアップローダーの動画で利用可能なタイプID(tid)を一覧表示します"
+
+msgctxt "O90"
+msgid "Change working directory to script directory."
+msgstr "作業ディレクトリをスクリプトディレクトリに変更する。"
+
+msgctxt "O91"
+msgid "Get input from bili scheme URI."
+msgstr "biliスキームのURIから入力を取得します。"

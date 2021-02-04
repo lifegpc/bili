@@ -13,13 +13,16 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from getopt import getopt
+from getopt import getopt, GetoptError
 from re import search
 from biliTime import checktime
 from file import filterd
 from lang import lan,getlan,getdict
 from JSONParser import loadset
 import sys
+from urllib.parse import parse_qs, urlsplit, unquote_plus
+
+
 def ph() :
     h=f'''{la['O1']}
     start.py -h/-?/--help   {la['O2']}
@@ -118,13 +121,15 @@ def ph() :
     --yol   {la['O87']}
     --nol   {la['O88']}
     --ltid  {la['O89']}
+    -c      {la['O90']}
+    -b [bili scheme URI]    {la['O91']}
     {la['O56']}
     {la['O57']}
     {la['O58']}
     {la['O59']}'''
     print(h)
 def gopt(args,d:bool=False) :
-    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:s', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid'])
+    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid'])
     if d:
         print(re)
     rr=re[0]
@@ -364,6 +369,42 @@ def gopt(args,d:bool=False) :
             r['ol'] = False
         if i[0] == '--ltid':
             r['ltid'] = True
+        if i[0] == '-b':
+            ree = urlsplit(i[1])
+            if ree.scheme == "bili":
+                pat = f"{ree.netloc}{ree.path}"
+                if ree.path == "/" and i[1].find("://") > -1:
+                    pat = ree.netloc
+                argv = ['-i', unquote_plus(pat)]
+                getp = parse_qs(ree.query, True)
+                for key in getp.keys():
+                    if key == 'b':
+                        continue
+                    val = getp[key]
+                    if len(key) == 1:
+                        key = f"-{key}"
+                    elif len(key) > 1:
+                        key = f"--{key}"
+                    else:
+                        continue
+                    if len(val) == 1 and val[0] == "":
+                        argv.append(key)
+                    else:
+                        for v in val:
+                            argv.append(key)
+                            argv.append(v)
+                if d:
+                    print(argv)
+                try:
+                    return gopt(argv)
+                except GetoptError:
+                    t = i[1][5:]
+                    if t.startswith('//'):
+                        t = t[2:]
+                    argv = ['-i', t]
+                    if d:
+                        print(argv)
+                    return gopt(argv)
     if h:
         global la
         la=getdict('command',getlan(se,r))
