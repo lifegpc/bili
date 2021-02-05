@@ -50,7 +50,7 @@ from time import sleep, time
 from Logger import Logger
 from inspect import currentframe
 from autoopenlist import autoopenfilelist
-from urllib.parse import parse_qs
+from urllib.parse import parse_qs, urljoin
 from bstr import hasPar
 
 # 远程调试用代码
@@ -1846,10 +1846,23 @@ def main(ip = {}, menuInfo = None):
             else :
                 print(traceback.format_exc())
                 return -1
-        if 'error' in vd and 'code' in vd['error'] and 'message' in vd['error'] :
-            print('%s %s' % (vd['error']['code'], vd['error']['message']))
+        if 'error' in vd and 'code' in vd['error'] and vd['error']['code'] != 0:
+            if 'message' in vd['error'] and vd['error']['message'] is not None:
+                print('%s %s' % (vd['error']['code'], vd['error']['message']))
             if(vd['error']['trueCode'] == 62002 or vd['error']['trueCode'] == -404):
                 return NOT_FOUND
+            if vd['error']['trueCode'] == -200:
+                ip2 = copyip(ip)
+                if 'p' in ip:
+                    ip2['p'] = ip['p']
+                ip2['i'] = urljoin('https://www.bilibili.com', vd['error']['forward'])
+                ip2['uc'] = False
+                if log:
+                    logg.write(f"ip2 = {ip2}", currentframe(), "VIDEO CONFLICT REDIRECT PARAMETERS")
+                read = main(ip2)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "VIDEO CONFLICT REDIRECT RETURN")
+                return read
             return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
