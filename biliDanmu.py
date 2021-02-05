@@ -1049,7 +1049,7 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
                                     time.sleep(5)
                                     print(lan['OUTPUT8'].replace('<number>',str(rec)))#正在进行第<number>次重连
                                 elif len(inn)>0 and inn[0].lower()=='n' :
-                                    exit()
+                                    sys.exit(-1)
                     elif 'status' in read and read['status']==-2 :
                         if log:
                             logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var9")

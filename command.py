@@ -409,7 +409,7 @@ def gopt(args,d:bool=False) :
         global la
         la=getdict('command',getlan(se,r))
         ph()
-        exit()
+        sys.exit(0)
     for i in re[1] :
         if i.lower()=="show":
             r['SHOW'] = True

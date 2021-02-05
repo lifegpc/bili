@@ -2317,7 +2317,7 @@ if len(sys.argv)>1 :
     ip=gopt(sys.argv[1:])
     if 'SHOW' in ip:
         PrintInfo.prc()
-        exit()
+        sys.exit(0)
 log = True
 if 'log' in se:
     log = se['log']

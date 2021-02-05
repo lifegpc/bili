@@ -17,6 +17,7 @@ from getopt import getopt
 from lang import getdict, getlan, lan
 from . import loadset
 from hashl import sha256
+from sys import exit
 
 
 def ph():
@@ -60,21 +61,21 @@ def gopt(args):
     if h:
         la = getdict('command', getlan(se, r), 'webui')
         ph()
-        exit()
+        exit(0)
     if 'sslc' in r or 'sslp' in r:
         if 'sslc' in r and 'sslp' in r:
             pass
         else:
             la = getdict('command', getlan(se, r), 'webui')
             print(la['O8'])
-            exit()
+            exit(0)
     if 'pas' in r:
         if len(r['pas']) >= 8 and len(r['pas']) <= 20:
             r['pas'] = sha256(r['pas'])
         else:
             la = getdict('command', getlan(se, r), 'webui')
             print(la['O11'].replace('<min>', '8').replace('<max>', '20'))
-            exit()
+            exit(0)
     return r
 
 
