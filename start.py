@@ -59,6 +59,8 @@ from bstr import hasPar
 # ptvsd.wait_for_attach()
 
 
+NOT_FOUND = -404
+
 lan=None
 se=JSONParser.loadset()
 if se==-1 or se==-2 :
@@ -119,7 +121,7 @@ def main(ip = {}, menuInfo = None):
                 ru.start()
             else :
                 read = main(ip2)
-                if read == 62002:
+                if read == NOT_FOUND:
                     continue
                 if read!=0 :
                     return read
@@ -481,6 +483,8 @@ def main(ip = {}, menuInfo = None):
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
+            if re['code'] == 65531:
+                return NOT_FOUND
             return -1
         inf=JSONParser2.getsmi(re)
         if log:
@@ -554,7 +558,7 @@ def main(ip = {}, menuInfo = None):
             read=main(ip2)
             if log:
                 logg.write(f"read = {read}", currentframe(), "MD REDIRECT RETURN")
-            if read!=0 :
+            if read != 0 and read != NOT_FOUND:
                 return read
         else :
             print(f'{lan["ERROR5"]}') #md号解析失败
@@ -578,7 +582,7 @@ def main(ip = {}, menuInfo = None):
                 print('%s %s'%(re['code'],re['message']))
                 return -1
             else :
-                if 'data' in re and 'list' in re['data'] and re['data']['count']>0:
+                if 'data' in re and re['data'] is not None and 'list' in re['data'] and re['data']['count'] > 0:
                     if af:
                         dc=re['data']['count']
                         if ns:
@@ -643,7 +647,7 @@ def main(ip = {}, menuInfo = None):
                         fid=re['data']['list'][0]['id']
                 else :
                     print(lan["ERROR7"])
-                    return -1
+                    return NOT_FOUND
         if log:
             logg.write(f"fid = {fid}", currentframe(), "PL FID OUT")
         if 'ltid' in ip:
@@ -757,7 +761,7 @@ def main(ip = {}, menuInfo = None):
             read=main(ip2)
             if log:
                 logg.write(f"read = {read}", currentframe(), "PLI RETURN")
-            if read!=0 and read != 62002:
+            if read!=0 and read != NOT_FOUND:
                 return read
         return 0
     if ch :
@@ -789,6 +793,8 @@ def main(ip = {}, menuInfo = None):
             chl=JSONParser2.getchl(re)
             if log:
                 logg.write(f"chl = {chl}", currentframe(), "CHANNEL LIST RESULT")
+            if len(chl) == 0:
+                return NOT_FOUND
             if ns:
                 PrintInfo.printInfo5(chl)
             bs=True
@@ -844,7 +850,7 @@ def main(ip = {}, menuInfo = None):
                     read=main(ip2)
                     if log:
                         logg.write(f"read = {read}", currentframe(), "CHANNLE LIST RESULT")
-                    if read!=0 :
+                    if read != 0 and read != NOT_FOUND:
                         return read
             return 0
         r.headers.update({'referer':'https://space.bilibili.com/%s/channel/detail?cid=%s'%(uid,cid)})
@@ -866,6 +872,8 @@ def main(ip = {}, menuInfo = None):
             JSONParser2.getchs(chv,re)
         if log:
             logg.write(f"chv = {chv}", currentframe(), "CHANNLE VIDEO LIST RESULT")
+        if len(chv) == 0:
+            return NOT_FOUND
         if chi['count'] != len(chv) :
             print(lan['ERROR8'])#视频数量与预计数量不符，貌似BUG了。
             return -1
@@ -947,7 +955,7 @@ def main(ip = {}, menuInfo = None):
             read=main(ip2)
             if log:
                 logg.write(f"read = {read}", currentframe(), "CHANNLE VIDEO RESULT")
-            if read!=0 :
+            if read != 0 and read != NOT_FOUND:
                 return read
         return 0
     if uv:
@@ -960,6 +968,9 @@ def main(ip = {}, menuInfo = None):
         re = JSONParser2.getuvi(uid, 1, uvd, section, logg)
         if re==-1:
             return -1
+        vn = re['data']['page']['count']
+        if vn == 0:
+            return NOT_FOUND
         if 'ltid' in ip:
             tre = re['data']['list']['tlist']
             re = []
@@ -971,7 +982,6 @@ def main(ip = {}, menuInfo = None):
             else:
                 print(lan['PLITIDNUL'])
             return 0
-        vn=re['data']['page']['count']
         n=ceil(vn/30)
         i=1
         vl=[]
@@ -1065,7 +1075,7 @@ def main(ip = {}, menuInfo = None):
             read=main(ip2)
             if log:
                 logg.write(f"read = {read}", currentframe(), "UPLOADER VIDEO RETURN")
-            if read!=0 :
+            if read != 0 and read != NOT_FOUND:
                 return read
         return 0
     xml=0
@@ -1124,6 +1134,8 @@ def main(ip = {}, menuInfo = None):
         re=re.json()
         if re['code']!=0 :
             print('%s %s'%(re['code'],re['message']))
+            if re['code'] == 1003902:
+                return NOT_FOUND
             return -1
         ri=JSONParser2.getlr1(re)
         if log:
@@ -1328,7 +1340,7 @@ def main(ip = {}, menuInfo = None):
             read=main(ip2)
             if log:
                 logg.write(f"read = {read}", currentframe(), "PAID COURSES LIST RETURN")
-            if read!=0 :
+            if read != 0 and read != NOT_FOUND:
                 return read
         return 0
     if che:
@@ -1344,6 +1356,9 @@ def main(ip = {}, menuInfo = None):
         re=re.json()
         if re['code']!=0:
             print(f"{re['code']} {re['message']}")
+            if re['code'] == -404:
+                return NOT_FOUND
+            return -1
         vd=JSONParser.parseche(re)
         if log:
             logg.write(f"vd = {vd}", currentframe(), "PAID COURSES INFO")
@@ -1385,6 +1400,8 @@ def main(ip = {}, menuInfo = None):
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
+                if re['code'] == 1:
+                    return NOT_FOUND
                 return -1
             room_info = re['data']
         info = JSONParser2.getliveinfo1(room_info)
@@ -1503,10 +1520,14 @@ def main(ip = {}, menuInfo = None):
         re2 = re2.json()
         if re['code'] != 0 and re['code'] != 72010027:
             print(f"{re['code']} {re['msg']}")
+            if re['code'] == 7201006:
+                return NOT_FOUND
         elif re['code'] == 0:
             wapir = True
         if re2['code'] != 0:
             print(f"{re2['code']} {re2['msg']}")
+            if re['code'] == 7201006:
+                return NOT_FOUND
         else:
             mapir = True
         if not wapir and not mapir:
@@ -1677,6 +1698,8 @@ def main(ip = {}, menuInfo = None):
             if re['code'] != 0:
                 print(f"{re['code']} {re['msg']}")
                 return -1
+            if re['data'] is None:
+                return NOT_FOUND
             menuid = re['data']['menuId']
         uri = f"https://api.bilibili.com/audio/music-service-c/menus/{menuid}"
         if log:
@@ -1688,6 +1711,8 @@ def main(ip = {}, menuInfo = None):
         re = re.json()
         if re['code'] != 0:
             print(f"{re['code']} {re['msg']}")
+            if re['code'] == 7201009:
+                return NOT_FOUND
             return -1
         re = re['data']
         songsList = re['songsList']
@@ -1747,7 +1772,7 @@ def main(ip = {}, menuInfo = None):
             read = main(ip2, menuInfo = re)
             if log:
                 logg.write(f"read = {read}", currentframe(), "Audio Album Audio Return")
-            if read != 0:
+            if read != 0 and read != NOT_FOUND:
                 return read
         return 0
     if not che:
@@ -1824,7 +1849,7 @@ def main(ip = {}, menuInfo = None):
         if 'error' in vd and 'code' in vd['error'] and 'message' in vd['error'] :
             print('%s %s' % (vd['error']['code'], vd['error']['message']))
             if(vd['error']['trueCode'] == 62002 or vd['error']['trueCode'] == -404):
-                return 62002
+                return NOT_FOUND
             return -1
     if av :
         data=JSONParser.Myparser(parser.videodata)
@@ -1841,6 +1866,8 @@ def main(ip = {}, menuInfo = None):
             re = re.json()
             if re['code'] != 0:
                 print(f"{re['code']} {re['message']}")
+                if re['code'] == -404:
+                    return NOT_FOUND
                 return -1
             if 'data' in re and 'View' in re['data'] and 'redirect_url' in re['data']['View']:
                 ip2 = copyip(ip)
@@ -2318,18 +2345,20 @@ class mains(Thread) :
 if __name__=="__main__" :
     PrintInfo.pr()
     if not log or __debug__:
-        main(ip)
+        sys.exit(main(ip))
     else:
         try:
-            main(ip)
+            sys.exit(main(ip))
         except:
             te = traceback.format_exc()
             print(te)
             logg.write(te, currentframe(), "Main Function Except")
             if not logg.hasf():
                 logg.openf(f'log/{round(time())}.log')
+            logg.flush()
             logg.closef()
     if 'oll' in ip:
         ip['oll'].open()
+    sys.exit(-1)
 else :
     print(lan['OUTPUT11'])#请运行start.py
