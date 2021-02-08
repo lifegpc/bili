@@ -2358,11 +2358,12 @@ class mains(Thread) :
         main(self.ip)
 if __name__=="__main__" :
     PrintInfo.pr()
+    res = -1
     if not log or __debug__:
-        sys.exit(main(ip))
+        res = main(ip)
     else:
         try:
-            sys.exit(main(ip))
+            res = main(ip)
         except:
             te = traceback.format_exc()
             print(te)
@@ -2373,6 +2374,6 @@ if __name__=="__main__" :
             logg.closef()
     if 'oll' in ip:
         ip['oll'].open()
-    sys.exit(-1)
+    sys.exit(res)
 else :
     print(lan['OUTPUT11'])#请运行start.py
