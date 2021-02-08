@@ -54,3 +54,7 @@ msgstr ""
 msgctxt "ERROR6"
 msgid "Service is busy, try to log in using V3 interface."
 msgstr ""
+
+msgctxt "ERROR7"
+msgid "Please press Enter to retry."
+msgstr ""

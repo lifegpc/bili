@@ -62,3 +62,7 @@ msgstr "ログイン認証コード認識サービスは一時的にご利用い
 msgctxt "ERROR6"
 msgid "Service is busy, try to log in using V3 interface."
 msgstr "現在、サービスが混雑しています。V3インターフェースを使ってログインしてみてください。"
+
+msgctxt "ERROR7"
+msgid "Please press Enter to retry."
+msgstr ""
