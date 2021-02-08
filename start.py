@@ -2332,6 +2332,7 @@ if len(sys.argv)>1 :
         PrintInfo.prc()
         sys.exit(0)
 log = True
+logg = None
 if 'log' in se:
     log = se['log']
 if 'log' in ip:
