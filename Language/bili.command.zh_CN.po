@@ -4,14 +4,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# 1 q <g1710431395@gmail.com>, 2020
+# 1 q <g1710431395@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-12 10:37:00+0000\n"
 "PO-Revision-Date: 2020-07-12 11:00+0000\n"
-"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2021\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -463,3 +463,12 @@ msgstr "将当前工作目录切换为脚本所在目录。"
 msgctxt "O91"
 msgid "Get input from bili scheme URI."
 msgstr "从bili协议URI获得输入。"
+
+msgctxt "O92"
+msgid ""
+"Do not check certificate for HTTPS connection when downloading with aria2c."
+msgstr "使用arai2c下载时不检查HTTPS连接的证书。"
+
+msgctxt "O93"
+msgid "Check certificate for HTTPS connection when downloading with aria2c."
+msgstr "使用arai2c下载时检查HTTPS连接的证书。"

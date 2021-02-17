@@ -485,3 +485,12 @@ msgstr "作業ディレクトリをスクリプトディレクトリに変更す
 msgctxt "O91"
 msgid "Get input from bili scheme URI."
 msgstr "biliスキームのURIから入力を取得します。"
+
+msgctxt "O92"
+msgid ""
+"Do not check certificate for HTTPS connection when downloading with aria2c."
+msgstr ""
+
+msgctxt "O93"
+msgid "Check certificate for HTTPS connection when downloading with aria2c."
+msgstr ""

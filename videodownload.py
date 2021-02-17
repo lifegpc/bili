@@ -115,6 +115,12 @@ def dwaria2(r, fn, url, size, d2, ip, se, i=1, n=1, d=False):
         print(lan['OUTPUT2'])#正在开始下载
     (fn1,fn2)=file.spfln(fn)
     cm='aria2c --auto-file-renaming=false'+geth(r.headers)+' -o "'+fn2+'" -d "'+fn1+'"'
+    ack = True
+    if 'cc' in se:
+        ack = se['cc']
+    if 'cc' in se:
+        ack = se['cc']
+    cm += f" --check-certificate={'true' if ack else 'false'}"
     arc=3
     read=JSONParser.getset(se,'ax')
     if read!=None :

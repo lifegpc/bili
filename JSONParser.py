@@ -181,6 +181,7 @@ def getDefalutSettings():
     t['ma'] = True
     t['auf'] = True
     t['ol'] = True
+    t['cc'] = True
     return t
 
 
