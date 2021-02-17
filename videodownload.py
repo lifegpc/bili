@@ -736,10 +736,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2, filen + "." + vf, s, ip, se, data, ns, i)
-        imgf = file.spfn(filen + "." + vf)[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
-        imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
-        if log:
-            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var13")
+        imgs = -1
+        if 'pic' in data:
+            imgf = file.spfn(filen + "." + vf)[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
+            imgs = avpicdownload(data,r,ip,se,imgf)#封面下载状况
+            if log:
+                logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var13")
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt=int(time.time())
@@ -1341,10 +1343,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2, filen, s, ip, se, data, ns, i, dash['video']['width'], dash['video']['height'])
-        imgf=file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
-        imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
-        if log:
-            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var26")
+        imgs = -1
+        if 'pic' in data:
+            imgf = file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
+            imgs = avpicdownload(data,r,ip,se,imgf)#封面下载状况
+            if log:
+                logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var26")
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt = int(time.time())
@@ -1634,6 +1638,8 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
     -1 文件夹创建失败
     -2 封面文件下载失败
     -3 覆盖文件失败"""
+    if 'pic' not in data:
+        return 0
     log = False
     logg = None
     if 'logg' in ip:
@@ -2066,12 +2072,14 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             else:
                 for s in data['sub']:
                     downlrc(r2, f'{filen}.m4a', s, ip, se, data, ns, i)
-        imgf = file.spfn(filen + ".m4a")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
-        if log:
-            logg.write(f"imgf = {imgf}", currentframe(), "Normal Video Audio Download Var7")
-        imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
-        if log:
-            logg.write(f"imgs = {imgs}", currentframe(), "Normal Video Audio Download Var8")
+        imgs = -1
+        if 'pic' in data:
+            imgf = file.spfn(filen + ".m4a")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
+            if log:
+                logg.write(f"imgf = {imgf}", currentframe(), "Normal Video Audio Download Var7")
+            imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
+            if log:
+                logg.write(f"imgs = {imgs}", currentframe(), "Normal Video Audio Download Var8")
         if ffmpeg:
             print(lan['CONV_M4S_TO_M4A'])
             tt = int(time.time())
