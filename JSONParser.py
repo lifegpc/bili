@@ -41,6 +41,7 @@ def Myparser(s) :
         data['desc'] = vinfo['desc']
         data['uid'] = vinfo['upMid']
         data['name'] = vinfo['upName']
+        data['videoStaffs'] = obj["videoStaffs"]
         page = []
         for i in vinfo['pages']:
             for i in vinfo['pages'] :
@@ -63,6 +64,9 @@ def Myparser(s) :
     data['uid']=obj['videoData']['owner']['mid']
     data['name']=obj['videoData']['owner']['name']
     data['pic']=obj['videoData']['pic']
+    if 'upData' in obj:
+        if 'face' in obj['upData']:
+            data['upFace'] = obj['upData']['face']
     page=[]
     for i in obj['videoData']['pages'] :
         t={}

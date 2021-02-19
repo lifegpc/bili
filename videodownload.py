@@ -1542,9 +1542,19 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         nfof.metadata.premiered = data['pubdate']
         nfof.metadata.plot = data['desc']
         nfof.metadata.genre = data['tags']
-        act = NFOActor()
-        act.actorName = data['name']
-        nfof.metadata.actors.append(act)
+        if 'videoStaffs' not in data:
+            act = NFOActor()
+            act.actorName = data['name']
+            if 'upFace' in data:
+                act.actorThumb = data['upFace']
+            nfof.metadata.actors.append(act)
+        else:
+            for staff in data['videoStaffs']:
+                act = NFOActor()
+                act.actorName = staff['name']
+                act.actorRole = staff['title']
+                act.actorThumb = staff['face']
+                nfof.metadata.actors.append(act)
         nfof.save(filen)
 def avsubdownload(i,url,data,r,se,ip,ud) :
     '''下载普通类视频字幕
