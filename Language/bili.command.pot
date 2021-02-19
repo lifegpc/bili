@@ -390,3 +390,11 @@ msgstr ""
 msgctxt "O93"
 msgid "Check certificate for HTTPS connection when downloading with aria2c."
 msgstr ""
+
+msgctxt "O94"
+msgid "Generate NFO file."
+msgstr ""
+
+msgctxt "O95"
+msgid "Don't generate NFO file."
+msgstr ""

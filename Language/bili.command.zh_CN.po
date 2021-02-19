@@ -472,3 +472,11 @@ msgstr "使用arai2c下载时不检查HTTPS连接的证书。"
 msgctxt "O93"
 msgid "Check certificate for HTTPS connection when downloading with aria2c."
 msgstr "使用arai2c下载时检查HTTPS连接的证书。"
+
+msgctxt "O94"
+msgid "Generate NFO file."
+msgstr "生成NFO文件。"
+
+msgctxt "O95"
+msgid "Don't generate NFO file."
+msgstr "不生成NFO文件。"

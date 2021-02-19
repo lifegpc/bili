@@ -36,6 +36,7 @@ from inspect import currentframe
 from traceback import format_exc
 from biliLRC import filterLRC
 import biliAudio
+from nfofile import NFOFile, NFOActor
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -1526,6 +1527,25 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if imgs==0 and not bp :
                     os.remove(imgf)
             os.remove(f"Temp/{data['aid']}_{tt}_metadata.txt")
+    nfo = False
+    if 'nfo' in se:
+        nfo = se['nfo']
+    if 'nfo' in ip:
+        nfo = ip['nfo']
+    if nfo:
+        nfof = NFOFile()
+        tit = data['title']
+        tit2 = data['page'][i - 1]['part']
+        if tit2 != "":
+            tit = f'{tit} - {tit2}'
+        nfof.metadata.title = tit
+        nfof.metadata.premiered = data['pubdate']
+        nfof.metadata.plot = data['desc']
+        nfof.metadata.genre = data['tags']
+        act = NFOActor()
+        act.actorName = data['name']
+        nfof.metadata.actors.append(act)
+        nfof.save(filen)
 def avsubdownload(i,url,data,r,se,ip,ud) :
     '''下载普通类视频字幕
     -1 文件夹创建失败'''

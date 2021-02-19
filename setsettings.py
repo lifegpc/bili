@@ -334,4 +334,8 @@ if __name__=='__main__' :
     r = gk(se, 'cc')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'cc', se)
+    print(f"{la['INPUT46']}{la['NTN']}")
+    r = gk(se, 'nfo')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'nfo', se)
     saveset(ne)
