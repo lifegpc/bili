@@ -33,7 +33,7 @@ RELEASE构建脚本见[bili.build.bat](https://github.com/lifegpc/bili.build.bat
 RELEASE已使用[GPG](https://gnupg.org/)签名。  
 <details>
     <summary>公钥</summary>
-    ```
+    <pre><code>
 -----BEGIN PGP PUBLIC KEY BLOCK-----
 
 mQINBGAs3FkBEADdmvdU9RwUX5yY2jzkoHl7pKGIDpZOQB/CDvz8lpQaVLp+QilR
@@ -85,7 +85,7 @@ BEZ0vd7tlawbma07ifh/OuErMisD/k3laF0qo6EwU1kcRuD707BkN4SKsk0d7rLO
 zRlD7colcKT/F5NAG5kohc2QGuK8KHyRMfeg80YsddbKr1XSOo3QxS2Ecg==
 =DTeS
 -----END PGP PUBLIC KEY BLOCK-----
-    ```
+    </code></pre>
 </details>
 
 ## 程序功能
