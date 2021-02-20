@@ -427,6 +427,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     if quality < targetVq:
                         targetVq = quality
                         break
+                if targetVq not in avq:
+                    targetVq = avq[0]
             if vq != targetVq:
                 if napi:
                     r2.cookies.set('CURRENT_QUALITY', str(targetVq), domain='.bilibili.com', path='/')
@@ -1131,6 +1133,8 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                         if quality < targetVq:
                             targetVq = quality
                             break
+                    if targetVq not in vqmap:
+                        targetVq = vqlist[0]
                 if targetCodec is None or targetCodec not in vqmap[targetVq]:
                     vqkey = [temp for temp in vqmap[targetVq].keys()]
                     targetCodec = vqkey[0]
@@ -2538,7 +2542,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash['video'][j]['size'])}({dash['video'][j]['size']}B,{file.cml(dash['video'][j]['size'],re['data']['timelength'])})")#大小：
                 k=k+1
-            if len(avq)>1 and not F:
+            if len(avq) > 1 and not F and 'V' not in ip:
                 bs=True
                 fi=True
                 while bs:
@@ -2557,6 +2561,32 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             if ns:
                                 print(lan['OUTPUT11'].replace('<videoquality>',f"{vqd[sea(avq[int(inp)-1],avq2)]}({sev(avq[int(inp)-1])})"))#已选择%s(%s)画质
                             vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
+            elif 'V' in ip and not F:
+                targetVq = ip['V']['id']
+                targetCodec = ip['V']['codec']
+                vqmap = {}
+                for strk in dash['video']:
+                    stream = dash['video'][strk]
+                    if stream['id'] not in vqmap:
+                        vqmap[stream['id']] = {}
+                    vqmap[stream['id']][stream['codecs'][:3]] = stream
+                if targetVq not in vqmap:
+                    vqlist = vqmap.keys()
+                    vqlist = [vql for vql in vqlist]
+                    vqlist.sort(reverse=True)
+                    for quality in vqlist:
+                        if quality < targetVq:
+                            targetVq = quality
+                            break
+                    if targetVq not in vqmap:
+                        targetVq = vqlist[0]
+                if targetCodec is None or targetCodec not in vqmap[targetVq]:
+                    vqkey = [temp for temp in vqmap[targetVq].keys()]
+                    targetCodec = vqkey[0]
+                dash["video"] = vqmap[targetVq][targetCodec]
+                vqs.append(f"{vqd[avq2.index(targetVq)]},{dash['video']['codecs']}")
+                if ns:
+                    print(lan['OUTPUT11'].replace('<videoquality>', f"{vqd[avq2.index(targetVq)]}({dash['video']['codecs']})"))  # 已选择%s(%s)画质
             elif not F :
                 dash['video']=dash['video'][avq[0]]
                 vqs.append(vqd[0]+","+sev(avq[0]))
@@ -2956,7 +2986,75 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         vqs=""
         if log:
             logg.write(f"vq = {vq}\nvqd = {vqd}\navq = {avq}\ndurl.keys() = {durl.keys()}", currentframe(), "Bangumi Video Download Var20")
-        if not c or F:
+        if 'V' in ip and not F:
+            targetVq = ip['V']['id']
+            if targetVq not in avq:
+                for quality in avq:
+                    if quality < targetVq:
+                        targetVq = quality
+                        break
+                if targetVq not in avq:
+                    targetVq = avq[0]
+            if vq != targetVq:
+                if not che:
+                    if napi:
+                        r2.cookies.set('CURRENT_QUALITY', str(targetVq), domain='.bilibili.com', path='/')
+                        if log:
+                            logg.write(f"Current request quality: {targetVq}\nGET {url2}", currentframe(), "Bangumi Video Download Get Webpage4")
+                        re = r2.get(url2)
+                        re.encoding = 'utf8'
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Webpage4 Result")
+                        rs = search('__playinfo__=([^<]+)', re.text)
+                        if rs is not None:
+                            re = json.loads(rs.groups()[0])
+                            if log:
+                                logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage4 Regex")
+                        else:
+                            napi = False
+                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                            if log:
+                                logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl8")
+                            re = r2.get(uri)
+                            if log:
+                                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl8 Result")
+                            re = re.json()
+                            if re['code'] != 0:
+                                print(f"{re['code']} {re['message']}")
+                                return -2
+                            re['data'] = re['result']
+                    else:
+                        uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                        if log:
+                            logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl9")
+                        re = r2.get(uri)
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl9 Result")
+                        re = re.json()
+                        if re['code'] != 0:
+                            print(f"{re['code']} {re['message']}")
+                            return -2
+                        re['data'] = re['result']
+                else :
+                    uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                    if log:
+                        logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download  Get Playurl10")
+                    re = r2.get(uri)
+                    re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl10 Result")
+                    re = re.json()
+                    durl[re["data"]['quality']] = re['data']['durl']
+                targetVq = re['data']['quality']
+            vqs = vqd[avq.index(targetVq)]
+            vq = targetVq
+            durz = 0
+            for k in durl[vq]:
+                durz += k['size']
+            if ns:
+                print(f"{lan['OUTPUT10']}{file.info.size(durz)}({durz}B,{file.cml(durz, re['data']['timelength'])})")  # 大小：
+            durl = durl[vq]
+        elif not c or F:
             j=0
             for l in avq :
                 if not l in durl :
