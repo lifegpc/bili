@@ -4,14 +4,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# Kum4423, 2020
+# Kum4423, 2021
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-11 08:17:00+0000\n"
 "PO-Revision-Date: 2020-07-11 08:38+0000\n"
-"Last-Translator: Kum4423, 2020\n"
+"Last-Translator: Kum4423, 2021\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -291,3 +291,17 @@ msgctxt "INPUT44"
 msgid ""
 "Do you want to open the last download file's location in windows explorer?"
 msgstr "最後にダウンロードしたファイルの場所をWindowsエクスプローラで開きますか？"
+
+msgctxt "INPUT45"
+msgid ""
+"Do you want to check certificate for HTTPS connection when downloading with "
+"aria2c? (If you get error about certificate, you can disable this. Warning: "
+"DISABLE THIS IS INSECURE.)"
+msgstr ""
+"aria2cでダウンロードする際に、HTTPS接続の証明書を確認しますか？(証明書に関するエラーが出た場合は、これを無効にすることができます。警告が出ます。これは安全ではありません。)"
+
+msgctxt "INPUT46"
+msgid ""
+"Do you want to generate NFO file?  (NFO file store video information that "
+"can be used in Plex.)"
+msgstr ""

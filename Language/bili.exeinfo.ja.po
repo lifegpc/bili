@@ -34,3 +34,7 @@ msgstr "プログラムの設定をする"
 msgctxt "startwebui"
 msgid "WEB User Interface server"
 msgstr "WEBユーザーインターフェースサーバー"
+
+msgctxt "bilischeme"
+msgid "Add bili URI scheme to system."
+msgstr "システムにbili URIスキームを追加する。"

@@ -262,12 +262,12 @@ msgstr "アルバムお気に入り数: "
 
 msgctxt "O61"
 msgid "AM number: "
-msgstr ""
+msgstr "AM 番号: "
 
 msgctxt "O62"
 msgid "Collection ID: "
-msgstr ""
+msgstr "コレクション ID: "
 
 msgctxt "O63"
 msgid "Song list: "
-msgstr ""
+msgstr "楽曲リスト: "

@@ -60,6 +60,8 @@ class setting:
             r['code'] = re
         elif 'type' in i and 'data' in i and int(i['type']) == 2:
             i2 = loads(i['data'])
+            if 'lan' in i2 and i2['lan'] not in lan:
+                del i2['lan']
             re = saveset2(i2)
             r['code'] = re
         else:

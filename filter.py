@@ -38,7 +38,7 @@ else :
     xml=read#弹幕过滤列表
     if read==-1 :
         print(lan['OUTPUT2'].replace('<filename>','tv.bilibili.plater.xml'))#找不到文件"<filename>"。
-        exit(-1)
+        sys.exit(-1)
     se=loadset()
     if not isinstance(se,dict) :
         se=None

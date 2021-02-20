@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from re import search,I
-from html.parser import HTMLParser
+from html import unescape
 from regex import search as rsearch
 from typing import Callable
 from urllib.parse import parse_qs
@@ -82,7 +82,7 @@ def rhtml(s:str)-> str:
         else :
             r=r[:t[0]]+r[t[1]:]
         t=search(r'<[^>]+>',r,I)
-    r=HTMLParser().unescape(r)
+    r = unescape(r)
     return r
 def getv(l:list) -> (list,list) :
     """将合并在一起的画质id和画质描述分开

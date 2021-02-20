@@ -36,6 +36,7 @@ from inspect import currentframe
 from traceback import format_exc
 from biliLRC import filterLRC
 import biliAudio
+from nfofile import NFOFile, NFOActor
 #https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 #https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 #result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -115,6 +116,12 @@ def dwaria2(r, fn, url, size, d2, ip, se, i=1, n=1, d=False):
         print(lan['OUTPUT2'])#正在开始下载
     (fn1,fn2)=file.spfln(fn)
     cm='aria2c --auto-file-renaming=false'+geth(r.headers)+' -o "'+fn2+'" -d "'+fn1+'"'
+    ack = True
+    if 'cc' in se:
+        ack = se['cc']
+    if 'cc' in se:
+        ack = se['cc']
+    cm += f" --check-certificate={'true' if ack else 'false'}"
     arc=3
     read=JSONParser.getset(se,'ax')
     if read!=None :
@@ -252,6 +259,7 @@ def tim() :
     "返回当前时间（毫秒）"
     return int(time.time()*1000)
 def sea(s:str,avq:list) :
+    "获取id在avq中的索引"
     t=search('^[0-9]+',s)
     if t :
         t=int(t.group())
@@ -412,7 +420,54 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         vqs=""
         if log:
             logg.write(f"vq = {vq}\nvqd = {vqd}\navq = {avq}\nvqs = {vqs}", currentframe(), "Normal Video Download Var3")
-        if not c or F:
+        if 'V' in ip and not F:
+            targetVq = ip['V']['id']
+            if targetVq not in avq:
+                for quality in avq:
+                    if quality < targetVq:
+                        targetVq = quality
+                        break
+                if targetVq not in avq:
+                    targetVq = avq[0]
+            if vq != targetVq:
+                if napi:
+                    r2.cookies.set('CURRENT_QUALITY', str(targetVq), domain='.bilibili.com', path='/')
+                    if log:
+                        logg.write(f"Current request quality: {targetVq}\nGET {url}", currentframe(), "Get Normal Video Webpage3")
+                    re = r2.get(url)
+                    re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Webpage3 Result")
+                    rs = search('__playinfo__=([^<]+)', re.text)
+                    if rs is not None:
+                        re = json.loads(rs.groups()[0])
+                        if log:
+                            logg.write(f"re = {re}", currentframe(), "Get Normal Video Webpage3 Regex")
+                    else:
+                        return -2
+                else:
+                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i-1]['cid']}&qn={targetVq}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
+                    if log:
+                        logg.write(f"GET {uri}", currentframe(), "Get Normal Video Playurl3")
+                    re = r2.get(uri)
+                    re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Playurl3 Result")
+                    re = re.json()
+                    if re["code"] != 0:
+                        print(f"{re['code']} {re['message']}")
+                        return -2
+                durl[re["data"]['quality']] = re['data']['durl']
+                targetVq = re["data"]['quality']
+            vqs = vqd[avq.index(targetVq)]
+            vq = targetVq
+            durz = 0
+            for k in durl[vq]:
+                durz += k['size']
+            if ns:
+                print(f"{lan['OUTPUT10']}{file.info.size(durz)}({durz}B,{file.cml(durz, re['data']['timelength'])})")  # 大小：
+            durl = durl[vq]
+        elif not c or F:
             j=0
             for l in avq :
                 if not l in durl :
@@ -730,10 +785,12 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2, filen + "." + vf, s, ip, se, data, ns, i)
-        imgf = file.spfn(filen + "." + vf)[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
-        imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
-        if log:
-            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var13")
+        imgs = -1
+        if 'pic' in data:
+            imgf = file.spfn(filen + "." + vf)[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
+            imgs = avpicdownload(data,r,ip,se,imgf)#封面下载状况
+            if log:
+                logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var13")
         if (len(durl)>1 or ma) and os.system('ffmpeg -h%s'%(getnul()))==0 and ff :
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt=int(time.time())
@@ -1040,7 +1097,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash['video'][j]['size'])}({dash['video'][j]['size']}B,{file.cml(dash['video'][j]['size'],re['data']['timelength'])})")#大小：
                 k=k+1
-            if len(avq)>1 and not F :
+            if len(avq) > 1 and not F and 'V' not in ip:
                 bs=True
                 fi=True
                 while bs:
@@ -1059,6 +1116,32 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             if ns:
                                 print(lan['OUTPUT11'].replace('<videoquality>',f"{vqd[sea(avq[int(inp)-1],avq2)]}({sev(avq[int(inp)-1])})"))#已选择%s(%s)画质
                             vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
+            elif 'V' in ip and not F:
+                targetVq = ip['V']['id']
+                targetCodec = ip['V']['codec']
+                vqmap = {}
+                for strk in dash['video']:
+                    stream = dash['video'][strk]
+                    if stream['id'] not in vqmap:
+                        vqmap[stream['id']] = {}
+                    vqmap[stream['id']][stream['codecs'][:3]] = stream
+                if targetVq not in vqmap:
+                    vqlist = vqmap.keys()
+                    vqlist = [vql for vql in vqlist]
+                    vqlist.sort(reverse=True)
+                    for quality in vqlist:
+                        if quality < targetVq:
+                            targetVq = quality
+                            break
+                    if targetVq not in vqmap:
+                        targetVq = vqlist[0]
+                if targetCodec is None or targetCodec not in vqmap[targetVq]:
+                    vqkey = [temp for temp in vqmap[targetVq].keys()]
+                    targetCodec = vqkey[0]
+                dash["video"] = vqmap[targetVq][targetCodec]
+                vqs.append(f"{vqd[avq2.index(targetVq)]},{dash['video']['codecs']}")
+                if ns:
+                    print(lan['OUTPUT11'].replace('<videoquality>', f"{vqd[avq2.index(targetVq)]}({dash['video']['codecs']})"))  # 已选择%s(%s)画质
             elif not F :
                 dash['video']=dash['video'][avq[0]]
                 vqs.append(vqd[0]+","+sev(avq[0]))
@@ -1330,15 +1413,17 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                     bs2=True
                 else :
                     return -3
-        if oll:
+        if oll and not nau:
             oll.add(getfn(1, i, data, vqs, hzm, o, fin, dmp))
         if 'sub' in data :
             for s in data['sub']:
                 downsub(r2, filen, s, ip, se, data, ns, i, dash['video']['width'], dash['video']['height'])
-        imgf=file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
-        imgs=avpicdownload(data,r,ip,se,imgf)#封面下载状况
-        if log:
-            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var26")
+        imgs = -1
+        if 'pic' in data:
+            imgf = file.spfn(filen)[0]+"."+file.geturlfe(data['pic'])#图片文件名
+            imgs = avpicdownload(data,r,ip,se,imgf)#封面下载状况
+            if log:
+                logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Normal Video Download Var26")
         if os.system('ffmpeg -h%s'%(getnul()))==0 and ff:
             print(lan['OUTPUT13'])#将用ffmpeg自动合成
             tt = int(time.time())
@@ -1516,6 +1601,35 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if imgs==0 and not bp :
                     os.remove(imgf)
             os.remove(f"Temp/{data['aid']}_{tt}_metadata.txt")
+    nfo = False
+    if 'nfo' in se:
+        nfo = se['nfo']
+    if 'nfo' in ip:
+        nfo = ip['nfo']
+    if nfo:
+        nfof = NFOFile()
+        tit = data['title']
+        tit2 = data['page'][i - 1]['part']
+        if tit2 != "":
+            tit = f'{tit} - {tit2}'
+        nfof.metadata.title = tit
+        nfof.metadata.premiered = data['pubdate']
+        nfof.metadata.plot = data['desc']
+        nfof.metadata.genre = data['tags']
+        if 'videoStaffs' not in data:
+            act = NFOActor()
+            act.actorName = data['name']
+            if 'upFace' in data:
+                act.actorThumb = data['upFace']
+            nfof.metadata.actors.append(act)
+        else:
+            for staff in data['videoStaffs']:
+                act = NFOActor()
+                act.actorName = staff['name']
+                act.actorRole = staff['title']
+                act.actorThumb = staff['face']
+                nfof.metadata.actors.append(act)
+        nfof.save(filen)
 def avsubdownload(i,url,data,r,se,ip,ud) :
     '''下载普通类视频字幕
     -1 文件夹创建失败'''
@@ -1628,6 +1742,8 @@ def avpicdownload(data,r:requests.Session,ip,se,fn:str=None) ->int :
     -1 文件夹创建失败
     -2 封面文件下载失败
     -3 覆盖文件失败"""
+    if 'pic' not in data:
+        return 0
     log = False
     logg = None
     if 'logg' in ip:
@@ -2060,12 +2176,14 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
             else:
                 for s in data['sub']:
                     downlrc(r2, f'{filen}.m4a', s, ip, se, data, ns, i)
-        imgf = file.spfn(filen + ".m4a")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
-        if log:
-            logg.write(f"imgf = {imgf}", currentframe(), "Normal Video Audio Download Var7")
-        imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
-        if log:
-            logg.write(f"imgs = {imgs}", currentframe(), "Normal Video Audio Download Var8")
+        imgs = -1
+        if 'pic' in data:
+            imgf = file.spfn(filen + ".m4a")[0] + "." + file.geturlfe(data['pic'])  # 图片文件名
+            if log:
+                logg.write(f"imgf = {imgf}", currentframe(), "Normal Video Audio Download Var7")
+            imgs = avpicdownload(data, r, ip, se, imgf)  # 封面下载状况
+            if log:
+                logg.write(f"imgs = {imgs}", currentframe(), "Normal Video Audio Download Var8")
         if ffmpeg:
             print(lan['CONV_M4S_TO_M4A'])
             tt = int(time.time())
@@ -2424,7 +2542,7 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash['video'][j]['size'])}({dash['video'][j]['size']}B,{file.cml(dash['video'][j]['size'],re['data']['timelength'])})")#大小：
                 k=k+1
-            if len(avq)>1 and not F:
+            if len(avq) > 1 and not F and 'V' not in ip:
                 bs=True
                 fi=True
                 while bs:
@@ -2443,6 +2561,32 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
                             if ns:
                                 print(lan['OUTPUT11'].replace('<videoquality>',f"{vqd[sea(avq[int(inp)-1],avq2)]}({sev(avq[int(inp)-1])})"))#已选择%s(%s)画质
                             vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
+            elif 'V' in ip and not F:
+                targetVq = ip['V']['id']
+                targetCodec = ip['V']['codec']
+                vqmap = {}
+                for strk in dash['video']:
+                    stream = dash['video'][strk]
+                    if stream['id'] not in vqmap:
+                        vqmap[stream['id']] = {}
+                    vqmap[stream['id']][stream['codecs'][:3]] = stream
+                if targetVq not in vqmap:
+                    vqlist = vqmap.keys()
+                    vqlist = [vql for vql in vqlist]
+                    vqlist.sort(reverse=True)
+                    for quality in vqlist:
+                        if quality < targetVq:
+                            targetVq = quality
+                            break
+                    if targetVq not in vqmap:
+                        targetVq = vqlist[0]
+                if targetCodec is None or targetCodec not in vqmap[targetVq]:
+                    vqkey = [temp for temp in vqmap[targetVq].keys()]
+                    targetCodec = vqkey[0]
+                dash["video"] = vqmap[targetVq][targetCodec]
+                vqs.append(f"{vqd[avq2.index(targetVq)]},{dash['video']['codecs']}")
+                if ns:
+                    print(lan['OUTPUT11'].replace('<videoquality>', f"{vqd[avq2.index(targetVq)]}({dash['video']['codecs']})"))  # 已选择%s(%s)画质
             elif not F :
                 dash['video']=dash['video'][avq[0]]
                 vqs.append(vqd[0]+","+sev(avq[0]))
@@ -2842,7 +2986,75 @@ def epvideodownload(i,url,data,r,c,c3,se,ip,ud):
         vqs=""
         if log:
             logg.write(f"vq = {vq}\nvqd = {vqd}\navq = {avq}\ndurl.keys() = {durl.keys()}", currentframe(), "Bangumi Video Download Var20")
-        if not c or F:
+        if 'V' in ip and not F:
+            targetVq = ip['V']['id']
+            if targetVq not in avq:
+                for quality in avq:
+                    if quality < targetVq:
+                        targetVq = quality
+                        break
+                if targetVq not in avq:
+                    targetVq = avq[0]
+            if vq != targetVq:
+                if not che:
+                    if napi:
+                        r2.cookies.set('CURRENT_QUALITY', str(targetVq), domain='.bilibili.com', path='/')
+                        if log:
+                            logg.write(f"Current request quality: {targetVq}\nGET {url2}", currentframe(), "Bangumi Video Download Get Webpage4")
+                        re = r2.get(url2)
+                        re.encoding = 'utf8'
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Webpage4 Result")
+                        rs = search('__playinfo__=([^<]+)', re.text)
+                        if rs is not None:
+                            re = json.loads(rs.groups()[0])
+                            if log:
+                                logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage4 Regex")
+                        else:
+                            napi = False
+                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                            if log:
+                                logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl8")
+                            re = r2.get(uri)
+                            if log:
+                                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl8 Result")
+                            re = re.json()
+                            if re['code'] != 0:
+                                print(f"{re['code']} {re['message']}")
+                                return -2
+                            re['data'] = re['result']
+                    else:
+                        uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                        if log:
+                            logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl9")
+                        re = r2.get(uri)
+                        if log:
+                            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl9 Result")
+                        re = re.json()
+                        if re['code'] != 0:
+                            print(f"{re['code']} {re['message']}")
+                            return -2
+                        re['data'] = re['result']
+                else :
+                    uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                    if log:
+                        logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download  Get Playurl10")
+                    re = r2.get(uri)
+                    re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Bangumi Video Download Get Playurl10 Result")
+                    re = re.json()
+                    durl[re["data"]['quality']] = re['data']['durl']
+                targetVq = re['data']['quality']
+            vqs = vqd[avq.index(targetVq)]
+            vq = targetVq
+            durz = 0
+            for k in durl[vq]:
+                durz += k['size']
+            if ns:
+                print(f"{lan['OUTPUT10']}{file.info.size(durz)}({durz}B,{file.cml(durz, re['data']['timelength'])})")  # 大小：
+            durl = durl[vq]
+        elif not c or F:
             j=0
             for l in avq :
                 if not l in durl :

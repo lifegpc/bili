@@ -1,4 +1,4 @@
-# bili - The exe versioninfo Strings
+# bili - bili inno setup script Strings
 # (C) 2019-2020 lifegpc
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU Affero General Public License
@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
-"POT-Creation-Date: 2020-10-04 01:37:00+0000\n"
+"POT-Creation-Date: 2020-12-20 09:07:00+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,22 +15,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Language: \n"
 
-msgctxt "start"
-msgid "Download video/barrage from BiliBili"
-msgstr ""
-
-msgctxt "filter"
-msgid "Filter the barrage file"
-msgstr ""
-
-msgctxt "setsettings"
-msgid "Set settings for program"
-msgstr ""
-
-msgctxt "startwebui"
-msgid "WEB User Interface server"
+msgctxt "ViewChangelog"
+msgid "View changelog"
 msgstr ""
 
 msgctxt "bilischeme"
-msgid "Add bili URI scheme to system."
+msgid "Add bili URI scheme to registry"
 msgstr ""

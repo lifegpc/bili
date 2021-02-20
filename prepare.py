@@ -64,7 +64,7 @@ def gopt(args: List[str]):
         global la
         la = getdict('command', getlan(se, r))
         ph()
-        exit()
+        sys.exit(0)
     return r, re[1]
 
 

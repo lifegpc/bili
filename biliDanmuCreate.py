@@ -13,11 +13,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-import cgi
-import traceback
-def objtoxml(s) :
-    try :
-        return '<d p="%s,%s,%s,%s,%s,%s,%s,%s">%s</d>' % (s['ti'],s['mod'],s['fs'],s['fc'],s['ut'],s['dp'],s['si'],s['ri'],cgi.html.escape(s['t']))
-    except :
-        print(traceback.format_exc())
-        exit()
+from html import escape
+
+
+def objtoxml(s):
+    return f'''<d p="{s['ti']},{s['mod']},{s['fs']},{s['fc']},{s['ut']},{s['dp']},{s['si']},{s['ri']}">{escape(s['t'])}</d>'''

@@ -4,14 +4,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# Kum4423, 2020
+# Kum4423, 2021
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-12 10:37:00+0000\n"
 "PO-Revision-Date: 2020-07-12 11:00+0000\n"
-"Last-Translator: Kum4423, 2020\n"
+"Last-Translator: Kum4423, 2021\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -477,3 +477,58 @@ msgstr "最後にダウンロードしたファイルの場所をwindows explore
 msgctxt "O89"
 msgid "List all available type id(tid) for Favorites or Uploader's videos."
 msgstr "お気に入りやアップローダーの動画で利用可能なタイプID(tid)を一覧表示します"
+
+msgctxt "O90"
+msgid "Change working directory to script directory."
+msgstr "作業ディレクトリをスクリプトディレクトリに変更する。"
+
+msgctxt "O91"
+msgid "Get input from bili scheme URI."
+msgstr "biliスキームのURIから入力を取得します。"
+
+msgctxt "O92"
+msgid ""
+"Do not check certificate for HTTPS connection when downloading with aria2c."
+msgstr "aria2cでダウンロードする際には、HTTPS接続の証明書をチェックしないようにしてください。"
+
+msgctxt "O93"
+msgid "Check certificate for HTTPS connection when downloading with aria2c."
+msgstr "aria2cでダウンロードする際には、HTTPS接続の証明書を確認してください。"
+
+msgctxt "O94"
+msgid ""
+"Generate NFO file. (NFO file store video information that can be used in "
+"Plex.)"
+msgstr ""
+
+msgctxt "O95"
+msgid "Don't generate NFO file."
+msgstr ""
+
+msgctxt "O96"
+msgid "Choose video quality by format id."
+msgstr ""
+
+msgctxt "O97"
+msgid ""
+"Available format id:\n"
+"125: HDR\n"
+"120: UHD 4K\n"
+"116: HD 1080P60\n"
+"112: HD 1080P+\n"
+"80: HD 1080P\n"
+"74: HD 720P60\n"
+"64: HD 720P/HD 720P60\n"
+"32: SD 480P\n"
+"16: SD 360P"
+msgstr ""
+
+msgctxt "O98"
+msgid "Available coding format: <codecs>"
+msgstr ""
+
+msgctxt "O99"
+msgid ""
+"If coding format is not specified or cannot be found, the program will use "
+"the first one which has same format id."
+msgstr ""

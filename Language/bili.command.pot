@@ -374,3 +374,43 @@ msgstr ""
 msgctxt "O89"
 msgid "List all available type id(tid) for Favorites or Uploader's videos."
 msgstr ""
+
+msgctxt "O90"
+msgid "Change working directory to script directory."
+msgstr ""
+
+msgctxt "O91"
+msgid "Get input from bili scheme URI."
+msgstr ""
+
+msgctxt "O92"
+msgid "Do not check certificate for HTTPS connection when downloading with aria2c."
+msgstr ""
+
+msgctxt "O93"
+msgid "Check certificate for HTTPS connection when downloading with aria2c."
+msgstr ""
+
+msgctxt "O94"
+msgid "Generate NFO file. (NFO file store video information that can be used in Plex.)"
+msgstr ""
+
+msgctxt "O95"
+msgid "Don't generate NFO file."
+msgstr ""
+
+msgctxt "O96"
+msgid "Choose video quality by format id."
+msgstr ""
+
+msgctxt "O97"
+msgid "Available format id:\n125: HDR\n120: UHD 4K\n116: HD 1080P60\n112: HD 1080P+\n80: HD 1080P\n74: HD 720P60\n64: HD 720P/HD 720P60\n32: SD 480P\n16: SD 360P"
+msgstr ""
+
+msgctxt "O98"
+msgid "Available coding format: <codecs>"
+msgstr ""
+
+msgctxt "O99"
+msgid "If coding format is not specified or cannot be found, the program will use the first one which has same format id."
+msgstr ""

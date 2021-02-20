@@ -13,17 +13,23 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from getopt import getopt
+from getopt import getopt, GetoptError
 from re import search
 from biliTime import checktime
 from file import filterd
 from lang import lan,getlan,getdict
 from JSONParser import loadset
 import sys
+from urllib.parse import parse_qs, urlsplit, unquote_plus
+
+
+onewline = '\n'
+nnewline = '\n    '
+
 def ph() :
     h=f'''{la['O1']}
     start.py -h/-?/--help   {la['O2']}
-    start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>] [--bp/--nbp] [--in/--nin] [--mt/--nmt] [--vi <URL_index>] [--uc/--nuc] [--ass/--nass] [--dmp/--ndmp] [--vf <format>] [--lmd <time>] [--ynal/--nnal] [--log/--nlog] [--yauf/--nauf] [--ydwa/--ndwa] [--yol/--nol] [--ltid]
+    start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>] [--bp/--nbp] [--in/--nin] [--mt/--nmt] [--vi <URL_index>] [--uc/--nuc] [--ass/--nass] [--dmp/--ndmp] [--vf <format>] [--lmd <time>] [--ynal/--nnal] [--log/--nlog] [--yauf/--nauf] [--ydwa/--ndwa] [--yol/--nol] [--ltid] [--ycc/--ncc] [--nfo/--nnfo]
     start.py show c/w   {la['O3']}
     -i <input>   {la['O4']}
     -d <method>   {la['O5']}
@@ -118,13 +124,23 @@ def ph() :
     --yol   {la['O87']}
     --nol   {la['O88']}
     --ltid  {la['O89']}
+    -c      {la['O90']}
+    -b [bili scheme URI]    {la['O91']}
+    --ncc   {la['O92']}
+    --ycc   {la['O93']}
+    --nfo   {la['O94']}
+    --nnfo  {la['O95']}
+    -V <format id>[<coding format>] {la['O96']}
+    {la['O97'].replace(onewline, nnewline)}
+    {la['O98'].replace('<codecs>', 'avc, hev')}
+    {la['O99']}
     {la['O56']}
     {la['O57']}
     {la['O58']}
     {la['O59']}'''
     print(h)
 def gopt(args,d:bool=False) :
-    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:s', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid'])
+    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:V:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid', 'ncc', 'ycc', 'nfo', 'nnfo'])
     if d:
         print(re)
     rr=re[0]
@@ -364,11 +380,61 @@ def gopt(args,d:bool=False) :
             r['ol'] = False
         if i[0] == '--ltid':
             r['ltid'] = True
+        if i[0] == '--ycc' and not 'cc' in r:
+            r['cc'] = True
+        if i[0] == '--ncc' and not 'cc' in r:
+            r['cc'] = False
+        if i[0] == '--nfo' and not 'nfo' in r:
+            r['nfo'] = True
+        if i[0] == '--nnfo' and not 'nfo' in r:
+            r['nfo'] = False
+        if i[0] == '-V' and not 'V' in r:
+            rs = search(r'^([0-9]+)(avc|hev)?$', i[1])
+            if rs is not None:
+                vid = int(rs.groups()[0])
+                if vid in [16, 32, 64, 74, 80, 112, 116, 120, 125]:
+                    r['V'] = {'id': vid, 'codec': rs.groups()[1]}
+        if i[0] == '-b':
+            ree = urlsplit(i[1])
+            if ree.scheme == "bili":
+                pat = f"{ree.netloc}{ree.path}"
+                if ree.path == "/" and i[1].find("://") > -1:
+                    pat = ree.netloc
+                argv = ['-i', unquote_plus(pat)]
+                getp = parse_qs(ree.query, True)
+                for key in getp.keys():
+                    if key == 'b':
+                        continue
+                    val = getp[key]
+                    if len(key) == 1:
+                        key = f"-{key}"
+                    elif len(key) > 1:
+                        key = f"--{key}"
+                    else:
+                        continue
+                    if len(val) == 1 and val[0] == "":
+                        argv.append(key)
+                    else:
+                        for v in val:
+                            argv.append(key)
+                            argv.append(v)
+                if d:
+                    print(argv)
+                try:
+                    return gopt(argv)
+                except GetoptError:
+                    t = i[1][5:]
+                    if t.startswith('//'):
+                        t = t[2:]
+                    argv = ['-i', t]
+                    if d:
+                        print(argv)
+                    return gopt(argv)
     if h:
         global la
         la=getdict('command',getlan(se,r))
         ph()
-        exit()
+        sys.exit(0)
     for i in re[1] :
         if i.lower()=="show":
             r['SHOW'] = True

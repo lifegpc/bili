@@ -22,6 +22,13 @@ source_file = bili.biliLogin.pot
 source_lang = en
 type = PO
 
+[bili.bilibilischemepot]
+file_filter = bili.bilischeme.<lang>.po
+minimum_perc = 0
+source_file = bili.bilischeme.pot
+source_lang = en
+type = PO
+
 [bili.bilibilisubpot]
 file_filter = bili.biliSub.<lang>.po
 minimum_perc = 0
@@ -54,6 +61,13 @@ type = PO
 file_filter = bili.filter.<lang>.po
 minimum_perc = 0
 source_file = bili.filter.pot
+source_lang = en
+type = PO
+
+[bili.biliinnosetuppot]
+file_filter = bili.innosetup.<lang>.po
+minimum_perc = 0
+source_file = bili.innosetup.pot
 source_lang = en
 type = PO
 
