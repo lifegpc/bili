@@ -474,8 +474,10 @@ msgid "Check certificate for HTTPS connection when downloading with aria2c."
 msgstr "使用arai2c下载时检查HTTPS连接的证书。"
 
 msgctxt "O94"
-msgid "Generate NFO file."
-msgstr "生成NFO文件。"
+msgid ""
+"Generate NFO file. (NFO file store video information that can be used in "
+"Plex.)"
+msgstr "生成NFO文件。（NFO文件存储了可被Plex使用的视频信息。）"
 
 msgctxt "O95"
 msgid "Don't generate NFO file."

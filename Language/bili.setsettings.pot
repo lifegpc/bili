@@ -232,5 +232,5 @@ msgid "Do you want to check certificate for HTTPS connection when downloading wi
 msgstr ""
 
 msgctxt "INPUT46"
-msgid "Do you want to generate NFO file?"
+msgid "Do you want to generate NFO file?  (NFO file store video information that can be used in Plex.)"
 msgstr ""

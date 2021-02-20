@@ -496,7 +496,9 @@ msgid "Check certificate for HTTPS connection when downloading with aria2c."
 msgstr "aria2cでダウンロードする際には、HTTPS接続の証明書を確認してください。"
 
 msgctxt "O94"
-msgid "Generate NFO file."
+msgid ""
+"Generate NFO file. (NFO file store video information that can be used in "
+"Plex.)"
 msgstr ""
 
 msgctxt "O95"

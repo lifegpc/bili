@@ -392,7 +392,7 @@ msgid "Check certificate for HTTPS connection when downloading with aria2c."
 msgstr ""
 
 msgctxt "O94"
-msgid "Generate NFO file."
+msgid "Generate NFO file. (NFO file store video information that can be used in Plex.)"
 msgstr ""
 
 msgctxt "O95"

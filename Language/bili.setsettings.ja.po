@@ -301,5 +301,7 @@ msgstr ""
 "aria2cでダウンロードする際に、HTTPS接続の証明書を確認しますか？(証明書に関するエラーが出た場合は、これを無効にすることができます。警告が出ます。これは安全ではありません。)"
 
 msgctxt "INPUT46"
-msgid "Do you want to generate NFO file?"
+msgid ""
+"Do you want to generate NFO file?  (NFO file store video information that "
+"can be used in Plex.)"
 msgstr ""
