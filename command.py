@@ -23,6 +23,9 @@ import sys
 from urllib.parse import parse_qs, urlsplit, unquote_plus
 
 
+onewline = '\n'
+nnewline = '\n    '
+
 def ph() :
     h=f'''{la['O1']}
     start.py -h/-?/--help   {la['O2']}
@@ -127,13 +130,17 @@ def ph() :
     --ycc   {la['O93']}
     --nfo   {la['O94']}
     --nnfo  {la['O95']}
+    -V <format id>[<coding format>] {la['O96']}
+    {la['O97'].replace(onewline, nnewline)}
+    {la['O98'].replace('<codecs>', 'avc, hev')}
+    {la['O99']}
     {la['O56']}
     {la['O57']}
     {la['O58']}
     {la['O59']}'''
     print(h)
 def gopt(args,d:bool=False) :
-    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid', 'ncc', 'ycc', 'nfo', 'nnfo'])
+    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:V:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid', 'ncc', 'ycc', 'nfo', 'nnfo'])
     if d:
         print(re)
     rr=re[0]
@@ -381,6 +388,12 @@ def gopt(args,d:bool=False) :
             r['nfo'] = True
         if i[0] == '--nnfo' and not 'nfo' in r:
             r['nfo'] = False
+        if i[0] == '-V' and not 'V' in r:
+            rs = search(r'^([0-9]+)(avc|hev)?$', i[1])
+            if rs is not None:
+                vid = int(rs.groups()[0])
+                if vid in [16, 32, 64, 74, 80, 112, 116, 120, 125]:
+                    r['V'] = {'id': vid, 'codec': rs.groups()[1]}
         if i[0] == '-b':
             ree = urlsplit(i[1])
             if ree.scheme == "bili":

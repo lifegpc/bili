@@ -259,6 +259,7 @@ def tim() :
     "返回当前时间（毫秒）"
     return int(time.time()*1000)
 def sea(s:str,avq:list) :
+    "获取id在avq中的索引"
     t=search('^[0-9]+',s)
     if t :
         t=int(t.group())
@@ -419,7 +420,52 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
         vqs=""
         if log:
             logg.write(f"vq = {vq}\nvqd = {vqd}\navq = {avq}\nvqs = {vqs}", currentframe(), "Normal Video Download Var3")
-        if not c or F:
+        if 'V' in ip and not F:
+            targetVq = ip['V']['id']
+            if targetVq not in avq:
+                for quality in avq:
+                    if quality < targetVq:
+                        targetVq = quality
+                        break
+            if vq != targetVq:
+                if napi:
+                    r2.cookies.set('CURRENT_QUALITY', str(targetVq), domain='.bilibili.com', path='/')
+                    if log:
+                        logg.write(f"Current request quality: {targetVq}\nGET {url}", currentframe(), "Get Normal Video Webpage3")
+                    re = r2.get(url)
+                    re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Webpage3 Result")
+                    rs = search('__playinfo__=([^<]+)', re.text)
+                    if rs is not None:
+                        re = json.loads(rs.groups()[0])
+                        if log:
+                            logg.write(f"re = {re}", currentframe(), "Get Normal Video Webpage3 Regex")
+                    else:
+                        return -2
+                else:
+                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i-1]['cid']}&qn={targetVq}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
+                    if log:
+                        logg.write(f"GET {uri}", currentframe(), "Get Normal Video Playurl3")
+                    re = r2.get(uri)
+                    re.encoding = 'utf8'
+                    if log:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Playurl3 Result")
+                    re = re.json()
+                    if re["code"] != 0:
+                        print(f"{re['code']} {re['message']}")
+                        return -2
+                durl[re["data"]['quality']] = re['data']['durl']
+                targetVq = re["data"]['quality']
+            vqs = vqd[avq.index(targetVq)]
+            vq = targetVq
+            durz = 0
+            for k in durl[vq]:
+                durz += k['size']
+            if ns:
+                print(f"{lan['OUTPUT10']}{file.info.size(durz)}({durz}B,{file.cml(durz, re['data']['timelength'])})")  # 大小：
+            durl = durl[vq]
+        elif not c or F:
             j=0
             for l in avq :
                 if not l in durl :
@@ -1049,7 +1095,7 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                 if ns or(not ns and F):
                     print(f"{lan['OUTPUT10']}{file.info.size(dash['video'][j]['size'])}({dash['video'][j]['size']}B,{file.cml(dash['video'][j]['size'],re['data']['timelength'])})")#大小：
                 k=k+1
-            if len(avq)>1 and not F :
+            if len(avq) > 1 and not F and 'V' not in ip:
                 bs=True
                 fi=True
                 while bs:
@@ -1068,6 +1114,30 @@ def avvideodownload(i,url,data,r,c,c3,se,ip,ud) :
                             if ns:
                                 print(lan['OUTPUT11'].replace('<videoquality>',f"{vqd[sea(avq[int(inp)-1],avq2)]}({sev(avq[int(inp)-1])})"))#已选择%s(%s)画质
                             vqs.append(vqd[sea(avq[int(inp)-1],avq2)]+","+sev(avq[int(inp)-1]))
+            elif 'V' in ip and not F:
+                targetVq = ip['V']['id']
+                targetCodec = ip['V']['codec']
+                vqmap = {}
+                for strk in dash['video']:
+                    stream = dash['video'][strk]
+                    if stream['id'] not in vqmap:
+                        vqmap[stream['id']] = {}
+                    vqmap[stream['id']][stream['codecs'][:3]] = stream
+                if targetVq not in vqmap:
+                    vqlist = vqmap.keys()
+                    vqlist = [vql for vql in vqlist]
+                    vqlist.sort(reverse=True)
+                    for quality in vqlist:
+                        if quality < targetVq:
+                            targetVq = quality
+                            break
+                if targetCodec is None or targetCodec not in vqmap[targetVq]:
+                    vqkey = [temp for temp in vqmap[targetVq].keys()]
+                    targetCodec = vqkey[0]
+                dash["video"] = vqmap[targetVq][targetCodec]
+                vqs.append(f"{vqd[avq2.index(targetVq)]},{dash['video']['codecs']}")
+                if ns:
+                    print(lan['OUTPUT11'].replace('<videoquality>', f"{vqd[avq2.index(targetVq)]}({dash['video']['codecs']})"))  # 已选择%s(%s)画质
             elif not F :
                 dash['video']=dash['video'][avq[0]]
                 vqs.append(vqd[0]+","+sev(avq[0]))
