@@ -13,22 +13,24 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-def delli(l:list,i) -> (list,int):
-    r=[]
-    a=-1
-    b=0
+def delli(l: list, i) -> (list, int):  # noqa: E741
+    r = []
+    a = -1
+    b = 0
     for j in l:
-        if i!=j :
+        if i != j:
             r.append(j)
-        else :
-            a=b
-        b=b+1
-    return r,a
-def dellk(l:list,i:int) -> list:
-    r=[]
-    a=0
+        else:
+            a = b
+        b = b + 1
+    return r, a
+
+
+def dellk(l: list, i: int) -> list:  # noqa: E741
+    r = []
+    a = 0
     for k in l:
-        if a!=i :
+        if a != i:
             r.append(k)
-        a=a+1
+        a = a + 1
     return r

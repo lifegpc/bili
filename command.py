@@ -17,7 +17,7 @@ from getopt import getopt, GetoptError
 from re import search
 from biliTime import checktime
 from file import filterd
-from lang import lan,getlan,getdict
+from lang import lan, getlan, getdict
 from JSONParser import loadset
 import sys
 from urllib.parse import parse_qs, urlsplit, unquote_plus
@@ -26,8 +26,9 @@ from urllib.parse import parse_qs, urlsplit, unquote_plus
 onewline = '\n'
 nnewline = '\n    '
 
-def ph() :
-    h=f'''{la['O1']}
+
+def ph():
+    h = f'''{la['O1']}
     start.py -h/-?/--help   {la['O2']}
     start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>] [--bp/--nbp] [--in/--nin] [--mt/--nmt] [--vi <URL_index>] [--uc/--nuc] [--ass/--nass] [--dmp/--ndmp] [--vf <format>] [--lmd <time>] [--ynal/--nnal] [--log/--nlog] [--yauf/--nauf] [--ydwa/--ndwa] [--yol/--nol] [--ltid] [--ycc/--ncc] [--nfo/--nnfo]
     start.py show c/w   {la['O3']}
@@ -139,256 +140,258 @@ def ph() :
     {la['O58']}
     {la['O59']}'''
     print(h)
-def gopt(args,d:bool=False) :
+
+
+def gopt(args, d: bool = False):
     re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:V:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid', 'ncc', 'ycc', 'nfo', 'nnfo'])
     if d:
         print(re)
-    rr=re[0]
-    r={}
-    h=False
+    rr = re[0]
+    r = {}
+    h = False
     for i in rr:
-        if i[0]=='-h' or i[0]=='-?' or i[0]=='--help':
-            h=True
-        if i[0]=='-i' and not 'i' in r:
-            r['i']=i[1]
-        if i[0]=='-d' and not 'd' in r and i[1].isnumeric() and int(i[1])>0 and int(i[1])<9 :
-            r['d']=int(i[1])
-        if i[0]=='-p' and not 'p' in r :
-            r['p']=i[1]
-        if i[0]=='-m' and not 'm' in r :
-            if i[1].lower()=='true' :
-                r['m']=True
-            elif i[1].lower()=='false' :
-                r['m']=False
-        if i[0]=='--ym' and not 'm' in r:
-            r['m']=True
-        if i[0]=='--nm' and not 'm' in r:
-            r['m']=False
-        if i[0]=='--ac' and not 'ac' in r:
-            if i[1].lower()=='true' :
-                r['ac']=True
-            elif i[1].lower()=='false' :
-                r['ac']=False
-        if i[0]=='--yac' and not 'ac' in r:
-            r['ac']=True
-        if i[0]=='--nac' and not 'ac' in r:
-            r['ac']=False
-        if i[0]=='--dm' and not 'dm' in r:
-            if i[1].lower()=='true' :
-                r['dm']=True
-            elif i[1].lower()=='false' :
-                r['dm']=False
-        if i[0]=='--ydm' and not 'dm' in r:
-            r['dm']=True
-        if i[0]=='--ndm' and not 'dm' in r:
-            r['dm']=False
-        if i[0]=='--ad' and not 'ad' in r:
-            if i[1].lower()=='true' :
-                r['ad']=True
-            elif i[1].lower()=='false' :
-                r['ad']=False
-        if i[0]=='--yad' and not 'ad' in r:
-            r['ad']=True
-        if i[0]=='--nad' and not 'ad' in r:
-            r['ad']=False
-        if i[0]=='-r' and not 'r' in r:
-            if i[1].lower()=='true' :
-                r['r']=True
-            elif i[1].lower()=='false' :
-                r['r']=False
-        if i[0]=='--yr' and not 'r' in r:
-            r['r']=True
-        if i[0]=='--nr' and not 'r' in r:
-            r['r']=False
-        if i[0]=='-y' and not 'y' in r:
-            r['y']=True
-        if i[0]=='-n' and not 'y' in r:
-            r['y']=False
-        if i[0]=='--yf' and not 'yf' in r:
-            r['yf']=True
-        if i[0]=='--nf' and not 'yf' in r:
-            r['yf']=False
-        if i[0]=='--mc' and not 'mc' in r:
-            if i[1].lower()=='avc' :
-                r['mc']=True
-            elif i[1].lower()=='hev' :
-                r['mc']=False
-        if i[0]=='--ar' and not 'ar' in r:
-            r['ar']=True
-        if i[0]=='--nar' and not 'ar' in r:
-            r['ar']=False
-        if i[0]=='--ax' and not 'ax' in r:
-            if i[1].isnumeric() :
-                i2=int(i[1])
-                if i2<17 and i2>0 :
-                    r['ax']=i2
-        if i[0]=='--as' and not 'as' in r:
-            if i[1].isnumeric() :
-                i2=int(i[1])
-                if i2>0 :
-                    r['as']=i2
-        if i[0]=='--ak' and not 'ak' in r:
-            if i[1].isnumeric() :
-                i2=int(i[1])
-                if i2>0 and i2<1025 :
-                    r['ak']=i2
-        if i[0]=='--ab' and not 'ab' in r:
-            r['ab']=True
-        if i[0]=='--nab' and not 'ab' in r:
-            r['ab']=False
-        if i[0]=='--fa' and not 'fa' in r:
-            if i[1].lower()=='none' or i[1].lower()=='prealloc' or i[1].lower()=='trunc' or i[1].lower()=='falloc':
-                r['fa']=i[1].lower()
-        if i[0]=='--sv' and not 'sv' in r:
-            if i[1].lower()=='true' :
-                r['sv']=True
-            elif i[1].lower()=='false' :
-                r['sv']=False
-        if i[0]=='--ysv' and not 'sv' in r:
-            r['sv']=True
-        if i[0]=='--nsv' and not 'sv' in r:
-            r['sv']=False
-        if i[0]=='--ma' and not 'ma' in r:
-            if i[1].lower()=='true' :
-                r['ma']=True
-            elif i[1].lower()=='false' :
-                r['ma']=False
-        if i[0]=='--yma' and not 'ma' in r:
-            r['ma']=True
-        if i[0]=='--nma' and not 'ma' in r:
-            r['ma']=False
-        if i[0]=='--ms' and not 'ms' in r:
-            t=search("^[0-9]+[MK]?$",i[1])
-            if t!=None :
-                r['ms']=i[1]
-        if i[0]=='--da' and not 'da' in r:
-            if i[1].lower()=='true' :
-                r['da']=True
-            elif i[1].lower()=='false' :
-                r['da']=False
-        if i[0]=='--yda' and not 'da' in r:
-            r['da']=True
-        if i[0]=='--nda' and not 'da' in r:
-            r['da']=False
-        if i[0]=='--httpproxy' and not 'httpproxy' in r:
-            r['httpproxy']=i[1]
-        if i[0]=='--httpsproxy' and not 'httpsproxy' in r:
-            r['httpsproxy']=i[1]
-        if i[0]=="--jt" and not 'jt' in r:
-            if i[1].lower()=='a' or i[1].lower()=='b' or i[1].isnumeric():
-                r['jt']=i[1].lower()
-        if i[0]=='--jts' and not 'jts' in r:
-            if checktime(i[1]) :
-                r['jts']=i[1]
-        if i[0]=='-F' and not 'F' in r:
-            r['F']=True
-        if i[0]=='-v' and not 'v' in r:
-            if i[1].isnumeric() :
-                if int(i[1])>0 :
-                    r['v']=i[1]
-        if i[0]=='-a' and not 'a' in r:
+        if i[0] == '-h' or i[0] == '-?' or i[0] == '--help':
+            h = True
+        if i[0] == '-i' and 'i' not in r:
+            r['i'] = i[1]
+        if i[0] == '-d' and 'd' not in r and i[1].isnumeric() and int(i[1]) > 0 and int(i[1]) < 9:
+            r['d'] = int(i[1])
+        if i[0] == '-p' and 'p' not in r:
+            r['p'] = i[1]
+        if i[0] == '-m' and 'm' not in r:
+            if i[1].lower() == 'true':
+                r['m'] = True
+            elif i[1].lower() == 'false':
+                r['m'] = False
+        if i[0] == '--ym' and 'm' not in r:
+            r['m'] = True
+        if i[0] == '--nm' and 'm' not in r:
+            r['m'] = False
+        if i[0] == '--ac' and 'ac' not in r:
+            if i[1].lower() == 'true':
+                r['ac'] = True
+            elif i[1].lower() == 'false':
+                r['ac'] = False
+        if i[0] == '--yac' and 'ac' not in r:
+            r['ac'] = True
+        if i[0] == '--nac' and 'ac' not in r:
+            r['ac'] = False
+        if i[0] == '--dm' and 'dm' not in r:
+            if i[1].lower() == 'true':
+                r['dm'] = True
+            elif i[1].lower() == 'false':
+                r['dm'] = False
+        if i[0] == '--ydm' and 'dm' not in r:
+            r['dm'] = True
+        if i[0] == '--ndm' and 'dm' not in r:
+            r['dm'] = False
+        if i[0] == '--ad' and 'ad' not in r:
+            if i[1].lower() == 'true':
+                r['ad'] = True
+            elif i[1].lower() == 'false':
+                r['ad'] = False
+        if i[0] == '--yad' and 'ad' not in r:
+            r['ad'] = True
+        if i[0] == '--nad' and 'ad' not in r:
+            r['ad'] = False
+        if i[0] == '-r' and 'r' not in r:
+            if i[1].lower() == 'true':
+                r['r'] = True
+            elif i[1].lower() == 'false':
+                r['r'] = False
+        if i[0] == '--yr' and 'r' not in r:
+            r['r'] = True
+        if i[0] == '--nr' and 'r' not in r:
+            r['r'] = False
+        if i[0] == '-y' and 'y' not in r:
+            r['y'] = True
+        if i[0] == '-n' and 'y' not in r:
+            r['y'] = False
+        if i[0] == '--yf' and 'yf' not in r:
+            r['yf'] = True
+        if i[0] == '--nf' and 'yf' not in r:
+            r['yf'] = False
+        if i[0] == '--mc' and 'mc' not in r:
+            if i[1].lower() == 'avc':
+                r['mc'] = True
+            elif i[1].lower() == 'hev':
+                r['mc'] = False
+        if i[0] == '--ar' and 'ar' not in r:
+            r['ar'] = True
+        if i[0] == '--nar' and 'ar' not in r:
+            r['ar'] = False
+        if i[0] == '--ax' and 'ax' not in r:
             if i[1].isnumeric():
-                if int(i[1])>0:
-                    r['a']=i[1]
-        if i[0]=='-o' and not 'o' in r:
-            r['o']=filterd(i[1])
-        if i[0]=='--af' and not 'af' in r:
-            r['af']=False
-        if i[0]=='--naf' and not 'af' in r:
-            r['af']=True
-        if i[0]=='--afp' and not 'afp' in r:
-            r['afp']=i[1]
-        if i[0]=='-s' and not 's' in r:
-            r['s']=True
-        if i[0]=='--slt' and not 'slt' in r:
-            r['slt']=True
-        if i[0]=='--nslt' and not 'slt' in r:
-            r['slt']=False
-        if i[0]=='--te' and not 'te' in r:
-            r['te']=True
-        if i[0]=='--nte' and not 'te' in r:
-            r['te']=False
-        if i[0]=='--bd' and not 'bd' in r:
-            r['bd']=True
-        if i[0]=='--nbd' and not 'bd' in r:
-            r['bd']=False
-        if i[0]=='--cad' and not 'cad' in r:
-            r['cad']=True
-        if i[0]=='--ncad' and not 'cad' in r:
-            r['cad']=False
-        if i[0]=='--lrh' and not 'lrh' in r:
-            r['lrh']=True
-        if i[0]=='--nlrh' and not 'lrh' in r:
-            r['lrh']=False
-        if i[0]=='--ahttpproxy' and not 'ahttpproxy' in r:
-            r['ahttpproxy']=i[1]
-        if i[0]=='--ahttpsproxy' and not 'ahttpsproxy' in r:
-            r['ahttpsproxy']=i[1]
-        if i[0]=='--lan' and not 'lan' in r and (i[1]=='null' or i[1] in lan) :
-            r['lan']=i[1]
-        if i[0]=='--bp' and not 'bp' in r:
-            r['bp']=True
-        if i[0]=='--nbp' and not 'bp' in r:
-            r['bp']=False
-        if i[0]=='--in' and not 'in' in r:
-            r['in']=True
-        if i[0]=='--nin' and not 'in' in r:
-            r['in']=False
-        if i[0]=='--mt' and not 'mt' in r:
-            r['mt']=True
-        if i[0]=='--nmt' and not 'mt' in r:
-            r['mt']=False
-        if i[0]=='--vi' and not 'vi' in r:
+                i2 = int(i[1])
+                if i2 < 17 and i2 > 0:
+                    r['ax'] = i2
+        if i[0] == '--as' and 'as' not in r:
+            if i[1].isnumeric():
+                i2 = int(i[1])
+                if i2 > 0:
+                    r['as'] = i2
+        if i[0] == '--ak' and 'ak' not in r:
+            if i[1].isnumeric():
+                i2 = int(i[1])
+                if i2 > 0 and i2 < 1025:
+                    r['ak'] = i2
+        if i[0] == '--ab' and 'ab' not in r:
+            r['ab'] = True
+        if i[0] == '--nab' and 'ab' not in r:
+            r['ab'] = False
+        if i[0] == '--fa' and 'fa' not in r:
+            if i[1].lower() == 'none' or i[1].lower() == 'prealloc' or i[1].lower() == 'trunc' or i[1].lower() == 'falloc':
+                r['fa'] = i[1].lower()
+        if i[0] == '--sv' and 'sv' not in r:
+            if i[1].lower() == 'true':
+                r['sv'] = True
+            elif i[1].lower() == 'false':
+                r['sv'] = False
+        if i[0] == '--ysv' and 'sv' not in r:
+            r['sv'] = True
+        if i[0] == '--nsv' and 'sv' not in r:
+            r['sv'] = False
+        if i[0] == '--ma' and 'ma' not in r:
+            if i[1].lower() == 'true':
+                r['ma'] = True
+            elif i[1].lower() == 'false':
+                r['ma'] = False
+        if i[0] == '--yma' and 'ma' not in r:
+            r['ma'] = True
+        if i[0] == '--nma' and 'ma' not in r:
+            r['ma'] = False
+        if i[0] == '--ms' and 'ms' not in r:
+            t = search("^[0-9]+[MK]?$", i[1])
+            if t is not None:
+                r['ms'] = i[1]
+        if i[0] == '--da' and 'da' not in r:
+            if i[1].lower() == 'true':
+                r['da'] = True
+            elif i[1].lower() == 'false':
+                r['da'] = False
+        if i[0] == '--yda' and 'da' not in r:
+            r['da'] = True
+        if i[0] == '--nda' and 'da' not in r:
+            r['da'] = False
+        if i[0] == '--httpproxy' and 'httpproxy' not in r:
+            r['httpproxy'] = i[1]
+        if i[0] == '--httpsproxy' and 'httpsproxy' not in r:
+            r['httpsproxy'] = i[1]
+        if i[0] == "--jt" and 'jt' not in r:
+            if i[1].lower() == 'a' or i[1].lower() == 'b' or i[1].isnumeric():
+                r['jt'] = i[1].lower()
+        if i[0] == '--jts' and 'jts' not in r:
+            if checktime(i[1]):
+                r['jts'] = i[1]
+        if i[0] == '-F' and 'F' not in r:
+            r['F'] = True
+        if i[0] == '-v' and 'v' not in r:
+            if i[1].isnumeric():
+                if int(i[1]) > 0:
+                    r['v'] = i[1]
+        if i[0] == '-a' and 'a' not in r:
+            if i[1].isnumeric():
+                if int(i[1]) > 0:
+                    r['a'] = i[1]
+        if i[0] == '-o' and 'o' not in r:
+            r['o'] = filterd(i[1])
+        if i[0] == '--af' and 'af' not in r:
+            r['af'] = False
+        if i[0] == '--naf' and 'af' not in r:
+            r['af'] = True
+        if i[0] == '--afp' and 'afp' not in r:
+            r['afp'] = i[1]
+        if i[0] == '-s' and 's' not in r:
+            r['s'] = True
+        if i[0] == '--slt' and 'slt' not in r:
+            r['slt'] = True
+        if i[0] == '--nslt' and 'slt' not in r:
+            r['slt'] = False
+        if i[0] == '--te' and 'te' not in r:
+            r['te'] = True
+        if i[0] == '--nte' and 'te' not in r:
+            r['te'] = False
+        if i[0] == '--bd' and 'bd' not in r:
+            r['bd'] = True
+        if i[0] == '--nbd' and 'bd' not in r:
+            r['bd'] = False
+        if i[0] == '--cad' and 'cad' not in r:
+            r['cad'] = True
+        if i[0] == '--ncad' and 'cad' not in r:
+            r['cad'] = False
+        if i[0] == '--lrh' and 'lrh' not in r:
+            r['lrh'] = True
+        if i[0] == '--nlrh' and 'lrh' not in r:
+            r['lrh'] = False
+        if i[0] == '--ahttpproxy' and 'ahttpproxy' not in r:
+            r['ahttpproxy'] = i[1]
+        if i[0] == '--ahttpsproxy' and 'ahttpsproxy' not in r:
+            r['ahttpsproxy'] = i[1]
+        if i[0] == '--lan' and 'lan' not in r and (i[1] == 'null' or i[1] in lan):
+            r['lan'] = i[1]
+        if i[0] == '--bp' and 'bp' not in r:
+            r['bp'] = True
+        if i[0] == '--nbp' and 'bp' not in r:
+            r['bp'] = False
+        if i[0] == '--in' and 'in' not in r:
+            r['in'] = True
+        if i[0] == '--nin' and 'in' not in r:
+            r['in'] = False
+        if i[0] == '--mt' and 'mt' not in r:
+            r['mt'] = True
+        if i[0] == '--nmt' and 'mt' not in r:
+            r['mt'] = False
+        if i[0] == '--vi' and 'vi' not in r:
             if i[1].isnumeric():
                 r['vi'] = int(i[1])
-        if i[0] == '--uc' and not 'uc' in r:
+        if i[0] == '--uc' and 'uc' not in r:
             r['uc'] = True
-        if i[0] == '--nuc' and not 'uc' in r:
+        if i[0] == '--nuc' and 'uc' not in r:
             r['uc'] = False
-        if i[0] == '--ass' and not 'ass' in r:
+        if i[0] == '--ass' and 'ass' not in r:
             r['ass'] = True
-        if i[0] == '--nass' and not 'ass' in r:
+        if i[0] == '--nass' and 'ass' not in r:
             r['ass'] = False
-        if i[0] == '--dmp' and not 'dmp' in r:
+        if i[0] == '--dmp' and 'dmp' not in r:
             r['dmp'] = True
-        if i[0] == '--ndmp' and not 'dmp' in r:
+        if i[0] == '--ndmp' and 'dmp' not in r:
             r['dmp'] = False
-        if i[0] == '--vf' and not 'vf' in r and i[1] in ['mkv', 'mp4']:
+        if i[0] == '--vf' and 'vf' not in r and i[1] in ['mkv', 'mp4']:
             r['vf'] = i[1]
-        if i[0] == '--lmd' and not 'lmd' in r and i[1].isnumeric():
+        if i[0] == '--lmd' and 'lmd' not in r and i[1].isnumeric():
             if int(i[1]) >= 0:
                 r['lmd'] = int(i[1])
-        if i[0] == '--ynal' and not 'nal' in r:
+        if i[0] == '--ynal' and 'nal' not in r:
             r['nal'] = True
-        if i[0] == '--nnal' and not 'nal' in r:
+        if i[0] == '--nnal' and 'nal' not in r:
             r['nal'] = False
-        if i[0] == '--log' and not 'log' in r:
+        if i[0] == '--log' and 'log' not in r:
             r['log'] = True
-        if i[0] == '--nlog' and not 'log' in r:
+        if i[0] == '--nlog' and 'log' not in r:
             r['log'] = False
-        if i[0] == '--yauf' and not 'auf' in r:
+        if i[0] == '--yauf' and 'auf' not in r:
             r['auf'] = True
-        if i[0] == '--nauf' and not 'auf' in r:
+        if i[0] == '--nauf' and 'auf' not in r:
             r['auf'] = False
-        if i[0] == '--ydwa' and not 'dwa' in r:
+        if i[0] == '--ydwa' and 'dwa' not in r:
             r['dwa'] = True
-        if i[0] == '--ndwa' and not 'dwa' in r:
+        if i[0] == '--ndwa' and 'dwa' not in r:
             r['dwa'] = False
-        if i[0] == '--yol' and not 'ol' in r:
+        if i[0] == '--yol' and 'ol' not in r:
             r['ol'] = True
-        if i[0] == '--nol' and not 'ol' in r:
+        if i[0] == '--nol' and 'ol' not in r:
             r['ol'] = False
         if i[0] == '--ltid':
             r['ltid'] = True
-        if i[0] == '--ycc' and not 'cc' in r:
+        if i[0] == '--ycc' and 'cc' not in r:
             r['cc'] = True
-        if i[0] == '--ncc' and not 'cc' in r:
+        if i[0] == '--ncc' and 'cc' not in r:
             r['cc'] = False
-        if i[0] == '--nfo' and not 'nfo' in r:
+        if i[0] == '--nfo' and 'nfo' not in r:
             r['nfo'] = True
-        if i[0] == '--nnfo' and not 'nfo' in r:
+        if i[0] == '--nnfo' and 'nfo' not in r:
             r['nfo'] = False
-        if i[0] == '-V' and not 'V' in r:
+        if i[0] == '-V' and 'V' not in r:
             rs = search(r'^([0-9]+)(avc|hev)?$', i[1])
             if rs is not None:
                 vid = int(rs.groups()[0])
@@ -432,22 +435,23 @@ def gopt(args,d:bool=False) :
                     return gopt(argv)
     if h:
         global la
-        la=getdict('command',getlan(se,r))
+        la = getdict('command', getlan(se, r))
         ph()
         sys.exit(0)
-    for i in re[1] :
-        if i.lower()=="show":
+    for i in re[1]:
+        if i.lower() == "show":
             r['SHOW'] = True
     return r
-la=None
-se=loadset()
-if se==-1 or se==-2 :
-    se={}
-la=getdict('command',getlan(se,{}))
+
+
+la = None
+se = loadset()
+if se == -1 or se == -2:
+    se = {}
+la = getdict('command', getlan(se, {}))
 if __name__ == "__main__":
-    import sys
     print(sys.argv)
-    if len(sys.argv)==1 :
+    if len(sys.argv) == 1:
         print('该文件仅供测试命令行输入使用，请运行start.py')
-    else :
-        print(gopt(sys.argv[1:],True))
+    else:
+        print(gopt(sys.argv[1:], True))

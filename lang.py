@@ -21,69 +21,75 @@ from typing import Dict
 
 
 LanDict = Dict[str, str]
-dll=None
-lan={'en':'English','ja':'日本語','zh_CN':'中文（中国）'}
+dll = None
+lan = {'en': 'English', 'ja': '日本語', 'zh_CN': '中文（中国）'}
 syslan = None
 
 
-def getdict(sn:str,lan:str,sn2:str="bili") -> LanDict:
+def getdict(sn: str, lan: str, sn2: str = "bili") -> LanDict:
     """获取翻译词典
     sn 资源名称
     lan 语言代码"""
-    if lan=="en" :
-        fn=f"Language/{sn2}.{sn}.pot"
-    else :
-        fn=f"Language/{sn2}.{sn}.{lan}.po"
-    if not exists(fn) :
+    if lan == "en":
+        fn = f"Language/{sn2}.{sn}.pot"
+    else:
+        fn = f"Language/{sn2}.{sn}.{lan}.po"
+    if not exists(fn):
         print(f'Can not find the language resource file:"{fn}"')
-        fn=f'Language/{sn2}.{sn}.pot'
-        if not exists(fn) :
+        fn = f'Language/{sn2}.{sn}.pot'
+        if not exists(fn):
             print(f'Can not find the language resource file:"{fn}"')
             return -1
-    po=polib.pofile(fn,encoding='utf8')
-    r={}
-    for i in po.translated_entries() :
-        r[i.msgctxt]=i.msgstr
-    for i in po.untranslated_entries() :
-        r[i.msgctxt]=i.msgid
+    po = polib.pofile(fn, encoding='utf8')
+    r = {}
+    for i in po.translated_entries():
+        r[i.msgctxt] = i.msgstr
+    for i in po.untranslated_entries():
+        r[i.msgctxt] = i.msgid
     return r
-def getsyslan(d:bool=False) :
+
+
+def getsyslan(d: bool = False):
     """获取系统语言信息
     语言代码：https://docs.microsoft.com/en-us/openspecs/windows_protocols/ms-adts/a29e5c28-9fb9-4c49-8e43-4b9b8e733a05
     d 是否为调试模式"""
-    s=platform.system()
-    if s=="Windows" :
+    s = platform.system()
+    if s == "Windows":
         global dll
-        if dll==None :
-            dll=ctypes.windll.kernel32
-        l=dll.GetSystemDefaultUILanguage()
+        if dll is None:
+            dll = ctypes.windll.kernel32
+        la = dll.GetSystemDefaultUILanguage()
         if d:
-            print(f"SystemDefaultUILanguage:{hex(l)}")
-        if l==0x804 or l==0x4 or l==0x404 or l==0xc04 or l==0x1004 or l==0x1404 or l==0x7c04:
-            r="zh_CN"
-        elif l==0x411 :
-            r="ja"
-        else :
-            r="en"
+            print(f"SystemDefaultUILanguage:{hex(la)}")
+        if la == 0x804 or la == 0x4 or la == 0x404 or la == 0xc04 or la == 0x1004 or la == 0x1404 or la == 0x7c04:
+            r = "zh_CN"
+        elif la == 0x411:
+            r = "ja"
+        else:
+            r = "en"
         if d:
             global lan
             print(f'Choose {r} : {lan[r]}')
         return r
-    else :
-        return "en" #非Windows系统默认英文
-def getlan(se:dict,ip:dict)-> str:
+    else:
+        return "en"  # 非Windows系统默认英文
+
+
+def getlan(se: dict, ip: dict) -> str:
     global syslan
     if syslan is None:
         try:
             syslan = getsyslan()
-        except :
+        except:
             syslan = "en"
-    l = syslan
+    la = syslan
     if 'lan' in se:
-        l=se['lan']
+        la = se['lan']
     if 'lan' in ip:
-        l=ip['lan']
-    return l
+        la = ip['lan']
+    return la
+
+
 if __name__ == "__main__":
-    print(getdict('start','en'))
-    print(getdict('start',getsyslan(True))) #测试是否工作
+    print(getdict('start', 'en'))
+    print(getdict('start', getsyslan(True)))  # 测试是否工作

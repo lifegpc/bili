@@ -22,6 +22,7 @@ def sha256(s):
     h.update(t.encode('utf8'))
     return h.hexdigest()
 
+
 def md5(s):
     t = str(s)
     h = hashlib.md5()
