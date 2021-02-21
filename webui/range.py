@@ -14,13 +14,13 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from re import search, I
-from typing import List, Tuple, IO
+from typing import List, Tuple
 import web
 
 Range = List[Tuple[int, int]]
 
 
-def sortrange(l: Range):
+def sortrange(l: Range):  # noqa: E741
     "排序getrange输出的列表"
     le = len(l)
     for i in range(le - 1):
@@ -71,19 +71,19 @@ def getrange(s: str) -> Range:
         mi = r[0][0]
         ma = r[0][1]
         for i in range(le - 1):
-            if r[i][1] < r[i+1][0]:
+            if r[i][1] < r[i + 1][0]:
                 r2.append((mi, ma))
-                if i+1 < le:
-                    mi = r[i+1][0]
-                    ma = r[i+1][1]
+                if i + 1 < le:
+                    mi = r[i + 1][0]
+                    ma = r[i + 1][1]
             else:
-                ma = max(r[i][1], r[i+1][1])
+                ma = max(r[i][1], r[i + 1][1])
         r2.append((mi, ma))
         return r2
     return None
 
 
-def checkrange(r: Range, l: int):
+def checkrange(r: Range, l: int):  # noqa: E741
     "根据文件长度判断Range是否合法"
     if r is None:
         return False
@@ -92,7 +92,7 @@ def checkrange(r: Range, l: int):
             return True
         return False
     else:
-        if r[len(r)-1][1] <= l:
+        if r[len(r) - 1][1] <= l:
             if len(r) == 1:
                 return True
             return False
@@ -106,7 +106,7 @@ def getcontentbyrange(r: Range, fn: str):
         if r is None or len(r) == 0:
             f.seek(0, 0)
             while f.readable():
-                yield f.read(1024*1024)
+                yield f.read(1024 * 1024)
         if len(r) == 1 and r[0][1] is None:
             if r[0][0] >= 0:
                 f.seek(r[0][0], 0)
@@ -119,11 +119,11 @@ def getcontentbyrange(r: Range, fn: str):
         else:
             for i in r:
                 f.seek(i[0], 0)
-                l = f.tell()
-                while l <= i[1]:
+                l = f.tell()  # noqa: E741
+                while l <= i[1]:  # noqa: E741
                     le = min(i[1] - l, 1024 * 1024)
                     yield f.read(le)
-                    l = f.tell()
+                    l = f.tell()  # noqa: E741
 
 
 def DashRange(r: Range, fs: int):

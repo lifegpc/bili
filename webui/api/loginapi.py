@@ -211,7 +211,7 @@ class loginapi(apic):
             qr['tel'] = decrypt(b64decode(qr['tel'])).decode('utf8')
         except:
             return {'code': -1, 'e': traceback.format_exc()}
-        re = self._r.post(f'https://passport.bilibili.com/web/sms/general/v2/send', data=qr,
+        re = self._r.post('https://passport.bilibili.com/web/sms/general/v2/send', data=qr,
                           headers={'referer': 'https://passport.bilibili.com/ajax/miniLogin/minilogin'})
         re = re.json()
         if re['code'] == 0:

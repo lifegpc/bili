@@ -1,2 +1,3 @@
 [flake8]
 ignore = E501, E722
+exclude = ./v.py, python_x64/*, python_x86/*

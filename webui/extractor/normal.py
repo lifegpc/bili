@@ -33,11 +33,11 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
     vq 指定具体画质（仅在all为false时生效）
     vcodec 指定具体编码器（hev或avc）
     aq 指定具体音质（仅在all为false并且流类型为dash时生效）"""
-    if not all and vq is not None and not vq in video_id_vip_list:
+    if not all and vq is not None and vq not in video_id_vip_list:
         return -1, {'code': -1}
-    if not all and aq is not None and not aq in audio_id_list:
+    if not all and aq is not None and aq not in audio_id_list:
         return -1, {'code': -1}
-    if not all and vcodec is not None and not vcodec in vcodec_list:
+    if not all and vcodec is not None and vcodec not in vcodec_list:
         return -1, {'code': -1}
     if all:
         addcookies(r)
@@ -91,7 +91,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
         d2['size'] = size
         if all and len(accept_quality) > 1:
             for i in accept_quality:
-                if not i in durl:
+                if i not in durl:
                     if napi:
                         addcookies(r, i)
                         re = r.get(url)
@@ -115,7 +115,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                         if re['code'] != 0:
                             return -1, {'code': -2, 're': re}
                     re = re['data']
-                    if not re['quality'] in durl:
+                    if re['quality'] not in durl:
                         d2 = {
                             'id': re['quality'], 'desc': accept_description_dict[re['quality']]}
                         durl[re['quality']] = d2
@@ -164,8 +164,8 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
             accept_videoc_quality = []
             dash['video'] = vid
             for i in re['dash']['video']:
-                if not f"{i['id']}{i['codecs']}" in accept_videoc_quality:
-                    if not i['id'] in accept_video_quality:
+                if f"{i['id']}{i['codecs']}" not in accept_videoc_quality:
+                    if i['id'] not in accept_video_quality:
                         accept_video_quality.append(i['id'])
                     accept_videoc_quality.append(f"{i['id']}{i['codecs']}")
                     t = {'id': i['id'], 'desc': accept_description_dict[i['id']], 'codecs': i['codecs'],
@@ -210,8 +210,8 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                                 return -1, {'code': -2, 're': re}
                         re = re['data']
                         for i in re['dash']['video']:
-                            if not f"{i['id']}{i['codecs']}" in accept_videoc_quality:
-                                if not i['id'] in accept_video_quality:
+                            if f"{i['id']}{i['codecs']}" not in accept_videoc_quality:
+                                if i['id'] not in accept_video_quality:
                                     accept_video_quality.append(i['id'])
                                 accept_videoc_quality.append(
                                     f"{i['id']}{i['codecs']}")
@@ -235,7 +235,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                             break
                         k = k + 1
                     i = re['dash']['audio'][k]
-                    t = {'id': i['id'],  'codecs': i['codecs']}
+                    t = {'id': i['id'], 'codecs': i['codecs']}
                     if vurl:
                         if 'backup_url' in i and i['backup_url'] is not None:
                             t['url'] = [i['base_url']] + i['backup_url']
@@ -246,10 +246,10 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
             else:
                 dash['audio'] = None
         else:
-            if vq is None or not vq in accept_quality:
+            if vq is None or vq not in accept_quality:
                 vq = accept_quality[0]
             if has_audio:
-                if aq is None or not aq in accept_audio_quality:
+                if aq is None or aq not in accept_audio_quality:
                     aq = accept_audio_quality[0]
             vid = []
             for i in re['dash']['video']:
@@ -325,7 +325,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                 dash['audio'] = None
                 for i in re['dash']['audio']:
                     if i['id'] == aq:
-                        t = {'id': i['id'],  'codecs': i['codecs']}
+                        t = {'id': i['id'], 'codecs': i['codecs']}
                         if vurl:
                             if 'backup_url' in i and i['backup_url'] is not None:
                                 t['url'] = [i['base_url']] + i['backup_url']
@@ -335,7 +335,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                         dash['audio'] = t
                 if dash['audio'] is None:
                     i = re['dash']['audio']
-                    t = {'id': i['id'],  'codecs': i['codecs']}
+                    t = {'id': i['id'], 'codecs': i['codecs']}
                     if vurl:
                         if 'backup_url' in i and i['backup_url'] is not None:
                             t['url'] = [i['base_url']] + i['backup_url']

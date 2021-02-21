@@ -133,10 +133,10 @@ class normal(extractor):
                 if read == -1:
                     return -1
 
-    def _addninfo(self, d: dict, l: list):
+    def _addninfo(self, d: dict, l: list):  # noqa: E741
         d = d['data']
         e = {}
-        e['page'] = len(l)+1
+        e['page'] = len(l) + 1
         e['part'] = d['title']
         i = d['edge_id']
         for k in d['story_list']:
@@ -147,7 +147,7 @@ class normal(extractor):
                 l.append(e)
                 break
 
-    def _infoqc(self, c: int, l: list):
+    def _infoqc(self, c: int, l: list):  # noqa: E741
         "对互动视频列表进行去重"
         for i in l:
             if i['cid'] == c:

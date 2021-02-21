@@ -33,7 +33,7 @@ class extractor:
     def __init__(self, inp: str):
         "对uri进行处理"
         re = search(self._VALID_URI, inp, I)
-        if re == None:
+        if re is None:
             raise InvalidInputEroor()
         self._inp = inp
         self._groupdict = re.groupdict()

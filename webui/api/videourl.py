@@ -31,7 +31,7 @@ class videourl(apic):
     def __init__(self, inp: str):
         apic.__init__(self, inp)
         global last_checktime
-        if last_checktime is None or last_checktime < (time()-60):
+        if last_checktime is None or last_checktime < (time() - 60):
             last_checktime = time()
             if not logincheck():
                 raise NotLoginError()
@@ -50,7 +50,7 @@ class normalvideourl(videourl):
         vurl: str = web.input().get('vurl')
         vq: str = web.input().get('vq')
         vcodec: str = web.input().get('vcodec')
-        aq: str =web.input().get('aq')
+        aq: str = web.input().get('aq')
         if aid is None or bvid is None or cid is None or vip is None:
             return {'code': -1}
         if not aid.isnumeric() or not cid.isnumeric() or not vip.isnumeric():
@@ -69,7 +69,7 @@ class normalvideourl(videourl):
             all = False
         else:
             aq = 30280
-        if vcodec is not None and vcodec in ['avc','hev']:
+        if vcodec is not None and vcodec in ['avc', 'hev']:
             all = False
         else:
             vcodec = None

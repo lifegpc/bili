@@ -26,7 +26,7 @@ if len(sys.argv) > 1:
     ip = gopt(sys.argv[1:])
 
 
-def islanin(l: str) -> str:
+def islanin(l: str) -> str:  # noqa: E741
     """检查是否存在该语种
     是返回字符串，否返回None"""
     li = l.split('-')
@@ -43,7 +43,7 @@ class translate:
     def GET(self, n: str):
         web.header('Content-Type', 'text/json; charset=utf-8')
         et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
-        l = n.split('.', 1)
+        l = n.split('.', 1)  # noqa: E741
         la2 = None
         hl = web.input().get('hl')
         if hl is not None and hl in lan:

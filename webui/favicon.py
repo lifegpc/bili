@@ -13,8 +13,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, getEtag, getcontentbyrange
-from os.path import exists, getsize
+from . import web, getEtag
+from os.path import exists
 
 
 class favicon:

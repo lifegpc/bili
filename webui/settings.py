@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from . import web, loadset, translate, getdfset, saveset, gopt, pa, logincheck, apilogincheck, gettemplate
+from . import web, loadset, getdfset, saveset, gopt, logincheck, apilogincheck, gettemplate
 from lang import lan
 from json import dumps, loads
 import sys

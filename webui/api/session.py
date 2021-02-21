@@ -36,6 +36,6 @@ def new_Session(cookies: bool = True):
         read = loadcookie(r)
         if read != 0:
             raise NotLoginError()
-    if getset(se, 'te') == False:
+    if getset(se, 'te') is False:
         r.trust_env = False
     return r

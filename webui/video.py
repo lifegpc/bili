@@ -37,7 +37,7 @@ class video:
             if logincheck(h):
                 return ''
         s: str = t[0]
-        if s == None:
+        if s is None:
             s = ''
         o = 'Download/'
         if 'o' in se2:
