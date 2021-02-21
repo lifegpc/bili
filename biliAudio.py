@@ -56,7 +56,7 @@ def checkCid(data: dict, r: Session, logg: Logger = None) -> bool:
             ind = k - 1
         elif k == 0:
             ind = 1
-        elif (taken(drt[k+1]) - taken(tt)) >= (taken(tt) - taken(drt[k-1])):
+        elif (taken(drt[k + 1]) - taken(tt)) >= (taken(tt) - taken(drt[k - 1])):
             ind = k - 1
         else:
             ind = k + 1
