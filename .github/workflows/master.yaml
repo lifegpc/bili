@@ -16,4 +16,4 @@ jobs:
         run: pip3 install --upgrade flake8
       - name: check code
         shell: bash
-        run: flake8
+        run: python3 -m flake8
