@@ -33,8 +33,8 @@ def filterLRC(s: str) -> (str, int):
             if c is None:
                 r = r + '\n' + i
             else:
-                d = i[:c.start()+1] + "." + c.groups()[0] + \
-                    i[c.end()+1:]  # 替换为.00或.000
+                d = i[:c.start() + 1] + "." + c.groups()[0] + \
+                    i[c.end() + 1:]  # 替换为.00或.000
                 r = r + '\n' + d
                 n = n + 1
     while r.startswith('\n') and len(r) > 0:

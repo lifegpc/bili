@@ -80,7 +80,7 @@ class HDVideoParser:
     def addninfo(self, re: dict):
         d = re['data']
         e = {}
-        e['page'] = len(self.page_list)+1
+        e['page'] = len(self.page_list) + 1
         e['part'] = d['title']
         i = d['edge_id']
         for k in d['story_list']:
@@ -128,7 +128,7 @@ class HDVideoParser:
         return 0
 
 
-def infoqc(c: int, l: list):
+def infoqc(c: int, l: list):  # noqa: E741
     "对互动视频列表进行去重"
     for i in l:
         if i['cid'] == c:
@@ -138,7 +138,7 @@ def infoqc(c: int, l: list):
 
 def callen(re: dict) -> int:
     "计算story_list长度"
-    if not 'data' in re or not 'story_list' in re['data']:
+    if 'data' not in re or 'story_list' not in re['data']:
         return 0
     t = re['data']['story_list']
     p = []
