@@ -3133,6 +3133,10 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     if ii > -1:
                         vqd = dellk(vqd, ii)
                     continue
+                if l not in durl:
+                    del vqd[avq.index(l)]
+                    avq.remove(l)
+                    continue
                 if ns or (not ns and F):
                     print(f"{j+1}.{lan['OUTPUT9']}{vqd[j]}")  # 图质：
                 j = j + 1
