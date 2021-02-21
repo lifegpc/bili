@@ -1,0 +1,19 @@
+name: CI
+on:
+  push:
+    branches: [ master dev ]
+  pull_request:
+    branches: [ master dev ]
+  workflow_dispatch:
+jobs:
+  flake8:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: install flake8
+        shell: bash
+        run: pip3 install --upgrade flake8
+      - name: check code
+        shell: bash
+        run: flake8
