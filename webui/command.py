@@ -43,19 +43,19 @@ def gopt(args):
     for i in rr:
         if i[0] == '-h' or i[0] == '-?' or i[0] == '--help':
             h = True
-        if i[0] == '--lan' and not 'lan' in r and (i[1] == 'null' or i[1] in lan):
+        if i[0] == '--lan' and 'lan' not in r and (i[1] == 'null' or i[1] in lan):
             r['lan'] = i[1]
-        if (i[0] == '-s' or i[0] == '--host') and not 's' in r:
+        if (i[0] == '-s' or i[0] == '--host') and 's' not in r:
             r['s'] = i[1]
-        if (i[0] == '-p' or i[0] == '--port') and not 'p' in r:
+        if (i[0] == '-p' or i[0] == '--port') and 'p' not in r:
             r['p'] = int(i[1])
-        if i[0] == '--sslc' and not 'sslc' in r:
+        if i[0] == '--sslc' and 'sslc' not in r:
             r['sslc'] = i[1]
-        if i[0] == '--sslp' and not 'sslp' in r:
+        if i[0] == '--sslp' and 'sslp' not in r:
             r['sslp'] = i[1]
-        if i[0] == '--sslcc' and not 'sslcc' in r:
+        if i[0] == '--sslcc' and 'sslcc' not in r:
             r['sslcc'] = i[1]
-        if i[0] == '--pas' and not 'pas' in r:
+        if i[0] == '--pas' and 'pas' not in r:
             r['pas'] = i[1]
     global la
     if h:

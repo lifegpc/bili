@@ -70,7 +70,7 @@ class ASSScriptInfo():
         if len(self.__Comment) > 0:
             comment = []
             for i in self.__Comment:
-                l = i.split('\n')
+                l = i.split('\n')  # noqa: E741
                 for j in l:
                     comment.append(j)
             for i in comment:
@@ -513,11 +513,11 @@ class ASSScriptEvent():
             raise ValueError(lan['MUST_NUM'])
 
     def __time_to_str(self, i: int) -> str:
-        t = round(i/10)
+        t = round(i / 10)
         ms = t % 100
-        s = int(t/100) % 60
-        m = int(t/6000) % 60
-        h = int(t/360000)
+        s = int(t / 100) % 60
+        m = int(t / 6000) % 60
+        h = int(t / 360000)
         return "{:0>1d}:{:0>2d}:{:0>2d}.{:0>2d}".format(h, m, s, ms)
 
     def __db(self) -> str:
@@ -586,9 +586,9 @@ def parsefromCSSHex(s: str) -> ASSScriptColor:
     if re is not None:
         re = re.groups()
         r = ASSScriptColor(
-            int(re[0]*2, 16), int(re[1]*2, 16), int(re[2]*2, 16))
+            int(re[0] * 2, 16), int(re[1] * 2, 16), int(re[2] * 2, 16))
         if re[3]:
-            r.set_color(alpha=int(re[3]*2, 16))
+            r.set_color(alpha=int(re[3] * 2, 16))
         return r
     raise ValueError(lan['INVALID_CSS_COLOR'].replace('<value>', str(s)))
 

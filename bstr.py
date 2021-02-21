@@ -13,17 +13,17 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from re import search,I
+from re import search, I
 from html import unescape
 from regex import search as rsearch
 from typing import Callable
 from urllib.parse import parse_qs
 
 
-def f(i:str):
-    s=i.replace('\r','\\r')
-    s=s.replace('\n','\\n')
-    s=s.replace('"',"'")
+def f(i: str):
+    s = i.replace('\r', '\\r')
+    s = s.replace('\n', '\\n')
+    s = s.replace('"', "'")
     return s
 
 
@@ -53,53 +53,57 @@ def lg(i: str):
     return s
 
 
-def gettags(t: list, fun: Callable=None) -> str:
+def gettags(t: list, fun: Callable = None) -> str:
     "将tag列表转换为文字"
     if fun is None:
-        fun = lambda s : s
-    f=True
-    s=""
-    for i in t :
+        def fun(s): return s  # noqa: E704
+    f = True
+    s = ""
+    for i in t:
         if f:
-            f=False
+            f = False
             s = fun(i)
-        else :
+        else:
             s = s + "," + fun(i)
     return s
-def rhtml(s:str)-> str:
+
+
+def rhtml(s: str) -> str:
     "去HTML化"
-    r=s.replace('\n','')
-    r=r.replace('<br>','\n')
-    r=r.replace('<br/>','\n')
-    r=r.replace('</p>','\n')
-    t=search(r'<[^>]+>',r,I)
-    while t!=None:
-        t=t.span()
-        if t[0]==0 :
-            r=r[t[1]:]
-        elif t[1]==len(s) :
-            r=r[:t[0]]
-        else :
-            r=r[:t[0]]+r[t[1]:]
-        t=search(r'<[^>]+>',r,I)
+    r = s.replace('\n', '')
+    r = r.replace('<br>', '\n')
+    r = r.replace('<br/>', '\n')
+    r = r.replace('</p>', '\n')
+    t = search(r'<[^>]+>', r, I)
+    while t is not None:
+        t = t.span()
+        if t[0] == 0:
+            r = r[t[1]:]
+        elif t[1] == len(s):
+            r = r[:t[0]]
+        else:
+            r = r[:t[0]] + r[t[1]:]
+        t = search(r'<[^>]+>', r, I)
     r = unescape(r)
     return r
-def getv(l:list) -> (list,list) :
+
+
+def getv(l: list) -> (list, list):  # noqa: E741
     """将合并在一起的画质id和画质描述分开
     返回值为id,画质描述"""
-    q=[]
-    d=[]
+    q = []
+    d = []
     for i in l:
         q.append(i['qn'])
         d.append(i['desc'])
-    return q,d
+    return q, d
 
 
-def hasPar(s: str, k: str, r: str=None, flags: int=0):
+def hasPar(s: str, k: str, r: str = None, flags: int = 0):
     t = s
     if s[0] == '?':
         t = s[1:]
-    l = parse_qs(t)
+    l = parse_qs(t)  # noqa: E741
     if r is None:
         return True if k in l else False
     else:

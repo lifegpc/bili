@@ -66,3 +66,19 @@ msgstr "現在、サービスが混雑しています。V3インターフェー�
 msgctxt "ERROR7"
 msgid "Please press Enter to retry."
 msgstr "Enterキーを押してもう一度試してみてください。"
+
+msgctxt "OUTPUT3"
+msgid "The QR Code image is saved at \"<path>\"."
+msgstr ""
+
+msgctxt "OUTPUT4"
+msgid "The QR Code is expired. Press any key to generate a new one."
+msgstr ""
+
+msgctxt "WARN1"
+msgid "This login method now have bugs, some contents may not available."
+msgstr ""
+
+msgctxt "QRCODE"
+msgid "(If you don't input anything, the program will use QR code to login.)"
+msgstr ""

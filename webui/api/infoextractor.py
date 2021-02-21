@@ -39,7 +39,7 @@ class infoextractor(apic):
             if re is None:
                 re = search(r"[^:]+://", inp)
                 if re is None:
-                    inp = "https://"+inp
+                    inp = "https://" + inp
                 try:
                     ses = requests.Session()
                     ses.trust_env = False

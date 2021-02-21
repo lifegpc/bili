@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from os import system, popen
+from os import popen
 from os.path import exists
 from re import search, I
 import requests

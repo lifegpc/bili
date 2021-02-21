@@ -4,6 +4,7 @@
 log/
 .vs/
 *.txt
+Temp/
 #download file or config file
 *.xml
 *.json

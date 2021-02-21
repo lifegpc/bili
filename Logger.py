@@ -15,7 +15,6 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from file import filtern, spfln, mkdir, filterd, spfn
 from os.path import exists, abspath
-from os import remove
 from biliVersion import getversion
 import sys
 from typing import TextIO

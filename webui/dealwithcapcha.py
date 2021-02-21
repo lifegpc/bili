@@ -17,7 +17,6 @@ from . import web, gettemplate, logincheck, getEtag, gopt, loadset
 import sys
 
 
-
 ip = {}
 if len(sys.argv) > 1:
     ip = gopt(sys.argv[1:])
@@ -33,10 +32,11 @@ class dealwithcapcha:
             return ''
         web.header('Content-Type', 'text/html; charset=utf-8')
         et = web.ctx.env.get('HTTP_IF_NONE_MATCH')
-        et2 = getEtag(f'webuihtml/dealwithcapcha.html')
+        et2 = getEtag('webuihtml/dealwithcapcha.html')
         if et == et2 and et2 is not None:
             web.HTTPError('304')
             t = ''
+            return t
         else:
             web.header('Etag', et2)
             dea = gettemplate('dealwithcapcha')

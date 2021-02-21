@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from . import pa
-import webui
 from os.path import exists
 from json import loads, dumps
 from hashl import sha256
@@ -84,4 +83,3 @@ class sectionlist:
             f.close()
         except:
             print(traceback.format_exc())
-

@@ -25,49 +25,53 @@ import json
 import biliLogin
 import biliDanmuAuto
 import file
-from JSONParser import getset,loadset
+from JSONParser import getset, loadset
 from file import mkdir
 import sys
 from command import gopt
-from lang import getdict,getlan
+from lang import getdict, getlan
 from inspect import currentframe
 from traceback import format_exc
 
 
-lan=None
-se=loadset()
-if se==-1 or se==-2 :
-    se={}
-ip={}
-if len(sys.argv)>1 :
-    ip=gopt(sys.argv[1:])
-lan=getdict('biliDanmu',getlan(se,ip))
+lan = None
+se = loadset()
+if se == -1 or se == -2:
+    se = {}
+ip = {}
+if len(sys.argv) > 1:
+    ip = gopt(sys.argv[1:])
+lan = getdict('biliDanmu', getlan(se, ip))
+
+
 def downloadh(filen, r, pos, da, logg=None):
     d = biliDanmuDown.downloadh(pos, r, biliTime.tostr(biliTime.getDate(da)), logg)
-    if d==-1 :
+    if d == -1:
         if logg is not None:
             logg.write(f"d = {d}", currentframe(), "Download History Barrage Error")
-        print(lan['ERROR1'])#网络错误！
+        print(lan['ERROR1'])  # 网络错误！
         return -3
-    if exists(filen) :
+    if exists(filen):
         remove(filen)
-    try :
-        f=open(filen,mode='w',encoding='utf8')
+    try:
+        f = open(filen, mode='w', encoding='utf8')
         f.write(d)
         f.close()
     except:
         if logg is not None:
             logg.write(format_exc(), currentframe(), "Write History Barrage Error")
-        print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+        print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
         return -1
-    try :
-        d=biliDanmuXmlParser.loadXML(filen)
+    try:
+        d = biliDanmuXmlParser.loadXML(filen)
         remove(filen)
         return d
-    except :
+    except:
         if logg is not None:
             logg.write(format_exc(), currentframe(), "Read History Barrage Error")
-        return {'status':-2,'d':d}
+        return {'status': -2, 'd': d}
+
+
 def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
     "处理现在的弹幕"
     log = False
@@ -78,22 +82,22 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
     oll = None
     if 'oll' in ip:
         oll = ip['oll']
-    ns=True
+    ns = True
     if 's' in ip:
-        ns=False
-    o="Download/"
-    read=getset(se,'o')
-    if read!=None :
-        o=read
+        ns = False
+    o = "Download/"
+    read = getset(se, 'o')
+    if read is not None:
+        o = read
     if 'o' in ip:
-        o=ip['o']
+        o = ip['o']
     fin = True
-    if getset(se, 'in') == False:
+    if getset(se, 'in') is False:
         fin = False
     if 'in' in ip:
         fin = ip['in']
     dmp = False
-    if getset(se, 'dmp') == True:
+    if getset(se, 'dmp') is True:
         dmp = True
     if 'dmp' in ip:
         dmp = ip['dmp']
@@ -106,280 +110,282 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
             o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
     if log:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Normal Video Barrage Para")
-    try :
-        if not exists(o) :
+    try:
+        if not exists(o):
             mkdir(o)
     except:
         if log:
             logg.write(format_exc(), currentframe(), "Normal Video Barrage Mkdir Error")
-        print(lan['ERROR3'].replace('<dirname>',o))#创建文件夹<dirname>失败。
+        print(lan['ERROR3'].replace('<dirname>', o))  # 创建文件夹<dirname>失败。
         return -3
-    try :
-        if not exists('Temp') :
+    try:
+        if not exists('Temp'):
             mkdir('Temp')
     except:
         if log:
             logg.write(format_exc(), currentframe(), "Normal Video Barrage Mkdir Error2")
-        print(lan['ERROR3'].replace('<dirname>',"Temp"))#创建Temp文件夹失败
+        print(lan['ERROR3'].replace('<dirname>', "Temp"))  # 创建Temp文件夹失败
         return -3
-    if t=='av' :
-        d = biliDanmuDown.downloadn(data['page'][c-1]['cid'], r, logg)
+    if t == 'av':
+        d = biliDanmuDown.downloadn(data['page'][c - 1]['cid'], r, logg)
         if d == -1:
             if log:
                 logg.write(f"d = {d}", currentframe(), "Normal Video Download Barrage Failed")
             print(lan['ERROR1'])  # 网络错误
             return -1
-        if data['videos'] ==1 :
+        if data['videos'] == 1:
             if fin:
-                filen=o+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
-            else :
-                filen=f"{o}{file.filtern(data['title'])}.xml"
-        else :
+                filen = o + file.filtern(data['title'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml")
+            else:
+                filen = f"{o}{file.filtern(data['title'])}.xml"
+        else:
             if fin and not dmp:
-                filen=o+file.filtern(data['title']+'-'+f"{c}."+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+                filen = o + file.filtern(data['title'] + '-' + f"{c}." + data['page'][c - 1]['part'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml")
             elif not dmp:
-                filen=f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
+                filen = f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
             elif fin:
                 filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}(P{c},{data['page'][c - 1]['cid']}).xml")
             else:
                 filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}.xml")
         if log:
             logg.write(f"filen = {filen}", currentframe(), "Normal Video Barrage Var1")
-        if exists(filen) :
-            fg=False
-            bs=True
+        if exists(filen):
+            fg = False
+            bs = True
             if not ns:
-                bs=False
-                fg=True
+                bs = False
+                fg = True
             if 'y' in se:
                 fg = se['y']
                 bs = False
             if 'y' in ip:
                 fg = ip['y']
                 bs = False
-            while bs :
-                inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
-                if inp[0].lower()=='y' :
-                    bs=False
-                    fg=True
-                elif inp[0].lower()=='n' :
-                    bs=False
-            if fg :
-                try :
+            while bs:
+                inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")  # 文件"<filename>"已存在，是否覆盖？
+                if inp[0].lower() == 'y':
+                    bs = False
+                    fg = True
+                elif inp[0].lower() == 'n':
+                    bs = False
+            if fg:
+                try:
                     remove(filen)
-                except :
+                except:
                     if log:
                         logg.write(format_exc(), currentframe(), "Normal Video Barrage Remove File Failed")
-                    print(lan['ERROR4'])#删除原有文件失败，跳过下载
+                    print(lan['ERROR4'])  # 删除原有文件失败，跳过下载
                     return -1
-            else :
+            else:
                 return -1
-        if xml==2 :
-            try :
-                f=open(filen,mode='w',encoding='utf8')
+        if xml == 2:
+            try:
+                f = open(filen, mode='w', encoding='utf8')
                 f.write(d)
                 f.close()
-            except :
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Normal Video Barrage Error1")
-                print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                 return -2
             if oll:
                 oll.add(filen)
             return 0
-        else :
+        else:
             filen2 = f"Temp/n_{data['page'][c-1]['cid']}.xml"
-            if exists(filen2) :
+            if exists(filen2):
                 remove(filen2)
-            try :
-                f=open(filen2,mode='w',encoding='utf8')
+            try:
+                f = open(filen2, mode='w', encoding='utf8')
                 f.write(d)
                 f.close()
-            except :
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Normal Video Barrage Error2")
-                print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
+                print(lan['ERROR2'].replace('<filename>', filen2))  # 写入到文件"<filename>"时失败！
                 return -2
-            d=biliDanmuXmlParser.loadXML(filen2)
+            d = biliDanmuXmlParser.loadXML(filen2)
             remove(filen2)
-            try :
-                f=open(filen,mode='w',encoding='utf8')
+            try:
+                f = open(filen, mode='w', encoding='utf8')
             except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Normal Video Barrage Error3")
-                print(lan['ERROR5'].replace('<filename>',filen))#打开文件"<filename>"失败
+                print(lan['ERROR5'].replace('<filename>', filen))  # 打开文件"<filename>"失败
                 return -2
-            try :
+            try:
                 f.write('<?xml version="1.0" encoding="UTF-8"?>')
-                f.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d['chatserver'],d['chatid'],d['mission'],d['maxlimit'],d['state'],d['real_name'],d['source']))
-            except :
+                f.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d['chatserver'], d['chatid'], d['mission'], d['maxlimit'], d['state'], d['real_name'], d['source']))
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Normal Video Barrage Error4")
-                print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
+                print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
                 return -2
             if ns:
-                print(f"{lan['OUTPUT1']}{len(d['list'])}")#总计：
-                print(lan['OUTPUT2'])#正在过滤……
-            l=0
-            for i in d['list'] :
-                read=biliDanmuXmlFilter.Filter(i,xmlc)
-                if read :
-                    l=l+1
-                else :
-                    try :
+                print(f"{lan['OUTPUT1']}{len(d['list'])}")  # 总计：
+                print(lan['OUTPUT2'])  # 正在过滤……
+            filternum = 0
+            for i in d['list']:
+                read = biliDanmuXmlFilter.Filter(i, xmlc)
+                if read:
+                    filternum += 1
+                else:
+                    try:
                         f.write(biliDanmuCreate.objtoxml(i))
-                    except :
+                    except:
                         if log:
                             logg.write(format_exc(), currentframe(), "Normal Video Barrage Error5")
-                        print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
+                        print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
                         return -2
             if ns:
-                print(lan['OUTPUT3'].replace('<number>',str(l)))#共计过滤%s条
-                print(lan['OUTPUT4'].replace('<number>',str(len(d['list'])-l)))#实际输出<number>条
-            try :
+                print(lan['OUTPUT3'].replace('<number>', str(filternum)))  # 共计过滤%s条
+                print(lan['OUTPUT4'].replace('<number>', str(len(d['list']) - filternum)))  # 实际输出<number>条
+            try:
                 f.write('</i>')
                 f.close()
-            except :
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Normal Video Barrage Error6")
-                print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
+                print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
                 return -2
             if oll:
                 oll.add(filen)
             return 0
-    elif t=='ss' :
+    elif t == 'ss':
         d = biliDanmuDown.downloadn(c['cid'], r, logg)
         if d == -1:
             if log:
                 logg.write(f"d = {d}", currentframe(), "Bangumi Video Download Barrage Failed")
             print(lan['ERROR1'])  # 网络错误
             return -1
-        pat=o+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
+        pat = o + file.filtern('%s(SS%s)' % (data['mediaInfo']['title'], data['mediaInfo']['ssId']))
         if log:
             logg.write(f"pat = {pat}", currentframe(), "Bangumi Video Barrage Var1")
-        try :
-            if not exists(pat) :
+        try:
+            if not exists(pat):
                 mkdir(pat)
-        except :
+        except:
             if log:
                 logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Mkdir Failed")
-            print(lan['ERROR3'].replace('<dirname>',pat))#创建文件夹<dirname>失败。
+            print(lan['ERROR3'].replace('<dirname>', pat))  # 创建文件夹<dirname>失败。
             return -3
-        if c['s']=='e' :
+        if c['s'] == 'e':
             if fin:
-                filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
-            else :
-                filen='%s/%s'%(pat,file.filtern(f"{c['i']+1}.{c['longTitle']}.xml"))
-        else :
+                filen = '%s/%s' % (pat, file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid'])))
+            else:
+                filen = '%s/%s' % (pat, file.filtern(f"{c['i']+1}.{c['longTitle']}.xml"))
+        else:
             if fin:
-                filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
-            else :
-                filen='%s/%s'%(pat,file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
+                filen = '%s/%s' % (pat, file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['title'], c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid'])))
+            else:
+                filen = '%s/%s' % (pat, file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
         if log:
             logg.write(f"filen = {filen}", currentframe(), "Bangumi Video Barrage Var2")
-        if exists(filen) :
-            fg=False
-            bs=True
+        if exists(filen):
+            fg = False
+            bs = True
             if not ns:
-                fg=True
-                bs=False
+                fg = True
+                bs = False
             if 'y' in se:
                 fg = se['y']
                 bs = False
             if 'y' in ip:
                 fg = ip['y']
                 bs = False
-            while bs :
-                inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
-                if inp[0].lower()=='y' :
-                    bs=False
-                    fg=True
-                elif inp[0].lower()=='n' :
-                    bs=False
-            if fg :
-                try :
+            while bs:
+                inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")  # 文件"<filename>"已存在，是否覆盖？
+                if inp[0].lower() == 'y':
+                    bs = False
+                    fg = True
+                elif inp[0].lower() == 'n':
+                    bs = False
+            if fg:
+                try:
                     remove(filen)
-                except :
+                except:
                     if log:
                         logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error")
-                    print(lan['ERROR4'])#删除原有文件失败，跳过下载
+                    print(lan['ERROR4'])  # 删除原有文件失败，跳过下载
                     return -1
-            else :
+            else:
                 return -1
-        if xml==2 :
-            try :
-                f=open(filen,mode='w',encoding='utf8')
+        if xml == 2:
+            try:
+                f = open(filen, mode='w', encoding='utf8')
                 f.write(d)
                 f.close()
-            except :
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error2")
-                print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                 return -2
             if oll:
                 oll.add(filen)
             return 0
-        else :
+        else:
             filen2 = f"Temp/n_{c['cid']}.xml"
-            if exists(filen2) :
+            if exists(filen2):
                 remove(filen2)
-            try :
-                f=open(filen2,mode='w',encoding='utf8')
+            try:
+                f = open(filen2, mode='w', encoding='utf8')
                 f.write(d)
                 f.close()
-            except :
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error3")
-                print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
+                print(lan['ERROR2'].replace('<filename>', filen2))  # 写入到文件"<filename>"时失败！
                 return -2
-            d=biliDanmuXmlParser.loadXML(filen2)
+            d = biliDanmuXmlParser.loadXML(filen2)
             remove(filen2)
-            try :
-                f=open(filen,mode='w',encoding='utf8')
+            try:
+                f = open(filen, mode='w', encoding='utf8')
             except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error4")
-                print(lan['ERROR5'].replace('<filename>',filen))#打开文件"<filename>"失败
+                print(lan['ERROR5'].replace('<filename>', filen))  # 打开文件"<filename>"失败
                 return -2
-            try :
+            try:
                 f.write('<?xml version="1.0" encoding="UTF-8"?>')
-                f.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d['chatserver'],d['chatid'],d['mission'],d['maxlimit'],d['state'],d['real_name'],d['source']))
-            except :
+                f.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d['chatserver'], d['chatid'], d['mission'], d['maxlimit'], d['state'], d['real_name'], d['source']))
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error5")
-                print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
+                print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
                 return -2
             if ns:
-                print(f"{lan['OUTPUT1']}{len(d['list'])}")#总计：
-                print(lan['OUTPUT2'])#正在过滤……
-            l=0
-            for i in d['list'] :
-                read=biliDanmuXmlFilter.Filter(i,xmlc)
-                if read :
-                    l=l+1
-                else :
-                    try :
+                print(f"{lan['OUTPUT1']}{len(d['list'])}")  # 总计：
+                print(lan['OUTPUT2'])  # 正在过滤……
+            filternum = 0
+            for i in d['list']:
+                read = biliDanmuXmlFilter.Filter(i, xmlc)
+                if read:
+                    filternum = filternum + 1
+                else:
+                    try:
                         f.write(biliDanmuCreate.objtoxml(i))
-                    except :
+                    except:
                         if log:
                             logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error6")
-                        print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
+                        print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
                         return -2
             if ns:
-                print(lan['OUTPUT3'].replace('<number>',str(l)))#共计过滤%s条
-                print(lan['OUTPUT4'].replace('<number>',str(len(d['list'])-l)))#实际输出<number>条
-            try :
+                print(lan['OUTPUT3'].replace('<number>', str(filternum)))  # 共计过滤%s条
+                print(lan['OUTPUT4'].replace('<number>', str(len(d['list']) - filternum)))  # 实际输出<number>条
+            try:
                 f.write('</i>')
                 f.close()
-            except :
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Bangumi Video Barrage Error7")
-                print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
+                print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
                 return -2
             if oll:
                 oll.add(filen)
             return 0
-def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
+
+
+def DanmuGeta(c, data, r, t, xml, xmlc, ip: dict, se: dict, che: bool = False):
     "全弹幕处理"
     log = False
     logg = None
@@ -389,22 +395,22 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
     oll = None
     if 'oll' in ip:
         oll = ip['oll']
-    ns=True
+    ns = True
     if 's' in ip:
-        ns=False
-    o="Download/"
-    read=getset(se,'o')
-    if read!=None :
-        o=read
+        ns = False
+    o = "Download/"
+    read = getset(se, 'o')
+    if read is not None:
+        o = read
     if 'o' in ip:
-        o=ip['o']
+        o = ip['o']
     fin = True
-    if getset(se, 'in') == False:
+    if getset(se, 'in') is False:
         fin = False
     if 'in' in ip:
         fin = ip['in']
     dmp = False
-    if getset(se, 'dmp') == True:
+    if getset(se, 'dmp') is True:
         dmp = True
     if 'dmp' in ip:
         dmp = ip['dmp']
@@ -416,875 +422,875 @@ def DanmuGeta(c,data,r,t,xml,xmlc,ip:dict,se:dict,che:bool=False) :
         else:
             o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
     dwa = False
-    if getset(se, 'dwa') == True:
+    if getset(se, 'dwa') is True:
         dwa = True
     if 'dwa' in ip:
         dwa = ip['dwa']
     if log:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}\ndwa = {dwa}", currentframe(), "All Barrage Para")
-    try :
-        if not exists(o) :
+    try:
+        if not exists(o):
             mkdir(o)
     except:
         if log:
             logg.write(format_exc(), currentframe(), "All Barrage Mkdir Error")
-        print(lan['ERROR3'].replace('<dirname>',o))#创建文件夹<dirname>失败。
+        print(lan['ERROR3'].replace('<dirname>', o))  # 创建文件夹<dirname>失败。
         return -1
-    try :
-        if not exists('Temp') :
+    try:
+        if not exists('Temp'):
             mkdir('Temp')
     except:
         if log:
             logg.write(format_exc(), currentframe(), "All Barrage Mkdir Error2")
-        print(lan['ERROR3'].replace('<dirname>',"Temp"))#创建Temp文件夹失败
+        print(lan['ERROR3'].replace('<dirname>', "Temp"))  # 创建Temp文件夹失败
         return -1
-    if t=='av' :
-        bs=True
-        at2=False
-        fi=True
-        jt=False
-        if getset(se,'jt')==True :
-            jt=True
-        while bs :
+    if t == 'av':
+        bs = True
+        at2 = False
+        fi = True
+        jt = False
+        if getset(se, 'jt') is True:
+            jt = True
+        while bs:
             if fi and 'jt' in ip:
-                fi=False
-                at=ip['jt']
-            elif jt :
-                at='a'
+                fi = False
+                at = ip['jt']
+            elif jt:
+                at = 'a'
             elif ns:
-                at=input(lan['INPUT2'].replace('<value>','1-365'))#请输入两次抓取之间的天数（有效值为<value>，a会启用自动模式（推荐））：
-            else :
-                print(lan['ERROR7'])#请使用"--jt <number>|a|b"来设置两次抓取之间的天数
+                at = input(lan['INPUT2'].replace('<value>', '1-365'))  # 请输入两次抓取之间的天数（有效值为<value>，a会启用自动模式（推荐））：
+            else:
+                print(lan['ERROR7'])  # 请使用"--jt <number>|a|b"来设置两次抓取之间的天数
                 return -1
-            if at.isnumeric() and int(at)<=365 and int(at)>=1 :
-                at=int(at)
-                bs=False
-            elif len(at)>0 and at[0].lower()=='a' :
-                at2=True
-                at=1
-                bs=False
-        if data['videos'] ==1 :
+            if at.isnumeric() and int(at) <= 365 and int(at) >= 1:
+                at = int(at)
+                bs = False
+            elif len(at) > 0 and at[0].lower() == 'a':
+                at2 = True
+                at = 1
+                bs = False
+        if data['videos'] == 1:
             if fin:
-                filen=o+file.filtern(data['title']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
-            else :
-                filen=f"{o}{file.filtern(data['title'])}.xml"
-        else :
+                filen = o + file.filtern(data['title'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml")
+            else:
+                filen = f"{o}{file.filtern(data['title'])}.xml"
+        else:
             if fin and not dmp:
-                filen=o+file.filtern(data['title']+'-'+f"{c}."+data['page'][c-1]['part']+"(AV"+str(data['aid'])+','+data['bvid']+',P'+str(c)+','+str(data['page'][c-1]['cid'])+").xml")
+                filen = o + file.filtern(data['title'] + '-' + f"{c}." + data['page'][c - 1]['part'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml")
             elif not dmp:
-                filen=f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
+                filen = f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
             elif fin:
                 filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}(P{c},{data['page'][c - 1]['cid']}).xml")
             else:
                 filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}.xml")
         if log:
             logg.write(f"filen = {filen}", currentframe(), "Normal Video All Barrage Var")
-        if exists(filen) :
-            fg=False
-            bs=True
+        if exists(filen):
+            fg = False
+            bs = True
             if not ns:
-                fg=True
-                bs=False
+                fg = True
+                bs = False
             if 'y' in se:
                 fg = se['y']
                 bs = False
             if 'y' in ip:
                 fg = ip['y']
                 bs = False
-            while bs :
-                inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
-                if inp[0].lower()=='y' :
-                    bs=False
-                    fg=True
-                elif inp[0].lower()=='n' :
-                    bs=False
-            if fg :
-                try :
+            while bs:
+                inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")  # 文件"<filename>"已存在，是否覆盖？
+                if inp[0].lower() == 'y':
+                    bs = False
+                    fg = True
+                elif inp[0].lower() == 'n':
+                    bs = False
+            if fg:
+                try:
                     remove(filen)
-                except :
+                except:
                     if log:
                         logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error")
-                    print(lan['ERROR4'])#删除原有文件失败，跳过下载
+                    print(lan['ERROR4'])  # 删除原有文件失败，跳过下载
                     return -2
-            else :
+            else:
                 return -2
-        da=int(data['pubdate'])
-        zl=0
-        zg=0
-        zm=0
-        now=1
-        now2=now
+        da = int(data['pubdate'])
+        zl = 0
+        zg = 0
+        zm = 0
+        now = 1
+        now2 = now
         if log:
             logg.write(f"da = {da}\nnow = {now}\nnow2 = {now2}", currentframe(), "Normal Video All Barrage Var2")
         if ns:
-            print(lan['OUTPUT5'])#正在抓取最新弹幕……
-        d2 = biliDanmuDown.downloadn(data['page'][c-1]['cid'], r, logg)
-        if d2==-1 :
+            print(lan['OUTPUT5'])  # 正在抓取最新弹幕……
+        d2 = biliDanmuDown.downloadn(data['page'][c - 1]['cid'], r, logg)
+        if d2 == -1:
             if log:
                 logg.write(f"d2 = {d2}", currentframe(), "Normal Video All Barrage Var3")
-            print(lan['ERROR1'])#网络错误！
+            print(lan['ERROR1'])  # 网络错误！
             return -1
         filen2 = f"Temp/a_{data['page'][c-1]['cid']}.xml"
-        if exists(filen2) :
+        if exists(filen2):
             remove(filen2)
-        try :
-            f=open(filen2,mode='w',encoding='utf8')
+        try:
+            f = open(filen2, mode='w', encoding='utf8')
             f.write(d2)
             f.close()
-        except :
+        except:
             if log:
                 logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error2")
-            print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
+            print(lan['ERROR2'].replace('<filename>', filen2))  # 写入到文件"<filename>"时失败！
             return -3
-        d3=biliDanmuXmlParser.loadXML(filen2)
+        d3 = biliDanmuXmlParser.loadXML(filen2)
         remove(filen2)
-        ma=int(d3['maxlimit'])
+        ma = int(d3['maxlimit'])
         if log:
             logg.write(f"ma = {ma}", currentframe(), "Normal Video All Barrage Var4")
-        allok=False
+        allok = False
         if not dwa and len(d3['list']) < ma - 10:
-            bs=True
+            bs = True
             if not ns:
-                bs=False
-            while bs :
-                sts=input(f"{lan['INPUT3'].replace('<number>',str(len(d3['list']))).replace('<limit>',str(ma))}(y/n)")
-                if len(sts)>0 :
-                    if sts[0].lower()=='y' :
-                        bs=False
-                    elif sts[0].lower()=='n' :
-                        allok=True
-                        bs=False
+                bs = False
+            while bs:
+                sts = input(f"{lan['INPUT3'].replace('<number>',str(len(d3['list']))).replace('<limit>',str(ma))}(y/n)")
+                if len(sts) > 0:
+                    if sts[0].lower() == 'y':
+                        bs = False
+                    elif sts[0].lower() == 'n':
+                        allok = True
+                        bs = False
         if log:
             logg.write(f"allok = {allok}", currentframe(), "Normal Video All Barrage Var5")
-        if not allok :
-            d2=d3
+        if not allok:
+            d2 = d3
             if ns:
-                print(lan['OUTPUT6'].replace('<number>',str(len(d2['list']))))#抓取到<number>条弹幕，最新弹幕将在最后处理
-        try :
-            f2=open(filen,mode='w',encoding='utf8')
-        except :
+                print(lan['OUTPUT6'].replace('<number>', str(len(d2['list']))))  # 抓取到<number>条弹幕，最新弹幕将在最后处理
+        try:
+            f2 = open(filen, mode='w', encoding='utf8')
+        except:
             if log:
                 logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error3")
-            print(lan['ERROR5'].replace('<filename>',filen))#打开文件"<filename>"失败
+            print(lan['ERROR5'].replace('<filename>', filen))  # 打开文件"<filename>"失败
             return -3
-        if not allok :
-            try :
+        if not allok:
+            try:
                 f2.write('<?xml version="1.0" encoding="UTF-8"?>')
-                f2.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d2['chatserver'],d2['chatid'],d2['mission'],d2['maxlimit'],d2['state'],d2['real_name'],d2['source']))
-            except :
+                f2.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d2['chatserver'], d2['chatid'], d2['mission'], d2['maxlimit'], d2['state'], d2['real_name'], d2['source']))
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error4")
-                print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
+                print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
                 return -3
-        mri=0
-        mri2=0
-        t1=0
-        t2=0
-        tem={}
-        fir=True
-        while not allok and biliTime.equal(biliTime.getDate(da),biliTime.getNowDate())<0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da+now*24*3600),biliTime.getNowDate())<0)) :
-            t1=time.time()
+        mri = 0
+        mri2 = 0
+        t1 = 0
+        t2 = 0
+        tem = {}
+        fir = True
+        while not allok and biliTime.equal(biliTime.getDate(da), biliTime.getNowDate()) < 0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da + now * 24 * 3600), biliTime.getNowDate()) < 0)):
+            t1 = time.time()
             if log:
                 logg.write(f"mri = {mri}\nmri2 = {mri2}\nt1 = {t1}\nt2 = {t2}\ntem.keys() = {tem.keys()}\nfir = {fir}\nda = {da}\nnow = {now}\nnow2 = {now2}", currentframe(), "Normal Video All Barrage Var6")
-            if (not at2) or fir :
+            if (not at2) or fir:
                 if ns:
-                    print(lan['OUTPUT7'].replace('<date>',biliTime.tostr(biliTime.getDate(da))))#正在抓取<date>的弹幕……
-                bs=True
-                ts=300
-                rec=0
-                while bs :
-                    read=downloadh(filen2,r,data['page'][c-1]['cid'],da)
-                    if read==-1 :
+                    print(lan['OUTPUT7'].replace('<date>', biliTime.tostr(biliTime.getDate(da))))  # 正在抓取<date>的弹幕……
+                bs = True
+                ts = 300
+                rec = 0
+                while bs:
+                    read = downloadh(filen2, r, data['page'][c - 1]['cid'], da)
+                    if read == -1:
                         if log:
                             logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var7")
                         return -1
-                    elif read==-3:
-                        rec=rec+1
+                    elif read == -3:
+                        rec = rec + 1
                         if log:
                             logg.write(f"read = {read}\nrec = {rec}", currentframe(), "Normal Video All Barrage Var8")
-                        if rec%5!=0 :
+                        if rec % 5 != 0:
                             time.sleep(5)
-                            print(lan['OUTPUT8'].replace('<number>',str(rec)))#正在进行第<number>次重连
-                        else :
-                            bss=True
+                            print(lan['OUTPUT8'].replace('<number>', str(rec)))  # 正在进行第<number>次重连
+                        else:
+                            bss = True
                             while bss:
-                                inn=input(f"{lan['INPUT4'].replace('<number>',str(rec))}(y/n)")#是否重连？（已经失败<number>次）
-                                if len(inn)>0 and inn[0].lower()=='y' :
+                                inn = input(f"{lan['INPUT4'].replace('<number>',str(rec))}(y/n)")  # 是否重连？（已经失败<number>次）
+                                if len(inn) > 0 and inn[0].lower() == 'y':
                                     time.sleep(5)
-                                    print(lan['OUTPUT8'].replace('<number>',str(rec)))#正在进行第<number>次重连
-                                elif len(inn)>0 and inn[0].lower()=='n' :
+                                    print(lan['OUTPUT8'].replace('<number>', str(rec)))  # 正在进行第<number>次重连
+                                elif len(inn) > 0 and inn[0].lower() == 'n':
                                     return -1
-                    elif 'status' in read and read['status']==-2 :
+                    elif 'status' in read and read['status'] == -2:
                         if log:
                             logg.write(f"read = {read}\nts = {ts}", currentframe(), "Normal Video All Barrage Var9")
-                        obj=json.loads(read['d'])
-                        if obj['code']==-101 :
-                            if obj['message']=='账户未登录' :
-                                ud={}
+                        obj = json.loads(read['d'])
+                        if obj['code'] == -101:
+                            if obj['message'] == '账户未登录':
+                                ud = {}
                                 read = biliLogin.login(r, ud, ip, logg)
                                 if log:
                                     logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var10")
-                                if read>1 :
+                                if read > 1:
                                     return -1
-                            else :
+                            else:
                                 print(obj)
-                                print(lan['OUTPUT9'].replace('<number>',str(ts)))#休眠<number>s
+                                print(lan['OUTPUT9'].replace('<number>', str(ts)))  # 休眠<number>s
                                 time.sleep(ts)
-                                ts=ts+300
-                        else :
+                                ts = ts + 300
+                        else:
                             print(obj)
-                            print(lan['OUTPUT9'].replace('<number>',str(ts)))#休眠<number>s
+                            print(lan['OUTPUT9'].replace('<number>', str(ts)))  # 休眠<number>s
                             time.sleep(ts)
-                            ts=ts+300
-                    else :
-                        bs=False
-                d=read
-                l=0
-                g=0
+                            ts = ts + 300
+                    else:
+                        bs = False
+                d = read
+                l = 0  # noqa: E741
+                g = 0
                 if ns:
-                    print(lan['OUTPUT10'])#正在处理弹幕……
-                for i in d['list'] :
-                    if mri2<int(i['ri']) :
-                        mri2=int(i['ri'])
-                    if mri<int(i['ri']) :
-                        l=l+1
-                        if xml==2 :
-                            try :
+                    print(lan['OUTPUT10'])  # 正在处理弹幕……
+                for i in d['list']:
+                    if mri2 < int(i['ri']):
+                        mri2 = int(i['ri'])
+                    if mri < int(i['ri']):
+                        l += 1  # noqa: E741
+                        if xml == 2:
+                            try:
                                 f2.write(biliDanmuCreate.objtoxml(i))
-                            except :
+                            except:
                                 if log:
                                     logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error5")
-                                print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                                print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                                 return -3
-                        elif xml==1 :
-                            read=biliDanmuXmlFilter.Filter(i,xmlc)
-                            if read :
-                                g=g+1
-                            else :
-                                try :
+                        elif xml == 1:
+                            read = biliDanmuXmlFilter.Filter(i, xmlc)
+                            if read:
+                                g = g + 1
+                            else:
+                                try:
                                     f2.write(biliDanmuCreate.objtoxml(i))
-                                except :
+                                except:
                                     if log:
                                         logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error6")
-                                    print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                                    print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                                     return -3
-            else :
-                rr=False
-                rr2=False
-                if biliTime.tostr(biliTime.getDate(da+now*24*3600)) in tem :
+            else:
+                rr = False
+                rr2 = False
+                if biliTime.tostr(biliTime.getDate(da + now * 24 * 3600)) in tem:
                     if ns:
-                        print(lan['OUTPUT11'].replace('<date>',biliTime.tostr(biliTime.getDate(da+now*24*3600))))#从内存中获取了<date>的弹幕。
-                    read=biliDanmuAuto.reload(tem.pop(biliTime.tostr(biliTime.getDate(da+now*24*3600))),mri,ns)
-                    rr=True
-                    if read['z']==read['l'] and read['z']>ma-10 and now>1 :
-                        rr2=True
+                        print(lan['OUTPUT11'].replace('<date>', biliTime.tostr(biliTime.getDate(da + now * 24 * 3600))))  # 从内存中获取了<date>的弹幕。
+                    read = biliDanmuAuto.reload(tem.pop(biliTime.tostr(biliTime.getDate(da + now * 24 * 3600))), mri, ns)
+                    rr = True
+                    if read['z'] == read['l'] and read['z'] > ma - 10 and now > 1:
+                        rr2 = True
                 if log:
                     logg.write(f"rr = {rr}\nrr2 = {rr2}", currentframe(), "Normal Video All Barrage Var11")
-                if (not rr) or (rr and rr2) :
-                    if (not rr) :
-                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,data['page'][c-1]['cid'],mri,ip)
-                        if read==-1 :
+                if (not rr) or (rr and rr2):
+                    if (not rr):
+                        read = biliDanmuAuto.getMembers(filen2, r, da + now * 24 * 3600, data['page'][c - 1]['cid'], mri, ip)
+                        if read == -1:
                             if log:
                                 logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var12")
                             return -3
-                    while read['z']==read['l'] and read['z']>ma-10 and now>1 :
-                        #if ns:
-                            #print('尝试抓取了%s的弹幕，获取到%s条有效弹幕，未防止遗漏，间隔时间减半' % (biliTime.tostr(biliTime.getDate(da+now*24*3600)),read['l']))
-                        tem[biliTime.tostr(biliTime.getDate(da+now*24*3600))]=read
-                        now=now/2
-                        if now<1 :
-                            now=1
-                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,data['page'][c-1]['cid'],mri,ip)
-                        if read==-1 :
+                    while read['z'] == read['l'] and read['z'] > ma - 10 and now > 1:
+                        # if ns:
+                        # print('尝试抓取了%s的弹幕，获取到%s条有效弹幕，未防止遗漏，间隔时间减半' % (biliTime.tostr(biliTime.getDate(da+now*24*3600)),read['l']))
+                        tem[biliTime.tostr(biliTime.getDate(da + now * 24 * 3600))] = read
+                        now = now / 2
+                        if now < 1:
+                            now = 1
+                        read = biliDanmuAuto.getMembers(filen2, r, da + now * 24 * 3600, data['page'][c - 1]['cid'], mri, ip)
+                        if read == -1:
                             if log:
                                 logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var13")
                             return -3
-                        now2=now
-                    if read['l']<ma*0.5 :
-                        now2=now*2
-                        if now2>365 :
-                            now2=365
-                l=read['l']
-                g=0
-                mri2=read['m']
+                        now2 = now
+                    if read['l'] < ma * 0.5:
+                        now2 = now * 2
+                        if now2 > 365:
+                            now2 = 365
+                l = read['l']  # noqa: E741
+                g = 0
+                mri2 = read['m']
                 if ns:
-                    print(lan['OUTPUT12'])#正在处理……
-                for i in read['d']['list'] :
-                    if xml==2 :
-                        try :
+                    print(lan['OUTPUT12'])  # 正在处理……
+                for i in read['d']['list']:
+                    if xml == 2:
+                        try:
                             f2.write(biliDanmuCreate.objtoxml(i))
-                        except :
+                        except:
                             if log:
                                 logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error7")
-                            print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                            print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                             return -3
-                    elif xml==1:
-                        read=biliDanmuXmlFilter.Filter(i,xmlc)
-                        if read :
-                            g=g+1
-                        else :
-                            try :
+                    elif xml == 1:
+                        read = biliDanmuXmlFilter.Filter(i, xmlc)
+                        if read:
+                            g = g + 1
+                        else:
+                            try:
                                 f2.write(biliDanmuCreate.objtoxml(i))
-                            except :
+                            except:
                                 if log:
                                     logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error8")
-                                print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
+                                print(lan['ERROR2'].replace('<filename>', filen2))  # 写入到文件"<filename>"时失败！
                                 return -3
-                bs2=True
-                while bs2 and biliTime.equal(biliTime.getDate(da+(now2+now)*24*3600),biliTime.getNowDate())>=0 :
-                    if allok :
-                        read=biliDanmuAuto.getnownumber(d3,mri2)
-                    else :
-                        read=biliDanmuAuto.getnownumber(d2,mri2)
-                    if read['l']==read['m'] :
-                        now2=now2/2
-                        if now2<1 :
-                            now2=1
-                    else :
-                        bs2=False
-            m=l-g
-            zl=zl+l
-            zm=zm+m
-            zg=zg+g
+                bs2 = True
+                while bs2 and biliTime.equal(biliTime.getDate(da + (now2 + now) * 24 * 3600), biliTime.getNowDate()) >= 0:
+                    if allok:
+                        read = biliDanmuAuto.getnownumber(d3, mri2)
+                    else:
+                        read = biliDanmuAuto.getnownumber(d2, mri2)
+                    if read['l'] == read['m']:
+                        now2 = now2 / 2
+                        if now2 < 1:
+                            now2 = 1
+                    else:
+                        bs2 = False
+            m = l - g
+            zl = zl + l
+            zm = zm + m
+            zg = zg + g
             if ns:
-                print(lan['OUTPUT13'].replace('<number>',f"{l}({zl})"))#获取了<number>条弹幕。
-            if xml==1 and ns:
-                print(lan['OUTPUT14'].replace('<number>',f"{g}({zg})"))#过滤了<number>条弹幕。
-                print(lan['OUTPUT15'].replace('<number>',f"{m}({zm})"))#实际输出了<number>条弹幕。
-            if t2==0 or t1-t2<2 :
+                print(lan['OUTPUT13'].replace('<number>', f"{l}({zl})"))  # 获取了<number>条弹幕。
+            if xml == 1 and ns:
+                print(lan['OUTPUT14'].replace('<number>', f"{g}({zg})"))  # 过滤了<number>条弹幕。
+                print(lan['OUTPUT15'].replace('<number>', f"{m}({zm})"))  # 实际输出了<number>条弹幕。
+            if t2 == 0 or t1 - t2 < 2:
                 time.sleep(2)
-            t2=t1
+            t2 = t1
             if not at2:
-                da=da+at*3600*24
+                da = da + at * 3600 * 24
             elif fir:
-                fir=False
-            else :
-                da=da+now*3600*24
-                now=now2
-            mri=mri2
+                fir = False
+            else:
+                da = da + now * 3600 * 24
+                now = now2
+            mri = mri2
         if not allok:
             if ns:
-                print(lan['OUTPUT16'])#开始处理最新的弹幕……
-            l=0
-            g=0
-            for i in d2['list'] :
-                if int(mri)<int(i['ri']) :
-                    l=l+1
-                    if xml==2 :
-                        try :
+                print(lan['OUTPUT16'])  # 开始处理最新的弹幕……
+            l = 0  # noqa: E741
+            g = 0
+            for i in d2['list']:
+                if int(mri) < int(i['ri']):
+                    l = l + 1  # noqa: E741
+                    if xml == 2:
+                        try:
                             f2.write(biliDanmuCreate.objtoxml(i))
-                        except :
+                        except:
                             if log:
                                 logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error9")
-                            print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                            print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                             return -3
-                    elif xml==1 :
-                        read=biliDanmuXmlFilter.Filter(i,xmlc)
-                        if read :
-                            g=g+1
-                        else :
-                            try :
+                    elif xml == 1:
+                        read = biliDanmuXmlFilter.Filter(i, xmlc)
+                        if read:
+                            g = g + 1
+                        else:
+                            try:
                                 f2.write(biliDanmuCreate.objtoxml(i))
-                            except :
+                            except:
                                 if log:
                                     logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error10")
-                                print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                                print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                                 return -3
-            try :
+            try:
                 f2.write('</i>')
                 f2.close()
-            except :
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error11")
-                print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
+                print(lan['ERROR2'].replace('<filename>', filen2))  # 写入到文件"<filename>"时失败！
                 return -3
-            m=l-g
-            zl=zl+l
-            zg=zg+g
-            zm=zm+m
+            m = l - g
+            zl = zl + l
+            zg = zg + g
+            zm = zm + m
             if ns:
-                print(lan['OUTPUT17'].replace('<number>',str(l)))#在最新弹幕中获取新弹幕<number>条。
-            if xml==1 and ns :
-                print(lan['OUTPUT14'].replace('<number>',str(g)))#过滤了<number>条弹幕。
-                print(lan['OUTPUT15'].replace('<number>',str(m)))#实际输出了<number>条弹幕。
+                print(lan['OUTPUT17'].replace('<number>', str(l)))  # 在最新弹幕中获取新弹幕<number>条。
+            if xml == 1 and ns:
+                print(lan['OUTPUT14'].replace('<number>', str(g)))  # 过滤了<number>条弹幕。
+                print(lan['OUTPUT15'].replace('<number>', str(m)))  # 实际输出了<number>条弹幕。
             if ns:
-                print(lan['OUTPUT18'].replace('<number>',str(zl)))#总共获取了<number>条弹幕
-            if xml==1 and ns:
-                print(lan['OUTPUT3'].replace('<number>',str(zg)))#共计过滤<number>条弹幕。
-                print(lan['OUTPUT4'].replace('<number>',str(zm)))#实际输出<number>条弹幕。
-        else :
-            if xml==2 :
-                try :
+                print(lan['OUTPUT18'].replace('<number>', str(zl)))  # 总共获取了<number>条弹幕
+            if xml == 1 and ns:
+                print(lan['OUTPUT3'].replace('<number>', str(zg)))  # 共计过滤<number>条弹幕。
+                print(lan['OUTPUT4'].replace('<number>', str(zm)))  # 实际输出<number>条弹幕。
+        else:
+            if xml == 2:
+                try:
                     f2.write(d2)
                     f2.close()
-                except :
+                except:
                     if log:
                         logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error12")
-                    print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                    print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                     return -3
-            if xml==1 :
-                z=len(d3['list'])
-                g=0
-                for i in d3['list'] :
-                    read=biliDanmuXmlFilter.Filter(i,xmlc)
-                    if read :
-                        g=g+1
-                    else :
-                        try :
+            if xml == 1:
+                z = len(d3['list'])
+                g = 0
+                for i in d3['list']:
+                    read = biliDanmuXmlFilter.Filter(i, xmlc)
+                    if read:
+                        g = g + 1
+                    else:
+                        try:
                             f2.write(biliDanmuCreate.objtoxml(i))
-                        except :
+                        except:
                             if log:
                                 logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error13")
-                            print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                            print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                             return -3
-                try :
+                try:
                     f2.close()
-                except :
+                except:
                     if log:
                         logg.write(format_exc(), currentframe(), "Normal Video All Barrage Error14")
-                    print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                    print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                     return -3
-                m=z-g
+                m = z - g
                 if ns:
-                    print(lan['OUTPUT13'].replace('<number>',str(z)))#获取了<number>条弹幕。
-                    print(lan['OUTPUT14'].replace('<number>',str(g)))#过滤了<number>条弹幕。
-                    print(lan['OUTPUT15'].replace('<number>',str(m)))#实际输出了<number>条弹幕。
+                    print(lan['OUTPUT13'].replace('<number>', str(z)))  # 获取了<number>条弹幕。
+                    print(lan['OUTPUT14'].replace('<number>', str(g)))  # 过滤了<number>条弹幕。
+                    print(lan['OUTPUT15'].replace('<number>', str(m)))  # 实际输出了<number>条弹幕。
         if oll:
             oll.add(filen)
         return 0
-    elif t=='ss' :
-        bs=True
-        at2=False
-        if not che :
-            pubt=data['mediaInfo']['time'][0:10]
-        else :
-            pubt=biliTime.tostr2(c['time'])[0:10]
-        fi=True
-        jt=False
-        if getset(se,'jt')==True :
-            jt=True
-        if 'jts' in ip :
-            pubt=ip['jts']
-        while bs :
+    elif t == 'ss':
+        bs = True
+        at2 = False
+        if not che:
+            pubt = data['mediaInfo']['time'][0:10]
+        else:
+            pubt = biliTime.tostr2(c['time'])[0:10]
+        fi = True
+        jt = False
+        if getset(se, 'jt') is True:
+            jt = True
+        if 'jts' in ip:
+            pubt = ip['jts']
+        while bs:
             if fi and 'jt' in ip:
-                fi=False
-                at=ip['jt']
-            elif jt :
-                at='a'
+                fi = False
+                at = ip['jt']
+            elif jt:
+                at = 'a'
             elif ns:
-                at=input(lan['INPUT5'].replace('<value>','1-365').replace('<date>',str(pubt)))#请输入两次抓取之间的天数（有效值为<value>，输入a会启用自动模式（推荐），输入b可手动输入开始抓取的日期，日期目前为<date>）：
-            else :
-                print(lan['ERROR7'])#请使用"--jt <number>|a|b"来设置两次抓取之间的天数
+                at = input(lan['INPUT5'].replace('<value>', '1-365').replace('<date>', str(pubt)))  # 请输入两次抓取之间的天数（有效值为<value>，输入a会启用自动模式（推荐），输入b可手动输入开始抓取的日期，日期目前为<date>）：
+            else:
+                print(lan['ERROR7'])  # 请使用"--jt <number>|a|b"来设置两次抓取之间的天数
                 return -1
-            if at.isnumeric() and int(at)<=365 and int(at)>=1 :
-                at=int(at)
-                bs=False
-            elif len(at)>0 and at[0].lower()=='a' :
-                at2=True
-                at=1
-                bs=False
-            elif len(at)>0 and at[0].lower()=='b' :
+            if at.isnumeric() and int(at) <= 365 and int(at) >= 1:
+                at = int(at)
+                bs = False
+            elif len(at) > 0 and at[0].lower() == 'a':
+                at2 = True
+                at = 1
+                bs = False
+            elif len(at) > 0 and at[0].lower() == 'b':
                 if not ns:
-                    print(lan['ERROR8'])#请使用"--jts <date>"来修改抓取开始时间。
+                    print(lan['ERROR8'])  # 请使用"--jts <date>"来修改抓取开始时间。
                     return -1
-                at3=input(lan['INPUT6'])#请输入日期（格式为年-月-日，例如1989-02-25）：
-                if len(at3)>0 :
-                    if biliTime.checktime(at3) :
-                        pubt=time.strftime('%Y-%m-%d',time.strptime(at3,'%Y-%m-%d'))
-                    else :
-                        print(lan['ERROR9'])#输入格式有误或者该日期不存在。
-        pubt=biliTime.mkt(time.strptime(pubt,'%Y-%m-%d'))
-        da=int(pubt)
-        pat=o+file.filtern('%s(SS%s)' % (data['mediaInfo']['title'],data['mediaInfo']['ssId']))
+                at3 = input(lan['INPUT6'])  # 请输入日期（格式为年-月-日，例如1989-02-25）：
+                if len(at3) > 0:
+                    if biliTime.checktime(at3):
+                        pubt = time.strftime('%Y-%m-%d', time.strptime(at3, '%Y-%m-%d'))
+                    else:
+                        print(lan['ERROR9'])  # 输入格式有误或者该日期不存在。
+        pubt = biliTime.mkt(time.strptime(pubt, '%Y-%m-%d'))
+        da = int(pubt)
+        pat = o + file.filtern('%s(SS%s)' % (data['mediaInfo']['title'], data['mediaInfo']['ssId']))
         if log:
             logg.write(f"da = {da}\npat = {pat}", currentframe(), "Bangumi Video All Barrage Var")
-        try :
-            if not exists(pat) :
+        try:
+            if not exists(pat):
                 mkdir(pat)
-        except :
+        except:
             if log:
                 logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Mkdir Failed")
-            print(lan['ERROR3'].replace('<dirname>',pat))#创建文件夹<dirname>失败。
+            print(lan['ERROR3'].replace('<dirname>', pat))  # 创建文件夹<dirname>失败。
             return -1
-        if c['s']=='e' :
-            if fin :
-                filen='%s/%s' %(pat,file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
-            else :
-                filen='%s/%s'%(pat,file.filtern(f"{c['i']+1}.{c['longTitle']}.xml"))
-        else :
+        if c['s'] == 'e':
             if fin:
-                filen='%s/%s' %(pat,file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' %(c['title'],c['i']+1,c['longTitle'],c['titleFormat'],c['aid'],c['bvid'],c['id'],c['cid'])))
-            else :
-                filen='%s/%s'%(pat,file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
+                filen = '%s/%s' % (pat, file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid'])))
+            else:
+                filen = '%s/%s' % (pat, file.filtern(f"{c['i']+1}.{c['longTitle']}.xml"))
+        else:
+            if fin:
+                filen = '%s/%s' % (pat, file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['title'], c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid'])))
+            else:
+                filen = '%s/%s' % (pat, file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
         if log:
             logg.write(f"filen = {filen}", currentframe(), "Bangumi Video All Barrage Var2")
-        if exists(filen) :
-            fg=False
-            bs=True
+        if exists(filen):
+            fg = False
+            bs = True
             if not ns:
-                fg=True
-                bs=False
+                fg = True
+                bs = False
             if 'y' in se:
                 fg = se['y']
                 bs = False
             if 'y' in ip:
                 fg = ip['y']
                 bs = False
-            while bs :
-                inp=input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")#文件"<filename>"已存在，是否覆盖？
-                if inp[0].lower()=='y' :
-                    bs=False
-                    fg=True
-                elif inp[0].lower()=='n' :
-                    bs=False
-            if fg :
-                try :
+            while bs:
+                inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")  # 文件"<filename>"已存在，是否覆盖？
+                if inp[0].lower() == 'y':
+                    bs = False
+                    fg = True
+                elif inp[0].lower() == 'n':
+                    bs = False
+            if fg:
+                try:
                     remove(filen)
-                except :
+                except:
                     if log:
                         logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Remove File Failed")
-                    print(lan['ERROR4'])#删除原有文件失败，跳过下载
+                    print(lan['ERROR4'])  # 删除原有文件失败，跳过下载
                     return -2
-            else :
+            else:
                 return -2
-        zl=0
-        zg=0
-        zm=0
-        now=1
-        now2=now
+        zl = 0
+        zg = 0
+        zm = 0
+        now = 1
+        now2 = now
         if ns:
-            print(lan['OUTPUT5'])#正在抓取最新弹幕……
+            print(lan['OUTPUT5'])  # 正在抓取最新弹幕……
         d2 = biliDanmuDown.downloadn(c['cid'], r, logg)
-        if d2==-1 :
+        if d2 == -1:
             if log:
                 logg.write(f"d2 = {d2}", currentframe(), "Bangumi Video All Barrage Var3")
-            print(lan['ERROR1'])#网络错误！
+            print(lan['ERROR1'])  # 网络错误！
             return -1
         filen2 = f"Temp/a_{c['cid']}.xml"
-        if exists(filen2) :
+        if exists(filen2):
             remove(filen2)
-        try :
-            f=open(filen2,mode='w',encoding='utf8')
+        try:
+            f = open(filen2, mode='w', encoding='utf8')
             f.write(d2)
             f.close()
-        except :
+        except:
             if log:
                 logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error")
-            print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
+            print(lan['ERROR2'].replace('<filename>', filen2))  # 写入到文件"<filename>"时失败！
             return -3
-        d3=biliDanmuXmlParser.loadXML(filen2)
+        d3 = biliDanmuXmlParser.loadXML(filen2)
         remove(filen2)
-        ma=int(d3['maxlimit'])
+        ma = int(d3['maxlimit'])
         if log:
             logg.write(f"ma = {ma}", currentframe(), "Bangumi Video All Barrage Var4")
-        allok=False
+        allok = False
         if not dwa and len(d3['list']) < ma - 10:
-            bs=True
+            bs = True
             if not ns:
-                bs=False
-            while bs :
-                sts=input(f"{lan['INPUT3'].replace('<number>',str(len(d3['list']))).replace('<limit>',str(ma))}(y/n)")
-                if len(sts)>0 :
-                    if sts[0].lower()=='y' :
-                        bs=False
-                    elif sts[0].lower()=='n' :
-                        allok=True
-                        bs=False
+                bs = False
+            while bs:
+                sts = input(f"{lan['INPUT3'].replace('<number>',str(len(d3['list']))).replace('<limit>',str(ma))}(y/n)")
+                if len(sts) > 0:
+                    if sts[0].lower() == 'y':
+                        bs = False
+                    elif sts[0].lower() == 'n':
+                        allok = True
+                        bs = False
         if log:
             logg.write(f"allok = {allok}", currentframe(), "Bangumi Video All Barrage Var5")
-        if not allok :
-            d2=d3
+        if not allok:
+            d2 = d3
             if ns:
-                print(lan['OUTPUT6'].replace('<number>',str(len(d2['list']))))#抓取到<number>条弹幕，最新弹幕将在最后处理
-        try :
-            f2=open(filen,mode='w',encoding='utf8')
-        except :
+                print(lan['OUTPUT6'].replace('<number>', str(len(d2['list']))))  # 抓取到<number>条弹幕，最新弹幕将在最后处理
+        try:
+            f2 = open(filen, mode='w', encoding='utf8')
+        except:
             if log:
                 logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error2")
-            print(lan['ERROR5'].replace('<filename>',filen))#打开文件"<filename>"失败
+            print(lan['ERROR5'].replace('<filename>', filen))  # 打开文件"<filename>"失败
             return -3
-        if not allok :
-            try :
+        if not allok:
+            try:
                 f2.write('<?xml version="1.0" encoding="UTF-8"?>')
-                f2.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d2['chatserver'],d2['chatid'],d2['mission'],d2['maxlimit'],d2['state'],d2['real_name'],d2['source']))
-            except :
+                f2.write('<i><chatserver>%s</chatserver><chatid>%s</chatid><mission>%s</mission><maxlimit>%s</maxlimit><state>%s</state><real_name>%s</real_name><source>%s</source>' % (d2['chatserver'], d2['chatid'], d2['mission'], d2['maxlimit'], d2['state'], d2['real_name'], d2['source']))
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error3")
-                print(lan['ERROR6'].replace('<filename>',filen))#保存文件失败
+                print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
                 return -3
-        mri=0
-        mri2=0
-        t1=0
-        t2=0
-        tem={}
-        fir=True
-        while not allok and biliTime.equal(biliTime.getDate(da),biliTime.getNowDate())<0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da+now*24*3600),biliTime.getNowDate())<0)) :
-            t1=time.time()
+        mri = 0
+        mri2 = 0
+        t1 = 0
+        t2 = 0
+        tem = {}
+        fir = True
+        while not allok and biliTime.equal(biliTime.getDate(da), biliTime.getNowDate()) < 0 and ((not at2) or (at2 and biliTime.equal(biliTime.getDate(da + now * 24 * 3600), biliTime.getNowDate()) < 0)):
+            t1 = time.time()
             if log:
                 logg.write(f"mri = {mri}\nmri2 = {mri2}\nt1 = {t1}\nt2 = {t2}\ntem.keys() = {tem.keys()}\nfir = {fir}\nda = {da}\nnow = {now}\nnow2 = {now2}", currentframe(), "Normal Video All Barrage Var6")
-            if (not at2) or fir :
+            if (not at2) or fir:
                 if ns:
-                    print(lan['OUTPUT7'].replace('<date>',biliTime.tostr(biliTime.getDate(da))))#正在抓取<date>的弹幕……
-                bs=True
-                ts=300
-                rec=0
-                while bs :
+                    print(lan['OUTPUT7'].replace('<date>', biliTime.tostr(biliTime.getDate(da))))  # 正在抓取<date>的弹幕……
+                bs = True
+                ts = 300
+                rec = 0
+                while bs:
                     read = downloadh(filen2, r, c['cid'], da, logg)
-                    if read==-1 :
+                    if read == -1:
                         if log:
                             logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var7")
                         return -3
-                    elif read==-3:
-                        rec=rec+1
+                    elif read == -3:
+                        rec = rec + 1
                         if log:
                             logg.write(f"read = {read}\nrec = {rec}", currentframe(), "Normal Video All Barrage Var8")
-                        if rec%5!=0 :
+                        if rec % 5 != 0:
                             time.sleep(5)
-                            print(lan['OUTPUT8'].replace('<number>',str(rec)))#正在进行第<number>次重连
-                        else :
-                            bss=True
+                            print(lan['OUTPUT8'].replace('<number>', str(rec)))  # 正在进行第<number>次重连
+                        else:
+                            bss = True
                             while bss:
-                                inn=input(f"{lan['INPUT4'].replace('<number>',str(rec))}(y/n)")#是否重连？（已经失败<number>次）
-                                if len(inn)>0 and inn[0].lower()=='y' :
+                                inn = input(f"{lan['INPUT4'].replace('<number>',str(rec))}(y/n)")  # 是否重连？（已经失败<number>次）
+                                if len(inn) > 0 and inn[0].lower() == 'y':
                                     time.sleep(5)
-                                    print(lan['OUTPUT8'].replace('<number>',str(rec)))#正在进行第<number>次重连
-                                elif len(inn)>0 and inn[0].lower()=='n' :
+                                    print(lan['OUTPUT8'].replace('<number>', str(rec)))  # 正在进行第<number>次重连
+                                elif len(inn) > 0 and inn[0].lower() == 'n':
                                     sys.exit(-1)
-                    elif 'status' in read and read['status']==-2 :
+                    elif 'status' in read and read['status'] == -2:
                         if log:
                             logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var9")
-                        obj=json.loads(read['d'])
-                        if obj['code']==-101 :
-                            if obj['message']=='账户未登录' :
-                                ud={}
+                        obj = json.loads(read['d'])
+                        if obj['code'] == -101:
+                            if obj['message'] == '账户未登录':
+                                ud = {}
                                 read = biliLogin.login(r, ud, ip, logg)
                                 if log:
                                     logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var10")
-                                if read>1 :
+                                if read > 1:
                                     return -1
-                            else :
+                            else:
                                 print(obj)
-                                print(lan['OUTPUT9'].replace('<number>',str(ts)))#休眠<number>s
+                                print(lan['OUTPUT9'].replace('<number>', str(ts)))  # 休眠<number>s
                                 time.sleep(ts)
-                                ts=ts+300
-                        else :
+                                ts = ts + 300
+                        else:
                             print(obj)
-                            print(lan['OUTPUT9'].replace('<number>',str(ts)))#休眠<number>s
+                            print(lan['OUTPUT9'].replace('<number>', str(ts)))  # 休眠<number>s
                             time.sleep(ts)
-                            ts=ts+300
-                    else :
-                        bs=False
-                d=read
-                l=0
-                g=0
+                            ts = ts + 300
+                    else:
+                        bs = False
+                d = read
+                l = 0  # noqa: E741
+                g = 0
                 if ns:
-                    print(lan['OUTPUT10'])#正在处理弹幕……
-                for i in d['list'] :
-                    if mri2<int(i['ri']) :
-                        mri2=int(i['ri'])
-                    if mri<int(i['ri']) :
-                        l=l+1
-                        if xml==2 :
-                            try :
+                    print(lan['OUTPUT10'])  # 正在处理弹幕……
+                for i in d['list']:
+                    if mri2 < int(i['ri']):
+                        mri2 = int(i['ri'])
+                    if mri < int(i['ri']):
+                        l = l + 1  # noqa: E741
+                        if xml == 2:
+                            try:
                                 f2.write(biliDanmuCreate.objtoxml(i))
-                            except :
+                            except:
                                 if log:
                                     logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error4")
-                                print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                                print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                                 return -3
-                        elif xml==1 :
-                            read=biliDanmuXmlFilter.Filter(i,xmlc)
-                            if read :
-                                g=g+1
-                            else :
-                                try :
+                        elif xml == 1:
+                            read = biliDanmuXmlFilter.Filter(i, xmlc)
+                            if read:
+                                g = g + 1
+                            else:
+                                try:
                                     f2.write(biliDanmuCreate.objtoxml(i))
-                                except :
+                                except:
                                     if log:
                                         logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error5")
-                                    print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                                    print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                                     return -3
-            else :
-                rr=False
-                rr2=False
-                if biliTime.tostr(biliTime.getDate(da+now*24*3600)) in tem :
+            else:
+                rr = False
+                rr2 = False
+                if biliTime.tostr(biliTime.getDate(da + now * 24 * 3600)) in tem:
                     if ns:
-                        print(lan['OUTPUT11'].replace('<date>',biliTime.tostr(biliTime.getDate(da+now*24*3600))))#从内存中获取了<date>的弹幕。
-                    read=biliDanmuAuto.reload(tem.pop(biliTime.tostr(biliTime.getDate(da+now*24*3600))),mri,ns)
-                    rr=True
-                    if read['z']==read['l'] and read['z']>ma-10 and now>1 :
-                        rr2=True
+                        print(lan['OUTPUT11'].replace('<date>', biliTime.tostr(biliTime.getDate(da + now * 24 * 3600))))  # 从内存中获取了<date>的弹幕。
+                    read = biliDanmuAuto.reload(tem.pop(biliTime.tostr(biliTime.getDate(da + now * 24 * 3600))), mri, ns)
+                    rr = True
+                    if read['z'] == read['l'] and read['z'] > ma - 10 and now > 1:
+                        rr2 = True
                 if log:
                     logg.write(f"rr = {rr}\nrr2 = {rr2}", currentframe(), "Normal Video All Barrage Var11")
-                if (not rr) or (rr and rr2) :
-                    if (not rr) :
-                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,c['cid'],mri,ip)
-                        if read==-1 :
+                if (not rr) or (rr and rr2):
+                    if (not rr):
+                        read = biliDanmuAuto.getMembers(filen2, r, da + now * 24 * 3600, c['cid'], mri, ip)
+                        if read == -1:
                             if log:
                                 logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var12")
                             return -3
-                    while read['z']==read['l'] and read['z']>ma-10 and now>1 :
-                        #if ns:
-                            #print('尝试抓取了%s的弹幕，获取到%s条有效弹幕，未防止遗漏，间隔时间减半' % (biliTime.tostr(biliTime.getDate(da+now*24*3600)),read['l']))
-                        tem[biliTime.tostr(biliTime.getDate(da+now*24*3600))]=read
-                        now=now/2
-                        if now<1 :
-                            now=1
-                        read=biliDanmuAuto.getMembers(filen2,r,da+now*24*3600,c['cid'],mri,ip)
-                        if read==-1 :
+                    while read['z'] == read['l'] and read['z'] > ma - 10 and now > 1:
+                        # if ns:
+                        # print('尝试抓取了%s的弹幕，获取到%s条有效弹幕，未防止遗漏，间隔时间减半' % (biliTime.tostr(biliTime.getDate(da+now*24*3600)),read['l']))
+                        tem[biliTime.tostr(biliTime.getDate(da + now * 24 * 3600))] = read
+                        now = now / 2
+                        if now < 1:
+                            now = 1
+                        read = biliDanmuAuto.getMembers(filen2, r, da + now * 24 * 3600, c['cid'], mri, ip)
+                        if read == -1:
                             if log:
                                 logg.write(f"read = {read}", currentframe(), "Normal Video All Barrage Var13")
                             return -3
-                        now2=now
-                    if read['l']<ma*0.5 :
-                        now2=now*2
-                        if now2>365 :
-                            now2=365
-                l=read['l']
-                g=0
-                mri2=read['m']
+                        now2 = now
+                    if read['l'] < ma * 0.5:
+                        now2 = now * 2
+                        if now2 > 365:
+                            now2 = 365
+                l = read['l']  # noqa: E741
+                g = 0
+                mri2 = read['m']
                 if ns:
-                    print(lan['OUTPUT12'])#正在处理……
-                for i in read['d']['list'] :
-                    if xml==2 :
-                        try :
+                    print(lan['OUTPUT12'])  # 正在处理……
+                for i in read['d']['list']:
+                    if xml == 2:
+                        try:
                             f2.write(biliDanmuCreate.objtoxml(i))
-                        except :
+                        except:
                             if log:
                                 logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error6")
-                            print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                            print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                             return -3
-                    elif xml==1:
-                        read=biliDanmuXmlFilter.Filter(i,xmlc)
-                        if read :
-                            g=g+1
-                        else :
-                            try :
+                    elif xml == 1:
+                        read = biliDanmuXmlFilter.Filter(i, xmlc)
+                        if read:
+                            g = g + 1
+                        else:
+                            try:
                                 f2.write(biliDanmuCreate.objtoxml(i))
-                            except :
+                            except:
                                 if log:
                                     logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error7")
-                                print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
+                                print(lan['ERROR2'].replace('<filename>', filen2))  # 写入到文件"<filename>"时失败！
                                 return -3
-                bs2=True
-                while bs2 and biliTime.equal(biliTime.getDate(da+(now2+now)*24*3600),biliTime.getNowDate())>=0 :
-                    if allok :
-                        read=biliDanmuAuto.getnownumber(d3,mri2)
-                    else :
-                        read=biliDanmuAuto.getnownumber(d2,mri2)
-                    if read['l']==read['m'] :
-                        now2=now2/2
-                        if now2<1 :
-                            now2=1
-                    else :
-                        bs2=False
-            m=l-g
-            zl=zl+l
-            zm=zm+m
-            zg=zg+g
+                bs2 = True
+                while bs2 and biliTime.equal(biliTime.getDate(da + (now2 + now) * 24 * 3600), biliTime.getNowDate()) >= 0:
+                    if allok:
+                        read = biliDanmuAuto.getnownumber(d3, mri2)
+                    else:
+                        read = biliDanmuAuto.getnownumber(d2, mri2)
+                    if read['l'] == read['m']:
+                        now2 = now2 / 2
+                        if now2 < 1:
+                            now2 = 1
+                    else:
+                        bs2 = False
+            m = l - g
+            zl = zl + l
+            zm = zm + m
+            zg = zg + g
             if ns:
-                print(lan['OUTPUT13'].replace('<number>',f"{l}({zl})"))#获取了<number>条弹幕。
-            if xml==1 and ns:
-                print(lan['OUTPUT14'].replace('<number>',f"{g}({zg})"))#过滤了<number>条弹幕。
-                print(lan['OUTPUT15'].replace('<number>',f"{m}({zm})"))#实际输出了<number>条弹幕。
-            if t2==0 or t1-t2<2 :
+                print(lan['OUTPUT13'].replace('<number>', f"{l}({zl})"))  # 获取了<number>条弹幕。
+            if xml == 1 and ns:
+                print(lan['OUTPUT14'].replace('<number>', f"{g}({zg})"))  # 过滤了<number>条弹幕。
+                print(lan['OUTPUT15'].replace('<number>', f"{m}({zm})"))  # 实际输出了<number>条弹幕。
+            if t2 == 0 or t1 - t2 < 2:
                 time.sleep(2)
-            t2=t1
+            t2 = t1
             if not at2:
-                da=da+at*3600*24
+                da = da + at * 3600 * 24
             elif fir:
-                fir=False
-            else :
-                da=da+now*3600*24
-                now=now2
-            mri=mri2
+                fir = False
+            else:
+                da = da + now * 3600 * 24
+                now = now2
+            mri = mri2
         if not allok:
             if ns:
-                print(lan['OUTPUT16'])#开始处理最新的弹幕……
-            l=0
-            g=0
-            for i in d2['list'] :
-                if int(mri)<int(i['ri']) :
-                    l=l+1
-                    if xml==2 :
-                        try :
+                print(lan['OUTPUT16'])  # 开始处理最新的弹幕……
+            l = 0  # noqa: E741
+            g = 0
+            for i in d2['list']:
+                if int(mri) < int(i['ri']):
+                    l = l + 1  # noqa: E741
+                    if xml == 2:
+                        try:
                             f2.write(biliDanmuCreate.objtoxml(i))
-                        except :
+                        except:
                             if log:
                                 logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error8")
-                            print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                            print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                             return -3
-                    elif xml==1 :
-                        read=biliDanmuXmlFilter.Filter(i,xmlc)
-                        if read :
-                            g=g+1
-                        else :
-                            try :
+                    elif xml == 1:
+                        read = biliDanmuXmlFilter.Filter(i, xmlc)
+                        if read:
+                            g = g + 1
+                        else:
+                            try:
                                 f2.write(biliDanmuCreate.objtoxml(i))
-                            except :
+                            except:
                                 if log:
                                     logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error9")
-                                print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                                print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                                 return -3
-            try :
+            try:
                 f2.write('</i>')
                 f2.close()
-            except :
+            except:
                 if log:
                     logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error10")
-                print(lan['ERROR2'].replace('<filename>',filen2))#写入到文件"<filename>"时失败！
+                print(lan['ERROR2'].replace('<filename>', filen2))  # 写入到文件"<filename>"时失败！
                 return -3
-            m=l-g
-            zl=zl+l
-            zg=zg+g
-            zm=zm+m
+            m = l - g
+            zl = zl + l
+            zg = zg + g
+            zm = zm + m
             if ns:
-                print(lan['OUTPUT17'].replace('<number>',str(l)))#在最新弹幕中获取新弹幕<number>条。
-            if xml==1 and ns:
-                print(lan['OUTPUT14'].replace('<number>',str(g)))#过滤了<number>条弹幕。
-                print(lan['OUTPUT15'].replace('<number>',str(m)))#实际输出了<number>条弹幕。
+                print(lan['OUTPUT17'].replace('<number>', str(l)))  # 在最新弹幕中获取新弹幕<number>条。
+            if xml == 1 and ns:
+                print(lan['OUTPUT14'].replace('<number>', str(g)))  # 过滤了<number>条弹幕。
+                print(lan['OUTPUT15'].replace('<number>', str(m)))  # 实际输出了<number>条弹幕。
             if ns:
-                print(lan['OUTPUT18'].replace('<number>',str(zl)))#总共获取了<number>条弹幕
-            if xml==1 and ns:
-                print(lan['OUTPUT3'].replace('<number>',str(zg)))#共计过滤<number>条弹幕。
-                print(lan['OUTPUT4'].replace('<number>',str(zm)))#实际输出<number>条弹幕。
-        else :
-            if xml==2 :
-                try :
+                print(lan['OUTPUT18'].replace('<number>', str(zl)))  # 总共获取了<number>条弹幕
+            if xml == 1 and ns:
+                print(lan['OUTPUT3'].replace('<number>', str(zg)))  # 共计过滤<number>条弹幕。
+                print(lan['OUTPUT4'].replace('<number>', str(zm)))  # 实际输出<number>条弹幕。
+        else:
+            if xml == 2:
+                try:
                     f2.write(d2)
                     f2.close()
-                except :
+                except:
                     if log:
                         logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error11")
-                    print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                    print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                     return -3
-            if xml==1 :
-                z=len(d3['list'])
-                g=0
-                for i in d3['list'] :
-                    read=biliDanmuXmlFilter.Filter(i,xmlc)
-                    if read :
-                        g=g+1
-                    else :
-                        try :
+            if xml == 1:
+                z = len(d3['list'])
+                g = 0
+                for i in d3['list']:
+                    read = biliDanmuXmlFilter.Filter(i, xmlc)
+                    if read:
+                        g = g + 1
+                    else:
+                        try:
                             f2.write(biliDanmuCreate.objtoxml(i))
-                        except :
+                        except:
                             if log:
                                 logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error12")
-                            print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                            print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                             return -3
-                try :
+                try:
                     f2.close()
-                except :
+                except:
                     if log:
                         logg.write(format_exc(), currentframe(), "Bangumi Video All Barrage Error13")
-                    print(lan['ERROR2'].replace('<filename>',filen))#写入到文件"<filename>"时失败！
+                    print(lan['ERROR2'].replace('<filename>', filen))  # 写入到文件"<filename>"时失败！
                     return -3
-                m=z-g
+                m = z - g
                 if ns:
-                    print(lan['OUTPUT13'].replace('<number>',str(z)))#获取了<number>条弹幕。
-                    print(lan['OUTPUT14'].replace('<number>',str(g)))#过滤了<number>条弹幕。
-                    print(lan['OUTPUT15'].replace('<number>',str(m)))#实际输出了<number>条弹幕。
+                    print(lan['OUTPUT13'].replace('<number>', str(z)))  # 获取了<number>条弹幕。
+                    print(lan['OUTPUT14'].replace('<number>', str(g)))  # 过滤了<number>条弹幕。
+                    print(lan['OUTPUT15'].replace('<number>', str(m)))  # 实际输出了<number>条弹幕。
         if oll:
             oll.add(filen)
         return 0

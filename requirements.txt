@@ -6,3 +6,4 @@ requests>=2.25.1
 rsa>=4.6
 selenium>=3.141.0
 web.py>=0.62
+qrcode>=6.1

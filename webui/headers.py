@@ -60,7 +60,7 @@ def getacceptlanguage(s: str) -> AcceptLanguage:
     t = s.strip()
     if t == "*":
         return None
-    l = t.split(',')
+    l = t.split(',')  # noqa: E741
     tem = []
     for i in l:
         i = i.strip()

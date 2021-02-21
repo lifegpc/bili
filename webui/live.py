@@ -27,7 +27,7 @@ class live:
     "反代B站视频资源"
 
     def GET(self, t):
-        if not 'dclive' in se or se['dclive']:
+        if 'dclive' not in se or se['dclive']:
             h = web.cookies().get('section')
             if logincheck2(h):
                 return '403 Forbidden'

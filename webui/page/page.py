@@ -50,7 +50,7 @@ class page:
             if re is None:
                 re = search(r"[^:]+://", t)
                 if re is None:
-                    t = "https://"+t
+                    t = "https://" + t
                 try:
                     ses = requests.Session()
                     ses.trust_env = False

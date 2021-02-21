@@ -13,9 +13,8 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from os.path import abspath, exists, isfile, split
+from os.path import abspath, exists, isfile
 from platform import system
-from os import system as syst
 from inspect import currentframe
 if system() == "Windows":
     from win32com.shell import shell  # pylint: disable=import-error no-name-in-module

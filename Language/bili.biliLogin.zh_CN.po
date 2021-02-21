@@ -66,3 +66,19 @@ msgstr "服务繁忙，尝试使用V3接口登录。"
 msgctxt "ERROR7"
 msgid "Please press Enter to retry."
 msgstr "请按回车键重试。"
+
+msgctxt "OUTPUT3"
+msgid "The QR Code image is saved at \"<path>\"."
+msgstr "二维码图片已保存至\"<path>\"。"
+
+msgctxt "OUTPUT4"
+msgid "The QR Code is expired. Press any key to generate a new one."
+msgstr "二维码已过期。请按任意键重新生成。"
+
+msgctxt "WARN1"
+msgid "This login method now have bugs, some contents may not available."
+msgstr "这种登录方式目前有BUG，部分内容可能不可用。"
+
+msgctxt "QRCODE"
+msgid "(If you don't input anything, the program will use QR code to login.)"
+msgstr "（如果不输入内容，出现会使用二维码登录。）"
