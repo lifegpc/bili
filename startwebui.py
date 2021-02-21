@@ -16,7 +16,6 @@
 import web
 from cheroot.server import HTTPServer
 from cheroot.ssl.builtin import BuiltinSSLAdapter
-import os
 import webui
 from webui import gopt, loadset, pa, gettemplate, server_ver
 import sys

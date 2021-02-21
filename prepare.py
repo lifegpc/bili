@@ -52,13 +52,13 @@ def gopt(args: List[str]):
     for i in rr:
         if i[0] == '-h' or i[0] == '-?' or i[0] == '--help':
             h = True
-        if i[0] == '--lan' and not 'lan' in r and (i[1] == 'null' or i[1] in lan):
+        if i[0] == '--lan' and 'lan' not in r and (i[1] == 'null' or i[1] in lan):
             r['lan'] = i[1]
         if i[0] == '-u':
             r['u'] = True
         if i[0] == '-c':
             r['c'] = True
-        if i[0] == '-j' and not 'j' in r:
+        if i[0] == '-j' and 'j' not in r:
             r['j'] = i[1]
     if h:
         global la
