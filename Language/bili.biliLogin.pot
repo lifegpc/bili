@@ -58,3 +58,15 @@ msgstr ""
 msgctxt "ERROR7"
 msgid "Please press Enter to retry."
 msgstr ""
+
+msgctxt "OUTPUT3"
+msgid "The QR Code image is saved at \"<path>\"."
+msgstr ""
+
+msgctxt "OUTPUT4"
+msgid "The QR Code is expired. Press any key to generate a new one."
+msgstr ""
+
+msgctxt "WARN1"
+msgid "This login method now have bugs, some contents may not available."
+msgstr ""

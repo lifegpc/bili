@@ -28,6 +28,13 @@ import sys
 from command import gopt
 from inspect import currentframe
 from json import dumps
+from os.path import exists, abspath
+from os import mkdir, remove
+from random import randint, randrange
+from urllib.parse import quote_plus, parse_qsl, urlsplit
+from qrcode import QRCode, constants as qrconst
+from qrcode.image.svg import SvgImage
+from platform import system
 
 
 lan=None
@@ -62,7 +69,7 @@ def login(r, ud: dict, ip: dict, logg = None):
             logg.write(traceback.format_exc(), currentframe(), "CHROME DRIVER FAILED")
         print(traceback.format_exc())
         print(lan['ERROR1'])#使用ChromeDriver登录发生错误，尝试采用用户名、密码登录
-        read = login2(r, logg)
+        read = loginwithqrcode(r, logg)
         if read==-1 :
             print(lan['ERROR2'])#登录失败！
             return 2
@@ -205,3 +212,121 @@ def dealwithcap(r:requests.Session, uri:str, logg=None):
         if logg is not None:
             logg.write(traceback.format_exc(), currentframe(), "DEAL WITH CAP ERROR2")
         print(traceback.format_exc())
+
+def generateRandomHex(w: int) -> str:
+    i = randrange(0, 16**w)
+    s = hex(i)[2:].upper()
+    return "0" * (w - len(s)) + s
+
+def generateUUID():
+    s = f"{generateRandomHex(8)}-{generateRandomHex(4)}-{generateRandomHex(4)}-{generateRandomHex(4)}-{generateRandomHex(12)}"
+    t = round(time.time() * 1000)
+    s += f"{t%10000:05}infoc"
+    return s
+
+def prepareSession(r: requests.Session):
+    r.cookies.clear()
+    r.cookies.clear_session_cookies()
+    r.headers.update({"referer": "https://passport.bilibili.com/login"})
+    r.get("https://api.bilibili.com/x/web-interface/nav")  # get bfe_id
+    r.get("https://passport.bilibili.com/web/generic/country/list")  # get sid
+    r.cookies.set("finger", str(randint(1e9, 2e9)), path='/', domain="passport.bilibili.com", discard=True)  # 瞎几把指定finger
+    year = 365 * 24 * 3600
+    r.cookies.set("_uuid", generateUUID(), path="/", domain=".bilibili.com", expires=round(time.time() + year), discard=False)  # generate UUID
+    r.get("https://data.bilibili.com/v/web/web_page_view", data={"mid": "null", "fts": "null", "url": quote_plus("https://passport.bilibili.com/login"), "proid": "3", "ptype": "2", "module": "game", "title": "哔哩哔哩弹幕视频网 - ( ゜- ゜)つロ 乾杯~ - bilibili", "ajaxtag": "", "ajaxid": "", "page_ref": ""})  # get buvid3 and buvid2
+    fp = generateRandomHex(32).lower()  # generate fingerprint
+    r.cookies.set("fingerprint", fp, path="/", domain=".bilibili.com", expires=round(time.time() + year), discard=False)
+    re = r.get("https://api.bilibili.com/x/frontend/finger/fpfmc", data={"fp": fp})  # upload fingerprint
+    try:
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']} {re['message']}")
+        else:
+            if "buvid_fp" in re['data'] and re['data']['buvid_fp']:
+                r.cookies.set("buvid_fp", re['data']['buvid_fp'], path="/", domain=".bilibili.com", expires=round(time.time() + year), discard=False)
+            if 'buvid_fp_plain' in re['data'] and re['data']['buvid_fp_plain']:
+                r.cookies.set("buvid_fp_plain", re['data']['buvid_fp_plain'], path="/", domain=".bilibili.com", expires=round(time.time() + year), discard=False)
+    except:
+        pass
+
+def loginwithqrcode(r: requests.Session, logg=None):
+    print(lan['WARN1'])
+    prepareSession(r)
+    year = 365 * 24 * 3600
+    while True:
+        url = "https://passport.bilibili.com/qrcode/getLoginUrl"
+        if logg:
+            logg.write(f"GET {url}", currentframe(), "getloginurl")
+        re = r.get(url)
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']}")
+            if logg:
+                logg.write(f"content: {re}", currentframe, "unknownerror")
+            return -1
+        ts = re['ts']
+        oauthKey = re['data']['oauthKey']
+        oauthUrl = re['data']['url']
+        if not exists('Temp/'):
+            mkdir('Temp/')
+        qr = QRCode(version=1, error_correction=qrconst.ERROR_CORRECT_H, box_size=10)
+        qr.add_data(oauthUrl)
+        pn = f'Temp/{ts}.svg'
+        qr.make_image(SvgImage).save(pn)
+        print(lan['OUTPUT3'].replace("<path>", pn))  # 二维码已保存至
+        if system() == "Windows":
+            from win32com.shell import shell  # pylint: disable=import-error no-name-in-module
+            d = shell.SHParseDisplayName(abspath(pn), 0)
+            shell.SHOpenFolderAndSelectItems(d[0], [], 0)
+        suc = False
+        while not suc:
+            re = r.post("https://passport.bilibili.com/qrcode/getLoginInfo", data={"oauthKey": oauthKey, "gourl": ""})
+            re = re.json()
+            if re['status']:
+                url = re['data']['url']
+                for (key, value) in parse_qsl(urlsplit(url).query):
+                    if key != "gourl" and key != "Expires":
+                        r.cookies.set(key, value, path="/", domain=".bilibili.com", expires=round(time.time() + year), discard=False)
+                suc = True
+                if exists(pn):
+                    try:
+                        remove(pn)
+                    except:
+                        pass
+                break
+            else:
+                if re['data'] == -4:
+                    time.sleep(3)
+                    if time.time() > ts + 300:
+                        if exists(pn):
+                            try:
+                                remove(pn)
+                            except:
+                                pass
+                        input(lan['OUTPUT4'])
+                        break
+                elif re['data'] == -2:
+                    if exists(pn):
+                        try:
+                            remove(pn)
+                        except:
+                            pass
+                    input(lan['OUTPUT4'])
+                    break
+                else:
+                    if exists(pn):
+                        try:
+                            remove(pn)
+                        except:
+                            pass
+                    print(f"{re['data']} {re['message']}")
+                    return -1
+        if suc:
+            sa = []
+            for domain in r.cookies._cookies.keys():
+                for path in r.cookies._cookies[domain].keys():
+                    for cookiename in r.cookies._cookies[domain][path]:
+                        cookie = r.cookies._cookies[domain][path][cookiename]
+                        if not cookie.discard:
+                            sa.append({"name": cookie.name, "value": cookie.value, 'domain': cookie.domain, 'path': cookie.path})
+            return sa
