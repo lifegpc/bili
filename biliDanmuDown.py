@@ -20,15 +20,15 @@ from traceback import format_exc
 def downloadn(cid, r, logg=None):
     "下载当前弹幕"
     uri = f"https://comment.bilibili.com/{cid}.xml"
-    try :
+    try:
         if logg is not None:
             logg.write(f"GET {uri}", currentframe(), "Download Barrage Request")
         re = r.get(uri)
-    except :
+    except:
         if logg is not None:
             logg.write(format_exc(), currentframe(), "Download Barrage Failed")
         return -1
-    re.encoding='utf8'
+    re.encoding = 'utf8'
     if logg is not None:
         if re.ok:
             logg.write(f"status = {re.status_code}", currentframe(), "Download Barrage Result")
@@ -42,9 +42,9 @@ def downloadh(cid, r, date, logg=None):
     uri = f"https://api.bilibili.com/x/v2/dm/history?type=1&date={date}&oid={cid}"
     if logg is not None:
         logg.write(f"GET {uri}", currentframe(), "Download History Barrage Request")
-    try :
-        re=r.get(uri)
-    except :
+    try:
+        re = r.get(uri)
+    except:
         if logg is not None:
             logg.write(format_exc(), currentframe(), "Download History Barrage Failed")
         return -1
@@ -53,5 +53,5 @@ def downloadh(cid, r, date, logg=None):
             logg.write(f"status = {re.status_code}", currentframe(), "Download History Barrage Result")
         else:
             logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Download History Barrage Result2")
-    re.encoding='utf8'
+    re.encoding = 'utf8'
     return re.text if re.ok else -1
