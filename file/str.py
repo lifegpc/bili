@@ -15,34 +15,44 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from unicodedata import east_asian_width
 from file import lan
-def width(s) :
+
+
+def width(s):
     '获取字符串宽度'
-    t=0
-    for i in s :
-        if east_asian_width(i) in ('F','W','A') :
-            t=t+2
-        else :
-            t=t+1
+    t = 0
+    for i in s:
+        if east_asian_width(i) in ('F', 'W', 'A'):
+            t = t + 2
+        else:
+            t = t + 1
     return t
-dw=['B','K','M','G','T','P','E','Z','Y']
-def size(i) :
+
+
+dw = ['B', 'K', 'M', 'G', 'T', 'P', 'E', 'Z', 'Y']
+
+
+def size(i):
     '将字节数转为可读性较好的数'
-    if i=='N/A' :
+    if i == 'N/A':
         return 'N/A'
-    t=float(i)
-    b=0
-    while t > 10*2**10 and b<8 :
-        b=b+1
-        t=t/2**10
+    t = float(i)
+    b = 0
+    while t > 10 * 2**10 and b < 8:
+        b = b + 1
+        t = t / 2**10
     global dw
-    return "%.2f%s" %(t,dw[b])
-def ftts(i) :
+    return "%.2f%s" % (t, dw[b])
+
+
+def ftts(i):
     '转换'
-    if i=='d' :
+    if i == 'd':
         return lan['DIR']
-    elif i=='f' :
+    elif i == 'f':
         return lan['FILE']
-def cml(s,t):
+
+
+def cml(s, t):
     '计算码率,s 大小B,t 时间ms'
-    s=s*8/t
-    return "%.2fkbps"%(s)
+    s = s * 8 / t
+    return "%.2fkbps" % (s)

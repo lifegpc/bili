@@ -16,17 +16,19 @@
 from os.path import exists
 import os
 from file import filterd
-def mkdir(dir:str) :
-    dir=filterd(dir)
-    dl=dir.split('/')[:-1]
-    if len(dl) :
-        s=""
+
+
+def mkdir(dir: str):
+    dir = filterd(dir)
+    dl = dir.split('/')[:-1]
+    if len(dl):
+        s = ""
         f = True
         for i in dl:
             if f:
                 f = False
-                s=i
-            else :
-                s=s+"/"+i
+                s = i
+            else:
+                s = s + "/" + i
             if s != "" and not exists(s):
                 os.mkdir(s)
