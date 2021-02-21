@@ -139,7 +139,7 @@ class loginapi(apic):
         elif re['code'] == -449:
             pm = f"access_key=&actionKey=appkey&appkey={self._appkey}&build=6040500&captcha=&challenge=&channel=bili&cookies=&device=phone&mobi_app=android&password={self._encrypt(f'{keyhash}{password}')}&permission=ALL&platform=android&seccode=&subid=1&ts={int(time.time())}&username={quote_plus(username)}&validate="
             pm2 = f"{pm}&sign={self._cal_sign(pm)}"
-            re = self._r.post('https://passport.bilibili.com/api/v3/oauth2/login',
+            re = self._r.post('https://passport.bilibili.com/x/passport-login/oauth2/login',
                               pm2, headers={'Content-type': "application/x-www-form-urlencoded"})
             re = re.json()
             if re['code'] == 0:

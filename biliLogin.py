@@ -69,10 +69,14 @@ def login(r, ud: dict, ip: dict, logg = None):
             logg.write(traceback.format_exc(), currentframe(), "CHROME DRIVER FAILED")
         print(traceback.format_exc())
         print(lan['ERROR1'])#使用ChromeDriver登录发生错误，尝试采用用户名、密码登录
-        read = loginwithqrcode(r, logg)
-        if read==-1 :
-            print(lan['ERROR2'])#登录失败！
-            return 2
+        read = login2(r, logg)
+        if read in [-1, -2]:
+            if read == -1:
+                print(lan['ERROR2'])  # 登录失败！
+            read = loginwithqrcode(r, logg)
+            if read == -1:
+                print(lan['ERROR2'])  # 登录失败！
+                return 2
         sa=read
     rr = tryok(r, ud , logg)
     if rr==True :
@@ -111,7 +115,9 @@ def tryok(r, ud: dict, logg = None):
         return re.text
 def login2(r: requests.Session, logg = None):
     "使用用户名密码登录"
-    username=input(lan['INPUT1'])#请输入用户名：
+    username = input(f"{lan['INPUT1']} {lan['QRCODE']}")  # 请输入用户名：
+    if len(username) == 0:
+        return -2
     password=getpass(lan['INPUT2'])#请输入密码：
     appkey="bca7e84c2d947ac6"
     def getk():
@@ -167,10 +173,11 @@ def login2(r: requests.Session, logg = None):
                     return -1
             elif re['code']==-449:
                 print(lan['ERROR6'])#服务繁忙, 尝试使用V3接口登录
+                logurl = "https://passport.bilibili.com/x/passport-login/oauth2/login"
                 if logg is not None:
-                    logg.write("POST https://passport.bilibili.com/api/v3/oauth2/login", currentframe(), "TRY V3 INTERFACE")
+                    logg.write(f"POST {logurl}", currentframe(), "TRY V3 INTERFACE")
                 pm=f"access_key=&actionKey=appkey&appkey={appkey}&build=6040500&captcha=&challenge=&channel=bili&cookies=&device=phone&mobi_app=android&password={parse.quote_plus(base64.b64encode(rsa.encrypt(f'{keyhash}{password}'.encode(),pubkey)))}&permission=ALL&platform=android&seccode=&subid=1&ts={int(time.time())}&username={parse.quote_plus(username)}&validate="
-                re=r.post('https://passport.bilibili.com/api/v3/oauth2/login',f"{pm}&sign={cal_sign(pm)}",headers={'Content-type':"application/x-www-form-urlencoded"})
+                re = r.post(logurl, f"{pm}&sign={cal_sign(pm)}", headers={'Content-type': "application/x-www-form-urlencoded"})
                 re=re.json()
             else :
                 print(f"{re['code']} {re['message']}")

@@ -70,3 +70,7 @@ msgstr ""
 msgctxt "WARN1"
 msgid "This login method now have bugs, some contents may not available."
 msgstr ""
+
+msgctxt "QRCODE"
+msgid "(If you don't input anything, the program will use QR code to login.)"
+msgstr ""
