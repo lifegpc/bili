@@ -200,7 +200,7 @@ def main(ip={}, menuInfo=None):
         if log and not logg.hasf():
             logg.openf(f"log/AV{inp}_{round(time())}.log")
     else:
-        re = search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?(.+))?)?((([0-9]+)/video|medialist/play/([0-9]+))(\?.+)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?(audio/mycollection/([0-9]+))?(audio/am([0-9]+))?', inp, I)
+        re = search(r'([^:]+://)?(www\.)?(space\.)?(vc\.)?(m\.)?(live\.)?bilibili\.com/(s?/?video/av([0-9]+))?(s?/?video/(bv[0-9A-Z]+))?(bangumi/play/(ss[0-9]+))?(bangumi/play/(ep[0-9]+))?(([0-9]+)/favlist(\?(.+)?)?)?(([0-9]+)/channel/(index)?(detail\?(.+))?)?((([0-9]+)/video|medialist/play/([0-9]+))(\?.+)?)?(bangumi/media/md([0-9]+))?(video/([0-9]+))?(mobile/detail\?vc=([0-9]+))?(record/([^\?]+))?(cheese/play/ss([0-9]+))?(cheese/play/ep([0-9]+))?(v/cheese/mine/list)?(cheese/mine/list)?([0-9]+)?(audio/au([0-9]+))?(audio/mycollection/([0-9]+))?(audio/am([0-9]+))?(festival/[^/\?]+\?(.+))?', inp, I)
         if re is None:
             re = search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?', inp, I)
             if re is None:
@@ -426,6 +426,17 @@ def main(ip={}, menuInfo=None):
                 menuid == int(re[48])
                 if log and not logg.hasf():
                     logg.openf(f"log/AM{menuid}_{round(time())}.log")
+            elif re[49]:
+                para = parse_qs(re[50])
+                if 'bvid' in para:
+                    inp = str(biliBv.debv(para['bvid'][0]))
+                    s = "https://www.bilibili.com/video/av" + inp
+                    av = True
+                    if log and not logg.hasf():
+                        logg.openf(f"log/AV{inp}_{round(time())}.log")
+                else:
+                    print(f'{lan["ERROR2"]}')
+                    return -1
             else:
                 print(f'{lan["ERROR2"]}')
                 return -1

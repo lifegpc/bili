@@ -176,9 +176,13 @@ def dwaria2(r, fn, url, size, d2, ip, se, i=1, n=1, d=False):
     cm = cm + ' -k %sM' % (ark)
     cm = cm + ' --max-overall-download-limit=' + ms
     cm = cm + ' --async-dns=' + asd
-    if 'ahttpproxy' in ip:
+    if 'anopro' in ip:
+        cm += ' --http-proxy='
+    elif 'ahttpproxy' in ip:
         cm = cm + ' --http-proxy=' + ip['ahttpproxy']
-    if 'ahttpsproxy' in ip:
+    if 'anopro' in ip:
+        cm += ' --https-proxy='
+    elif 'ahttpsproxy' in ip:
         cm = cm + ' --https-proxy=' + ip['ahttpsproxy']
     if os.path.exists(fn):
         oa = os.path.exists('%s.aria2' % (fn))
@@ -3132,6 +3136,10 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     avq, ii = delli(avq, l)
                     if ii > -1:
                         vqd = dellk(vqd, ii)
+                    continue
+                if l not in durl:
+                    del vqd[avq.index(l)]
+                    avq.remove(l)
                     continue
                 if ns or (not ns and F):
                     print(f"{j+1}.{lan['OUTPUT9']}{vqd[j]}")  # 图质：

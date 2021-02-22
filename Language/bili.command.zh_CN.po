@@ -520,3 +520,7 @@ msgid ""
 "If coding format is not specified or cannot be found, the program will use "
 "the first one which has same format id."
 msgstr "如果编码未指定或者找不到该编码，程序会自动使用第一个具有相同格式ID的视频流。"
+
+msgctxt "O100"
+msgid "Disable all proxy for aria2c."
+msgstr "为aria2c禁用所有代理。"

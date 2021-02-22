@@ -414,3 +414,7 @@ msgstr ""
 msgctxt "O99"
 msgid "If coding format is not specified or cannot be found, the program will use the first one which has same format id."
 msgstr ""
+
+msgctxt "O100"
+msgid "Disable all proxy for aria2c."
+msgstr ""
