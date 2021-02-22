@@ -94,7 +94,7 @@ def login(r, ud: dict, ip: dict, logg=None):
             if logg is not None:
                 logg.write(traceback.format_exc(), currentframe(), "GECKO DRIVER FAILED")
             print(traceback.format_exc())
-            print(lan['ERROR1'])  # 使用ChromeDriver登录发生错误，尝试采用用户名、密码登录
+            print(f"{lan['ERROR1']} {lan['QRCODE']}")  # 使用ChromeDriver登录发生错误，尝试采用用户名、密码登录
             read = login2(r, logg)
             if read in [-1, -2]:
                 if read == -1:
@@ -147,7 +147,7 @@ def tryok(r, ud: dict, logg=None):
 
 def login2(r: requests.Session, logg=None):
     "使用用户名密码登录"
-    username = input(f"{lan['INPUT1']} {lan['QRCODE']}")  # 请输入用户名：
+    username = input(lan['INPUT1'])  # 请输入用户名：
     if len(username) == 0:
         return -2
     password = getpass(lan['INPUT2'])  # 请输入密码：

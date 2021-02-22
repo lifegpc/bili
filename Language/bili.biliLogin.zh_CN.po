@@ -81,4 +81,4 @@ msgstr "这种登录方式目前有BUG，部分内容可能不可用。"
 
 msgctxt "QRCODE"
 msgid "(If you don't input anything, the program will use QR code to login.)"
-msgstr "（如果不输入内容，出现会使用二维码登录。）"
+msgstr "（如果不输入内容，程序会使用二维码登录。）"
