@@ -110,6 +110,8 @@ def tryok(r, ud: dict, logg=None):
         obj = re.json()
         if obj['code'] == 0 and 'data' in obj and obj['data']['isLogin']:
             ud['d'] = obj['data']
+            if 'vipStatus' in ud['d'] and ud['d']['vipStatus'] != 1:
+                ud['d']['vipStatus'] = 0
             return True
         return obj
     except:
