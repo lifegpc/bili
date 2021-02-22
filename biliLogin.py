@@ -49,18 +49,20 @@ lan = getdict('biliLogin', getlan(se, ip))
 def login(r, ud: dict, ip: dict, logg=None):
     '登录至B站'
     global lan
+    url = "https://passport.bilibili.com/ajax/miniLogin/minilogin"
+    reurl = "https://passport.bilibili.com/ajax/miniLogin/redirect"
     try:
         option = webdriver.ChromeOptions()
         option.add_argument("disable-logging")
         option.add_argument('log-level=3')
         driver = webdriver.Chrome(options=option)
         if logg is not None:
-            logg.write("OEPN https://passport.bilibili.com/ajax/miniLogin/minilogin in ChromeDriver", currentframe(), "OPEN WEB")
-        driver.get('https://passport.bilibili.com/ajax/miniLogin/minilogin')
+            logg.write(f"OEPN {url} in ChromeDriver", currentframe(), "OPEN WEB")
+        driver.get(url)
         aa = True
         while aa:
             time.sleep(1)
-            if driver.current_url == 'https://passport.bilibili.com/ajax/miniLogin/redirect':
+            if driver.current_url == reurl:
                 aa = False
         sa = []
         for i in driver.get_cookies():
@@ -72,16 +74,36 @@ def login(r, ud: dict, ip: dict, logg=None):
         if logg is not None:
             logg.write(traceback.format_exc(), currentframe(), "CHROME DRIVER FAILED")
         print(traceback.format_exc())
-        print(lan['ERROR1'])  # 使用ChromeDriver登录发生错误，尝试采用用户名、密码登录
-        read = login2(r, logg)
-        if read in [-1, -2]:
-            if read == -1:
-                print(lan['ERROR2'])  # 登录失败！
-            read = loginwithqrcode(r, logg)
-            if read == -1:
-                print(lan['ERROR2'])  # 登录失败！
-                return 2
-        sa = read
+        try:
+            driver = webdriver.Firefox()
+            if logg is not None:
+                logg.write(f"OEPN {url} in FirefoxDriver", currentframe(), "OPEN WEB")
+            driver.get(url)
+            aa = True
+            while aa:
+                time.sleep(1)
+                if driver.current_url == reurl:
+                    aa = False
+            sa = []
+            for i in driver.get_cookies():
+                r.cookies.set(i['name'], i['value'], domain=i['domain'], path=i['path'])
+                t = {'name': i['name'], 'value': i['value'], 'domain': i['domain'], 'path': i['path']}
+                sa.append(t)
+            driver.close()
+        except:
+            if logg is not None:
+                logg.write(traceback.format_exc(), currentframe(), "GECKO DRIVER FAILED")
+            print(traceback.format_exc())
+            print(lan['ERROR1'])  # 使用ChromeDriver登录发生错误，尝试采用用户名、密码登录
+            read = login2(r, logg)
+            if read in [-1, -2]:
+                if read == -1:
+                    print(lan['ERROR2'])  # 登录失败！
+                read = loginwithqrcode(r, logg)
+                if read == -1:
+                    print(lan['ERROR2'])  # 登录失败！
+                    return 2
+            sa = read
     rr = tryok(r, ud, logg)
     if rr is True:
         if 's' not in ip:
