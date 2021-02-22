@@ -14,7 +14,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from selenium import webdriver
-from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 import requests
 import JSONParser
 import time
@@ -51,13 +50,10 @@ def login(r, ud: dict, ip: dict, logg=None):
     '登录至B站'
     global lan
     try:
-        cap = DesiredCapabilities.CHROME
-        cap["loggingPrefs"] = {"performance": "ALL"}
-        cap["goog:loggingPrefs"] = {"performance": "ALL"}
         option = webdriver.ChromeOptions()
         option.add_argument("disable-logging")
         option.add_argument('log-level=3')
-        driver = webdriver.Chrome(options=option, desired_capabilities=cap)
+        driver = webdriver.Chrome(options=option)
         if logg is not None:
             logg.write("OEPN https://passport.bilibili.com/ajax/miniLogin/minilogin in ChromeDriver", currentframe(), "OPEN WEB")
         driver.get('https://passport.bilibili.com/ajax/miniLogin/minilogin')
