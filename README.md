@@ -162,6 +162,7 @@ zRlD7colcKT/F5NAG5kohc2QGuK8KHyRMfeg80YsddbKr1XSOo3QxS2Ecg==
 - ```b23.tv/BV1xx411c7mC```
 - ```bilibili.com/s/video/av9```
 - ```bilibili.com/s/video/BV1xx411c7mC```
+- ```bilibili.com/festival/2021bnj?bvid=BV1j5411n7s9```
 
 如果视频指向的是番剧，将会自动重定向到[番剧](#番剧)。
 #### 仅下载音频

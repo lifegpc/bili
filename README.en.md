@@ -147,6 +147,7 @@ This program supports following input format (Take av9 for example. The program 
 - ```b23.tv/BV1xx411c7mC```
 - ```bilibili.com/s/video/av9```
 - ```bilibili.com/s/video/BV1xx411c7mC```
+- ```bilibili.com/festival/2021bnj?bvid=BV1j5411n7s9```
 
 If the video is an episode of Bangumi, the program will redirect it to [Bangumi video](#bangumi-video). 
 #### Only Download Audio
