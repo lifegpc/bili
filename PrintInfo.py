@@ -300,6 +300,24 @@ def printAmInfo(d: dict):
         k = k + 1
 
 
+def printAcInfo(d: dict):
+    print(f"{lan['O64']}{d['currentVideoId']}")  # CV号
+    print(f"{lan['O3']}{len(d['videoList'])}")  # 分P数
+    print(f"{lan['O4']}{d['title']}")  # 标题
+    print(f"{lan['O5']}{tostr2(d['createTimeMillis']/1000)}")  # 发布时间
+    print(f"{lan['O7']}{d['description']}")  # 描述
+    print(lan['O8'])  # UP主信息：
+    print(f"UID：{d['user']['id']}")
+    print(f"{lan['O9']}{d['user']['name']}")  # 名字
+    print(lan['O10'])  # 分P信息
+    k = 0
+    for i in d['videoList']:
+        k += 1
+        print(lan['O11'].replace('<number>', str(k)))  # 第<number>P
+        print(f"ID：{i['id']}")
+        print(f"{lan['O12']}{i['title']}")  # 分P名
+
+
 def printplitid(d: list):
     for i in d:
         print(f"{lan['O52']}{i['tid']}")

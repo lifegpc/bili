@@ -266,3 +266,7 @@ msgstr ""
 msgctxt "O63"
 msgid "Song list: "
 msgstr ""
+
+msgctxt "O64"
+msgid "AC number: "
+msgstr ""

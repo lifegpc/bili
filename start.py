@@ -1806,6 +1806,73 @@ def main(ip={}, menuInfo=None):
                 return read
         return 0
     if acvideo:
+        url = f"https://www.acfun.cn/v/ac{acvideoid}"
+        if log:
+            logg.write(f"GET {url}", currentframe(), "Get Acfun Video Webpage")
+        re = section.get(url)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Acfun Video Webpage Result")
+        if re.status_code == 404:
+            print("404")
+            return NOT_FOUND
+        elif re.status_code >= 400:
+            return -1
+        parser = HTMLParser.AcfunParser()
+        parser.feed(re.text)
+        if log:
+            logg.write(f"parser.videoInfo = {parser.videoInfo}", currentframe(), "Acfun Video Webpage Parser Result")
+        videoInfo = json.loads(parser.videoInfo, strict=False)
+        if ns:
+            PrintInfo.printAcInfo(videoInfo)
+        cho = []
+        videoCount = len(videoInfo['videoList'])
+        if videoCount == 1:
+            cho.append(1)
+        else:
+            bs = True
+            f = True
+            while bs:
+                if f and 'p' in ip:
+                    f = False
+                    inp = ip['p']
+                elif ns:
+                    inp = input(lan['OUTPUT4'])  # 请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
+                else:
+                    print(lan['ERROR9'])  # 请使用-p <number>选择视频编号
+                    return -1
+                cho = []
+                if inp[0] == 'a':
+                    if ns:
+                        print(lan['OUTPUT5'])  # 您全选了所有视频
+                    for i in range(1, videoCount + 1):
+                        cho.append(i)
+                    bs = False
+                else:
+                    inp = inp.split(',')
+                    bb = True
+                    for i in inp:
+                        if i.isnumeric() and int(i) > 0 and int(i) <= videoCount and (not (int(i) in cho)):
+                            cho.append(int(i))
+                        else:
+                            rrs = search(r"([0-9]+)-([0-9]+)", i)
+                            if rrs is None:
+                                rrs = rrs.groups()
+                                i1 = int(rrs[0])
+                                i2 = int(rrs[1])
+                                if i2 < i1:
+                                    tt = i1
+                                    i1 = i2
+                                    i2 = tt
+                                for i in range(i1, i2 + 1):
+                                    if i > 0 and i <= videoCount and (not (i in cho)):
+                                        cho.append(i)
+                            else:
+                                bb = False
+                    if bb:
+                        bs = False
+                        for i in cho:
+                            if ns:
+                                print(f"{lan['OUTPUT6']}{i},{videoInfo['videoList'][i-1]['title']}")  # 您选中了视频：
         return 0
     if not che:
         if log:

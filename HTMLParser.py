@@ -61,3 +61,23 @@ class Myparser3(HTMLParser):
     def handle_data(self, data):
         if self.script == 1 and data[0:24] == "window.__INITIAL_STATE__":
             self.videodata = data[25:-122]
+
+
+class AcfunParser(HTMLParser):
+    script = 0
+    videoInfo = ''
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'script':
+            self.script = 1
+        else:
+            self.script = 0
+
+    def handle_data(self, data: str):
+        if self.script == 1:
+            slist = data.splitlines(False)
+            for i in slist:
+                i = i.strip()
+                if i.startswith("window.pageInfo"):
+                    self.videoInfo = i[37:]
+                    self.videoInfo = self.videoInfo.rstrip(";")
