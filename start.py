@@ -1873,6 +1873,8 @@ def main(ip={}, menuInfo=None):
                         for i in cho:
                             if ns:
                                 print(f"{lan['OUTPUT6']}{i},{videoInfo['videoList'][i-1]['title']}")  # 您选中了视频：
+        for i in cho:
+            biliDanmu.acDownloadDanmu(section, i - 1, videoInfo, se, ip, xml, xmlc)
         return 0
     if not che:
         if log:
