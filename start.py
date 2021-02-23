@@ -128,6 +128,8 @@ def main(ip={}, menuInfo=None):
                 if read != 0:
                     return read
         return 0
+    acfun = False  # Acfun网站
+    acvideo = False  # Acfun Video acxxxxx
     av = False
     ss = False
     ep = False
@@ -158,6 +160,7 @@ def main(ip={}, menuInfo=None):
     roomid = -1  # 直播房间ID
     menuid = -1  # 音频区AM号
     collid = -1  # 音频区收藏夹ID
+    acvideoid = -1  # Acfun AC号
     if inp[0:2].lower() == 'ss' and inp[2:].isnumeric():
         s = "https://www.bilibili.com/bangumi/play/ss" + inp[2:]
         ss = True
@@ -194,6 +197,12 @@ def main(ip={}, menuInfo=None):
         menuid = int(inp[2:])
         if log and not logg.hasf():
             logg.openf(f"log/AM{menuid}_{round(time())}.log")
+    elif inp[:2].lower() == "ac" and inp[2:].isnumeric():
+        acfun = True
+        acvideo = True
+        acvideoid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/AC{acvideoid}_{round(time())}.log")
     elif inp.isnumeric():
         s = "https://www.bilibili.com/video/av" + inp
         av = True
@@ -451,11 +460,15 @@ def main(ip={}, menuInfo=None):
         section.proxies = pr
     if nte:
         section.trust_env = False
-    read = JSONParser.loadcookie(section, logg)
+    ckfn = "acfun_cookies.json" if acfun else "cookies.json"
+    read = JSONParser.loadcookie(section, logg, ckfn)
     ud = {}
     login = 0
     if read == 0:
-        read = biliLogin.tryok(section, ud, logg)
+        if acfun:
+            read = biliLogin.acCheckLogin(section, ud, logg)
+        else:
+            read = biliLogin.tryok(section, ud, logg)
         if read is True:
             if ns:
                 print(f"{lan['OUTPUT1']}")  # 登录校验成功！
@@ -472,9 +485,12 @@ def main(ip={}, menuInfo=None):
         print(f"{lan['ERROR4']}")  # 文件读取错误！
         login = 2
     if login == 2:
-        if os.path.exists('cookies.json'):
-            os.remove('cookies.json')
-        read = biliLogin.login(section, ud, ip, logg)
+        if os.path.exists(ckfn):
+            os.remove(ckfn)
+        if acfun:
+            read = biliLogin.acLogin(section, ud, ip, logg)
+        else:
+            read = biliLogin.login(section, ud, ip, logg)
         if read == 0:
             login = 1
         elif read == 1:
@@ -483,7 +499,8 @@ def main(ip={}, menuInfo=None):
             return -1
     if 'd' not in ud:
         return -1
-    ud['vip'] = ud['d']['vipStatus']
+    if not acfun:
+        ud['vip'] = ud['d']['vipStatus']
     if log:
         logg.write(f"read = {read}\nlogin = {login}\nud = {ud}", currentframe(), "VERIFY LOGIN 2")
     if sm:
@@ -1787,6 +1804,8 @@ def main(ip={}, menuInfo=None):
                 logg.write(f"read = {read}", currentframe(), "Audio Album Audio Return")
             if read != 0 and read != NOT_FOUND:
                 return read
+        return 0
+    if acvideo:
         return 0
     if not che:
         if log:

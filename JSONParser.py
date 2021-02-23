@@ -154,18 +154,18 @@ def Myparser2(s):
     return data
 
 
-def savecookie(data):
+def savecookie(data, fn="cookies.json"):
     '存储cookies信息'
     jsObj = dumps(data)
-    obj = open('cookies.json', mode='w')
+    obj = open(fn, mode='w')
     obj.write(jsObj)
     obj.close()
 
 
-def loadcookie(r, logg=None):
+def loadcookie(r, logg=None, fn="cookies.json"):
     '读取cookie信息'
     try:
-        obj = open('cookies.json', mode='r')
+        obj = open(fn, mode='r')
     except:
         if logg is not None:
             logg.write(format_exc(), currentframe(), "READ cookies.json FAILED 1")
