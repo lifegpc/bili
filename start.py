@@ -213,17 +213,32 @@ def main(ip={}, menuInfo=None):
         if re is None:
             re = search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?', inp, I)
             if re is None:
-                re = search(r"[^:]+://", inp)
+                re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?', inp)
                 if re is None:
-                    inp = "https://" + inp
-                re = requests.head(inp)
-                if 'Location' in re.headers:
-                    ip['i'] = re.headers['Location']
-                    ip['uc'] = False
-                    return main(ip)
+                    re = search(r"[^:]+://", inp)
+                    if re is None:
+                        inp = "https://" + inp
+                    re = requests.head(inp)
+                    if 'Location' in re.headers:
+                        ip['i'] = re.headers['Location']
+                        ip['uc'] = False
+                        return main(ip)
+                    else:
+                        print(f'{lan["ERROR2"]}')  # 输入有误
+                        return -1
                 else:
-                    print(f'{lan["ERROR2"]}')  # 输入有误
-                    return -1
+                    re = re.groups()
+                    if log:
+                        logg.write(f"re = {re}", currentframe(), "Input Regex 3")
+                    if re[2]:
+                        acfun = True
+                        acvideo = True
+                        acvideoid = int(re[3])
+                        if log and not logg.hasf():
+                            logg.openf(f"log/AC{inp}_{round(time())}.log")
+                    else:
+                        print(f'{lan["ERROR2"]}')  # 输入有误
+                        return -1
             else:
                 re = re.groups()
                 if log:
