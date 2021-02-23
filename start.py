@@ -1812,7 +1812,7 @@ def main(ip={}, menuInfo=None):
         re = section.get(url)
         if log:
             logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Acfun Video Webpage Result")
-        if re.status_code == 404:
+        if re.status_code == 404 or re.url != url:
             print("404")
             return NOT_FOUND
         elif re.status_code >= 400:
