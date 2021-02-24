@@ -2044,9 +2044,9 @@ def main(ip={}, menuInfo=None):
                                 bb = False
                     if bb:
                         bs = False
-                        for i in cho:
-                            if ns:
-                                print(f"{lan['OUTPUT6']}{i},{bangumiList['items'][i-1]['title']}")  # 您选中了视频：
+            for i in cho:
+                if ns:
+                    print(f"{lan['OUTPUT6']}{i},{bangumiList['items'][i-1]['title']}")  # 您选中了视频：
         return 0
     if not che:
         if log:
