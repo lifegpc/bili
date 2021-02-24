@@ -6311,6 +6311,99 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         nfof.save(filen)
 
 
+def acCoverImgDownload(r: requests.Session, data: dict, ip: dict, se: dict, fn: str = None) -> int:
+    """下载Acfun视频封面
+    data 数据字典
+    ip 命令行字典
+    se 设置字典
+    fn 文件名
+    -1 创建文件夹失败
+    -2 下载失败"""
+    if 'coverUrl' not in data:
+        return 0
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    dmp = ip['dmp'] if 'dmp' in ip else True if JSONParser.getset(se, 'dmp') is True else False
+    videoCount = len(data['videoList'])
+    if videoCount == 1:
+        dmp = False
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    if dmp:
+        if not fin:
+            o += f"{file.filtern(data['title'])}/"
+        else:
+            o += file.filtern(f"{data['title']}(AC{data['currentVideoId']})/")
+    if logg:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Acfun Normal Video Download Pic Para")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Normal Video Download Pic Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
+        return -1
+    if fn is None:
+        hzm = file.geturlfe(data["coverUrl"])
+        if fin and not dmp:
+            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']}).{hzm}")
+        elif not dmp:
+            filen = o + file.filtern(f"{data['title']}.{hzm}")
+        else:
+            filen = o + file.filtern(f"cover.{hzm}")
+    else:
+        filen = fn
+    if logg:
+        logg.write(f"filen = {filen}", currentframe(), "Acfun Normal Video Download Pic Var")
+    if os.path.exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "Acfun Normal Video Download Pic Remove File Failed")
+                print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                return 0
+    if logg:
+        logg.write(f"GET {data['coverUrl']}", currentframe(), "Acfun Normal Video Download Pic Request")
+    re = r.get(data['coverUrl'])
+    if logg:
+        logg.write(f"status = {re.status_code}", currentframe(), "Acfun Normal Video Download Pic Request Result")
+    if re.status_code == 200:
+        f = open(filen, 'wb')
+        f.write(re.content)
+        f.close()
+        if oll:
+            oll.add(filen)
+        if ns:
+            print(lan['OUTPUT23'].replace('<filename>', filen))  # 封面图片下载完成。
+        return 0
+    else:
+        print(f"{lan['OUTPUT24']}HTTP {re.status_code}")  # 下载封面图片时发生错误：
+        return -2
+
+
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):
     logg = None
     if 'logg' in ip:
