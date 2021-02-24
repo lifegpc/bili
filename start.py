@@ -570,7 +570,7 @@ def main(ip={}, menuInfo=None):
         if log:
             logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "MD WEBPAGE CONTENT")
         rs = search(r'__INITIAL_STATE__=([^;]+)', re.text, I)
-        if rs is None:
+        if rs is not None:
             rs = rs.groups()[0]
             if log:
                 logg.write(f"rs = {rs}", currentframe(), "MD WEBPAGE REGEX CONTENT")
@@ -655,7 +655,7 @@ def main(ip={}, menuInfo=None):
                                         cho.append(int(i))
                                     else:
                                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                                        if rrs is None:
+                                        if rrs is not None:
                                             rrs = rrs.groups()
                                             i1 = int(rrs[0])
                                             i2 = int(rrs[1])
@@ -753,7 +753,7 @@ def main(ip={}, menuInfo=None):
                         cho.append(int(i))
                     else:
                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                        if rrs is None:
+                        if rrs is not None:
                             rrs = rrs.groups()
                             i1 = int(rrs[0])
                             i2 = int(rrs[1])
@@ -776,7 +776,7 @@ def main(ip={}, menuInfo=None):
         if not ns:
             bs = False
         read = JSONParser.getset(se, 'da')
-        if read is None:
+        if read is not None:
             c1 = read
             bs = False
         if 'da' in ip:
@@ -865,7 +865,7 @@ def main(ip={}, menuInfo=None):
                             cho.append(int(i))
                         else:
                             rrs = search(r"([0-9]+)-([0-9]+)", i)
-                            if rrs is None:
+                            if rrs is not None:
                                 rrs = rrs.groups()
                                 i1 = int(rrs[0])
                                 i2 = int(rrs[1])
@@ -947,7 +947,7 @@ def main(ip={}, menuInfo=None):
                         cho.append(int(i))
                     else:
                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                        if rrs is None:
+                        if rrs is not None:
                             rrs = rrs.groups()
                             i1 = int(rrs[0])
                             i2 = int(rrs[1])
@@ -970,7 +970,7 @@ def main(ip={}, menuInfo=None):
         if not ns:
             bs = False
         read = JSONParser.getset(se, 'da')
-        if read is None:
+        if read is not None:
             c1 = read
             bs = False
         if 'da' in ip:
@@ -1067,7 +1067,7 @@ def main(ip={}, menuInfo=None):
                         cho.append(int(i))
                     else:
                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                        if rrs is None:
+                        if rrs is not None:
                             rrs = rrs.groups()
                             i1 = int(rrs[0])
                             i2 = int(rrs[1])
@@ -1090,7 +1090,7 @@ def main(ip={}, menuInfo=None):
         if not ns:
             bs = False
         read = JSONParser.getset(se, 'da')
-        if read is None:
+        if read is not None:
             c1 = read
             bs = False
         if 'da' in ip:
@@ -1332,7 +1332,7 @@ def main(ip={}, menuInfo=None):
                         cho.append(int(i))
                     else:
                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                        if rrs is None:
+                        if rrs is not None:
                             rrs = rrs.groups()
                             i1 = int(rrs[0])
                             i2 = int(rrs[1])
@@ -1355,7 +1355,7 @@ def main(ip={}, menuInfo=None):
         if not ns:
             bs = False
         read = JSONParser.getset(se, 'da')
-        if read is None:
+        if read is not None:
             c1 = read
             bs = False
         if 'da' in ip:
@@ -1869,7 +1869,7 @@ def main(ip={}, menuInfo=None):
                             cho.append(int(i))
                         else:
                             rrs = search(r"([0-9]+)-([0-9]+)", i)
-                            if rrs is None:
+                            if rrs is not None:
                                 rrs = rrs.groups()
                                 i1 = int(rrs[0])
                                 i2 = int(rrs[1])
@@ -2078,7 +2078,7 @@ def main(ip={}, menuInfo=None):
             if log:
                 logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PLAYER.SO RESULT")
             rs = search(r"<interaction>(.+)</interaction>", re.text, I)
-            if rs is None:
+            if rs is not None:
                 rs = rs.groups()[0]
                 if log:
                     logg.write(f"rs = {rs}", currentframe(), "PLAYER.SO REGEX")
@@ -2125,7 +2125,7 @@ def main(ip={}, menuInfo=None):
                             cho.append(int(i))
                         else:
                             rrs = search(r"([0-9]+)-([0-9]+)", i)
-                            if rrs is None:
+                            if rrs is not None:
                                 rrs = rrs.groups()
                                 i1 = int(rrs[0])
                                 i2 = int(rrs[1])
@@ -2269,12 +2269,12 @@ def main(ip={}, menuInfo=None):
             data = JSONParser.Myparser2(parser.videodata)
             le = PrintInfo.printInfo2(data, ns)
             rs = search(r'__PGC_USERSTATE__=([^<]+)', re.text)
-            if rs is None:
+            if rs is not None:
                 rs = rs.groups()[0]
                 if log:
                     logg.write(f"rs = {rs}", currentframe(), "Normal Bangumi Data Regex")
                 pgc = json.loads(rs)
-                if 'progress' in pgc and pgc['progress'] is None:
+                if 'progress' in pgc and pgc['progress'] is not None:
                     if 'last_ep_id' in pgc['progress'] and pgc['progress']['last_ep_id'] > -1:
                         led = pgc['progress']['last_ep_id']
         epr = ""
@@ -2365,7 +2365,7 @@ def main(ip={}, menuInfo=None):
                                 cho.append(int(i))
                             else:
                                 rrs = search(r"([0-9]+)-([0-9]+)", i)
-                                if rrs is None:
+                                if rrs is not None:
                                     rrs = rrs.groups()
                                     i1 = int(rrs[0])
                                     i2 = int(rrs[1])
