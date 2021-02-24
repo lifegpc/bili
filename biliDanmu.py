@@ -1339,7 +1339,7 @@ def acDownloadDanmu(r: Session, index: int, data: dict, se: dict, ip: dict, xml:
         if not fin:
             o += f"{file.filtern(data['title'])}/"
         else:
-            o += file.filtern(f"{data['title']}(AC{data['currentVideoId']})/")
+            o += file.filtern(f"{data['title']}(AC{data['dougaId']})/")
     if logg:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Acfun Barrage Para")
     try:
@@ -1352,12 +1352,12 @@ def acDownloadDanmu(r: Session, index: int, data: dict, se: dict, ip: dict, xml:
         return -1
     if videoCount == 1:
         if fin:
-            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).xml")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).xml")
         else:
             filen = o + file.filtern(f"{data['title']}.xml")
     else:
         if fin and not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).xml")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).xml")
         elif not dmp:
             filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}.xml")
         elif fin:

@@ -6108,7 +6108,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         if not fin:
             o += f"{file.filtern(data['title'])}/"
         else:
-            o += file.filtern(f"{data['title']}(AC{data['currentVideoId']})/")
+            o += file.filtern(f"{data['title']}(AC{data['dougaId']})/")
     vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
     sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
     if logg:
@@ -6187,18 +6187,18 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         if not fin:
             filen = o + file.filtern(f"{data['title']}.{vf}")
         elif sv:
-            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
         else:
-            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
     else:
         if not fin and not dmp:
             filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}.{vf}")
         elif not fin and dmp:
             filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}.{vf}")
         elif sv and not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
         elif not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
         elif sv:
             filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
         else:
@@ -6239,7 +6239,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
                 return 0
         else:
             return 0
-    tempf = f"Temp/AC{data['currentVideoId']}_{int(time.time())}_metadata.txt"
+    tempf = f"Temp/AC{data['dougaId']}_{int(time.time())}_metadata.txt"
     tit = data['title']
     tit2 = data['videoList'][index]['title']
     if tit2 != "" and tit != tit2:
@@ -6263,7 +6263,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(';FFMETADATA1\n')
             te.write(f"title={bstr.g(tit)}\n")
             te.write(f"description={bstr.g(data['description'])}\n")
-            te.write(f"acid={data['currentVideoId']}\n")
+            te.write(f"acid={data['dougaId']}\n")
             te.write(f"atitle={bstr.g(data['title'])}\n")
             te.write(f"pubdate={tostr2(data['createTimeMillis']/1000)}\n")
             te.write(f"uid={data['user']['id']}\n")
@@ -6272,7 +6272,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"p={index+1}P/{videoCount}P\n")
             te.write(f"part={bstr.g(data['videoList'][index]['title'])}\n")
             te.write(f"vq={bstr.g(info['codecs'])}\n")
-            te.write(f"purl=https://www.acfun.cn/v/ac{data['currentVideoId']}\n")
+            te.write(f"purl=https://www.acfun.cn/v/ac{data['dougaId']}\n")
             te.write(f"tags={bstr.g(tags)}\n")
         ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
     else:
@@ -6288,11 +6288,11 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"album_artist={bstr.g(data['user']['name'])}\n")
             te.write(f"track={index+1}/{videoCount}\n")
             te.write("disc=1/1\n")
-            te.write(f"episode_id=AC{data['currentVideoId']}\n")
+            te.write(f"episode_id=AC{data['dougaId']}\n")
             te.write(f"date={tostr4(data['createTimeMillis']/1000)}\n")
             te.write(f"description={bstr.g(info['codecs'])},{data['user']['id']}\\\n")
             te.write(f"{bstr.g(tags)}\\\n")
-            te.write(f"https://www.acfun.cn/v/ac{data['currentVideoId']}\n")
+            te.write(f"https://www.acfun.cn/v/ac{data['dougaId']}\n")
         ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
     if logg:
         with open(tempf, 'r', encoding='utf8') as te:
@@ -6371,7 +6371,7 @@ def acCoverImgDownload(r: requests.Session, data: dict, ip: dict, se: dict, fn: 
         if not fin:
             o += f"{file.filtern(data['title'])}/"
         else:
-            o += file.filtern(f"{data['title']}(AC{data['currentVideoId']})/")
+            o += file.filtern(f"{data['title']}(AC{data['dougaId']})/")
     if logg:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Acfun Normal Video Download Pic Para")
     try:
@@ -6385,7 +6385,7 @@ def acCoverImgDownload(r: requests.Session, data: dict, ip: dict, se: dict, fn: 
     if fn is None:
         hzm = file.geturlfe(data["coverUrl"])
         if fin and not dmp:
-            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']}).{hzm}")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']}).{hzm}")
         elif not dmp:
             filen = o + file.filtern(f"{data['title']}.{hzm}")
         else:

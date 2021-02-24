@@ -301,7 +301,7 @@ def printAmInfo(d: dict):
 
 
 def printAcInfo(d: dict):
-    print(f"{lan['O64']}{d['currentVideoId']}")  # CV号
+    print(f"{lan['O64']}{d['dougaId']}")  # CV号
     print(f"{lan['O3']}{len(d['videoList'])}")  # 分P数
     print(f"{lan['O4']}{d['title']}")  # 标题
     print(f"{lan['O5']}{tostr2(d['createTimeMillis']/1000)}")  # 发布时间
