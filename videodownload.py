@@ -6133,7 +6133,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         print(lan['ERROR2'])  # 读取cookies.json出现错误
         return -2
     if F:
-        print(f"{lan['OUTPUT8'].replace('<number>',str(index+1))}{data['page'][index]['part']}")  # 第<number>P：
+        print(f"{lan['OUTPUT8'].replace('<number>',str(index+1))}{data['videoList'][index]['title']}")  # 第<number>P：
     playJson = json.loads(data['currentVideoInfo']['ksPlayJson'])
     if logg:
         logg.write(f"playJson = {playJson}", currentframe(), "Acfun Normal Video Download PlayJson")
