@@ -275,3 +275,11 @@ msgstr "楽曲リスト: "
 msgctxt "O64"
 msgid "AC number: "
 msgstr ""
+
+msgctxt "O65"
+msgid "AA number (Bangumi ID): "
+msgstr ""
+
+msgctxt "O66"
+msgid "Episode ID: "
+msgstr ""
