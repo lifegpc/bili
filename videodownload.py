@@ -6207,6 +6207,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
     if logg:
         logg.write(f"ff = {ff}\nfilen = '{filen}'", currentframe(), "Acfun Normal Video Download Var2")
     if not ff:
+        print(lan['FFMPEG'])
         return 0
     if os.path.exists(filen):
         fg = False
