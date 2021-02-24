@@ -6248,7 +6248,17 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
     nss = ""
     if not ns:
         nss = getnul()
+    imgs = -1
+    if 'coverUrl' in data:
+        imgf = os.path.splitext(filen)[0] + "." + file.geturlfe(data['coverUrl'])  # 图片文件名
+        imgs = acCoverImgDownload(r2, data, ip, se, imgf)
+        if logg:
+            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Acfun Normal Video Download Var2")
+    imga = ""
+    imga2 = ""
     if vf == "mkv":
+        if imgs == 0:
+            imga = f' -attach "{imgf}" -metadata:s:t mimetype=image/webp'  # TMD是webp
         with open(tempf, 'w', encoding='utf8', newline='\n') as te:
             te.write(';FFMETADATA1\n')
             te.write(f"title={bstr.g(tit)}\n")
@@ -6264,8 +6274,11 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"vq={bstr.g(info['codecs'])}\n")
             te.write(f"purl=https://www.acfun.cn/v/ac{data['currentVideoId']}\n")
             te.write(f"tags={bstr.g(tags)}\n")
-        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}" -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
     else:
+        if imgs == 0:
+            imga = f' -i "{imgf}"'
+            imga2 = ' -map 2 -c:v:1 mjpeg -disposition:v:1 attached_pic'
         with open(tempf, 'w', encoding='utf8', newline='\n') as te:
             te.write(';FFMETADATA1\n')
             te.write(f"title={bstr.g(tit)}\n")
@@ -6280,7 +6293,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"description={bstr.g(info['codecs'])},{data['user']['id']}\\\n")
             te.write(f"{bstr.g(tags)}\\\n")
             te.write(f"https://www.acfun.cn/v/ac{data['currentVideoId']}\n")
-        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}" -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
     if logg:
         with open(tempf, 'r', encoding='utf8') as te:
             logg.write(f"METADATAFILE '{tempf}'\n{te.read()}", currentframe(), "Acfun Normal Video Video Download Metadata")
@@ -6292,6 +6305,30 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         print(lan['OUTPUT14'])  # 合并完成！
         if oll:
             oll.add(filen)
+        if imgs == 0:
+            de = False
+            bs = True if ns else False
+            if JSONParser.getset(se, 'ad') is True:
+                de = True
+                bs = False
+            elif JSONParser.getset(se, 'ad') is False:
+                bs = False
+            if 'ad' in ip:
+                de = ip['ad']
+                bs = False
+            if bp:
+                de = False
+                bs = False
+            while bs:
+                inp = input(f"{lan['INPUT4']}(y/n)")  # 是否删除中间文件？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        bs = False
+                        de = True
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if de:
+                os.remove(imgf)
     os.remove(tempf)
     nfo = False
     if 'nfo' in se:
