@@ -1455,23 +1455,22 @@ def main(ip={}, menuInfo=None):
         rs = search(r'window\.__NEPTUNE_IS_MY_WAIFU__=({[^<]+})', re.text, I)
         if rs is not None:
             live_info = json.loads(rs.groups()[0])
-            room_info = live_info['baseInfoRes']['data']
         else:
             live_info = None
-            uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
-            if log:
-                logg.write(f"GET {uri}", currentframe(), "GET LIVE ROOM INFO")
-            re = r.get(uri)
-            re.encoding = 'utf8'
-            if log:
-                logg.write(f"status = {re.status_code}\n{re.text}")
-            re = re.json()
-            if re['code'] != 0:
-                print(f"{re['code']} {re['message']}")
-                if re['code'] == 1:
-                    return NOT_FOUND
-                return -1
-            room_info = re['data']
+        uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET LIVE ROOM INFO")
+        re = r.get(uri)
+        re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}")
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']} {re['message']}")
+            if re['code'] == 1:
+                return NOT_FOUND
+            return -1
+        room_info = re['data']
         info = JSONParser2.getliveinfo1(room_info)
         if log:
             logg.write(f"live_info = {live_info}\nroom_info = {room_info}", currentframe(), "LIVE ROOM INFO")
