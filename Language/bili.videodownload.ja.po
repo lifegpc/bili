@@ -348,3 +348,7 @@ msgstr "高画質"
 msgctxt "AU无损音质"
 msgid "Lossless quality"
 msgstr "オリジナル画質"
+
+msgctxt "FFMPEG"
+msgid "Can not find ffmpeg. ffmpeg is required to download this video."
+msgstr ""

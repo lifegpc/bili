@@ -71,11 +71,8 @@ ip = {}
 def main(ip={}, menuInfo=None):
     """ip 命令行参数字典
     menuInfo AU号专辑/歌单信息"""
-    log = False
-    logg: Logger = None
-    if 'logg' in ip:
-        log = True
-        logg: Logger = ip['logg']
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    log = logg is not None
     global se
     global lan
     uc = True  # 是否检测更新
@@ -235,7 +232,7 @@ def main(ip={}, menuInfo=None):
                         acvideo = True
                         acvideoid = int(re[3])
                         if log and not logg.hasf():
-                            logg.openf(f"log/AC{inp}_{round(time())}.log")
+                            logg.openf(f"log/AC{acvideoid}_{round(time())}.log")
                     else:
                         print(f'{lan["ERROR2"]}')  # 输入有误
                         return -1
@@ -1837,6 +1834,8 @@ def main(ip={}, menuInfo=None):
         if log:
             logg.write(f"parser.videoInfo = {parser.videoInfo}", currentframe(), "Acfun Video Webpage Parser Result")
         videoInfo = json.loads(parser.videoInfo, strict=False)
+        if 'tagList' not in videoInfo:
+            videoInfo['tagList'] = []
         if ns:
             PrintInfo.printAcInfo(videoInfo)
         cho = []
@@ -1888,8 +1887,54 @@ def main(ip={}, menuInfo=None):
                         for i in cho:
                             if ns:
                                 print(f"{lan['OUTPUT6']}{i},{videoInfo['videoList'][i-1]['title']}")  # 您选中了视频：
-        for i in cho:
-            biliDanmu.acDownloadDanmu(section, i - 1, videoInfo, se, ip, xml, xmlc)
+        cho2 = 0
+        bs = True
+        if 'd' in ip and ip['d'] > 0 and ip['d'] < 5:
+            bs = False
+            cho2 = ip['d']
+        while bs:
+            if not ns:
+                print(lan['ERROR11'])  # 请使用-d <method>选择下载方式
+                return -1
+            inp = input(lan['INPUT13'])  # 选择下载方式
+            if inp[0].isnumeric() and int(inp[0]) > 0 and int(inp[0]) < 5:
+                cho2 = int(inp[0])
+                bs = False
+        if cho2 == 1 or cho2 == 4:
+            for i in cho:
+                read = biliDanmu.acDownloadDanmu(section, i - 1, videoInfo, se, ip, xml, xmlc)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Normal Video Download Barrage Return")
+                if read == 0:
+                    print(lan['OUTPUT9'].replace('<number>', str(i)))  # <number>P下载完成
+        if cho2 == 2 or cho2 == 4:
+            bs = True
+            cho3 = False
+            if not ns:
+                bs = False
+            read = JSONParser.getset(se, 'mp')
+            if read is True:
+                bs = False
+                cho3 = True
+            elif read is False:
+                bs = False
+            if 'm' in ip:
+                cho3 = ip['m']
+                bs = False
+            while bs:
+                inp = input(f'{lan["INPUT8"]}(y/n)')  # 是否要默认下载最高画质（这样将不会询问具体画质）？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        cho3 = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if log:
+                logg.write(f"cho3 = {cho3}", currentframe(), "Acfun Normal Video Download Video Para")
+            for i in cho:
+                read = videodownload.acVideoDownload(section, i - 1, videoInfo, cho3, se, ip)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Normal Video Download Video Return")
         return 0
     if not che:
         if log:
