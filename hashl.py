@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import hashlib
+from zlib import crc32 as crc32f
 
 
 def sha256(s):
@@ -28,3 +29,9 @@ def md5(s):
     h = hashlib.md5()
     h.update(t.encode('utf8'))
     return h.hexdigest()
+
+
+def crc32(s):
+    t = str(s)
+    te = hex(crc32f(t.encode('utf8')))[2:]
+    return '0' * (8 - len(te)) + te

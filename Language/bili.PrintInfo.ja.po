@@ -271,3 +271,7 @@ msgstr "コレクション ID: "
 msgctxt "O63"
 msgid "Song list: "
 msgstr "楽曲リスト: "
+
+msgctxt "O64"
+msgid "AC number: "
+msgstr ""

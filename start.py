@@ -71,11 +71,8 @@ ip = {}
 def main(ip={}, menuInfo=None):
     """ip 命令行参数字典
     menuInfo AU号专辑/歌单信息"""
-    log = False
-    logg: Logger = None
-    if 'logg' in ip:
-        log = True
-        logg: Logger = ip['logg']
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    log = logg is not None
     global se
     global lan
     uc = True  # 是否检测更新
@@ -128,6 +125,8 @@ def main(ip={}, menuInfo=None):
                 if read != 0:
                     return read
         return 0
+    acfun = False  # Acfun网站
+    acvideo = False  # Acfun Video acxxxxx
     av = False
     ss = False
     ep = False
@@ -158,6 +157,7 @@ def main(ip={}, menuInfo=None):
     roomid = -1  # 直播房间ID
     menuid = -1  # 音频区AM号
     collid = -1  # 音频区收藏夹ID
+    acvideoid = -1  # Acfun AC号
     if inp[0:2].lower() == 'ss' and inp[2:].isnumeric():
         s = "https://www.bilibili.com/bangumi/play/ss" + inp[2:]
         ss = True
@@ -194,6 +194,12 @@ def main(ip={}, menuInfo=None):
         menuid = int(inp[2:])
         if log and not logg.hasf():
             logg.openf(f"log/AM{menuid}_{round(time())}.log")
+    elif inp[:2].lower() == "ac" and inp[2:].isnumeric():
+        acfun = True
+        acvideo = True
+        acvideoid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/AC{acvideoid}_{round(time())}.log")
     elif inp.isnumeric():
         s = "https://www.bilibili.com/video/av" + inp
         av = True
@@ -204,17 +210,32 @@ def main(ip={}, menuInfo=None):
         if re is None:
             re = search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?', inp, I)
             if re is None:
-                re = search(r"[^:]+://", inp)
+                re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?', inp)
                 if re is None:
-                    inp = "https://" + inp
-                re = requests.head(inp)
-                if 'Location' in re.headers:
-                    ip['i'] = re.headers['Location']
-                    ip['uc'] = False
-                    return main(ip)
+                    re = search(r"[^:]+://", inp)
+                    if re is None:
+                        inp = "https://" + inp
+                    re = requests.head(inp)
+                    if 'Location' in re.headers:
+                        ip['i'] = re.headers['Location']
+                        ip['uc'] = False
+                        return main(ip)
+                    else:
+                        print(f'{lan["ERROR2"]}')  # 输入有误
+                        return -1
                 else:
-                    print(f'{lan["ERROR2"]}')  # 输入有误
-                    return -1
+                    re = re.groups()
+                    if log:
+                        logg.write(f"re = {re}", currentframe(), "Input Regex 3")
+                    if re[2]:
+                        acfun = True
+                        acvideo = True
+                        acvideoid = int(re[3])
+                        if log and not logg.hasf():
+                            logg.openf(f"log/AC{acvideoid}_{round(time())}.log")
+                    else:
+                        print(f'{lan["ERROR2"]}')  # 输入有误
+                        return -1
             else:
                 re = re.groups()
                 if log:
@@ -451,11 +472,15 @@ def main(ip={}, menuInfo=None):
         section.proxies = pr
     if nte:
         section.trust_env = False
-    read = JSONParser.loadcookie(section, logg)
+    ckfn = "acfun_cookies.json" if acfun else "cookies.json"
+    read = JSONParser.loadcookie(section, logg, ckfn)
     ud = {}
     login = 0
     if read == 0:
-        read = biliLogin.tryok(section, ud, logg)
+        if acfun:
+            read = biliLogin.acCheckLogin(section, ud, logg)
+        else:
+            read = biliLogin.tryok(section, ud, logg)
         if read is True:
             if ns:
                 print(f"{lan['OUTPUT1']}")  # 登录校验成功！
@@ -472,9 +497,12 @@ def main(ip={}, menuInfo=None):
         print(f"{lan['ERROR4']}")  # 文件读取错误！
         login = 2
     if login == 2:
-        if os.path.exists('cookies.json'):
-            os.remove('cookies.json')
-        read = biliLogin.login(section, ud, ip, logg)
+        if os.path.exists(ckfn):
+            os.remove(ckfn)
+        if acfun:
+            read = biliLogin.acLogin(section, ud, ip, logg)
+        else:
+            read = biliLogin.login(section, ud, ip, logg)
         if read == 0:
             login = 1
         elif read == 1:
@@ -483,7 +511,8 @@ def main(ip={}, menuInfo=None):
             return -1
     if 'd' not in ud:
         return -1
-    ud['vip'] = ud['d']['vipStatus']
+    if not acfun:
+        ud['vip'] = ud['d']['vipStatus']
     if log:
         logg.write(f"read = {read}\nlogin = {login}\nud = {ud}", currentframe(), "VERIFY LOGIN 2")
     if sm:
@@ -541,7 +570,7 @@ def main(ip={}, menuInfo=None):
         if log:
             logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "MD WEBPAGE CONTENT")
         rs = search(r'__INITIAL_STATE__=([^;]+)', re.text, I)
-        if rs is None:
+        if rs is not None:
             rs = rs.groups()[0]
             if log:
                 logg.write(f"rs = {rs}", currentframe(), "MD WEBPAGE REGEX CONTENT")
@@ -626,7 +655,7 @@ def main(ip={}, menuInfo=None):
                                         cho.append(int(i))
                                     else:
                                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                                        if rrs is None:
+                                        if rrs is not None:
                                             rrs = rrs.groups()
                                             i1 = int(rrs[0])
                                             i2 = int(rrs[1])
@@ -724,7 +753,7 @@ def main(ip={}, menuInfo=None):
                         cho.append(int(i))
                     else:
                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                        if rrs is None:
+                        if rrs is not None:
                             rrs = rrs.groups()
                             i1 = int(rrs[0])
                             i2 = int(rrs[1])
@@ -747,7 +776,7 @@ def main(ip={}, menuInfo=None):
         if not ns:
             bs = False
         read = JSONParser.getset(se, 'da')
-        if read is None:
+        if read is not None:
             c1 = read
             bs = False
         if 'da' in ip:
@@ -836,7 +865,7 @@ def main(ip={}, menuInfo=None):
                             cho.append(int(i))
                         else:
                             rrs = search(r"([0-9]+)-([0-9]+)", i)
-                            if rrs is None:
+                            if rrs is not None:
                                 rrs = rrs.groups()
                                 i1 = int(rrs[0])
                                 i2 = int(rrs[1])
@@ -918,7 +947,7 @@ def main(ip={}, menuInfo=None):
                         cho.append(int(i))
                     else:
                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                        if rrs is None:
+                        if rrs is not None:
                             rrs = rrs.groups()
                             i1 = int(rrs[0])
                             i2 = int(rrs[1])
@@ -941,7 +970,7 @@ def main(ip={}, menuInfo=None):
         if not ns:
             bs = False
         read = JSONParser.getset(se, 'da')
-        if read is None:
+        if read is not None:
             c1 = read
             bs = False
         if 'da' in ip:
@@ -1038,7 +1067,7 @@ def main(ip={}, menuInfo=None):
                         cho.append(int(i))
                     else:
                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                        if rrs is None:
+                        if rrs is not None:
                             rrs = rrs.groups()
                             i1 = int(rrs[0])
                             i2 = int(rrs[1])
@@ -1061,7 +1090,7 @@ def main(ip={}, menuInfo=None):
         if not ns:
             bs = False
         read = JSONParser.getset(se, 'da')
-        if read is None:
+        if read is not None:
             c1 = read
             bs = False
         if 'da' in ip:
@@ -1303,7 +1332,7 @@ def main(ip={}, menuInfo=None):
                         cho.append(int(i))
                     else:
                         rrs = search(r"([0-9]+)-([0-9]+)", i)
-                        if rrs is None:
+                        if rrs is not None:
                             rrs = rrs.groups()
                             i1 = int(rrs[0])
                             i2 = int(rrs[1])
@@ -1326,7 +1355,7 @@ def main(ip={}, menuInfo=None):
         if not ns:
             bs = False
         read = JSONParser.getset(se, 'da')
-        if read is None:
+        if read is not None:
             c1 = read
             bs = False
         if 'da' in ip:
@@ -1788,6 +1817,125 @@ def main(ip={}, menuInfo=None):
             if read != 0 and read != NOT_FOUND:
                 return read
         return 0
+    if acvideo:
+        url = f"https://www.acfun.cn/v/ac{acvideoid}"
+        if log:
+            logg.write(f"GET {url}", currentframe(), "Get Acfun Video Webpage")
+        re = section.get(url)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Acfun Video Webpage Result")
+        if re.status_code == 404 or re.url != url:
+            print("404")
+            return NOT_FOUND
+        elif re.status_code >= 400:
+            return -1
+        parser = HTMLParser.AcfunParser()
+        parser.feed(re.text)
+        if log:
+            logg.write(f"parser.videoInfo = {parser.videoInfo}", currentframe(), "Acfun Video Webpage Parser Result")
+        videoInfo = json.loads(parser.videoInfo, strict=False)
+        if 'tagList' not in videoInfo:
+            videoInfo['tagList'] = []
+        if ns:
+            PrintInfo.printAcInfo(videoInfo)
+        cho = []
+        videoCount = len(videoInfo['videoList'])
+        if videoCount == 1:
+            cho.append(1)
+        else:
+            bs = True
+            f = True
+            while bs:
+                if f and 'p' in ip:
+                    f = False
+                    inp = ip['p']
+                elif ns:
+                    inp = input(lan['OUTPUT4'])  # 请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
+                else:
+                    print(lan['ERROR9'])  # 请使用-p <number>选择视频编号
+                    return -1
+                cho = []
+                if inp[0] == 'a':
+                    if ns:
+                        print(lan['OUTPUT5'])  # 您全选了所有视频
+                    for i in range(1, videoCount + 1):
+                        cho.append(i)
+                    bs = False
+                else:
+                    inp = inp.split(',')
+                    bb = True
+                    for i in inp:
+                        if i.isnumeric() and int(i) > 0 and int(i) <= videoCount and (not (int(i) in cho)):
+                            cho.append(int(i))
+                        else:
+                            rrs = search(r"([0-9]+)-([0-9]+)", i)
+                            if rrs is not None:
+                                rrs = rrs.groups()
+                                i1 = int(rrs[0])
+                                i2 = int(rrs[1])
+                                if i2 < i1:
+                                    tt = i1
+                                    i1 = i2
+                                    i2 = tt
+                                for i in range(i1, i2 + 1):
+                                    if i > 0 and i <= videoCount and (not (i in cho)):
+                                        cho.append(i)
+                            else:
+                                bb = False
+                    if bb:
+                        bs = False
+                        for i in cho:
+                            if ns:
+                                print(f"{lan['OUTPUT6']}{i},{videoInfo['videoList'][i-1]['title']}")  # 您选中了视频：
+        cho2 = 0
+        bs = True
+        if 'd' in ip and ip['d'] > 0 and ip['d'] < 5:
+            bs = False
+            cho2 = ip['d']
+        while bs:
+            if not ns:
+                print(lan['ERROR11'])  # 请使用-d <method>选择下载方式
+                return -1
+            inp = input(lan['INPUT13'])  # 选择下载方式
+            if inp[0].isnumeric() and int(inp[0]) > 0 and int(inp[0]) < 5:
+                cho2 = int(inp[0])
+                bs = False
+        if cho2 == 1 or cho2 == 4:
+            for i in cho:
+                read = biliDanmu.acDownloadDanmu(section, i - 1, videoInfo, se, ip, xml, xmlc)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Normal Video Download Barrage Return")
+                if read == 0:
+                    print(lan['OUTPUT9'].replace('<number>', str(i)))  # <number>P下载完成
+        if cho2 == 2 or cho2 == 4:
+            bs = True
+            cho3 = False
+            if not ns:
+                bs = False
+            read = JSONParser.getset(se, 'mp')
+            if read is True:
+                bs = False
+                cho3 = True
+            elif read is False:
+                bs = False
+            if 'm' in ip:
+                cho3 = ip['m']
+                bs = False
+            while bs:
+                inp = input(f'{lan["INPUT8"]}(y/n)')  # 是否要默认下载最高画质（这样将不会询问具体画质）？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        cho3 = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if log:
+                logg.write(f"cho3 = {cho3}", currentframe(), "Acfun Normal Video Download Video Para")
+            for i in cho:
+                read = videodownload.acVideoDownload(section, i - 1, videoInfo, cho3, se, ip)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Normal Video Download Video Return")
+        return 0
     if not che:
         if log:
             logg.write(f"GET {s}", currentframe(), "GET NORMAL/BANGUMI VIDEO WEBPAGE")
@@ -1930,7 +2078,7 @@ def main(ip={}, menuInfo=None):
             if log:
                 logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PLAYER.SO RESULT")
             rs = search(r"<interaction>(.+)</interaction>", re.text, I)
-            if rs is None:
+            if rs is not None:
                 rs = rs.groups()[0]
                 if log:
                     logg.write(f"rs = {rs}", currentframe(), "PLAYER.SO REGEX")
@@ -1977,7 +2125,7 @@ def main(ip={}, menuInfo=None):
                             cho.append(int(i))
                         else:
                             rrs = search(r"([0-9]+)-([0-9]+)", i)
-                            if rrs is None:
+                            if rrs is not None:
                                 rrs = rrs.groups()
                                 i1 = int(rrs[0])
                                 i2 = int(rrs[1])
@@ -2121,12 +2269,12 @@ def main(ip={}, menuInfo=None):
             data = JSONParser.Myparser2(parser.videodata)
             le = PrintInfo.printInfo2(data, ns)
             rs = search(r'__PGC_USERSTATE__=([^<]+)', re.text)
-            if rs is None:
+            if rs is not None:
                 rs = rs.groups()[0]
                 if log:
                     logg.write(f"rs = {rs}", currentframe(), "Normal Bangumi Data Regex")
                 pgc = json.loads(rs)
-                if 'progress' in pgc and pgc['progress'] is None:
+                if 'progress' in pgc and pgc['progress'] is not None:
                     if 'last_ep_id' in pgc['progress'] and pgc['progress']['last_ep_id'] > -1:
                         led = pgc['progress']['last_ep_id']
         epr = ""
@@ -2217,7 +2365,7 @@ def main(ip={}, menuInfo=None):
                                 cho.append(int(i))
                             else:
                                 rrs = search(r"([0-9]+)-([0-9]+)", i)
-                                if rrs is None:
+                                if rrs is not None:
                                     rrs = rrs.groups()
                                     i1 = int(rrs[0])
                                     i2 = int(rrs[1])

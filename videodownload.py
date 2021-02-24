@@ -37,6 +37,8 @@ from traceback import format_exc
 from biliLRC import filterLRC
 import biliAudio
 from nfofile import NFOFile, NFOActor
+from Logger import Logger
+from autoopenlist import autoopenfilelist
 # https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 # https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 # result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -50,6 +52,8 @@ ip = {}
 if len(sys.argv) > 1:
     ip = gopt(sys.argv[1:])
 lan = getdict('videodownload', getlan(se, ip))
+
+acfunQualityLabelList = ['2160P120', '2160P60', '2160P', '1080P60', '1080P+', '1080P', '720P60', '720P', '540P', '480P', '360P']
 
 
 def getqualitytrans(t: str) -> str:
@@ -110,6 +114,11 @@ def geth(h: CaseInsensitiveDict):
     for i in h.keys():
         s = s + ' --header "' + i + ': ' + h[i] + '"'
     return s
+
+
+def calFileSize(len_ms: int, avgBitRate: int) -> int:
+    "根据视频时长(ms)和平均码率计算视频大小"
+    return round(len_ms * avgBitRate / 8)
 
 
 def dwaria2(r, fn, url, size, d2, ip, se, i=1, n=1, d=False):
@@ -6070,6 +6079,236 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
                 for s in data['sub']:
                     downlrc(r2, fn + ".m4a", s, ip, se, data, ns, isau=True)
     return 0
+
+
+def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: dict, ip: dict):
+    """下载Acfun普通视频
+    index 下载P（忽略）
+    data 数据字典
+    c 自动下载最高画质
+    se 设置字典
+    ip 命令行字典
+    -1 创建文件夹失败
+    -2 读取cookies错误
+    -3 解析错误
+    -4 缺少必要的命令行参数"""
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    bp = ip['bp'] if 'bp' in ip else True if JSONParser.getset(se, 'bp') is True else False
+    nte = not ip['te'] if 'te' in ip else True if JSONParser.getset(se, 'te') is False else False
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    dmp = ip['dmp'] if 'dmp' in ip else True if JSONParser.getset(se, 'dmp') is True else False
+    videoCount = len(data['videoList'])
+    if videoCount == 1:
+        dmp = False
+    F = True if 'F' in ip else False
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    if dmp:
+        if not fin:
+            o += f"{file.filtern(data['title'])}/"
+        else:
+            o += file.filtern(f"{data['title']}(AC{data['currentVideoId']})/")
+    vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
+    sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
+    if logg:
+        logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\ndmp = {dmp}\nF = {F}\nfin = {fin}\nvf = {vf}\nsv = {sv}", currentframe(), "Acfun Normal Video Download Var")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Normal Video Download Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败
+        return -1
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
+    r2 = requests.Session()
+    r2.headers = copydict(r.headers)
+    if nte:
+        r2.trust_env = False
+    r2.proxies = r.proxies
+    read = JSONParser.loadcookie(r2, logg, "acfun_cookies.json")
+    if read != 0:
+        print(lan['ERROR2'])  # 读取cookies.json出现错误
+        return -2
+    if F:
+        print(f"{lan['OUTPUT8'].replace('<number>',str(index+1))}{data['videoList'][index]['title']}")  # 第<number>P：
+    playJson = json.loads(data['currentVideoInfo']['ksPlayJson'])
+    if logg:
+        logg.write(f"playJson = {playJson}", currentframe(), "Acfun Normal Video Download PlayJson")
+    if 'adaptationSet' not in playJson or len(playJson['adaptationSet']) == 0:
+        return -3
+    dur = playJson['adaptationSet'][0]['duration']
+    rep = playJson['adaptationSet'][0]['representation']
+    if len(rep) == 0:
+        return -3
+    rep.sort(key=lambda d: acfunQualityLabelList.index(d['qualityLabel']))
+    if logg:
+        logg.write(f"rep = {rep}", currentframe(), "Acfun Normal Video Download Replist")
+    if not c or F:
+        i = 0
+        for q in rep:
+            if ns or (not ns and F):
+                print(f"{i+1}.{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+                essize = calFileSize(dur, q['avgBitrate'])
+                print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+            i += 1
+        if F:
+            return 0
+        if len(rep) == 1:
+            info = rep[0]
+        else:
+            bs = True
+            fi = True
+            while bs:
+                if fi and 'v' in ip:
+                    fi = False
+                    inp = ip['v']
+                elif ns:
+                    inp = input(lan['INPUT2'])  # 请选择画质：
+                else:
+                    print(lan['ERROR3'])  # 请使用-v <id>选择画质
+                    return -4
+                if len(inp) > 0 and inp.isnumeric():
+                    if int(inp) > 0 and int(inp) <= len(rep):
+                        bs = False
+                        info = rep[int(inp) - 1]
+                        if ns:
+                            print(lan["OUTPUT11"].replace('<videoquality>', info['qualityLabel']))  # 已选择%s画质
+    else:
+        info = rep[0]
+        if ns:
+            q = info
+            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+            essize = calFileSize(dur, q['avgBitrate'])
+            print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+    if videoCount == 1:
+        if not fin:
+            filen = o + file.filtern(f"{data['title']}.{vf}")
+        elif sv:
+            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+        else:
+            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
+    else:
+        if not fin and not dmp:
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}.{vf}")
+        elif not fin and dmp:
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}.{vf}")
+        elif sv and not dmp:
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+        elif not dmp:
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
+        elif sv:
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+        else:
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']}).{vf}")
+    ff = os.system(f'ffmpeg -h{getnul()}') == 0
+    if logg:
+        logg.write(f"ff = {ff}\nfilen = '{filen}'", currentframe(), "Acfun Normal Video Download Var2")
+    if not ff:
+        print(lan['FFMPEG'])
+        return 0
+    if os.path.exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "Acfun Normal Video Download Remove File Failed")
+                print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                return 0
+        else:
+            return 0
+    tempf = f"Temp/AC{data['currentVideoId']}_{int(time.time())}_metadata.txt"
+    tit = data['title']
+    tit2 = data['videoList'][index]['title']
+    if tit2 != "" and tit != tit2:
+        tit = f'{tit} - {tit2}'
+    tags = bstr.gettags(data['tagList'], lambda d: d['name'])
+    nss = ""
+    if not ns:
+        nss = getnul()
+    if vf == "mkv":
+        with open(tempf, 'w', encoding='utf8', newline='\n') as te:
+            te.write(';FFMETADATA1\n')
+            te.write(f"title={bstr.g(tit)}\n")
+            te.write(f"description={bstr.g(data['description'])}\n")
+            te.write(f"acid={data['currentVideoId']}\n")
+            te.write(f"atitle={bstr.g(data['title'])}\n")
+            te.write(f"pubdate={tostr2(data['createTimeMillis']/1000)}\n")
+            te.write(f"uid={data['user']['id']}\n")
+            te.write(f"artist={bstr.g(data['user']['name'])}\n")
+            te.write(f"author={bstr.g(data['user']['name'])}\n")
+            te.write(f"p={index+1}P/{videoCount}P\n")
+            te.write(f"part={bstr.g(data['videoList'][index]['title'])}\n")
+            te.write(f"vq={bstr.g(info['codecs'])}\n")
+            te.write(f"purl=https://www.acfun.cn/v/ac{data['currentVideoId']}\n")
+            te.write(f"tags={bstr.g(tags)}\n")
+        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}" -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+    else:
+        with open(tempf, 'w', encoding='utf8', newline='\n') as te:
+            te.write(';FFMETADATA1\n')
+            te.write(f"title={bstr.g(tit)}\n")
+            te.write(f"comment={bstr.g(data['description'])}\n")
+            te.write(f"album={bstr.g(data['title'])}\n")
+            te.write(f"artist={bstr.g(data['user']['name'])}\n")
+            te.write(f"album_artist={bstr.g(data['user']['name'])}\n")
+            te.write(f"track={index+1}/{videoCount}\n")
+            te.write("disc=1/1\n")
+            te.write(f"episode_id=AC{data['currentVideoId']}\n")
+            te.write(f"date={tostr4(data['createTimeMillis']/1000)}\n")
+            te.write(f"description={bstr.g(info['codecs'])},{data['user']['id']}\\\n")
+            te.write(f"{bstr.g(tags)}\\\n")
+            te.write(f"https://www.acfun.cn/v/ac{data['currentVideoId']}\n")
+        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}" -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+    if logg:
+        with open(tempf, 'r', encoding='utf8') as te:
+            logg.write(f"METADATAFILE '{tempf}'\n{te.read()}", currentframe(), "Acfun Normal Video Video Download Metadata")
+        logg.write(f"ml = {ml}", currentframe(), "Acfun Normal Video Download FFmpeg Command Line")
+    re = os.system(ml)
+    if logg:
+        logg.write(f"re = {re}", currentframe(), "Acfun Normal Video Download FFmpeg Return")
+    if re == 0:
+        print(lan['OUTPUT14'])  # 合并完成！
+        if oll:
+            oll.add(filen)
+    os.remove(tempf)
+    nfo = False
+    if 'nfo' in se:
+        nfo = se['nfo']
+    if 'nfo' in ip:
+        nfo = ip['nfo']
+    if nfo:
+        nfof = NFOFile()
+        nfof.metadata.title = tit
+        nfof.metadata.premiered = round(data['createTimeMillis'] / 1000)
+        nfof.metadata.plot = data['description']
+        nfof.metadata.genre = [d['name'] for d in data['tagList']]
+        act = NFOActor()
+        act.actorName = data['user']['name']
+        act.actorThumb = data['user']['headUrl']
+        nfof.metadata.actors.append(act)
+        nfof.save(filen)
 
 
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):

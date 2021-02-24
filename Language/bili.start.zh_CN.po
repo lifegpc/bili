@@ -4,14 +4,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# 1 q <g1710431395@gmail.com>, 2020
+# 1 q <g1710431395@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-10 23:16:38+0000\n"
 "PO-Revision-Date: 2020-07-10 23:26+0000\n"
-"Last-Translator: 1 q <g1710431395@gmail.com>, 2020\n"
+"Last-Translator: 1 q <g1710431395@gmail.com>, 2021\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -306,3 +306,17 @@ msgstr "您全选了所有音频"
 msgctxt "OUTPUT16"
 msgid "You have selected the audio:"
 msgstr "您选中了音频："
+
+msgctxt "INPUT13"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download barrage\n"
+"2.download video\n"
+"3.download cover image only\n"
+"4.download barrage and video"
+msgstr ""
+"请输入你要下载的方式：\n"
+"1.弹幕下载\n"
+"2.视频下载\n"
+"3.仅封面图片下载\n"
+"4.弹幕+视频下载"

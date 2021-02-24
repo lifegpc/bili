@@ -32,6 +32,10 @@ from command import gopt
 from lang import getdict, getlan
 from inspect import currentframe
 from traceback import format_exc
+from requests import Session
+from acfunDanmu import getDanmuList
+from Logger import Logger
+from autoopenlist import autoopenfilelist
 
 
 lan = None
@@ -1294,3 +1298,139 @@ def DanmuGeta(c, data, r, t, xml, xmlc, ip: dict, se: dict, che: bool = False):
         if oll:
             oll.add(filen)
         return 0
+
+
+def acDownloadDanmu(r: Session, index: int, data: dict, se: dict, ip: dict, xml: int, xmlc: dict):
+    '''下载Acfun视频弹幕
+    index 第几P
+    data 视频信息
+    se 设置字典
+    ip 命令行字典
+    xml 2不过滤，1过滤
+    xmlc 过滤词典
+    -1 创建文件夹失败
+    -2 删除原有文件失败
+    -3 写入文件失败'''
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = True
+    if 's' in ip:
+        ns = False
+    o = "Download/"
+    read = getset(se, 'o')
+    if read is not None:
+        o = read
+    if 'o' in ip:
+        o = ip['o']
+    fin = True
+    if getset(se, 'in') is False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    dmp = False
+    if getset(se, 'dmp') is True:
+        dmp = True
+    if 'dmp' in ip:
+        dmp = ip['dmp']
+    videoCount = len(data['videoList'])
+    if dmp and videoCount == 1:
+        dmp = False
+    if dmp:
+        if not fin:
+            o += f"{file.filtern(data['title'])}/"
+        else:
+            o += file.filtern(f"{data['title']}(AC{data['currentVideoId']})/")
+    if logg:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Acfun Barrage Para")
+    try:
+        if not exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Barrage Mkdir Error")
+        print(lan['ERROR3'].replace('<dirname>', o))  # 创建文件夹<dirname>失败。
+        return -1
+    if videoCount == 1:
+        if fin:
+            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).xml")
+        else:
+            filen = o + file.filtern(f"{data['title']}.xml")
+    else:
+        if fin and not dmp:
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).xml")
+        elif not dmp:
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}.xml")
+        elif fin:
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']}).xml")
+        else:
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}.xml")
+    if logg:
+        logg.write(f"filen = {filen}", currentframe(), "Acfun Barrage Var1")
+    if exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            bs = False
+            fg = True
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")  # 文件"<filename>"已存在，是否覆盖？
+            if inp[0].lower() == 'y':
+                bs = False
+                fg = True
+            elif inp[0].lower() == 'n':
+                bs = False
+        if fg:
+            try:
+                remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "Acfun Barrage Remove File Failed")
+                print(lan['ERROR4'])  # 删除原有文件失败，跳过下载
+                return -2
+        else:
+            return -2
+    dml = getDanmuList(r, data["videoList"][index]["id"], data["videoList"][index]['danmakuCount'], logg)  # 弹幕列表
+    if len(dml) == 0:
+        return 0
+    if ns:
+        print(f"{lan['OUTPUT1']}{len(dml)}")  # 总计：
+        if xml == 1:
+            print(lan['OUTPUT2'])  # 正在过滤……
+    if xml == 1:
+        sdml = dml
+        dml = []
+        filterNum = 0
+        for i in sdml:
+            read = biliDanmuXmlFilter.Filter(i, xmlc)
+            if read:
+                filterNum += 1
+            else:
+                dml.append(i)
+    try:
+        f = open(filen, mode='w', encoding='utf8')
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Barrage Error")
+        print(lan['ERROR5'].replace('<filename>', filen))  # 打开文件"<filename>"失败
+        return -3
+    try:
+        f.write('<?xml version="1.0" encoding="UTF-8"?>')
+        f.write(f"<i><chatserver>www.acfun.com</chatserver><chatid>{data['videoList'][index]['id']}</chatid><mission>{0}</mission><maxlimit>{data['videoList'][index]['danmakuCount']}</maxlimit><state>0</state><real_name>0</real_name><source>k-v</source>")
+        for i in dml:
+            f.write(biliDanmuCreate.objtoxml(i))
+        f.write('</i>')
+        f.close()
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Barrage Error2")
+        print(lan['ERROR6'].replace('<filename>', filen))  # 保存文件失败
+        return -3
+    if oll:
+        oll.add(filen)
+    return 0
