@@ -6660,6 +6660,121 @@ def acBangumiVideoDownload(r: requests.Session, index: int, data: dict, li: dict
     return 0
 
 
+def acfunBangumiCoverImgDownload(r: requests.Session, index: int, data: dict, li: dict, se: dict, ip: dict, fn: str = None) -> int:
+    '''下载Acfun番剧封面
+    index 第几P
+    data 数据字典
+    li 番剧列表字典
+    se 设置字典
+    ip 命令行参数字典
+    fn 可选文件名
+    -1 创建文件夹失败
+    -2 下载失败'''
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    if not fin:
+        o += file.filtern(f"{data['bangumiTitle']}") + "/"
+    else:
+        o += file.filtern(f"{data['bangumiTitle']}(AA{data['bangumiId']})") + "/"
+    if logg:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "Acfun Bangumi Video Download Pic Para")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Pic Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
+        return -1
+    bangumiId = data['bangumiId']
+    episodeId = li['items'][index]['itemId']
+    currVideoId = data['videoId']
+    tarVideoId = li['items'][index]['videoId']
+    if currVideoId == tarVideoId:
+        tarData = data
+    else:
+        url = f"https://www.acfun.cn/bangumi/aa{bangumiId}_36188_{episodeId}"
+        if logg:
+            logg.write(f"GET {url}", currentframe(), "Acfun Bangumi Video Download Pic Get Webpage")
+        re = r.get(url)
+        if logg:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Acfun Bangumi Video Download Pic Webpage Result")
+        if re.status_code >= 400:
+            return -2
+        parser = AcfunBangumiParser()
+        parser.feed(re.text)
+        if logg:
+            logg.write(f"parser.bangumiData = {parser.bangumiData}", currentframe(), "Acfun Bangumi Video Download Pic Webpage Parser Result")
+        if parser.bangumiData == '':
+            return -2
+        try:
+            tarData = json.loads(parser.bangumiData, strict=False)
+        except:
+            if logg:
+                logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Pic Webpage Parser Error")
+            return -2
+    if 'image' not in tarData:
+        return -2
+    if fn is None:
+        hzm = file.geturlfe(tarData['image'])
+        if fin:
+            filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}({li['items'][index]['episodeName']},EP{li['items'][index]['itemId']},{li['items'][index]['videoId']}).{hzm}")
+        else:
+            filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}.{hzm}")
+    else:
+        filen = fn
+    if logg:
+        logg.write(f"filen = {filen}", currentframe(), "Acfun Bangumi Video Download Pic Var")
+    if os.path.exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Pic Remove File Failed")
+                print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                return 0
+    if logg:
+        logg.write(f"GET {tarData['image']}", currentframe(), "Acfun Bangumi Video Download Pic Request")
+    re = r.get(tarData['image'])
+    if logg:
+        logg.write(f"status = {re.status_code}", currentframe(), "Acfun Bangumi Video Download Pic Request Result")
+    if re.status_code == 200:
+        f = open(filen, 'wb')
+        f.write(re.content)
+        f.close()
+        if oll:
+            oll.add(filen)
+        if ns:
+            print(lan['OUTPUT23'].replace('<filename>', filen))  # 封面图片下载完成。
+        return 0
+    else:
+        print(f"{lan['OUTPUT24']}HTTP {re.status_code}")  # 下载封面图片时发生错误：
+        return -2
+
+
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):
     logg = None
     if 'logg' in ip:
