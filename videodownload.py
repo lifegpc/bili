@@ -6117,7 +6117,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         if not fin:
             o += f"{file.filtern(data['title'])}/"
         else:
-            o += file.filtern(f"{data['title']}(AC{data['dougaId']})/")
+            o += file.filtern(f"{data['title']}(AC{data['dougaId']})") + "/"
     vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
     sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
     if logg:
@@ -6381,7 +6381,7 @@ def acCoverImgDownload(r: requests.Session, data: dict, ip: dict, se: dict, fn: 
         if not fin:
             o += f"{file.filtern(data['title'])}/"
         else:
-            o += file.filtern(f"{data['title']}(AC{data['dougaId']})/")
+            o += file.filtern(f"{data['title']}(AC{data['dougaId']})") + "/"
     if logg:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Acfun Normal Video Download Pic Para")
     try:

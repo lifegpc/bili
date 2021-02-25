@@ -2047,6 +2047,26 @@ def main(ip={}, menuInfo=None):
             for i in cho:
                 if ns:
                     print(f"{lan['OUTPUT6']}{i},{bangumiList['items'][i-1]['title']}")  # 您选中了视频：
+        cho2 = 0
+        bs = True
+        if 'd' in ip and ip['d'] > 0 and ip['d'] < 5:
+            bs = False
+            cho2 = ip['d']
+        while bs:
+            if not ns:
+                print(lan['ERROR11'])  # 请使用-d <method>选择下载方式
+                return -1
+            inp = input(lan['INPUT13'])  # 选择下载方式
+            if inp[0].isnumeric() and int(inp[0]) > 0 and int(inp[0]) < 5:
+                cho2 = int(inp[0])
+                bs = False
+        if cho2 == 1 or cho2 == 4:
+            for i in cho:
+                biliDanmu.acBangumiDownloadDanmu(section, bangumiData, bangumiList, i - 1, se, ip, xml, xmlc)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Barrage Return")
+                if read == 0:
+                    print(lan['OUTPUT9'].replace('<number>', str(i)))  # <number>P下载完成
         return 0
     if not che:
         if log:

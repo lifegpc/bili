@@ -27,7 +27,9 @@ def convertToBiliVer(dm: dict) -> dict:
 
 def getDanmuList(r: Session, rid: str, totalCount: int, logg: Logger = None) -> list:
     rel = []
-    for page in range(0, 200):
+    page = 0
+    while True:
+        page += 1
         url = "https://www.acfun.cn/rest/pc-direct/new-danmaku/list"
         data = {"resourceId": rid, "resourceType": "9", "enableAdvanced": "true",
                 "pcursor": str(page), "count": "200", "sortType": "1", "asc": "false"}
@@ -42,6 +44,8 @@ def getDanmuList(r: Session, rid: str, totalCount: int, logg: Logger = None) -> 
             print(f"{re['result']} {re['error_msg']}")
             break
         rel += re['danmakus']
+        if totalCount is None:
+            totalCount = re['totalCount']
         if len(rel) >= totalCount:
             break
     rel2 = []
