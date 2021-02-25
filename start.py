@@ -1960,6 +1960,8 @@ def main(ip={}, menuInfo=None):
                 read = videodownload.acVideoDownload(section, i - 1, videoInfo, cho3, se, ip)
                 if log:
                     logg.write(f"read = {read}", currentframe(), "Acfun Normal Video Download Video Return")
+                if read == -4:
+                    return -1
         if cho2 == 3:
             for i in cho:
                 read = videodownload.acCoverImgDownload(section, videoInfo, ip, se)
@@ -2095,6 +2097,8 @@ def main(ip={}, menuInfo=None):
                 read = videodownload.acBangumiVideoDownload(section, i - 1, bangumiData, bangumiList, cho3, se, ip)
                 if log:
                     logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Video Return")
+                if read == -4:
+                    return -1
         if cho2 == 3:
             for i in cho:
                 read = videodownload.acfunBangumiCoverImgDownload(section, i - 1, bangumiData, bangumiList, se, ip)

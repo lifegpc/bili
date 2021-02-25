@@ -133,6 +133,7 @@ def ph():
     --nnfo  {la['O95']}
     -V <format id>[<coding format>] {la['O96']}
     {la['O97'].replace(onewline, nnewline)}
+    {la['O101'].replace(onewline, nnewline)}
     {la['O98'].replace('<codecs>', 'avc, hev')}
     {la['O99']}
     --anopro    {la['O100']}
@@ -397,6 +398,8 @@ def gopt(args, d: bool = False):
             if rs is not None:
                 vid = int(rs.groups()[0])
                 if vid in [16, 32, 64, 74, 80, 112, 116, 120, 125]:
+                    r['V'] = {'id': vid, 'codec': rs.groups()[1]}
+                elif vid in range(1, 12):
                     r['V'] = {'id': vid, 'codec': rs.groups()[1]}
         if i[0] == '--anopro' and 'anopro' not in r:
             r['anopro'] = True

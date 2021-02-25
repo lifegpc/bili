@@ -6156,7 +6156,23 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
     rep.sort(key=lambda d: acfunQualityLabelList.index(d['qualityLabel']))
     if logg:
         logg.write(f"rep = {rep}", currentframe(), "Acfun Normal Video Download Replist")
-    if not c or F:
+    if 'V' in ip and not F:
+        if ip['V']['id'] not in range(1, 12):
+            return -4
+        tarLabel = acfunQualityLabelList[-ip['V']['id']]
+        matched = False
+        for q in rep:
+            if acfunQualityLabelList.index(tarLabel) <= acfunQualityLabelList.index(q['qualityLabel']):
+                matched = True
+                info = q
+        if not matched:
+            info = rep[0]
+        if ns:
+            q = info
+            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+            essize = calFileSize(dur, q['avgBitrate'])
+            print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+    elif not c or F:
         i = 0
         for q in rep:
             if ns or (not ns and F):
@@ -6463,7 +6479,8 @@ def acBangumiVideoDownload(r: requests.Session, index: int, data: dict, li: dict
     ip 命令行字典
     -1 创建文件夹失败
     -2 解析失败
-    -3 需要购买'''
+    -3 需要购买
+    -4 命令行参数错误'''
     logg: Logger = ip['logg'] if 'logg' in ip else None
     oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
     ns = False if 's' in ip else True
@@ -6530,7 +6547,23 @@ def acBangumiVideoDownload(r: requests.Session, index: int, data: dict, li: dict
     rep.sort(key=lambda d: acfunQualityLabelList.index(d['qualityLabel']))
     if logg:
         logg.write(f"rep = {rep}", currentframe(), "Acfun Bangumi Video Download Replist")
-    if not c or F:
+    if 'V' in ip and not F:
+        if ip['V']['id'] not in range(1, 12):
+            return -4
+        tarLabel = acfunQualityLabelList[-ip['V']['id']]
+        matched = False
+        for q in rep:
+            if acfunQualityLabelList.index(tarLabel) <= acfunQualityLabelList.index(q['qualityLabel']):
+                matched = True
+                info = q
+        if not matched:
+            info = rep[0]
+        if ns:
+            q = info
+            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+            essize = calFileSize(dur, q['avgBitrate'])
+            print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+    elif not c or F:
         i = 0
         for q in rep:
             if ns or (not ns and F):
