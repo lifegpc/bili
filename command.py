@@ -132,10 +132,10 @@ def ph():
     --nfo   {la['O94']}
     --nnfo  {la['O95']}
     -V <format id>[<coding format>] {la['O96']}
-    --anopro    {la['O100']}
     {la['O97'].replace(onewline, nnewline)}
     {la['O98'].replace('<codecs>', 'avc, hev')}
     {la['O99']}
+    --anopro    {la['O100']}
     {la['O56']}
     {la['O57']}
     {la['O58']}
