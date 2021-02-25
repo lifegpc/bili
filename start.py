@@ -2067,6 +2067,34 @@ def main(ip={}, menuInfo=None):
                     logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Barrage Return")
                 if read == 0:
                     print(lan['OUTPUT9'].replace('<number>', str(i)))  # <number>P下载完成
+        if cho2 == 2 or cho2 == 4:
+            bs = True
+            cho3 = False
+            if not ns:
+                bs = False
+            read = JSONParser.getset(se, 'mp')
+            if read is True:
+                bs = False
+                cho3 = True
+            elif read is False:
+                bs = False
+            if 'm' in ip:
+                cho3 = ip['m']
+                bs = False
+            while bs:
+                inp = input(f'{lan["INPUT8"]}(y/n)')  # 是否要默认下载最高画质（这样将不会询问具体画质）？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        cho3 = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if log:
+                logg.write(f"cho3 = {cho3}", currentframe(), "Acfun Bangumi Video Download Video Para")
+            for i in cho:
+                read = videodownload.acBangumiVideoDownload(section, i - 1, bangumiData, bangumiList, cho3, se, ip)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Video Return")
         return 0
     if not che:
         if log:

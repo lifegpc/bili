@@ -318,3 +318,7 @@ msgstr ""
 msgctxt "FFMPEG"
 msgid "Can not find ffmpeg. ffmpeg is required to download this video."
 msgstr ""
+
+msgctxt "NEEDPAY"
+msgid "You need to purchase this video to access it."
+msgstr ""
