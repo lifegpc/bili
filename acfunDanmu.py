@@ -43,6 +43,8 @@ def getDanmuList(r: Session, rid: str, totalCount: int, logg: Logger = None) -> 
         if re['result'] != 0:
             print(f"{re['result']} {re['error_msg']}")
             break
+        if len(re['danmakus']) == 0:
+            break
         rel += re['danmakus']
         if totalCount is None:
             totalCount = re['totalCount']
