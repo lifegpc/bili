@@ -929,6 +929,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                    te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if log:
                     with open(f"Temp/{data['aid']}_{tt}.txt", 'r', encoding='utf8') as te:
                         logg.write(f"INPUT FILE 'Temp/{data['aid']}_{tt}.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Temp File2")
@@ -954,6 +955,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                    te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if log:
                     with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                         logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata4")
@@ -1558,6 +1560,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                    te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if log:
                     with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                         logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata7")
@@ -1581,6 +1584,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     te.write(f"description={bstr.g(vqs[0])},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                    te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if log:
                     with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                         logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata8")
@@ -2246,6 +2250,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                 te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                 te.write(f"{bstr.g(url)}\n")
+                te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
             if log:
                 with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                     logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Audio Download Metadata")
@@ -4481,6 +4486,7 @@ def smdownload(r: requests.Session, i: dict, c: bool, se: dict, ip: dict):
                 te.write(f"date={i['upload_time'][:10]}\n")
                 te.write(f"description=UID{i['uid']},{i['width']}x{i['height']},{bstr.g(bstr.gettags(i['tags']))}\\\n")
                 te.write(f"https://vc.bilibili.com/video/{i['id']}\n")
+                te.write(f"genre={bstr.g(bstr.gettags(i['tags']))}\n")
             if log:
                 with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                     logg.write(f"METADATAFILE 'Temp/{i['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "SMDOWNLOAD METADATAFILE")
@@ -4920,6 +4926,7 @@ def lrvideodownload(data, r, c, c3, se, ip):
                     te.write(f"date={tostr2(data['st'])[:10]}\n")
                     te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\\\n")
                     te.write(f"https://live.bilibili.com/record/{data['rid']}\n")
+                    te.write(f"genre={bstr.g(data['tags'])}\n")
                 if log:
                     with open(f"Temp/{data['rid']}_{tt}.txt", 'r', encoding='utf8') as te:
                         logg.write(f"FFMPEG CONCAT FILE 'Temp/{data['rid']}_{tt}.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO FFMPEG CONCAT")
@@ -4936,6 +4943,7 @@ def lrvideodownload(data, r, c, c3, se, ip):
                     te.write(f"date={tostr2(data['st'])[:10]}\n")
                     te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\\\n")
                     te.write(f"https://live.bilibili.com/record/{data['rid']}\n")
+                    te.write(f"genre={bstr.g(data['tags'])}\n")
                 if log:
                     with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                         logg.write(f"METADATAFILE 'Temp/{data['rid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO METADATAFILE")
@@ -5672,6 +5680,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 if 'tags' in albumdata and albumdata['tags'] is not None and albumdata['title'] != '':
                     te.write(f"{bstr.g(lan['ALBTAGS'])}{bstr.g(bstr.gettags(albumdata['tags']))}\\\n")
                 te.write(f"""{bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
+                te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
                     te.write(f"copyright=Publish by {albumdata['publisher']}\n")
                 if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '' and 'menusRespones' in albumdata:
@@ -6293,6 +6302,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"description={bstr.g(info['codecs'])},{data['user']['id']}\\\n")
             te.write(f"{bstr.g(tags)}\\\n")
             te.write(f"https://www.acfun.cn/v/ac{data['dougaId']}\n")
+            te.write(f"genre={bstr.g(tags)}\n")
         ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
     if logg:
         with open(tempf, 'r', encoding='utf8') as te:
