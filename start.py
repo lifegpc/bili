@@ -33,7 +33,7 @@ import biliTime
 import chon
 import videodownload
 import biliBv
-from re import search, I
+from re import search, I, match
 import os
 import sys
 from command import gopt
@@ -127,6 +127,7 @@ def main(ip={}, menuInfo=None):
         return 0
     acfun = False  # Acfun网站
     acvideo = False  # Acfun Video acxxxxx
+    acbangumi = False  # Acfun Bangumi
     av = False
     ss = False
     ep = False
@@ -158,6 +159,8 @@ def main(ip={}, menuInfo=None):
     menuid = -1  # 音频区AM号
     collid = -1  # 音频区收藏夹ID
     acvideoid = -1  # Acfun AC号
+    acbangumiid = -1  # Acfun AA号
+    acepisodeid = -1  # Acfun 剧集号（EP号
     if inp[0:2].lower() == 'ss' and inp[2:].isnumeric():
         s = "https://www.bilibili.com/bangumi/play/ss" + inp[2:]
         ss = True
@@ -200,6 +203,21 @@ def main(ip={}, menuInfo=None):
         acvideoid = int(inp[2:])
         if log and not logg.hasf():
             logg.openf(f"log/AC{acvideoid}_{round(time())}.log")
+    elif inp[:2].lower() == "aa" and inp[2:].isnumeric():
+        acfun = True
+        acbangumi = True
+        acbangumiid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/AA{acbangumiid}_{round(time())}.log")
+    elif inp[:2].lower() == "aa" and match(r'\d+_36188_\d+', inp[2:]):
+        rs = search(r'(\d+)_36188_(\d+)', inp[2:])
+        rs = rs.groups()
+        acfun = True
+        acbangumi = True
+        acbangumiid = int(rs[0])
+        acepisodeid = int(rs[1])
+        if log and not logg.hasf():
+            logg.openf(f"log/AA{acbangumiid}_{round(time())}.log")
     elif inp.isnumeric():
         s = "https://www.bilibili.com/video/av" + inp
         av = True
@@ -210,7 +228,7 @@ def main(ip={}, menuInfo=None):
         if re is None:
             re = search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?', inp, I)
             if re is None:
-                re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?', inp)
+                re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?(bangumi/aa(\d+)(_36188_(\d+))?)?', inp)
                 if re is None:
                     re = search(r"[^:]+://", inp)
                     if re is None:
@@ -233,6 +251,14 @@ def main(ip={}, menuInfo=None):
                         acvideoid = int(re[3])
                         if log and not logg.hasf():
                             logg.openf(f"log/AC{acvideoid}_{round(time())}.log")
+                    elif re[4]:
+                        acfun = True
+                        acbangumi = True
+                        acbangumiid = int(re[5])
+                        if re[6]:
+                            acepisodeid = int(re[7])
+                        if log and not logg.hasf():
+                            logg.openf(f"log/AA{acbangumiid}_{round(time())}.log")
                     else:
                         print(f'{lan["ERROR2"]}')  # 输入有误
                         return -1
@@ -1429,23 +1455,22 @@ def main(ip={}, menuInfo=None):
         rs = search(r'window\.__NEPTUNE_IS_MY_WAIFU__=({[^<]+})', re.text, I)
         if rs is not None:
             live_info = json.loads(rs.groups()[0])
-            room_info = live_info['baseInfoRes']['data']
         else:
             live_info = None
-            uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
-            if log:
-                logg.write(f"GET {uri}", currentframe(), "GET LIVE ROOM INFO")
-            re = r.get(uri)
-            re.encoding = 'utf8'
-            if log:
-                logg.write(f"status = {re.status_code}\n{re.text}")
-            re = re.json()
-            if re['code'] != 0:
-                print(f"{re['code']} {re['message']}")
-                if re['code'] == 1:
-                    return NOT_FOUND
-                return -1
-            room_info = re['data']
+        uri = f"https://api.live.bilibili.com/room/v1/Room/get_info?room_id={roomid}&from=room"
+        if log:
+            logg.write(f"GET {uri}", currentframe(), "GET LIVE ROOM INFO")
+        re = r.get(uri)
+        re.encoding = 'utf8'
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}")
+        re = re.json()
+        if re['code'] != 0:
+            print(f"{re['code']} {re['message']}")
+            if re['code'] == 1:
+                return NOT_FOUND
+            return -1
+        room_info = re['data']
         info = JSONParser2.getliveinfo1(room_info)
         if log:
             logg.write(f"live_info = {live_info}\nroom_info = {room_info}", currentframe(), "LIVE ROOM INFO")
@@ -1935,6 +1960,150 @@ def main(ip={}, menuInfo=None):
                 read = videodownload.acVideoDownload(section, i - 1, videoInfo, cho3, se, ip)
                 if log:
                     logg.write(f"read = {read}", currentframe(), "Acfun Normal Video Download Video Return")
+                if read == -4:
+                    return -1
+        if cho2 == 3:
+            for i in cho:
+                read = videodownload.acCoverImgDownload(section, videoInfo, ip, se)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Normal Video Download Pic Return")
+        return 0
+    if acbangumi:
+        url = f"https://www.acfun.cn/bangumi/aa{acbangumiid}"
+        if log:
+            logg.write(f"GET {url}", currentframe(), "Get Acfun Bangumi Webpage")
+        re = section.get(url)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Acfun Bangumi Webpage Result")
+        if re.status_code == 404:
+            print("404")
+            return NOT_FOUND
+        elif re.status_code >= 400:
+            return -1
+        parser = HTMLParser.AcfunBangumiParser()
+        parser.feed(re.text)
+        if log:
+            logg.write(f"parser.bangumiData = {parser.bangumiData}\nparser.bangumiList = {parser.bangumiList}", currentframe(), "Acfun Bangumi Webpage Parser Result")
+        bangumiData = json.loads(parser.bangumiData, strict=False)
+        bangumiList = json.loads(parser.bangumiList, strict=False)
+        if ns:
+            PrintInfo.printAcBangumiInfo(bangumiData, bangumiList)
+        cho = []
+        videoCount = len(bangumiList['items'])
+        if videoCount == 1:
+            cho.append(1)
+        else:
+            epl = lan['INPUT10'] if acepisodeid != -1 else ''  # ，仅下载输入的ep号可输入b
+            bs = True
+            f = True
+            while bs:
+                if f and 'p' in ip:
+                    f = False
+                    inp = ip['p']
+                elif ns:
+                    inp = input(f"{lan['OUTPUT4']}{epl}")  # 请输入你想下载的视频编号（每两个编号间用,隔开，全部下载可输入a）：
+                else:
+                    print(lan['ERROR9'])  # 请使用-p <number>选择视频编号
+                    return -1
+                cho = []
+                if inp[0] == 'a':
+                    if ns:
+                        print(lan['OUTPUT5'])  # 您全选了所有视频
+                    for i in range(1, videoCount + 1):
+                        cho.append(i)
+                    bs = False
+                elif acepisodeid != -1 and inp[0] == 'b':
+                    i = 0
+                    found = False
+                    for k in bangumiList['items']:
+                        i += 1
+                        if k['itemId'] == acepisodeid:
+                            cho.append(i)
+                            found = True
+                            break
+                    if found:
+                        bs = False
+                else:
+                    inp = inp.split(',')
+                    bb = True
+                    for i in inp:
+                        if i.isnumeric() and int(i) > 0 and int(i) <= videoCount and (not (int(i) in cho)):
+                            cho.append(int(i))
+                        else:
+                            rrs = search(r"([0-9]+)-([0-9]+)", i)
+                            if rrs is not None:
+                                rrs = rrs.groups()
+                                i1 = int(rrs[0])
+                                i2 = int(rrs[1])
+                                if i2 < i1:
+                                    tt = i1
+                                    i1 = i2
+                                    i2 = tt
+                                for i in range(i1, i2 + 1):
+                                    if i > 0 and i <= videoCount and (not (i in cho)):
+                                        cho.append(i)
+                            else:
+                                bb = False
+                    if bb:
+                        bs = False
+            for i in cho:
+                if ns:
+                    print(f"{lan['OUTPUT6']}{i},{bangumiList['items'][i-1]['title']}")  # 您选中了视频：
+        cho2 = 0
+        bs = True
+        if 'd' in ip and ip['d'] > 0 and ip['d'] < 5:
+            bs = False
+            cho2 = ip['d']
+        while bs:
+            if not ns:
+                print(lan['ERROR11'])  # 请使用-d <method>选择下载方式
+                return -1
+            inp = input(lan['INPUT13'])  # 选择下载方式
+            if inp[0].isnumeric() and int(inp[0]) > 0 and int(inp[0]) < 5:
+                cho2 = int(inp[0])
+                bs = False
+        if cho2 == 1 or cho2 == 4:
+            for i in cho:
+                biliDanmu.acBangumiDownloadDanmu(section, bangumiData, bangumiList, i - 1, se, ip, xml, xmlc)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Barrage Return")
+                if read == 0:
+                    print(lan['OUTPUT9'].replace('<number>', str(i)))  # <number>P下载完成
+        if cho2 == 2 or cho2 == 4:
+            bs = True
+            cho3 = False
+            if not ns:
+                bs = False
+            read = JSONParser.getset(se, 'mp')
+            if read is True:
+                bs = False
+                cho3 = True
+            elif read is False:
+                bs = False
+            if 'm' in ip:
+                cho3 = ip['m']
+                bs = False
+            while bs:
+                inp = input(f'{lan["INPUT8"]}(y/n)')  # 是否要默认下载最高画质（这样将不会询问具体画质）？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        cho3 = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if log:
+                logg.write(f"cho3 = {cho3}", currentframe(), "Acfun Bangumi Video Download Video Para")
+            for i in cho:
+                read = videodownload.acBangumiVideoDownload(section, i - 1, bangumiData, bangumiList, cho3, se, ip)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Video Return")
+                if read == -4:
+                    return -1
+        if cho2 == 3:
+            for i in cho:
+                read = videodownload.acfunBangumiCoverImgDownload(section, i - 1, bangumiData, bangumiList, se, ip)
+                if log:
+                    logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Pic Return")
         return 0
     if not che:
         if log:

@@ -301,7 +301,7 @@ def printAmInfo(d: dict):
 
 
 def printAcInfo(d: dict):
-    print(f"{lan['O64']}{d['currentVideoId']}")  # CV号
+    print(f"{lan['O64']}{d['dougaId']}")  # CV号
     print(f"{lan['O3']}{len(d['videoList'])}")  # 分P数
     print(f"{lan['O4']}{d['title']}")  # 标题
     print(f"{lan['O5']}{tostr2(d['createTimeMillis']/1000)}")  # 发布时间
@@ -316,6 +316,20 @@ def printAcInfo(d: dict):
         print(lan['O11'].replace('<number>', str(k)))  # 第<number>P
         print(f"ID：{i['id']}")
         print(f"{lan['O12']}{i['title']}")  # 分P名
+
+
+def printAcBangumiInfo(d: dict, l: dict):  # noqa: E741
+    print(f"{lan['O65']}{d['bangumiId']}")  # AA号（番剧ID）
+    print(f"{lan['O4']}{d['bangumiTitle']}")  # 标题
+    print(f"{lan['O7']}{d['bangumiIntro']}")  # 简介
+    print(f"{lan['O33']}{gettags(d['bangumiStyleList'],lambda d: d['name'])}")  # 标签
+    print(lan['O17'])  # 内容
+    k = 0
+    for i in l['items']:
+        k += 1
+        print(f"{k}.{lan['O4']}{i['title']}")  # 标题
+        print(f"{lan['O66']}{i['itemId']}")  # 剧集ID
+        print(f"{lan['O34']}{tostr2(i['updateTime']/1000)}")  # 上传时间
 
 
 def printplitid(d: list):

@@ -81,3 +81,27 @@ class AcfunParser(HTMLParser):
                 if i.startswith("window.pageInfo"):
                     self.videoInfo = i[37:]
                     self.videoInfo = self.videoInfo.rstrip(";")
+
+
+class AcfunBangumiParser(HTMLParser):
+    script = 0
+    bangumiData = ''
+    bangumiList = ''
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'script':
+            self.script = 1
+        else:
+            self.script = 0
+
+    def handle_data(self, data: str):
+        if self.script == 1:
+            slist = data.splitlines(False)
+            for i in slist:
+                i = i.strip()
+                if i.startswith("window.pageInfo"):
+                    self.bangumiData = i[39:]
+                    self.bangumiData = self.bangumiData.rstrip(";")
+                if i.startswith("window.bangumiList"):
+                    self.bangumiList = i[21:]
+                    self.bangumiList = self.bangumiList.rstrip(";")

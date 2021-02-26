@@ -275,3 +275,11 @@ msgstr "歌曲列表："
 msgctxt "O64"
 msgid "AC number: "
 msgstr "AC号："
+
+msgctxt "O65"
+msgid "AA number (Bangumi ID): "
+msgstr "AA号（番剧ID）："
+
+msgctxt "O66"
+msgid "Episode ID: "
+msgstr "剧集ID："

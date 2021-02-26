@@ -25,9 +25,18 @@ def convertToBiliVer(dm: dict) -> dict:
             dm["position"] / 1000, "si": crc32(dm["userId"]), "ri": dm["danmakuId"]}
 
 
-def getDanmuList(r: Session, rid: str, totalCount: int, logg: Logger = None) -> list:
+def getDanmuList(r: Session, rid: str, totalCount: int, se: dict, ip: dict, logg: Logger = None) -> list:
     rel = []
-    for page in range(0, 200):
+    page = 0
+    pageLimit = 40
+    if 'mxd' in se:
+        pageLimit = se['mxd']
+    if 'mxd' in ip:
+        pageLimit = ip['mxd']
+    if logg:
+        logg.write(f"pageLimit = {pageLimit}", currentframe(), "Acfun Danmu Para")
+    while pageLimit <= 0 or page < pageLimit:
+        page += 1
         url = "https://www.acfun.cn/rest/pc-direct/new-danmaku/list"
         data = {"resourceId": rid, "resourceType": "9", "enableAdvanced": "true",
                 "pcursor": str(page), "count": "200", "sortType": "1", "asc": "false"}
@@ -41,7 +50,11 @@ def getDanmuList(r: Session, rid: str, totalCount: int, logg: Logger = None) -> 
         if re['result'] != 0:
             print(f"{re['result']} {re['error_msg']}")
             break
+        if len(re['danmakus']) == 0:
+            break
         rel += re['danmakus']
+        if totalCount is None:
+            totalCount = re['totalCount']
         if len(rel) >= totalCount:
             break
     rel2 = []

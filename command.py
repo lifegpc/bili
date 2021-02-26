@@ -30,7 +30,7 @@ nnewline = '\n    '
 def ph():
     h = f'''{la['O1']}
     start.py -h/-?/--help   {la['O2']}
-    start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>] [--bp/--nbp] [--in/--nin] [--mt/--nmt] [--vi <URL_index>] [--uc/--nuc] [--ass/--nass] [--dmp/--ndmp] [--vf <format>] [--lmd <time>] [--ynal/--nnal] [--log/--nlog] [--yauf/--nauf] [--ydwa/--ndwa] [--yol/--nol] [--ltid] [--ycc/--ncc] [--nfo/--nnfo] [-V <format id>[<coding format>]] [--anopro]
+    start.py [-i <input>] [-d <method>] [-p <number>] [-m <boolean>/--ym/--nm] [--ac <boolean>/--yac/--nac] [--dm <boolean>/--ydm/--ndm] [--ad <boolean>/--yad/--nad] [-r <boolean>/--yr/--nr] [-y/-n] [--yf/--nf] [--mc avc/hev] [--ar/--nar] [--ax <number>] [--as <number>] [--ak <number>] [--ab/--nab] [--fa none/prealloc/trunc/falloc] [--sv <boolean>/--ysv/--nsv] [--ma <boolean>/--yma/--nma] [--ms <speed>] [--da <boolean>/--yda/--nda] [--httpproxy <URI>] [--httpsproxy <URI>] [--jt <number>|a|b] [--jts <date>] [-F] [-v <id>] [-a <id>] [-o <dir>] [--af/--naf] [--afp <number>] [-s] [--slt/--nslt] [--te/--nte] [--bd/--nbd] [--cad/--ncad] [--lrh/--nlrh] [--ahttpproxy <PROXY>] [--ahttpsproxy <PROXY>] [--lan <LANGUAGECODE>] [--bp/--nbp] [--in/--nin] [--mt/--nmt] [--vi <URL_index>] [--uc/--nuc] [--ass/--nass] [--dmp/--ndmp] [--vf <format>] [--lmd <time>] [--ynal/--nnal] [--log/--nlog] [--yauf/--nauf] [--ydwa/--ndwa] [--yol/--nol] [--ltid] [--ycc/--ncc] [--nfo/--nnfo] [-V <format id>[<coding format>]] [--anopro] [--mxd <number>]
     start.py show c/w   {la['O3']}
     -i <input>   {la['O4']}
     -d <method>   {la['O5']}
@@ -132,10 +132,12 @@ def ph():
     --nfo   {la['O94']}
     --nnfo  {la['O95']}
     -V <format id>[<coding format>] {la['O96']}
-    --anopro    {la['O100']}
     {la['O97'].replace(onewline, nnewline)}
+    {la['O101'].replace(onewline, nnewline)}
     {la['O98'].replace('<codecs>', 'avc, hev')}
     {la['O99']}
+    --anopro    {la['O100']}
+    --mxd <number>  {la['O102']}
     {la['O56']}
     {la['O57']}
     {la['O58']}
@@ -144,7 +146,7 @@ def ph():
 
 
 def gopt(args, d: bool = False):
-    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:V:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid', 'ncc', 'ycc', 'nfo', 'nnfo', 'anopro'])
+    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:V:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid', 'ncc', 'ycc', 'nfo', 'nnfo', 'anopro', 'mxd='])
     if d:
         print(re)
     rr = re[0]
@@ -398,8 +400,14 @@ def gopt(args, d: bool = False):
                 vid = int(rs.groups()[0])
                 if vid in [16, 32, 64, 74, 80, 112, 116, 120, 125]:
                     r['V'] = {'id': vid, 'codec': rs.groups()[1]}
+                elif vid in range(1, 12):
+                    r['V'] = {'id': vid, 'codec': rs.groups()[1]}
         if i[0] == '--anopro' and 'anopro' not in r:
             r['anopro'] = True
+        if i[0] == '--mxd' and 'mxd' not in r:
+            if i[1].isnumeric():
+                if int(i[1]) >= 0:
+                    r['mxd'] = int(i[1])
         if i[0] == '-b':
             ree = urlsplit(i[1])
             if ree.scheme == "bili":

@@ -39,6 +39,7 @@ import biliAudio
 from nfofile import NFOFile, NFOActor
 from Logger import Logger
 from autoopenlist import autoopenfilelist
+from HTMLParser import AcfunBangumiParser
 # https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 # https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 # result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -929,6 +930,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                    te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if log:
                     with open(f"Temp/{data['aid']}_{tt}.txt", 'r', encoding='utf8') as te:
                         logg.write(f"INPUT FILE 'Temp/{data['aid']}_{tt}.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Temp File2")
@@ -954,6 +956,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                    te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if log:
                     with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                         logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata4")
@@ -1558,6 +1561,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     te.write(f"description={bstr.g(vqs[0])},{bstr.g(vqs[1])},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                    te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if log:
                     with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                         logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata7")
@@ -1581,6 +1585,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     te.write(f"description={bstr.g(vqs[0])},{data['uid']}\\\n")
                     te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                     te.write(f"{bstr.g(url)}\n")
+                    te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if log:
                     with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                         logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Video Download Metadata8")
@@ -2246,6 +2251,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
                 te.write(f"description={bstr.g(vqs)},{data['uid']}\\\n")
                 te.write(f"{bstr.g(bstr.gettags(data['tags']))}\\\n")
                 te.write(f"{bstr.g(url)}\n")
+                te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
             if log:
                 with open(f"Temp/{data['aid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                     logg.write(f"METADATAFILE 'Temp/{data['aid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "Normal Video Audio Download Metadata")
@@ -4481,6 +4487,7 @@ def smdownload(r: requests.Session, i: dict, c: bool, se: dict, ip: dict):
                 te.write(f"date={i['upload_time'][:10]}\n")
                 te.write(f"description=UID{i['uid']},{i['width']}x{i['height']},{bstr.g(bstr.gettags(i['tags']))}\\\n")
                 te.write(f"https://vc.bilibili.com/video/{i['id']}\n")
+                te.write(f"genre={bstr.g(bstr.gettags(i['tags']))}\n")
             if log:
                 with open(f"Temp/{i['id']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                     logg.write(f"METADATAFILE 'Temp/{i['id']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "SMDOWNLOAD METADATAFILE")
@@ -4920,6 +4927,7 @@ def lrvideodownload(data, r, c, c3, se, ip):
                     te.write(f"date={tostr2(data['st'])[:10]}\n")
                     te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\\\n")
                     te.write(f"https://live.bilibili.com/record/{data['rid']}\n")
+                    te.write(f"genre={bstr.g(data['tags'])}\n")
                 if log:
                     with open(f"Temp/{data['rid']}_{tt}.txt", 'r', encoding='utf8') as te:
                         logg.write(f"FFMPEG CONCAT FILE 'Temp/{data['rid']}_{tt}.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO FFMPEG CONCAT")
@@ -4936,6 +4944,7 @@ def lrvideodownload(data, r, c, c3, se, ip):
                     te.write(f"date={tostr2(data['st'])[:10]}\n")
                     te.write(f"description=UID{data['uid']},ROOMID{data['roomid']},{bstr.g(vqs)}\\\n")
                     te.write(f"https://live.bilibili.com/record/{data['rid']}\n")
+                    te.write(f"genre={bstr.g(data['tags'])}\n")
                 if log:
                     with open(f"Temp/{data['rid']}_{tt}_metadata.txt", 'r', encoding='utf8') as te:
                         logg.write(f"METADATAFILE 'Temp/{data['rid']}_{tt}_metadata.txt'\n{te.read()}", currentframe(), "LIVE RECORD VIDEO METADATAFILE")
@@ -5672,6 +5681,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
                 if 'tags' in albumdata and albumdata['tags'] is not None and albumdata['title'] != '':
                     te.write(f"{bstr.g(lan['ALBTAGS'])}{bstr.g(bstr.gettags(albumdata['tags']))}\\\n")
                 te.write(f"""{bstr.g(f"https://www.bilibili.com/audio/au{data['id']}")}\n""")
+                te.write(f"genre={bstr.g(bstr.gettags(data['tags']))}\n")
                 if 'publisher' in albumdata and albumdata['publisher'] is not None and albumdata['publisher'] != '':
                     te.write(f"copyright=Publish by {albumdata['publisher']}\n")
                 if 'title' in albumdata and albumdata['title'] is not None and albumdata['title'] != '' and 'menusRespones' in albumdata:
@@ -6108,7 +6118,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         if not fin:
             o += f"{file.filtern(data['title'])}/"
         else:
-            o += file.filtern(f"{data['title']}(AC{data['currentVideoId']})/")
+            o += file.filtern(f"{data['title']}(AC{data['dougaId']})") + "/"
     vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
     sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
     if logg:
@@ -6146,7 +6156,24 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
     rep.sort(key=lambda d: acfunQualityLabelList.index(d['qualityLabel']))
     if logg:
         logg.write(f"rep = {rep}", currentframe(), "Acfun Normal Video Download Replist")
-    if not c or F:
+    if 'V' in ip and not F:
+        if ip['V']['id'] not in range(1, 12):
+            return -4
+        tarLabel = acfunQualityLabelList[-ip['V']['id']]
+        matched = False
+        for q in rep:
+            if acfunQualityLabelList.index(tarLabel) <= acfunQualityLabelList.index(q['qualityLabel']):
+                matched = True
+                info = q
+                break
+        if not matched:
+            info = rep[0]
+        if ns:
+            q = info
+            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+            essize = calFileSize(dur, q['avgBitrate'])
+            print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+    elif not c or F:
         i = 0
         for q in rep:
             if ns or (not ns and F):
@@ -6187,20 +6214,20 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         if not fin:
             filen = o + file.filtern(f"{data['title']}.{vf}")
         elif sv:
-            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
         else:
-            filen = o + file.filtern(f"{data['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
     else:
         if not fin and not dmp:
             filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}.{vf}")
         elif not fin and dmp:
             filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}.{vf}")
         elif sv and not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
         elif not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['currentVideoId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
         elif sv:
-            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
         else:
             filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']}).{vf}")
     ff = os.system(f'ffmpeg -h{getnul()}') == 0
@@ -6239,7 +6266,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
                 return 0
         else:
             return 0
-    tempf = f"Temp/AC{data['currentVideoId']}_{int(time.time())}_metadata.txt"
+    tempf = f"Temp/AC{data['dougaId']}_{int(time.time())}_metadata.txt"
     tit = data['title']
     tit2 = data['videoList'][index]['title']
     if tit2 != "" and tit != tit2:
@@ -6248,12 +6275,22 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
     nss = ""
     if not ns:
         nss = getnul()
+    imgs = -1
+    if 'coverUrl' in data:
+        imgf = os.path.splitext(filen)[0] + "." + file.geturlfe(data['coverUrl'])  # 图片文件名
+        imgs = acCoverImgDownload(r2, data, ip, se, imgf)
+        if logg:
+            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Acfun Normal Video Download Var2")
+    imga = ""
+    imga2 = ""
     if vf == "mkv":
+        if imgs == 0:
+            imga = f' -attach "{imgf}" -metadata:s:t mimetype=image/webp'  # TMD是webp
         with open(tempf, 'w', encoding='utf8', newline='\n') as te:
             te.write(';FFMETADATA1\n')
             te.write(f"title={bstr.g(tit)}\n")
             te.write(f"description={bstr.g(data['description'])}\n")
-            te.write(f"acid={data['currentVideoId']}\n")
+            te.write(f"acid={data['dougaId']}\n")
             te.write(f"atitle={bstr.g(data['title'])}\n")
             te.write(f"pubdate={tostr2(data['createTimeMillis']/1000)}\n")
             te.write(f"uid={data['user']['id']}\n")
@@ -6261,11 +6298,14 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"author={bstr.g(data['user']['name'])}\n")
             te.write(f"p={index+1}P/{videoCount}P\n")
             te.write(f"part={bstr.g(data['videoList'][index]['title'])}\n")
-            te.write(f"vq={bstr.g(info['codecs'])}\n")
-            te.write(f"purl=https://www.acfun.cn/v/ac{data['currentVideoId']}\n")
+            te.write(f"vq={info['qualityLabel']},{bstr.g(info['codecs'])}\n")
+            te.write(f"purl=https://www.acfun.cn/v/ac{data['dougaId']}\n")
             te.write(f"tags={bstr.g(tags)}\n")
-        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}" -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
     else:
+        if imgs == 0:
+            imga = f' -i "{imgf}"'
+            imga2 = ' -map 2 -c:v:1 mjpeg -disposition:v:1 attached_pic'
         with open(tempf, 'w', encoding='utf8', newline='\n') as te:
             te.write(';FFMETADATA1\n')
             te.write(f"title={bstr.g(tit)}\n")
@@ -6275,12 +6315,13 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"album_artist={bstr.g(data['user']['name'])}\n")
             te.write(f"track={index+1}/{videoCount}\n")
             te.write("disc=1/1\n")
-            te.write(f"episode_id=AC{data['currentVideoId']}\n")
+            te.write(f"episode_id=AC{data['dougaId']}\n")
             te.write(f"date={tostr4(data['createTimeMillis']/1000)}\n")
-            te.write(f"description={bstr.g(info['codecs'])},{data['user']['id']}\\\n")
+            te.write(f"description={info['qualityLabel']},{bstr.g(info['codecs'])},{data['user']['id']}\\\n")
             te.write(f"{bstr.g(tags)}\\\n")
-            te.write(f"https://www.acfun.cn/v/ac{data['currentVideoId']}\n")
-        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}" -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+            te.write(f"https://www.acfun.cn/v/ac{data['dougaId']}\n")
+            te.write(f"genre={bstr.g(tags)}\n")
+        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
     if logg:
         with open(tempf, 'r', encoding='utf8') as te:
             logg.write(f"METADATAFILE '{tempf}'\n{te.read()}", currentframe(), "Acfun Normal Video Video Download Metadata")
@@ -6292,6 +6333,30 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         print(lan['OUTPUT14'])  # 合并完成！
         if oll:
             oll.add(filen)
+        if imgs == 0:
+            de = False
+            bs = True if ns else False
+            if JSONParser.getset(se, 'ad') is True:
+                de = True
+                bs = False
+            elif JSONParser.getset(se, 'ad') is False:
+                bs = False
+            if 'ad' in ip:
+                de = ip['ad']
+                bs = False
+            if bp:
+                de = False
+                bs = False
+            while bs:
+                inp = input(f"{lan['INPUT4']}(y/n)")  # 是否删除中间文件？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        bs = False
+                        de = True
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if de:
+                os.remove(imgf)
     os.remove(tempf)
     nfo = False
     if 'nfo' in se:
@@ -6309,6 +6374,476 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         act.actorThumb = data['user']['headUrl']
         nfof.metadata.actors.append(act)
         nfof.save(filen)
+    return 0
+
+
+def acCoverImgDownload(r: requests.Session, data: dict, ip: dict, se: dict, fn: str = None) -> int:
+    """下载Acfun视频封面
+    data 数据字典
+    ip 命令行字典
+    se 设置字典
+    fn 文件名
+    -1 创建文件夹失败
+    -2 下载失败"""
+    if 'coverUrl' not in data:
+        return 0
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    dmp = ip['dmp'] if 'dmp' in ip else True if JSONParser.getset(se, 'dmp') is True else False
+    videoCount = len(data['videoList'])
+    if videoCount == 1:
+        dmp = False
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    if dmp:
+        if not fin:
+            o += f"{file.filtern(data['title'])}/"
+        else:
+            o += file.filtern(f"{data['title']}(AC{data['dougaId']})") + "/"
+    if logg:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Acfun Normal Video Download Pic Para")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Normal Video Download Pic Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
+        return -1
+    if fn is None:
+        hzm = file.geturlfe(data["coverUrl"])
+        if fin and not dmp:
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']}).{hzm}")
+        elif not dmp:
+            filen = o + file.filtern(f"{data['title']}.{hzm}")
+        else:
+            filen = o + file.filtern(f"cover.{hzm}")
+    else:
+        filen = fn
+    if logg:
+        logg.write(f"filen = {filen}", currentframe(), "Acfun Normal Video Download Pic Var")
+    if os.path.exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "Acfun Normal Video Download Pic Remove File Failed")
+                print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                return 0
+    if logg:
+        logg.write(f"GET {data['coverUrl']}", currentframe(), "Acfun Normal Video Download Pic Request")
+    re = r.get(data['coverUrl'])
+    if logg:
+        logg.write(f"status = {re.status_code}", currentframe(), "Acfun Normal Video Download Pic Request Result")
+    if re.status_code == 200:
+        f = open(filen, 'wb')
+        f.write(re.content)
+        f.close()
+        if oll:
+            oll.add(filen)
+        if ns:
+            print(lan['OUTPUT23'].replace('<filename>', filen))  # 封面图片下载完成。
+        return 0
+    else:
+        print(f"{lan['OUTPUT24']}HTTP {re.status_code}")  # 下载封面图片时发生错误：
+        return -2
+
+
+def acBangumiVideoDownload(r: requests.Session, index: int, data: dict, li: dict, c: bool, se: dict, ip: dict):
+    '''下载Acfun番剧视频
+    index 第几P
+    data 数据字典
+    li 番剧列表字典
+    c 自动选择最高画质
+    se 设置字典
+    ip 命令行字典
+    -1 创建文件夹失败
+    -2 解析失败
+    -3 需要购买
+    -4 命令行参数错误'''
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    bp = ip['bp'] if 'bp' in ip else True if JSONParser.getset(se, 'bp') is True else False
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    F = True if 'F' in ip else False
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    bangumiId = data['bangumiId']
+    episodeId = li['items'][index]['itemId']
+    needPay = li['items'][index]['needPay']
+    paidForUser = li['items'][index]['paidForUser']
+    if needPay and not paidForUser:
+        print(lan['NEEDPAY'])  # 需要购买此视频才能访问
+        return -3
+    if not fin:
+        o += file.filtern(f"{data['bangumiTitle']}") + "/"
+    else:
+        o += file.filtern(f"{data['bangumiTitle']}(AA{bangumiId})") + "/"
+    vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
+    sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
+    if logg:
+        logg.write(f"ns = {ns}\nbp = {bp}\no = '{o}'\nF = {F}\nfin = {fin}\nvf = {vf}\nsv = {sv}", currentframe(), "Acfun Bangumi Video Download Var")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败
+        return -1
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
+    url = f"https://www.acfun.cn/bangumi/aa{bangumiId}_36188_{episodeId}"
+    if logg:
+        logg.write(f"GET '{url}'", currentframe(), "Acfun Bangumi Video Download Get Webpage")
+    re = r.get(url)
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Acfun Bangumi Video Download Webpage Result")
+    if re.status_code >= 400:
+        return -2
+    parser = AcfunBangumiParser()
+    parser.feed(re.text)
+    if logg:
+        logg.write(f"parser.bangumiData = {parser.bangumiData}", currentframe(), "Acfun Bangumi Video Download Webpage Parser Result")
+    if parser.bangumiData == '':
+        return -2
+    try:
+        bangumiData = json.loads(parser.bangumiData, strict=False)
+        playJson = json.loads(bangumiData['currentVideoInfo']['ksPlayJson'])
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Webpage Parser Error")
+        return -2
+    if logg:
+        logg.write(f"playJson = {playJson}", currentframe(), "Acfun Bangumi Video Download PlayJson")
+    if F:
+        print(f"{lan['OUTPUT8'].replace('<number>',str(index+1))}{li['items'][index]['title']}")  # 第<number>P：
+    if 'adaptationSet' not in playJson or len(playJson['adaptationSet']) == 0:
+        return -2
+    dur = playJson['adaptationSet'][0]['duration']
+    rep = playJson['adaptationSet'][0]['representation']
+    if len(rep) == 0:
+        return -2
+    rep.sort(key=lambda d: acfunQualityLabelList.index(d['qualityLabel']))
+    if logg:
+        logg.write(f"rep = {rep}", currentframe(), "Acfun Bangumi Video Download Replist")
+    if 'V' in ip and not F:
+        if ip['V']['id'] not in range(1, 12):
+            return -4
+        tarLabel = acfunQualityLabelList[-ip['V']['id']]
+        matched = False
+        for q in rep:
+            if acfunQualityLabelList.index(tarLabel) <= acfunQualityLabelList.index(q['qualityLabel']):
+                matched = True
+                info = q
+                break
+        if not matched:
+            info = rep[0]
+        if ns:
+            q = info
+            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+            essize = calFileSize(dur, q['avgBitrate'])
+            print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+    elif not c or F:
+        i = 0
+        for q in rep:
+            if ns or (not ns and F):
+                print(f"{i+1}.{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+                essize = calFileSize(dur, q['avgBitrate'])
+                print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+            i += 1
+        if F:
+            return 0
+        if len(rep) == 1:
+            info = rep[0]
+        else:
+            bs = True
+            fi = True
+            while bs:
+                if fi and 'v' in ip:
+                    fi = False
+                    inp = ip['v']
+                elif ns:
+                    inp = input(lan['INPUT2'])  # 请选择画质：
+                else:
+                    print(lan['ERROR3'])  # 请使用-v <id>选择画质
+                    return -4
+                if len(inp) > 0 and inp.isnumeric():
+                    if int(inp) > 0 and int(inp) <= len(rep):
+                        bs = False
+                        info = rep[int(inp) - 1]
+                        if ns:
+                            print(lan["OUTPUT11"].replace('<videoquality>', info['qualityLabel']))  # 已选择%s画质
+    else:
+        info = rep[0]
+        if ns:
+            q = info
+            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+            essize = calFileSize(dur, q['avgBitrate'])
+            print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+    if not fin:
+        filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}.{vf}")
+    elif sv:
+        filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}({li['items'][index]['episodeName']},EP{li['items'][index]['itemId']},{li['items'][index]['videoId']},{info['qualityLabel']},{info['codecs']}).{vf}")
+    else:
+        filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}({li['items'][index]['episodeName']},EP{li['items'][index]['itemId']},{li['items'][index]['videoId']}).{vf}")
+    ff = os.system(f'ffmpeg -h{getnul()}') == 0
+    if logg:
+        logg.write(f"ff = {ff}\nfilen = '{filen}'", currentframe(), "Acfun Bangumi Video Download Var2")
+    if not ff:
+        print(lan['FFMPEG'])
+        return 0
+    if os.path.exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "Acfun Normal Video Download Remove File Failed")
+                print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                return 0
+        else:
+            return 0
+    tempf = f"Temp/AA{bangumiId}_EP{episodeId}_{int(time.time())}_metadata.txt"
+    tit = f"{data['bangumiTitle']} - {li['items'][index]['episodeName']} {li['items'][index]['title']}"
+    tags = bstr.gettags(data['bangumiStyleList'], lambda d: d['name'])
+    nss = ""
+    if not ns:
+        nss = getnul()
+    imgs = -1
+    imgf = os.path.splitext(filen)[0] + ".jpg"
+    imgs = acfunBangumiCoverImgDownload(r, index, data, li, se, ip, imgf)
+    if logg:
+        logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Acfun Bangumi Video Download Var2")
+    imga = ""
+    imga2 = ""
+    videoCount = len(li['items'])
+    if vf == "mkv":
+        if imgs == 0:
+            imga = f' -attach "{imgf}" -metadata:s:t mimetype=image/webp'  # TMD是webp
+        with open(tempf, 'w', encoding='utf8', newline='\n') as te:
+            te.write(';FFMETADATA1\n')
+            te.write(f"title={bstr.g(tit)}\n")
+            te.write(f"description={bstr.g(data['bangumiIntro'])}\n")
+            te.write(f"aaid={bangumiId}\n")
+            te.write(f"epid={episodeId}\n")
+            te.write(f"atitle={bstr.g(data['bangumiTitle'])}\n")
+            te.write(f"eptitle={bstr.g(li['items'][index]['title'])}\n")
+            te.write(f"titleformat={bstr.g(li['items'][index]['episodeName'])}\n")
+            te.write(f"vq={info['qualityLabel']},{bstr.g(info['codecs'])}\n")
+            te.write(f"purl={url}\n")
+            te.write(f"tags={tags}\n")
+            te.write(f"pubtime={tostr2(li['items'][index]['updateTime']/1000)}\n")
+        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+    else:
+        if imgs == 0:
+            imga = f' -i "{imgf}"'
+            imga2 = ' -map 2 -c:v:1 mjpeg -disposition:v:1 attached_pic'
+        with open(tempf, 'w', encoding='utf8', newline='\n') as te:
+            te.write(';FFMETADATA1\n')
+            te.write(f"title={bstr.g(tit)}\n")
+            te.write(f"comment={bstr.g(data['bangumiIntro'])}\n")
+            te.write(f"album={bstr.g(data['bangumiTitle'])}\n")
+            te.write(f"track={index+1}/{videoCount}\n")
+            te.write(f"episode_id=aa{bangumiId}_36188_{episodeId}\n")
+            te.write(f"date={tostr4(li['items'][index]['updateTime']/1000)}\n")
+            te.write(f"description={info['qualityLabel']},{bstr.g(info['codecs'])}\\\n")
+            te.write(f"{bstr.g(tags)}\\\n")
+            te.write(f"{bstr.g(url)}\n")
+            te.write(f"genre={bstr.g(tags)}\n")
+        ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
+    if logg:
+        with open(tempf, 'r', encoding='utf8') as te:
+            logg.write(f"METADATAFILE '{tempf}'\n{te.read()}", currentframe(), "Acfun Bangumi Video Video Download Metadata")
+        logg.write(f"ml = {ml}", currentframe(), "Acfun Bangumi Video Download FFmpeg Command Line")
+    re = os.system(ml)
+    if logg:
+        logg.write(f"re = {re}", currentframe(), "Acfun Bangumi Video Download FFmpeg Return")
+    if re == 0:
+        print(lan['OUTPUT14'])  # 合并完成！
+        if oll:
+            oll.add(filen)
+        if imgs == 0:
+            de = False
+            bs = True if ns else False
+            if JSONParser.getset(se, 'ad') is True:
+                de = True
+                bs = False
+            elif JSONParser.getset(se, 'ad') is False:
+                bs = False
+            if 'ad' in ip:
+                de = ip['ad']
+                bs = False
+            if bp:
+                de = False
+                bs = False
+            while bs:
+                inp = input(f"{lan['INPUT4']}(y/n)")  # 是否删除中间文件？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        bs = False
+                        de = True
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if de:
+                os.remove(imgf)
+    os.remove(tempf)
+    return 0
+
+
+def acfunBangumiCoverImgDownload(r: requests.Session, index: int, data: dict, li: dict, se: dict, ip: dict, fn: str = None) -> int:
+    '''下载Acfun番剧封面
+    index 第几P
+    data 数据字典
+    li 番剧列表字典
+    se 设置字典
+    ip 命令行参数字典
+    fn 可选文件名
+    -1 创建文件夹失败
+    -2 下载失败'''
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    if not fin:
+        o += file.filtern(f"{data['bangumiTitle']}") + "/"
+    else:
+        o += file.filtern(f"{data['bangumiTitle']}(AA{data['bangumiId']})") + "/"
+    if logg:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "Acfun Bangumi Video Download Pic Para")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Pic Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
+        return -1
+    bangumiId = data['bangumiId']
+    episodeId = li['items'][index]['itemId']
+    currVideoId = data['videoId']
+    tarVideoId = li['items'][index]['videoId']
+    if currVideoId == tarVideoId:
+        tarData = data
+    else:
+        url = f"https://www.acfun.cn/bangumi/aa{bangumiId}_36188_{episodeId}"
+        if logg:
+            logg.write(f"GET {url}", currentframe(), "Acfun Bangumi Video Download Pic Get Webpage")
+        re = r.get(url)
+        if logg:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Acfun Bangumi Video Download Pic Webpage Result")
+        if re.status_code >= 400:
+            return -2
+        parser = AcfunBangumiParser()
+        parser.feed(re.text)
+        if logg:
+            logg.write(f"parser.bangumiData = {parser.bangumiData}", currentframe(), "Acfun Bangumi Video Download Pic Webpage Parser Result")
+        if parser.bangumiData == '':
+            return -2
+        try:
+            tarData = json.loads(parser.bangumiData, strict=False)
+        except:
+            if logg:
+                logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Pic Webpage Parser Error")
+            return -2
+    if 'image' not in tarData:
+        return -2
+    if fn is None:
+        hzm = file.geturlfe(tarData['image'])
+        if fin:
+            filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}({li['items'][index]['episodeName']},EP{li['items'][index]['itemId']},{li['items'][index]['videoId']}).{hzm}")
+        else:
+            filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}.{hzm}")
+    else:
+        filen = fn
+    if logg:
+        logg.write(f"filen = {filen}", currentframe(), "Acfun Bangumi Video Download Pic Var")
+    if os.path.exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Pic Remove File Failed")
+                print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                return 0
+    if logg:
+        logg.write(f"GET {tarData['image']}", currentframe(), "Acfun Bangumi Video Download Pic Request")
+    re = r.get(tarData['image'])
+    if logg:
+        logg.write(f"status = {re.status_code}", currentframe(), "Acfun Bangumi Video Download Pic Request Result")
+    if re.status_code == 200:
+        f = open(filen, 'wb')
+        f.write(re.content)
+        f.close()
+        if oll:
+            oll.add(filen)
+        if ns:
+            print(lan['OUTPUT23'].replace('<filename>', filen))  # 封面图片下载完成。
+        return 0
+    else:
+        print(f"{lan['OUTPUT24']}HTTP {re.status_code}")  # 下载封面图片时发生错误：
+        return -2
 
 
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):

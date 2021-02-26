@@ -404,7 +404,7 @@ msgid "Choose video quality by format id."
 msgstr ""
 
 msgctxt "O97"
-msgid "Available format id:\n125: HDR\n120: UHD 4K\n116: HD 1080P60\n112: HD 1080P+\n80: HD 1080P\n74: HD 720P60\n64: HD 720P/HD 720P60\n32: SD 480P\n16: SD 360P"
+msgid "Available format id (bilibili):\n125: HDR\n120: UHD 4K\n116: HD 1080P60\n112: HD 1080P+\n80: HD 1080P\n74: HD 720P60\n64: HD 720P/HD 720P60\n32: SD 480P\n16: SD 360P"
 msgstr ""
 
 msgctxt "O98"
@@ -417,4 +417,12 @@ msgstr ""
 
 msgctxt "O100"
 msgid "Disable all proxy for aria2c."
+msgstr ""
+
+msgctxt "O101"
+msgid "Available format id (acfun):\n11: 2160P120\n10: 2160P60\n9: 2160P\n8: 1080P60\n7: 1080P+\n6: 1080P\n5: 720P60\n4: 720P\n3: 540P\n2: 480P\n1: 360P"
+msgstr ""
+
+msgctxt "O102"
+msgid "The maximum number of download pages when downloading barrage from acfun. (1 page contains 200 entries. 0 means no limit.)"
 msgstr ""
