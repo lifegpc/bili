@@ -6213,7 +6213,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         if not fin:
             filen = o + file.filtern(f"{data['title']}.{vf}")
         elif sv:
-            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
         else:
             filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
     else:
@@ -6222,11 +6222,11 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         elif not fin and dmp:
             filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}.{vf}")
         elif sv and not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
         elif not dmp:
             filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
         elif sv:
-            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
         else:
             filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']}).{vf}")
     ff = os.system(f'ffmpeg -h{getnul()}') == 0
@@ -6297,7 +6297,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"author={bstr.g(data['user']['name'])}\n")
             te.write(f"p={index+1}P/{videoCount}P\n")
             te.write(f"part={bstr.g(data['videoList'][index]['title'])}\n")
-            te.write(f"vq={bstr.g(info['codecs'])}\n")
+            te.write(f"vq={info['qualityLabel']},{bstr.g(info['codecs'])}\n")
             te.write(f"purl=https://www.acfun.cn/v/ac{data['dougaId']}\n")
             te.write(f"tags={bstr.g(tags)}\n")
         ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
@@ -6316,7 +6316,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write("disc=1/1\n")
             te.write(f"episode_id=AC{data['dougaId']}\n")
             te.write(f"date={tostr4(data['createTimeMillis']/1000)}\n")
-            te.write(f"description={bstr.g(info['codecs'])},{data['user']['id']}\\\n")
+            te.write(f"description={info['qualityLabel']},{bstr.g(info['codecs'])},{data['user']['id']}\\\n")
             te.write(f"{bstr.g(tags)}\\\n")
             te.write(f"https://www.acfun.cn/v/ac{data['dougaId']}\n")
             te.write(f"genre={bstr.g(tags)}\n")
@@ -6603,7 +6603,7 @@ def acBangumiVideoDownload(r: requests.Session, index: int, data: dict, li: dict
     if not fin:
         filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}.{vf}")
     elif sv:
-        filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}({li['items'][index]['episodeName']},EP{li['items'][index]['itemId']},{li['items'][index]['videoId']},{info['codecs']}).{vf}")
+        filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}({li['items'][index]['episodeName']},EP{li['items'][index]['itemId']},{li['items'][index]['videoId']},{info['qualityLabel']},{info['codecs']}).{vf}")
     else:
         filen = o + file.filtern(f"{index+1}.{li['items'][index]['title']}({li['items'][index]['episodeName']},EP{li['items'][index]['itemId']},{li['items'][index]['videoId']}).{vf}")
     ff = os.system(f'ffmpeg -h{getnul()}') == 0
@@ -6668,7 +6668,7 @@ def acBangumiVideoDownload(r: requests.Session, index: int, data: dict, li: dict
             te.write(f"atitle={bstr.g(data['bangumiTitle'])}\n")
             te.write(f"eptitle={bstr.g(li['items'][index]['title'])}\n")
             te.write(f"titleformat={bstr.g(li['items'][index]['episodeName'])}\n")
-            te.write(f"vq={bstr.g(info['codecs'])}\n")
+            te.write(f"vq={info['qualityLabel']},{bstr.g(info['codecs'])}\n")
             te.write(f"purl={url}\n")
             te.write(f"tags={tags}\n")
             te.write(f"pubtime={tostr2(li['items'][index]['updateTime']/1000)}\n")
@@ -6685,7 +6685,7 @@ def acBangumiVideoDownload(r: requests.Session, index: int, data: dict, li: dict
             te.write(f"track={index+1}/{videoCount}\n")
             te.write(f"episode_id=aa{bangumiId}_36188_{episodeId}\n")
             te.write(f"date={tostr4(li['items'][index]['updateTime']/1000)}\n")
-            te.write(f"description={bstr.g(info['codecs'])}\\\n")
+            te.write(f"description={info['qualityLabel']},{bstr.g(info['codecs'])}\\\n")
             te.write(f"{bstr.g(tags)}\\\n")
             te.write(f"{bstr.g(url)}\n")
             te.write(f"genre={bstr.g(tags)}\n")
