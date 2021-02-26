@@ -6165,6 +6165,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             if acfunQualityLabelList.index(tarLabel) <= acfunQualityLabelList.index(q['qualityLabel']):
                 matched = True
                 info = q
+                break
         if not matched:
             info = rep[0]
         if ns:
@@ -6556,6 +6557,7 @@ def acBangumiVideoDownload(r: requests.Session, index: int, data: dict, li: dict
             if acfunQualityLabelList.index(tarLabel) <= acfunQualityLabelList.index(q['qualityLabel']):
                 matched = True
                 info = q
+                break
         if not matched:
             info = rep[0]
         if ns:
