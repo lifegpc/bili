@@ -25,10 +25,17 @@ def convertToBiliVer(dm: dict) -> dict:
             dm["position"] / 1000, "si": crc32(dm["userId"]), "ri": dm["danmakuId"]}
 
 
-def getDanmuList(r: Session, rid: str, totalCount: int, logg: Logger = None) -> list:
+def getDanmuList(r: Session, rid: str, totalCount: int, se: dict, ip: dict, logg: Logger = None) -> list:
     rel = []
     page = 0
-    while True:
+    pageLimit = 40
+    if 'mxd' in se:
+        pageLimit = se['mxd']
+    if 'mxd' in ip:
+        pageLimit = ip['mxd']
+    if logg:
+        logg.write(f"pageLimit = {pageLimit}", currentframe(), "Acfun Danmu Para")
+    while pageLimit <= 0 or page < pageLimit:
         page += 1
         url = "https://www.acfun.cn/rest/pc-direct/new-danmaku/list"
         data = {"resourceId": rid, "resourceType": "9", "enableAdvanced": "true",

@@ -1395,7 +1395,7 @@ def acDownloadDanmu(r: Session, index: int, data: dict, se: dict, ip: dict, xml:
                 return -2
         else:
             return -2
-    dml = getDanmuList(r, data["videoList"][index]["id"], data["videoList"][index]['danmakuCount'], logg)  # 弹幕列表
+    dml = getDanmuList(r, data["videoList"][index]["id"], data["videoList"][index]['danmakuCount'], se, ip, logg)  # 弹幕列表
     if len(dml) == 0:
         return 0
     if ns:
@@ -1502,7 +1502,7 @@ def acBangumiDownloadDanmu(r: Session, data: dict, list: dict, index: int, se: d
                 return 0
         else:
             return 0
-    dml = getDanmuList(r, list["items"][index]["videoId"], None, logg)  # 弹幕列表
+    dml = getDanmuList(r, list["items"][index]["videoId"], None, se, ip, logg)  # 弹幕列表
     if len(dml) == 0:
         return 0
     if ns:

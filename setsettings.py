@@ -345,4 +345,23 @@ if __name__ == '__main__':
     r = gk(se, 'nfo')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'nfo', se)
+    mxd = 40
+    if 'mxd' in se:
+        if se['mxd'] >= 0:
+            mxd = se['mxd']
+    print(la['INPUT47'].replace('<value>', '40').replace('<value2>', str(mxd)))
+    inp = input(la['INPUT14'].replace('<min>', '0'))
+    bs = True
+    while bs:
+        if len(inp) == 0:
+            bs = False
+        elif inp.isnumeric():
+            tem = int(inp)
+            if tem >= 0:
+                mxd = tem
+                bs = False
+        else:
+            inp = input(la['INPUT14'].replace('<min>', '0'))
+    if mxd != 40:
+        ne['mxd'] = mxd
     saveset(ne)
