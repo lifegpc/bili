@@ -1,0 +1,96 @@
+# bili - webui/page Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-09-11 06:58:00+0000\n"
+"PO-Revision-Date: 2020-09-11 13:39+0000\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "NOTEXT"
+msgid "Now is not support this."
+msgstr ""
+
+msgctxt "PARTNO"
+msgid "Part Number"
+msgstr ""
+
+msgctxt "PARTCID"
+msgid "Part CID"
+msgstr ""
+
+msgctxt "PARTNAME"
+msgid "Part Name"
+msgstr ""
+
+msgctxt "DMME"
+msgid "Download Method"
+msgstr ""
+
+msgctxt "DMME1"
+msgid "Barrage"
+msgstr ""
+
+msgctxt "DMME2"
+msgid "All barrage"
+msgstr ""
+
+msgctxt "DMME3"
+msgid "Video"
+msgstr ""
+
+msgctxt "DMME4"
+msgid "Barrage and video"
+msgstr ""
+
+msgctxt "DMME5"
+msgid "All barrage and video"
+msgstr ""
+
+msgctxt "DMME6"
+msgid "Subtitles only"
+msgstr ""
+
+msgctxt "DMME7"
+msgid "Cover image only"
+msgstr ""
+
+msgctxt "DMME8"
+msgid "Audio only"
+msgstr ""
+
+msgctxt "PARTDUR"
+msgid "Part Duration"
+msgstr ""
+
+msgctxt "DFE"
+msgid "Default"
+msgstr ""
+
+msgctxt "VCB"
+msgid "Copy video link"
+msgstr ""
+
+msgctxt "ACB"
+msgid "Copy audio link"
+msgstr ""
+
+msgctxt "SMU"
+msgid "Save as playlist file"
+msgstr ""
+
+msgctxt "SELNUM"
+msgid "You have selected <value> parts."
+msgstr ""
+
+msgctxt "ASNOW"
+msgid "Use the selection above"
+msgstr ""

@@ -1,0 +1,281 @@
+# bili - PrintInfo.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-12 04:24:00+0000\n"
+"PO-Revision-Date: 2020-07-12 05:16+0000\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "O1"
+msgid "AV number :"
+msgstr ""
+
+msgctxt "O2"
+msgid "BV number :"
+msgstr ""
+
+msgctxt "O3"
+msgid "Total parts :"
+msgstr ""
+
+msgctxt "O4"
+msgid "Title :"
+msgstr ""
+
+msgctxt "O5"
+msgid "Publish time :"
+msgstr ""
+
+msgctxt "O6"
+msgid "Create time:"
+msgstr ""
+
+msgctxt "O7"
+msgid "Description :"
+msgstr ""
+
+msgctxt "O8"
+msgid "Uploader's info :"
+msgstr ""
+
+msgctxt "O9"
+msgid "Name :"
+msgstr ""
+
+msgctxt "O10"
+msgid "Information of each part :"
+msgstr ""
+
+msgctxt "O11"
+msgid "Part <number> :"
+msgstr ""
+
+msgctxt "O12"
+msgid "Part name :"
+msgstr ""
+
+msgctxt "O13"
+msgid "Japanese name :"
+msgstr ""
+
+msgctxt "O14"
+msgid "Series name :"
+msgstr ""
+
+msgctxt "O15"
+msgid "Alias :"
+msgstr ""
+
+msgctxt "O16"
+msgid "Type name :"
+msgstr ""
+
+msgctxt "O17"
+msgid "Content :"
+msgstr ""
+
+msgctxt "O18"
+msgid "Favorites ID:"
+msgstr ""
+
+msgctxt "O19"
+msgid "Favorites title :"
+msgstr ""
+
+msgctxt "O20"
+msgid "Creator's name :"
+msgstr ""
+
+msgctxt "O21"
+msgid "Create time :"
+msgstr ""
+
+msgctxt "O22"
+msgid "Video count :"
+msgstr ""
+
+msgctxt "O23"
+msgid "Video <number> :"
+msgstr ""
+
+msgctxt "O24"
+msgid "Uploader's name :"
+msgstr ""
+
+msgctxt "O25"
+msgid "Favorites time :"
+msgstr ""
+
+msgctxt "O26"
+msgid "Channel ID :"
+msgstr ""
+
+msgctxt "O27"
+msgid "Uploader's gender :"
+msgstr ""
+
+msgctxt "O28"
+msgid "Uploader's level :"
+msgstr ""
+
+msgctxt "O29"
+msgid "Personalized signature :"
+msgstr ""
+
+msgctxt "O30"
+msgid "Birthday :"
+msgstr ""
+
+msgctxt "O31"
+msgid "Favorites <number> :"
+msgstr ""
+
+msgctxt "O32"
+msgid "Small Video ID :"
+msgstr ""
+
+msgctxt "O33"
+msgid "Tags :"
+msgstr ""
+
+msgctxt "O34"
+msgid "Upload time :"
+msgstr ""
+
+msgctxt "O35"
+msgid "You selected :"
+msgstr ""
+
+msgctxt "O36"
+msgid "Live Record ID :"
+msgstr ""
+
+msgctxt "O37"
+msgid "Room ID :"
+msgstr ""
+
+msgctxt "O38"
+msgid "Start time :"
+msgstr ""
+
+msgctxt "O39"
+msgid "End time :"
+msgstr ""
+
+msgctxt "O40"
+msgid "Area name :"
+msgstr ""
+
+msgctxt "O41"
+msgid "Room hot words :"
+msgstr ""
+
+msgctxt "O42"
+msgid "You can find the source code on <https://github.com/lifegpc/bili>."
+msgstr ""
+
+msgctxt "O43"
+msgid ""
+"Can't find GNU GPL3 LICENSE file, please see <http://www.gnu.org/licenses/>."
+msgstr ""
+
+msgctxt "O44"
+msgid "AU number: "
+msgstr ""
+
+msgctxt "O45"
+msgid "Duration: "
+msgstr ""
+
+msgctxt "O46"
+msgid "Author: "
+msgstr ""
+
+msgctxt "O47"
+msgid "Statistics :"
+msgstr ""
+
+msgctxt "O48"
+msgid "Played times: "
+msgstr ""
+
+msgctxt "O49"
+msgid "Comment count: "
+msgstr ""
+
+msgctxt "O50"
+msgid "Shared times: "
+msgstr ""
+
+msgctxt "O51"
+msgid "Favorited count: "
+msgstr ""
+
+msgctxt "O52"
+msgid "Type ID (tid): "
+msgstr ""
+
+msgctxt "O53"
+msgid "Album info: "
+msgstr ""
+
+msgctxt "O54"
+msgid "Album artist: "
+msgstr ""
+
+msgctxt "O55"
+msgid "Album title: "
+msgstr ""
+
+msgctxt "O56"
+msgid "Album publisher: "
+msgstr ""
+
+msgctxt "O57"
+msgid "Album publish time: "
+msgstr ""
+
+msgctxt "O58"
+msgid "Album tags: "
+msgstr ""
+
+msgctxt "O59"
+msgid "Album played times: "
+msgstr ""
+
+msgctxt "O60"
+msgid "Album favorited times: "
+msgstr ""
+
+msgctxt "O61"
+msgid "AM number: "
+msgstr ""
+
+msgctxt "O62"
+msgid "Collection ID: "
+msgstr ""
+
+msgctxt "O63"
+msgid "Song list: "
+msgstr ""
+
+msgctxt "O64"
+msgid "AC number: "
+msgstr ""
+
+msgctxt "O65"
+msgid "AA number (Bangumi ID): "
+msgstr ""
+
+msgctxt "O66"
+msgid "Episode ID: "
+msgstr ""

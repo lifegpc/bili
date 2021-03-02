@@ -1,0 +1,287 @@
+# bili - start.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-10 23:16:38+0000\n"
+"PO-Revision-Date: 2020-07-10 23:26+0000\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "RUN_SETTINGS_TIPS"
+msgid ""
+"It is recommended to setup program by runing \"settings.py\" in order to "
+"reduce unnecessary queries."
+msgstr ""
+
+msgctxt "INPUT1"
+msgid ""
+"Please enter the av/ss/ep/md/bv number (bv number needs start with BV) or "
+"link (Support Favorites, Channels, Uploaded Video and Small Video page from "
+"user page. Also support live, live records video and purchased courses' "
+"video link.):"
+msgstr ""
+
+msgctxt "ERROR1"
+msgid "Please use \"-i <input>\"."
+msgstr ""
+
+msgctxt "ERROR2"
+msgid "Invalid input."
+msgstr ""
+
+msgctxt "OUTPUT1"
+msgid "The login is successfully verified."
+msgstr ""
+
+msgctxt "ERROR3"
+msgid "Network Error! Verification failed!"
+msgstr ""
+
+msgctxt "WARN1"
+msgid "The login information has expired."
+msgstr ""
+
+msgctxt "ERROR4"
+msgid "An error occurred when reading the file."
+msgstr ""
+
+msgctxt "INPUT2"
+msgid "Do you want to enable \"Continue Download\" function?"
+msgstr ""
+
+msgctxt "ERROR5"
+msgid "An error occurred when parsing md number page."
+msgstr ""
+
+msgctxt "INPUT3"
+msgid ""
+"Please enter the number of the favorite you want to choose (You can use "
+"\",\" to separate each two numbers. Use \"-\" to separate each two numbers "
+"to select a range.(e.g. 1-25) If you want to select all favorites, please "
+"enter \"a\".):"
+msgstr ""
+
+msgctxt "ERROR6"
+msgid "Please use \"--afp <number>\" to choose favorite."
+msgstr ""
+
+msgctxt "OUTPUT2"
+msgid "You have selected all favorites."
+msgstr ""
+
+msgctxt "OUTPUT3"
+msgid "You have selected the favorite:"
+msgstr ""
+
+msgctxt "ERROR7"
+msgid "An error occurred when getting the list of favorites."
+msgstr ""
+
+msgctxt "ERROR8"
+msgid ""
+"The count of video in list is not equal to the estimated count which from "
+"bilibili. Maybe an bug occurred."
+msgstr ""
+
+msgctxt "OUTPUT4"
+msgid ""
+"Please enter the number of the video you want to choose (You can use \",\" "
+"to separate each two numbers. Use \"-\" to separate each two numbers to "
+"select a range.(e.g. 1-25) If you want to select all videos, please enter "
+"\"a\".):"
+msgstr ""
+
+msgctxt "ERROR9"
+msgid "Please use \"-p <number>\" to choose video."
+msgstr ""
+
+msgctxt "OUTPUT5"
+msgid "You have selected all videos."
+msgstr ""
+
+msgctxt "OUTPUT6"
+msgid "You have selected the video:"
+msgstr ""
+
+msgctxt "INPUT4"
+msgid "Do you want to enable \"download all parts of each video automatically\"?"
+msgstr ""
+
+msgctxt "ERROR10"
+msgid "An error occurred when reading the file: \"cookies.json\"."
+msgstr ""
+
+msgctxt "INPUT5"
+msgid ""
+"Please enter the number of the channel you want to choose (You can use \",\""
+" to separate each two numbers. Use \"-\" to separate each two numbers to "
+"select a range.(e.g. 1-25) If you want to select all channels, please enter "
+"\"a\".):"
+msgstr ""
+
+msgctxt "OUTPUT7"
+msgid "You have selected all channels."
+msgstr ""
+
+msgctxt "OUTPUT8"
+msgid "You have selected the channel:"
+msgstr ""
+
+msgctxt "INPUT6"
+msgid "Do you want filter barrage?"
+msgstr ""
+
+msgctxt "INPUT7"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download video\n"
+"2.download barrage\n"
+"3.download video and barrage"
+msgstr ""
+
+msgctxt "ERROR11"
+msgid "Please use \"-d <method>\" to choose download method."
+msgstr ""
+
+msgctxt "INPUT8"
+msgid ""
+"Do you want download with maximum quality (this will not ask for specific "
+"quality)?"
+msgstr ""
+
+msgctxt "INPUT9"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download barrage\n"
+"2.download all barrage from historical records (may needs lots of time)\n"
+"3.download video\n"
+"4.download barrage and video\n"
+"5.download all barrage from historical records and video\n"
+"6.download subtitles only\n"
+"7.download cover image only\n"
+"8.download audio only"
+msgstr ""
+
+msgctxt "OUTPUT9"
+msgid "Part <number> download complete."
+msgstr ""
+
+msgctxt "ERROR12"
+msgid ""
+"This video is not support to download all barrage from historical records."
+msgstr ""
+
+msgctxt "INPUT10"
+msgid ""
+"If you only want to download video which match the ep number you entered, "
+"please enter \"b\"."
+msgstr ""
+
+msgctxt "INPUT11"
+msgid "If you want to download the last viewed \"EP<number>\", please enter \"l\"."
+msgstr ""
+
+msgctxt "INPUT12"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download barrage\n"
+"2.download all barrage from historical records (may needs lots of time)\n"
+"3.download video\n"
+"4.download barrage and video\n"
+"5.download all barrage from historical records and video\n"
+"7.download cover image only\n"
+"8.download audio only"
+msgstr ""
+
+msgctxt "OUTPUT10"
+msgid "<title> download complete."
+msgstr ""
+
+msgctxt "OUTPUT11"
+msgid "Please run \"start.py\"."
+msgstr ""
+
+msgctxt "OUTPUT12"
+msgid "Try to redirect to \"<link>\"."
+msgstr ""
+
+msgctxt "OUTPUT13"
+msgid "(You can use \",\" to separate multiple numbers or links.)"
+msgstr ""
+
+msgctxt "LIVE_NOT_START"
+msgid ""
+"The live has not started. The program will check the live status after 30 "
+"seconds."
+msgstr ""
+
+msgctxt "SPERROR"
+msgid "Please open \"<url>\" in a browser and pass the captcha."
+msgstr ""
+
+msgctxt "AUINPUT"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download audio\n"
+"2.download lyrics only\n"
+"3.download cover image only"
+msgstr ""
+
+msgctxt "AUAPPERR"
+msgid ""
+"This audio can only be played on the APP. (This program do not support it "
+"now.)"
+msgstr ""
+
+msgctxt "PLITID"
+msgid "Here are all available type id (tid) for this favorites:"
+msgstr ""
+
+msgctxt "PLITIDNUL"
+msgid "This favorites don't have any available type id (tid)."
+msgstr ""
+
+msgctxt "UPLTID"
+msgid "Here are all available type id (tid) for this uploader's videos:"
+msgstr ""
+
+msgctxt "UPLTIDNUL"
+msgid "This uploader's video don't have any available type id (tid)."
+msgstr ""
+
+msgctxt "OUTPUT14"
+msgid ""
+"Please enter the number of the audio you want to choose (You can use \",\" "
+"to separate each two numbers. Use \"-\" to separate each two numbers to "
+"select a range.(e.g. 1-25) If you want to select all videos, please enter "
+"\"a\".):"
+msgstr ""
+
+msgctxt "ERROR13"
+msgid "Please use \"-p <number>\" to choose audio."
+msgstr ""
+
+msgctxt "OUTPUT15"
+msgid "You have selected all audios."
+msgstr ""
+
+msgctxt "OUTPUT16"
+msgid "You have selected the audio:"
+msgstr ""
+
+msgctxt "INPUT13"
+msgid ""
+"Please input the number before \".\" to choose download method:\n"
+"1.download barrage\n"
+"2.download video\n"
+"3.download cover image only\n"
+"4.download barrage and video"
+msgstr ""

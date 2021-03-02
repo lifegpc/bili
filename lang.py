@@ -22,7 +22,7 @@ from typing import Dict
 
 LanDict = Dict[str, str]
 dll = None
-lan = {'en': 'English', 'ja': '日本語', 'zh_CN': '中文（中国）'}
+lan = {'en': 'English', 'ja': '日本語', 'zh_CN': '中文（中国）', 'zh_TW': '中文（台灣）'}
 syslan = None
 
 
@@ -61,8 +61,10 @@ def getsyslan(d: bool = False):
         la = dll.GetSystemDefaultUILanguage()
         if d:
             print(f"SystemDefaultUILanguage:{hex(la)}")
-        if la == 0x804 or la == 0x4 or la == 0x404 or la == 0xc04 or la == 0x1004 or la == 0x1404 or la == 0x7c04:
+        if la == 0x804 or la == 0x4 or la == 0x1004 or la == 0x1404:
             r = "zh_CN"
+        elif la == 0x404 or la == 0xc04 or la == 0x7c04:
+            r = "zh_TW"
         elif la == 0x411:
             r = "ja"
         else:

@@ -1,0 +1,97 @@
+# bili - webui/bililogin Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-09-206 11:03:00+0000\n"
+"PO-Revision-Date: 2020-09-06 13:43+0000\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "NEEDLOGIN"
+msgid ""
+"You need to login in to your bilibili account if you want to continue using "
+"this program."
+msgstr ""
+
+msgctxt "USERNAME"
+msgid "User name:"
+msgstr ""
+
+msgctxt "CAPTCHA"
+msgid "Captcha:"
+msgstr ""
+
+msgctxt "NEEDCAP"
+msgid "Captcha is required to login in."
+msgstr ""
+
+msgctxt "SERISBUS"
+msgid "Service is busy."
+msgstr ""
+
+msgctxt "INCOUSPA"
+msgid "Incorrect user name or password."
+msgstr ""
+
+msgctxt "HTTPWARN"
+msgid ""
+"Although the program has encrypted the user name and password, it is still "
+"subject to man-in-the-middle(MITM) attacks. If you use this in the public "
+"network, please enable HTTPS."
+msgstr ""
+
+msgctxt "QRSCAN"
+msgid "Use APP to scan QR Code to login in"
+msgstr ""
+
+msgctxt "USEANDPA"
+msgid "Use user name and password to login in"
+msgstr ""
+
+msgctxt "QRCEXPR"
+msgid "The QR code has expired, click here to reload."
+msgstr ""
+
+msgctxt "USEPHONE"
+msgid "Login in with SMS"
+msgstr ""
+
+msgctxt "PHONEN"
+msgid "Phone number:"
+msgstr ""
+
+msgctxt "SENDSMS"
+msgid "Send captcha code by SMS"
+msgstr ""
+
+msgctxt "INVALIDCPN"
+msgid "This is an invalid China phone number."
+msgstr ""
+
+msgctxt "MUSTCAPT"
+msgid "You must complete the captcha to continue."
+msgstr ""
+
+msgctxt "CAPERROR"
+msgid "An error occured:"
+msgstr ""
+
+msgctxt "SMSSEND"
+msgid "SMS is already send."
+msgstr ""
+
+msgctxt "USEANDPAW"
+msgid "Use user name and password to login in (Web API)"
+msgstr ""
+
+msgctxt "BUGWARN"
+msgid "This login method now have bugs, some contents may not available."
+msgstr ""

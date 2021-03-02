@@ -1,0 +1,174 @@
+# bili - webui/settings Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-08-24 12:07:00+0000\n"
+"PO-Revision-Date: 2020-08-24 15:02+0000\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "WEBUISET"
+msgid "WEB User Interface Settings"
+msgstr ""
+
+msgctxt "WEBUILAN"
+msgid "WEB User Interface language:"
+msgstr ""
+
+msgctxt "IPADDR"
+msgid "The IP address:"
+msgstr ""
+
+msgctxt "IPPORT"
+msgid "The port of IP address:"
+msgstr ""
+
+msgctxt "SSLCPATH"
+msgid "The path to the SSL certificate:"
+msgstr ""
+
+msgctxt "SSLPPATH"
+msgid "The path to the SSL private key:"
+msgstr ""
+
+msgctxt "SSLCCPATH"
+msgid "The path to the SSL certificate chain:"
+msgstr ""
+
+msgctxt "SUBMIT"
+msgid "Submit"
+msgstr ""
+
+msgctxt "SUBOK"
+msgid "Save successfully."
+msgstr ""
+
+msgctxt "SUBFA"
+msgid "Failed to save settings."
+msgstr ""
+
+msgctxt "INVALIP"
+msgid "\"<value>\" is not an invalid IP address."
+msgstr ""
+
+msgctxt "ENPASS"
+msgid "Enable password verification"
+msgstr ""
+
+msgctxt "PASS"
+msgid "Password:"
+msgstr ""
+
+msgctxt "UIFONT"
+msgid "User interface font name:"
+msgstr ""
+
+msgctxt "MAIN"
+msgid "Main Program Settings"
+msgstr ""
+
+msgctxt "MAINPS"
+msgid ""
+"PS. If the settings on this page are successfully saved, the origin file "
+"\"settings.json\" will be overwriten."
+msgstr ""
+
+msgctxt "MAINLAN"
+msgid "Program language:"
+msgstr ""
+
+msgctxt "MAINFB"
+msgid "Filter barrage by default:"
+msgstr ""
+
+msgctxt "MAINMP"
+msgid ""
+"Download with maximum quality (Enable this will not ask for specific "
+"quality):"
+msgstr ""
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr ""
+
+msgctxt "ENABLE"
+msgid "Enable"
+msgstr ""
+
+msgctxt "DISABLE"
+msgid "Disable"
+msgstr ""
+
+msgctxt "MAINAD"
+msgid "Delete useless files after merge is complete:"
+msgstr ""
+
+msgctxt "MAINCD"
+msgid "Enable \"Continue Download\" function by default:"
+msgstr ""
+
+msgctxt "MAINRD"
+msgid "Download again automatically after the download failed:"
+msgstr ""
+
+msgctxt "MAINSV"
+msgid "Put video/audio quality information in the file name."
+msgstr ""
+
+msgctxt "MAINMA"
+msgid ""
+"Add video information to file forcibly. (This will transcode the video and "
+"transcoding will not affect the video/audio quality.)"
+msgstr ""
+
+msgctxt "MAINDA"
+msgid ""
+"\"Download all parts of each video automatically\" when you input Favorites,"
+" Channels, Uploaded Video page link:"
+msgstr ""
+
+msgctxt "MAINJT"
+msgid ""
+"Set the number of days between crawls to automatic by default when "
+"downloading all barrage."
+msgstr ""
+
+msgctxt "MAINO"
+msgid "Download folder location:"
+msgstr ""
+
+msgctxt "FONTPATH"
+msgid ""
+"The path to the font file (The font format should be one of "
+"TTF/OTF/WOFF/WOFF2.):"
+msgstr ""
+
+msgctxt "LENPASS"
+msgid "Enable password verification for pages beginning with \"<part>\"."
+msgstr ""
+
+msgctxt "OWFIBD"
+msgid "Overwrite existing files by default:"
+msgstr ""
+
+msgctxt "SUBINFO"
+msgid "PS. You may need to restart the web server to apply the new settings."
+msgstr ""
+
+msgctxt "VIDEOFMT"
+msgid "The video format output from ffmpeg (Default:<value>):"
+msgstr ""
+
+msgctxt "TIMELMD"
+msgid ""
+"The time latter line of multiple lines which have same timestamps should be "
+"delayed when converting subtitles to LRC file (Default:<value>):"
+msgstr ""
