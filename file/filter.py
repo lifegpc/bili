@@ -107,13 +107,18 @@ def filterd(dir: str) -> str:
     while re is not None:
         dir = dir.replace(re.group(), '_')
         re = regex.search(r'[^[:print:]]', dir)
-    dir = dir.replace(':', '_')
-    dir = dir.replace('*', '_')
-    dir = dir.replace('?', '_')
-    dir = dir.replace('"', '_')
-    dir = dir.replace('<', '_')
-    dir = dir.replace('>', '_')
-    dir = dir.replace('|', '_')
+    if p == "Windows":
+        dir = dir.replace(':', '_')
+        dir = dir.replace('*', '_')
+        dir = dir.replace('?', '_')
+        dir = dir.replace('"', '_')
+        dir = dir.replace('<', '_')
+        dir = dir.replace('>', '_')
+        dir = dir.replace('|', '_')
+    elif p == "Linux":
+        dir = dir.replace('!', '_')
+        dir = dir.replace('$', '_')
+        dir = dir.replace('"', '_')
     if p == 'Windows':
         dir = f + dir
     return dir
