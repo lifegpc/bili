@@ -70,13 +70,18 @@ def filtern(filen: str):
         re = regex.search(r'[^[:print:]]', filen)
     filen = filen.replace('/', '_')
     filen = filen.replace('\\', '_')
-    filen = filen.replace(':', '_')
-    filen = filen.replace('*', '_')
-    filen = filen.replace('?', '_')
-    filen = filen.replace('"', '_')
-    filen = filen.replace('<', '_')
-    filen = filen.replace('>', '_')
-    filen = filen.replace('|', '_')
+    if platform.system() == "Windows":
+        filen = filen.replace(':', '_')
+        filen = filen.replace('*', '_')
+        filen = filen.replace('?', '_')
+        filen = filen.replace('"', '_')
+        filen = filen.replace('<', '_')
+        filen = filen.replace('>', '_')
+        filen = filen.replace('|', '_')
+    elif platform.system() == "Linux":
+        filen = filen.replace('!', '_')
+        filen = filen.replace('$', '_')
+        filen = filen.replace('"', '_')
     filen = filen.replace('\t', '_')
     while len(filen) > 0 and filen[0] == ' ':
         filen = filen[1:]
