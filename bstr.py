@@ -112,3 +112,8 @@ def hasPar(s: str, k: str, r: str = None, flags: int = 0):
                 if rsearch(r, v, flags) is not None:
                     return True
         return False
+
+
+def unescapeHTML(s: str) -> str:
+    s = s.replace('<br>', '\n')
+    return unescape(s)

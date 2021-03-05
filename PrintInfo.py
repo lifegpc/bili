@@ -16,7 +16,7 @@
 from command import gopt
 from time import localtime, strftime
 from biliTime import tostr2, tostr6
-from bstr import gettags, rhtml
+from bstr import gettags, rhtml, unescapeHTML
 from JSONParser import loadset
 import sys
 from lang import getdict, getlan
@@ -330,6 +330,18 @@ def printAcBangumiInfo(d: dict, l: dict):  # noqa: E741
         print(f"{k}.{lan['O4']}{i['title']}")  # 标题
         print(f"{lan['O66']}{i['itemId']}")  # 剧集ID
         print(f"{lan['O34']}{tostr2(i['updateTime']/1000)}")  # 上传时间
+
+
+def printNicoVideoInfo(d: dict):
+    v = d['video']
+    print(f"ID: {v['id']}")
+    print(f"{lan['O4']}{unescapeHTML(v['originalTitle'])}")  # 标题
+    print(f"{lan['O5']}{v['postedDateTime']}")  # 发布时间
+    print(f"{lan['O7']}{unescapeHTML(v['originalDescription'])}")  # 简介
+    print(f"{lan['O33']}{gettags(d['tags'], lambda d: d['name'])}")  # 标签
+    print(lan['O8'])  # UP主信息：
+    print(f"UID: {d['owner']['id']}")
+    print(f"{lan['O9']}{d['owner']['nickname'].rstrip(' さん')}")  # 作者
 
 
 def printplitid(d: list):

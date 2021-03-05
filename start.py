@@ -2119,6 +2119,26 @@ def main(ip={}, menuInfo=None):
                     logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Pic Return")
         return 0
     if nicovideo:
+        url = f"https://www.nicovideo.jp/watch/sm{smid}"
+        if log:
+            logg.write(f"GET {url}", currentframe(), "Get Niconico Video Webpage")
+        re = section.get(url)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Niconico Video Webpage Result")
+        if re.status_code == 404:
+            print("404")
+            return NOT_FOUND
+        elif re.status_code > 400:
+            return -1
+        parser = HTMLParser.NicoVideoInfoParser()
+        parser.feed(re.text)
+        if log:
+            logg.write(f"parser.apiData = {parser.apiData}", currentframe(), "Niconico Video Webpage Parser Result")
+        if parser.apiData == '':
+            return 0
+        apiData = json.loads(parser.apiData, strict=False)
+        if ns:
+            PrintInfo.printNicoVideoInfo(apiData)
         return 0
     if not che:
         if log:

@@ -14,6 +14,10 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from html.parser import HTMLParser
+from typing import Tuple, List
+
+
+HTMLAttrs = List[Tuple[str, str]]
 
 
 class Myparser(HTMLParser):
@@ -127,3 +131,22 @@ class NicoUserParser(HTMLParser):
                         self.userData += f'\n{i}'
                     else:
                         self.userData = i
+
+
+class NicoVideoInfoParser(HTMLParser):
+    apiData = ''
+
+    def handle_starttag(self, tag, attrs: HTMLAttrs):
+        if tag == 'div':
+            eid = ''
+            for t in attrs:
+                if t[0] == 'id':
+                    eid = t[1]
+                    break
+            if eid == 'js-initial-watch-data':
+                for t in attrs:
+                    if t[0] == 'data-api-data':
+                        self.apiData = t[1]
+
+    def handle_startendtag(self, tag, attrs):
+        self.handle_starttag(tag, attrs)
