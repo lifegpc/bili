@@ -268,6 +268,7 @@ zRlD7colcKT/F5NAG5kohc2QGuK8KHyRMfeg80YsddbKr1XSOo3QxS2Ecg==
 [iso-639](https://pypi.org/project/iso-639/)  
 [pywin32](https://pypi.org/project/pywin32/)  
 [qrcode](https://github.com/lincolnloop/python-qrcode)  
+[Js2Py](https://github.com/PiotrDabkowski/Js2Py)  
 用户名密码登录部分参考了[Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit)的登录部分代码。
 ### JavaScript依赖库
 [jQuery](https://jquery.com/)  

@@ -128,6 +128,8 @@ def main(ip={}, menuInfo=None):
     acfun = False  # Acfun网站
     acvideo = False  # Acfun Video acxxxxx
     acbangumi = False  # Acfun Bangumi
+    nico = False  # NicoNico
+    nicovideo = False  # NicoNico Video
     av = False
     ss = False
     ep = False
@@ -161,6 +163,7 @@ def main(ip={}, menuInfo=None):
     acvideoid = -1  # Acfun AC号
     acbangumiid = -1  # Acfun AA号
     acepisodeid = -1  # Acfun 剧集号（EP号
+    smid = -1  # niconico sm号
     if inp[0:2].lower() == 'ss' and inp[2:].isnumeric():
         s = "https://www.bilibili.com/bangumi/play/ss" + inp[2:]
         ss = True
@@ -218,6 +221,12 @@ def main(ip={}, menuInfo=None):
         acepisodeid = int(rs[1])
         if log and not logg.hasf():
             logg.openf(f"log/AA{acbangumiid}_{round(time())}.log")
+    elif inp[:2].lower() == "sm" and inp[2:].isnumeric():
+        nico = True
+        nicovideo = True
+        smid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/SM{smid}_{round(time())}.log")
     elif inp.isnumeric():
         s = "https://www.bilibili.com/video/av" + inp
         av = True
@@ -498,13 +507,15 @@ def main(ip={}, menuInfo=None):
         section.proxies = pr
     if nte:
         section.trust_env = False
-    ckfn = "acfun_cookies.json" if acfun else "cookies.json"
+    ckfn = "acfun_cookies.json" if acfun else "nico_cookies.json" if nico else "cookies.json"
     read = JSONParser.loadcookie(section, logg, ckfn)
     ud = {}
     login = 0
     if read == 0:
         if acfun:
             read = biliLogin.acCheckLogin(section, ud, logg)
+        elif nico:
+            read = biliLogin.nicoCheckLogin(section, ud, logg)
         else:
             read = biliLogin.tryok(section, ud, logg)
         if read is True:
@@ -527,6 +538,8 @@ def main(ip={}, menuInfo=None):
             os.remove(ckfn)
         if acfun:
             read = biliLogin.acLogin(section, ud, ip, logg)
+        elif nico:
+            read = biliLogin.nicoLogin(section, ud, ip, logg)
         else:
             read = biliLogin.login(section, ud, ip, logg)
         if read == 0:
@@ -537,7 +550,7 @@ def main(ip={}, menuInfo=None):
             return -1
     if 'd' not in ud:
         return -1
-    if not acfun:
+    if not acfun and not nico:
         ud['vip'] = ud['d']['vipStatus']
     if log:
         logg.write(f"read = {read}\nlogin = {login}\nud = {ud}", currentframe(), "VERIFY LOGIN 2")
@@ -2104,6 +2117,8 @@ def main(ip={}, menuInfo=None):
                 read = videodownload.acfunBangumiCoverImgDownload(section, i - 1, bangumiData, bangumiList, se, ip)
                 if log:
                     logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Pic Return")
+        return 0
+    if nicovideo:
         return 0
     if not che:
         if log:

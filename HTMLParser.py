@@ -105,3 +105,25 @@ class AcfunBangumiParser(HTMLParser):
                 if i.startswith("window.bangumiList"):
                     self.bangumiList = i[21:]
                     self.bangumiList = self.bangumiList.rstrip(";")
+
+
+class NicoUserParser(HTMLParser):
+    script = 0
+    userData = ""
+
+    def handle_starttag(self, tag, attrs):
+        if tag == 'script':
+            self.script = 1
+        else:
+            self.script = 0
+
+    def handle_data(self, data: str):
+        if self.script == 1:
+            slist = data.splitlines(False)
+            for i in slist:
+                i = i.strip()
+                if i.startswith('user.'):
+                    if self.userData != '':
+                        self.userData += f'\n{i}'
+                    else:
+                        self.userData = i
