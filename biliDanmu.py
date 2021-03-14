@@ -36,6 +36,7 @@ from requests import Session
 from acfunDanmu import getDanmuList
 from Logger import Logger
 from autoopenlist import autoopenfilelist
+from nicoPara import genNicoDanmuPara
 
 
 lan = None
@@ -1533,4 +1534,86 @@ def acBangumiDownloadDanmu(r: Session, data: dict, list: dict, index: int, se: d
         return -2
     if oll:
         oll.add(filen)
+    return 0
+
+
+def nicoDownloadDanmu(r: Session, data: dict, se: dict, ip: dict, xml: int, xmlc: dict):
+    """下载Niconico弹幕
+    -1 创建文件夹失败
+    -2 解析失败"""
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    # oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = True
+    if 's' in ip:
+        ns = False
+    o = "Download/"
+    read = getset(se, 'o')
+    if read is not None:
+        o = read
+    if 'o' in ip:
+        o = ip['o']
+    fin = True
+    if getset(se, 'in') is False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    if logg:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "NicoNico Barrage Para")
+    try:
+        if not exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "NicoNico Barrage Mkdir Error")
+        print(lan['ERROR3'].replace('<dirname>', o))  # 创建文件夹<dirname>失败。
+        return -1
+    smid = int(data['video']['id'][2:])
+    newline = '\n'
+    if fin:
+        filen = o + file.filtern(f"{data['video']['originalTitle'].replace('<br>', newline)}(SM{smid}).xml")
+    else:
+        filen = o + file.filtern(f"{data['video']['originalTitle'].replace('<br>', newline)}.xml")
+    if logg:
+        logg.write(f"filen = {filen}", currentframe(), "NicoNico Barrage Var1")
+    if exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            bs = False
+            fg = True
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")  # 文件"<filename>"已存在，是否覆盖？
+            if inp[0].lower() == 'y':
+                bs = False
+                fg = True
+            elif inp[0].lower() == 'n':
+                bs = False
+        if fg:
+            try:
+                remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "NicoNico Barrage Remove File Failed")
+                print(lan['ERROR4'])  # 删除原有文件失败，跳过下载
+                return 0
+        else:
+            return 0
+    para = genNicoDanmuPara(data)
+    url: str = data['thread']['serverUrl']
+    if url.endswith("api/"):
+        url = url[:-4] + "api.json/"
+    if logg:
+        logg.write(f"POST {url}\nPOST DATA:{json.dumps(para)}", currentframe(), "NicoNico Barrage Get Danmu Request")
+    re = r.post(url, json=para)
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Barrage Get Danmu Result")
+    if re.status_code != 200:
+        return -2
+    re = re.json()
     return 0
