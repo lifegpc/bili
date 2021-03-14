@@ -6281,7 +6281,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         nss = getnul()
     imgs = -1
     if 'coverUrl' in data:
-        imgf = os.path.splitext(filen)[0] + "." + file.geturlfe(data['coverUrl'], 'jpg')  # 图片文件名
+        imgf = os.path.splitext(filen)[0] + "." + file.geturlfe(data['coverUrl'], 'webp')  # 图片文件名
         imgs = acCoverImgDownload(r2, data, ip, se, imgf)
         if logg:
             logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Acfun Normal Video Download Var2")
@@ -6416,7 +6416,7 @@ def acCoverImgDownload(r: requests.Session, data: dict, ip: dict, se: dict, fn: 
         print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
         return -1
     if fn is None:
-        hzm = file.geturlfe(data["coverUrl"])
+        hzm = file.geturlfe(data["coverUrl"], "webp")
         if fin and not dmp:
             filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']}).{hzm}")
         elif not dmp:
