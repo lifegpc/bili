@@ -6170,14 +6170,16 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             info = rep[0]
         if ns:
             q = info
-            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+            codecs = f",{q['codecs']}" if 'codecs' in q else ""
+            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']}{codecs},{q['frameRate']}fps)")  # 图质
             essize = calFileSize(dur, q['avgBitrate'])
             print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
     elif not c or F:
         i = 0
         for q in rep:
             if ns or (not ns and F):
-                print(f"{i+1}.{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+                codecs = f",{q['codecs']}" if 'codecs' in q else ""
+                print(f"{i+1}.{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']}{codecs},{q['frameRate']}fps)")  # 图质
                 essize = calFileSize(dur, q['avgBitrate'])
                 print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
             i += 1
@@ -6207,14 +6209,16 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         info = rep[0]
         if ns:
             q = info
-            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']},{q['codecs']},{q['frameRate']}fps)")  # 图质
+            codecs = f",{q['codecs']}" if 'codecs' in q else ""
+            print(f"{lan['OUTPUT9']}{q['qualityLabel']}({q['width']}x{q['height']}{codecs},{q['frameRate']}fps)")  # 图质
             essize = calFileSize(dur, q['avgBitrate'])
             print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{q['avgBitrate']}kbps/{q['maxBitrate']}kbps)")  # 大小
+    codecs = f",{info['codecs']}" if 'codecs' in info else ""
     if videoCount == 1:
         if not fin:
             filen = o + file.filtern(f"{data['title']}.{vf}")
         elif sv:
-            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']}{codecs}).{vf}")
         else:
             filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
     else:
@@ -6223,11 +6227,11 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         elif not fin and dmp:
             filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}.{vf}")
         elif sv and not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']}{codecs}).{vf}")
         elif not dmp:
             filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).{vf}")
         elif sv:
-            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']},{info['codecs']}).{vf}")
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']},{info['qualityLabel']}{codecs}).{vf}")
         else:
             filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']}).{vf}")
     ff = os.system(f'ffmpeg -h{getnul()}') == 0
@@ -6277,7 +6281,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
         nss = getnul()
     imgs = -1
     if 'coverUrl' in data:
-        imgf = os.path.splitext(filen)[0] + "." + file.geturlfe(data['coverUrl'])  # 图片文件名
+        imgf = os.path.splitext(filen)[0] + "." + file.geturlfe(data['coverUrl'], 'jpg')  # 图片文件名
         imgs = acCoverImgDownload(r2, data, ip, se, imgf)
         if logg:
             logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "Acfun Normal Video Download Var2")
@@ -6298,7 +6302,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write(f"author={bstr.g(data['user']['name'])}\n")
             te.write(f"p={index+1}P/{videoCount}P\n")
             te.write(f"part={bstr.g(data['videoList'][index]['title'])}\n")
-            te.write(f"vq={info['qualityLabel']},{bstr.g(info['codecs'])}\n")
+            te.write(f"vq={info['qualityLabel']}{bstr.g(codecs)}\n")
             te.write(f"purl=https://www.acfun.cn/v/ac{data['dougaId']}\n")
             te.write(f"tags={bstr.g(tags)}\n")
         ml = f"""ffmpeg -i "{info['url']}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
@@ -6317,7 +6321,7 @@ def acVideoDownload(r: requests.Session, index: int, data: dict, c: bool, se: di
             te.write("disc=1/1\n")
             te.write(f"episode_id=AC{data['dougaId']}\n")
             te.write(f"date={tostr4(data['createTimeMillis']/1000)}\n")
-            te.write(f"description={info['qualityLabel']},{bstr.g(info['codecs'])},{data['user']['id']}\\\n")
+            te.write(f"description={info['qualityLabel']}{bstr.g(codecs)},{data['user']['id']}\\\n")
             te.write(f"{bstr.g(tags)}\\\n")
             te.write(f"https://www.acfun.cn/v/ac{data['dougaId']}\n")
             te.write(f"genre={bstr.g(tags)}\n")

@@ -13,13 +13,14 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from os.path import getatime, getmtime, getctime, getsize, exists, isfile, isdir
+from os.path import getatime, getmtime, getctime, getsize, exists, isfile, isdir, splitext
 from file.time import ttos
 from file.str import width, size, ftts
 from re import split
 from platform import system
 from hashl import md5
 from time import time
+from urllib.parse import urlsplit
 
 
 def getinfo(fn):
@@ -84,12 +85,14 @@ def printinfo(o, m):
     print('%s\t%s\t%s\t%s\t%s' % (ftts(o['i']), ttos(o['a']), ttos(o['c']), ttos(o['m']), size(o['s'])))
 
 
-def geturlfe(uri) -> str:
+def geturlfe(uri: str, default: str = '') -> str:
     "获取网址中的文件扩展名"
-    r = str(uri).split('?')
-    r = r[0]
-    r = r.split('.')
-    r = r[len(r) - 1]
+    url = str(uri)
+    r = splitext(urlsplit(url).path)[1]
+    if r == '':
+        r = default
+    else:
+        r = r[1:]
     return r
 
 
