@@ -57,13 +57,15 @@ class NicoDanmu:
     def __init__(self, d: dict):
         self.thread = d['thread']
         self.no = d['no']
-        self.content = d['content']
+        if 'content' in d:
+            self.content = d['content']
         self.vpos = d['vpos']
         if 'mail' in d:
             self.mail = split(r'\s+', d['mail'])
         self.date = d['date']
         self.dataUsec = d['date_usec']
-        self.userId = d['user_id']
+        if 'user_id' in d:
+            self.userId = d['user_id']
         if 'premium' in d:
             self.premium = d['premium']
         if 'nicoru' in d:
@@ -78,7 +80,8 @@ class NicoDanmu:
             self.anonymous = d['anonymity'] == 1
         if 'score' in d:
             self.score = d['score']
-        self.fork = d['fork']
+        if 'fork' in d:
+            self.fork = d['fork']
         for i in self.mail:
             if i in POSITIONS_ARRAY:
                 self.position = i
@@ -110,4 +113,14 @@ class NicoDanmu:
             return 40
 
     def toBiliVer(self):
-        return {"t": self.content, "mod": self.getDanmuType(), "fs": self.getSize(), "fc": self.getColor(), "ut": self.date, "ti": self.dataUsec / 1000, "si": crc32(self.userId), "ri": self.no}
+        return {"t": self.content, "mod": self.getDanmuType(), "fs": self.getSize(), "fc": self.getColor(), "ut": self.date, "ti": self.vpos / 100, "si": crc32(self.userId), "ri": f"{self.thread}{self.no:#04}", "dp": 0}
+
+
+def getNicoDanmuList(l: list) -> list:  # noqa: E741
+    r = []
+    for i in l:
+        if 'chat' in i:
+            n = NicoDanmu(i['chat'])
+            if not n.deletedStatus:
+                r.append(n.toBiliVer())
+    return r

@@ -98,7 +98,7 @@ class CommentThread():
 
     def genThread(self, data: dict, **k):
         lan = k.get("lan") if k.get("lan") is not None and k.get("lan") in LANG_MAP else 'ja-jp'
-        return {"fork": self.fork, "language": LANG_MAP[lan], "nicoru": 3, "scores": 1, "thread": str(self.id), "user_id": str(data["viewer"]["id"]), "userkey": data['context']['userkey'], "version": "20090904", "with_global": 1}
+        return {"fork": self.fork, "language": LANG_MAP[lan], "nicoru": 3, "scores": 1, "thread": str(self.id), "user_id": str(data["viewer"]["id"]), "userkey": data['comment']['keys']['userKey'], "version": "20090904", "with_global": 1}
 
     def genThreadLeaves(self, data: dict, **k):
         d = self.genThread(data, **k)
@@ -123,9 +123,9 @@ def generatePara(l: list) -> list:  # noqa: E741
 
 
 def genNicoDanmuPara(data: dict) -> list:
-    CommentThreadL = data["commentComposite"]["threads"]
+    commentThreadL = data["comment"]["threads"]
     rel = []
-    for i in CommentThreadL:
+    for i in commentThreadL:
         com = CommentThread(i)
         if com.isActive:
             rel.append({"thread": com.genThread(data)})

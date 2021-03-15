@@ -18,6 +18,7 @@ from html import unescape
 from regex import search as rsearch
 from typing import Callable
 from urllib.parse import parse_qs
+from HTMLParser import NicoDescriptionParser
 
 
 def f(i: str):
@@ -115,5 +116,6 @@ def hasPar(s: str, k: str, r: str = None, flags: int = 0):
 
 
 def unescapeHTML(s: str) -> str:
-    s = s.replace('<br>', '\n')
-    return unescape(s)
+    p = NicoDescriptionParser()
+    p.feed(s)
+    return p.data

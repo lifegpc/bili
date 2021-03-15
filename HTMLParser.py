@@ -150,3 +150,17 @@ class NicoVideoInfoParser(HTMLParser):
 
     def handle_startendtag(self, tag, attrs):
         self.handle_starttag(tag, attrs)
+
+
+class NicoDescriptionParser(HTMLParser):
+    data = ''
+
+    def handle_data(self, data: str):
+        self.data += data
+
+    def handle_starttag(self, tag: str, attrs: HTMLAttrs):
+        if tag == "br":
+            self.data += "\n"
+
+    def handle_startendtag(self, tag: str, attrs: HTMLAttrs):
+        self.handle_starttag(tag, attrs)

@@ -335,13 +335,13 @@ def printAcBangumiInfo(d: dict, l: dict):  # noqa: E741
 def printNicoVideoInfo(d: dict):
     v = d['video']
     print(f"ID: {v['id']}")
-    print(f"{lan['O4']}{unescapeHTML(v['originalTitle'])}")  # 标题
-    print(f"{lan['O5']}{v['postedDateTime']}")  # 发布时间
-    print(f"{lan['O7']}{unescapeHTML(v['originalDescription'])}")  # 简介
-    print(f"{lan['O33']}{gettags(d['tags'], lambda d: d['name'])}")  # 标签
+    print(f"{lan['O4']}{unescapeHTML(v['title'])}")  # 标题
+    print(f"{lan['O5']}{v['registeredAt']}")  # 发布时间
+    print(f"{lan['O7']}{unescapeHTML(v['description'])}")  # 简介
+    print(f"{lan['O33']}{gettags(d['tag']['items'], lambda d: d['name'])}")  # 标签
     print(lan['O8'])  # UP主信息：
     print(f"UID: {d['owner']['id']}")
-    print(f"{lan['O9']}{d['owner']['nickname'].rstrip(' さん')}")  # 作者
+    print(f"{lan['O9']}{d['owner']['nickname']}")  # 作者
 
 
 def printplitid(d: list):

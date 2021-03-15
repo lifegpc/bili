@@ -37,6 +37,9 @@ from acfunDanmu import getDanmuList
 from Logger import Logger
 from autoopenlist import autoopenfilelist
 from nicoPara import genNicoDanmuPara
+from nicoDanmu import getNicoDanmuList
+from urllib.parse import urlsplit
+from bstr import unescapeHTML
 
 
 lan = None
@@ -1542,7 +1545,7 @@ def nicoDownloadDanmu(r: Session, data: dict, se: dict, ip: dict, xml: int, xmlc
     -1 创建文件夹失败
     -2 解析失败"""
     logg: Logger = ip['logg'] if 'logg' in ip else None
-    # oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
     ns = True
     if 's' in ip:
         ns = False
@@ -1568,11 +1571,10 @@ def nicoDownloadDanmu(r: Session, data: dict, se: dict, ip: dict, xml: int, xmlc
         print(lan['ERROR3'].replace('<dirname>', o))  # 创建文件夹<dirname>失败。
         return -1
     smid = int(data['video']['id'][2:])
-    newline = '\n'
     if fin:
-        filen = o + file.filtern(f"{data['video']['originalTitle'].replace('<br>', newline)}(SM{smid}).xml")
+        filen = o + file.filtern(f"{unescapeHTML(data['video']['title'])}(SM{smid}).xml")
     else:
-        filen = o + file.filtern(f"{data['video']['originalTitle'].replace('<br>', newline)}.xml")
+        filen = o + file.filtern(f"{unescapeHTML(data['video']['title'])}.xml")
     if logg:
         logg.write(f"filen = {filen}", currentframe(), "NicoNico Barrage Var1")
     if exists(filen):
@@ -1605,7 +1607,7 @@ def nicoDownloadDanmu(r: Session, data: dict, se: dict, ip: dict, xml: int, xmlc
         else:
             return 0
     para = genNicoDanmuPara(data)
-    url: str = data['thread']['serverUrl']
+    url: str = data['comment']['server']['url']
     if url.endswith("api/"):
         url = url[:-4] + "api.json/"
     if logg:
@@ -1616,4 +1618,37 @@ def nicoDownloadDanmu(r: Session, data: dict, se: dict, ip: dict, xml: int, xmlc
     if re.status_code != 200:
         return -2
     re = re.json()
+    dml = getNicoDanmuList(re)
+    if logg:
+        logg.write(f"dml = {dml}", currentframe(), "NicoNico Barrage Barrage List")
+    if len(dml) == 0:
+        return 0
+    if ns:
+        print(f"{lan['OUTPUT1']}{len(dml)}")  # 总计：
+        if xml == 1:
+            print(lan['OUTPUT2'])  # 正在过滤……
+    if xml == 1:
+        sdml = dml
+        dml = []
+        filterNum = 0
+        for i in sdml:
+            read = biliDanmuXmlFilter.Filter(i, xmlc)
+            if read:
+                filterNum += 1
+            else:
+                dml.append(i)
+    try:
+        with open(filen, mode='w', encoding='utf8') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>')
+            f.write(f"<i><chatserver>{urlsplit(url).hostname}</chatserver><chatid>{smid}</chatid><mission>{0}</mission><maxlimit>{len(dml)}</maxlimit><state>0</state><real_name>0</real_name><source>k-v</source>")
+            for i in dml:
+                f.write(biliDanmuCreate.objtoxml(i))
+            f.write('</i>')
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "NicoNico Bangumi Barrage Error")
+        print(lan['ERROR5'].replace('<filename>', filen))  # 打开文件"<filename>"失败
+        return -2
+    if oll:
+        oll.add(filen)
     return 0
