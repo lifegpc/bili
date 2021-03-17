@@ -497,7 +497,7 @@ def main(ip={}, menuInfo=None):
                 print(f'{lan["ERROR2"]}')
                 return -1
     section = requests.session()
-    section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36", "Connection": "keep-alive", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8", "Accept-Language": "zh-CN,zh;q=0.8"})
+    section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36", "sec-ch-ua": '"Google Chrome";v="89", "Chromium";v="89", ";Not A Brand";v="99"', "sec-ch-ua-mobile": "?0", "Connection": "keep-alive", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8", "Accept-Language": "zh-CN,zh;q=0.8"})
     if nico:
         section.headers.update({"Accept-Language": "ja-JP"})
     if 'httpproxy' in ip or 'httpsproxy' in ip:
@@ -2079,7 +2079,7 @@ def main(ip={}, menuInfo=None):
                 bs = False
         if cho2 == 1 or cho2 == 4:
             for i in cho:
-                biliDanmu.acBangumiDownloadDanmu(section, bangumiData, bangumiList, i - 1, se, ip, xml, xmlc)
+                read = biliDanmu.acBangumiDownloadDanmu(section, bangumiData, bangumiList, i - 1, se, ip, xml, xmlc)
                 if log:
                     logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Barrage Return")
                 if read == 0:
@@ -2141,7 +2141,50 @@ def main(ip={}, menuInfo=None):
         apiData = json.loads(parser.apiData, strict=False)
         if ns:
             PrintInfo.printNicoVideoInfo(apiData)
-        biliDanmu.nicoDownloadDanmu(section, apiData, se, ip, xml, xmlc)
+        cho2 = 0
+        bs = True
+        if 'd' in ip and ip['d'] > 0 and ip['d'] < 5:
+            bs = False
+            cho2 = ip['d']
+        while bs:
+            if not ns:
+                print(lan['ERROR11'])  # 请使用-d <method>选择下载方式
+                return -1
+            inp = input(lan['INPUT13'])  # 选择下载方式
+            if inp[0].isnumeric() and int(inp[0]) > 0 and int(inp[0]) < 5:
+                cho2 = int(inp[0])
+                bs = False
+        if cho2 == 1 or cho2 == 4:
+            read = biliDanmu.nicoDownloadDanmu(section, apiData, se, ip, xml, xmlc)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Result")
+        if cho2 == 2 or cho2 == 4:
+            bs = True
+            cho3 = False
+            if not ns:
+                bs = False
+            read = JSONParser.getset(se, 'mp')
+            if read is True:
+                bs = False
+                cho3 = True
+            elif read is False:
+                bs = False
+            if 'm' in ip:
+                cho3 = ip['m']
+                bs = False
+            while bs:
+                inp = input(f'{lan["INPUT8"]}(y/n)')  # 是否要默认下载最高画质（这样将不会询问具体画质）？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        cho3 = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if log:
+                logg.write(f"cho3 = {cho3}", currentframe(), "NicoNico Normal Video Download Video Para")
+            read = videodownload.nicoVideoDownload(section, apiData, cho3, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Video Return")
         return 0
     if not che:
         if log:

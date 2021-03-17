@@ -40,6 +40,8 @@ from nfofile import NFOFile, NFOActor
 from Logger import Logger
 from autoopenlist import autoopenfilelist
 from HTMLParser import AcfunBangumiParser
+from nicoPara import genNicoVideoPara
+from M3UParser import parseSimpleMasterM3U
 # https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 # https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 # result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -6848,6 +6850,248 @@ def acfunBangumiCoverImgDownload(r: requests.Session, index: int, data: dict, li
     else:
         print(f"{lan['OUTPUT24']}HTTP {re.status_code}")  # 下载封面图片时发生错误：
         return -2
+
+
+def findNicoStream(li: list, id: str) -> dict:
+    for i in li:
+        if i['id'] == id:
+            return i
+    return None
+
+
+def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: dict):
+    '''下载NicoNico视频
+    data 数据字典
+    c 自动选择最高画质
+    se 设置字典
+    ip 命令行字典
+    -1 创建文件夹失败
+    -2 读取cookies出现错误
+    -3 命令行参数错误
+    -4 解析失败'''
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    bp = ip['bp'] if 'bp' in ip else True if JSONParser.getset(se, 'bp') is True else False
+    nte = not ip['te'] if 'te' in ip else True if JSONParser.getset(se, 'te') is False else False
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    F = True if 'F' in ip else False
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
+    sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
+    if logg:
+        logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\nF = {F}\nfin = {fin}\nvf = {vf}\nsv = {sv}", currentframe(), "NicoNico Normal Video Download Var")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "NicoNico Normal Video Download Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败
+        return -1
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
+    r2 = requests.Session()
+    r2.headers = copydict(r.headers)
+    if nte:
+        r2.trust_env = False
+    r2.proxies = r.proxies
+    read = JSONParser.loadcookie(r2, logg, "nico_cookies.json")
+    r2.headers.update({"Referer": "https://www.nicovideo.jp/", "X-Frontend-Id": "6", "X-Frontend-Version": "0"})
+    if read != 0:
+        print(lan["ERROR2"])  # 读取cookies.json出现错误
+        return -2
+    delivery = data['media']['delivery']
+    movie = delivery['movie']
+    dur = data['video']['duration']
+    smid = data['video']['id'][2:]
+    url = 'https://nvapi.nicovideo.jp/v1/2ab0cbaa/watch'
+    trackingId = delivery['trackingId']
+    if logg:
+        logg.write(f"GET {url}\nt={trackingId}", currentframe(), "NicoNico Normal Video Watch Track Request")
+    re = r2.get(url, data={"t": trackingId})
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Normal Video Watch Track Result")
+    if re.status_code != 200:
+        return -4
+    url = None
+    for uri in data["media"]["delivery"]["movie"]["session"]['urls']:
+        if url is None:
+            url = uri
+            if url['isSsl']:
+                break
+        elif uri['isSsl'] and not url['isSsl']:
+            url = uri
+            break
+    url: str = url['url'] + "?_format=json"
+    para = genNicoVideoPara(data)
+    if logg:
+        logg.write(f"POST {url}\nPOST DATA: {json.dumps(para)}", currentframe(), "NicoNico Video Request PlayUrl")
+    r2.headers.pop("X-Frontend-Id")
+    r2.headers.pop("X-Frontend-Version")
+    # b = json.dumps(para, separators=(',', ':')).encode()
+    # r2.headers.update({"Accept": "application/json", "Content-Type": "application/json", "Accept-Encoding": "gzip, deflate, br", "Cache-Control": "no-cache", "Content-Length": str(len(b)), "Pragma": "no-cache", "Origin": "https://www.nicovideo.jp", "Sec-Fetch-Dest": "empty", "Sec-Fetch-Mode": "cors", "Sec-Fetch-Site": "cross-site", "Host": "api.dmc.nico"})
+    re = r2.post(url, json=para)
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Video Request PlayUrl Result")
+    if re.status_code >= 400:
+        return -4
+    re = re.json()['data']
+    resession = re['session']
+    contentList = resession['content_src_id_sets'][0]['content_src_ids']
+    if not c or F:
+        i = 0
+        for inf in contentList:
+            inf = inf['src_id_to_mux']
+            if ns or (not ns and F):
+                q = findNicoStream(movie["videos"], inf['video_src_ids'][0])
+                m = q['metadata']
+                print(f"{i+1}.{lan['OUTPUT9']}{m['label']}({q['id']},{m['resolution']['width']}x{m['resolution']['height']})")  # 图质
+                essize = calFileSize(dur * 1000, m['bitrate'] / 1000)
+                print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{m['bitrate'] / 1000}kbps)")  # 大小
+                q = findNicoStream(movie["audios"], inf["audio_src_ids"][0])
+                m = q['metadata']
+                print(f"{lan['OUTPUT16']}{q['id']}({m['samplingRate']}Hz)")  # 音频轨
+                essize = calFileSize(dur * 1000, m['bitrate'] / 1000)
+                print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{m['bitrate']/1000}kbps)")  # 大小
+            i += 1
+        if F:
+            return 0
+        if len(contentList) == 1 and not F:
+            cinfo = contentList[0]['src_id_to_mux']
+            cinfo['i'] = 0
+            vinfo = findNicoStream(movie["videos"], cinfo['video_src_ids'][0])
+            ainfo = findNicoStream(movie["audios"], cinfo['audio_src_ids'][0])
+        else:
+            bs = True
+            fi = True
+            while bs:
+                if fi and 'v' in ip:
+                    fi = False
+                    inp = ip['v']
+                elif ns:
+                    inp = input(lan['INPUT2'])  # 请选择画质：
+                else:
+                    print(lan['ERROR3'])  # 请使用-v <id>选择画质
+                    return -3
+                if len(inp) > 0 and inp.isnumeric():
+                    if int(inp) > 0 and int(inp) <= len(contentList):
+                        bs = False
+                        cinfo = contentList[int(inp) - 1]['src_id_to_mux']
+                        cinfo['i'] = int(inp) - 1
+                        vinfo = findNicoStream(movie["videos"], cinfo['video_src_ids'][0])
+                        ainfo = findNicoStream(movie["audios"], cinfo['audio_src_ids'][0])
+                        if ns:
+                            print(lan["OUTPUT11"].replace('<videoquality>', f"{vinfo['metadata']['label']}({vinfo['id']})"))  # 已选择%s画质
+    if logg:
+        logg.write(f"cinfo = {cinfo}\nvinfo = {vinfo}\nainfo = {ainfo}", currentframe(), "NicoNico Normal Video Download Var2")
+    url = resession['content_uri']
+    if logg:
+        logg.write(f"GET {url}", currentframe(), "NicoNico Normal Video Download Get M3U Master Playlist")
+    re = r2.get(url)
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Normal Video Download M3U Master Playlist")
+    links = parseSimpleMasterM3U(re.text, url)
+    if logg:
+        logg.write(f"links = {links}", currentframe(), "NicoNico Normal Video M3U Playlist")
+    link = links[cinfo['i']]
+    if not fin:
+        filen = o + file.filtern(f"{bstr.unescapeHTML(data['video']['title'])}.{vf}")
+    elif sv:
+        filen = o + file.filtern(f"{bstr.unescapeHTML(data['video']['title'])}(SM{smid},{vinfo['metadata']['label']},{vinfo['id']},{ainfo['id']}).{vf}")
+    else:
+        filen = o + file.filtern(f"{bstr.unescapeHTML(data['video']['title'])}(SM{smid}).{vf}")
+    ff = os.system(f'ffmpeg -h{getnul()}') == 0
+    if logg:
+        logg.write(f"ff = {ff}\nfilen = '{filen}'", currentframe(), "NicoNico Normal Video Download Var3")
+    if not ff:
+        print(lan['FFMPEG'])
+        return 0
+    if os.path.exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "NicoNico Normal Video Download Remove File Failed")
+                print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                return 0
+        else:
+            return 0
+    tempf = f"Temp/SM{smid}_{int(time.time())}_metadata.txt"
+    tags = bstr.gettags(data['tag']['items'], lambda d: d['name'])
+    nss = ""
+    if not ns:
+        nss = getnul()
+    imgs = -1
+    imga = ""
+    imga2 = ""
+    if vf == "mkv":
+        if imgs == 0:
+            pass
+        with open(tempf, 'w', encoding='utf8', newline='\n') as te:
+            te.write(';FFMETADATA1\n')
+            te.write(f"title={bstr.g(bstr.unescapeHTML(data['video']['title']))}\n")
+            te.write(f"description={bstr.g(bstr.unescapeHTML(data['video']['description']))}\n")
+            te.write(f"smid={bstr.g(smid)}\n")
+            te.write(f"pubdate={bstr.g(data['video']['registeredAt'])}\n")
+            te.write(f"uid={data['owner']['id']}\n")
+            te.write(f"artist={bstr.g(data['owner']['nickname'])}\n")
+            te.write(f"author={bstr.g(data['owner']['nickname'])}\n")
+            te.write(f"vq={bstr.g(vinfo['metadata']['label'])},{bstr.g(vinfo['id'])}\n")
+            te.write(f"aq={bstr.g(ainfo['id'])}\n")
+            te.write(f"purl=https://www.nicovideo.jp/watch/sm{bstr.g(smid)}\n")
+            te.write(f"tags={bstr.g(tags)}\n")
+        ml = f"""ffmpeg -i "{link}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+    else:
+        if imgs == 0:
+            pass
+        with open(tempf, 'w', encoding='utf8', newline='\n') as te:
+            te.write(';FFMETADATA1\n')
+            te.write(f"title={bstr.g(bstr.unescapeHTML(data['video']['title']))}\n")
+            te.write(f"comment={bstr.g(bstr.unescapeHTML(data['video']['description']))}\n")
+            te.write(f"artist={bstr.g(data['owner']['nickname'])}\n")
+            te.write(f"episode_id=SM{bstr.g(smid)}\n")
+            te.write(f"date={bstr.g(data['video']['registeredAt'][:10])}\n")
+            te.write(f"description={bstr.g(vinfo['metadata']['label'])},{bstr.g(vinfo['id'])},{bstr.g(ainfo['id'])},{data['owner']['id']}\\\n")
+            te.write(f"{bstr.g(tags)}\\\n")
+            te.write(f"https://www.nicovideo.jp/watch/sm{bstr.g(smid)}\n")
+            te.write(f"genre={bstr.g(tags)}\n")
+        ml = f"""ffmpeg -i "{link}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
+    if logg:
+        with open(tempf, 'r', encoding='utf8') as te:
+            logg.write(f"METADATAFILE '{tempf}'\n{te.read()}", currentframe(), "NicoNico Normal Video Video Download Metadata")
+        logg.write(f"ml = {ml}", currentframe(), "NicoNico Normal Video Download FFmpeg Command Line")
+    re = os.system(ml)
+    if logg:
+        logg.write(f"re = {re}", currentframe(), "NicoNico Normal Video Download FFmpeg Return")
+    if re == 0:
+        print(lan['OUTPUT14'])  # 合并完成！
+        if oll:
+            oll.add(filen)
+        if imgs == 0:
+            pass
+    os.remove(tempf)
+    return 0
 
 
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):

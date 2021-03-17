@@ -15,6 +15,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # 下列常量在 https://nicovideo.cdn.nimg.jp/web/scripts/pages/watch/modern/watch_dll_a111f699de384a78533e.js 中定义
 from math import ceil
+from json import loads as loadjson
 
 DEFAULT_COMMENT_NUM_PER_LEAF = 100
 MAX_COMMENT_NUM = 72000
@@ -131,3 +132,39 @@ def genNicoDanmuPara(data: dict) -> list:
             rel.append({"thread": com.genThread(data)})
             rel.append({"thread_leaves": com.genThreadLeaves(data)})
     return generatePara(rel)
+
+
+def findAudioIndex(availableAudios: list, levelIndex: int) -> str:
+    for i in availableAudios:
+        if i['metadata']['levelIndex'] == levelIndex:
+            return i['id']
+    return availableAudios[0]['id']
+
+
+def genNicoVideoPara(data: dict) -> dict:
+    r = {}
+    delivery = data['media']['delivery']
+    movie = delivery['movie']
+    availableVideos = [video for video in movie['videos'] if video['isAvailable'] is True]
+    availableAudios = [audio for audio in movie['audios'] if audio['isAvailable'] is True]
+    session = movie["session"]
+    token = loadjson(session['token'])
+    r['recipe_id'] = session['recipeId']
+    r['content_id'] = token['content_ids'][0]
+    r['content_type'] = "movie"
+    contsrc = []
+    vinfoids = [i['id'] for i in availableVideos]
+    for vinfo in availableVideos:
+        vsrcs = vinfoids[vinfoids.index(vinfo['id']):]
+        asrcs = [findAudioIndex(availableAudios, vinfo['metadata']['recommendedHighestAudioLevelIndex'])]
+        contsrc.append({"src_id_to_mux": {"video_src_ids": vsrcs, "audio_src_ids": asrcs}})
+    r['content_src_id_sets'] = [{"content_src_ids": contsrc}]
+    r['timing_constraint'] = 'unlimited'
+    r['keep_method'] = {"heartbeat": {"lifetime": token['heartbeat_lifetime']}}
+    r['protocol'] = {"name": token['protocols'][0]['name'], "parameters": {"http_parameters": {"parameters": {"hls_parameters": {"use_well_known_port": "yes", "use_ssl": "yes", "transfer_preset": "", "segment_duration": 6000}}}}}
+    r['content_uri'] = ""
+    r['session_operation_auth'] = {"session_operation_auth_by_signature": {"token": session['token'], "signature": session["signature"]}}
+    r['content_auth'] = {"auth_type": token['protocols'][0]['auth_type'], "content_key_timeout": token['content_key_timeout'], "service_id": token['service_id'], "service_user_id": token["service_user_id"]}
+    r['client_info'] = {"player_id": token["player_id"]}
+    r['priority'] = round(token['priority'], 1)
+    return {"session": r}
