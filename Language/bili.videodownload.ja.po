@@ -4,7 +4,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# 1 q <g1710431395@gmail.com>, 2020
+# lifegpc <g1710431395@gmail.com>, 2020
 # Kum4423, 2020
 # 
 msgid ""
@@ -355,4 +355,8 @@ msgstr ""
 
 msgctxt "NEEDPAY"
 msgid "You need to purchase this video to access it."
+msgstr ""
+
+msgctxt "TIMEOUT"
+msgid "The token was expired. Try to fetch new webpage to get new token……"
 msgstr ""

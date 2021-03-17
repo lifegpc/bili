@@ -39,7 +39,7 @@ import biliAudio
 from nfofile import NFOFile, NFOActor
 from Logger import Logger
 from autoopenlist import autoopenfilelist
-from HTMLParser import AcfunBangumiParser
+from HTMLParser import AcfunBangumiParser, NicoVideoInfoParser
 from nicoPara import genNicoVideoPara
 from M3UParser import parseSimpleMasterM3U
 # https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
@@ -6859,12 +6859,13 @@ def findNicoStream(li: list, id: str) -> dict:
     return None
 
 
-def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: dict):
+def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: dict, retry: int = 0):
     '''下载NicoNico视频
     data 数据字典
     c 自动选择最高画质
     se 设置字典
     ip 命令行字典
+    retry 第几次重试，默认为0
     -1 创建文件夹失败
     -2 读取cookies出现错误
     -3 命令行参数错误
@@ -6935,6 +6936,29 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     if logg:
         logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Video Request PlayUrl Result")
     if re.status_code >= 400:
+        rej = re.json()
+        if re.status_code == 403 and rej['meta']['status'] == 403 and rej['meta']['message'] == 'token_accept_time_limit':
+            if retry > 3:
+                return -4
+            print(f"{lan['TIMEOUT']}({retry+1}/3)")
+            url = f'https://www.nicovideo.jp/watch/sm{smid}'
+            if logg:
+                logg.write(f"GET {url}", currentframe(), "NicoNico Video Download Get Webpage")
+            re = r.get(url)
+            if logg:
+                logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Video Download Webpage Result")
+            if re.status_code >= 400:
+                return nicoVideoDownload(r, data, c, se, ip, retry + 1)
+            p = NicoVideoInfoParser()
+            p.feed(re.text)
+            if logg:
+                logg.write(f"parser.apiData = {p.apiData}", currentframe(), "Niconico Video Webpage Parser Result")
+            if p.apiData == '':
+                return nicoVideoDownload(r, data, c, se, ip, retry + 1)
+            apiData = json.loads(p.apiData, strict=False)
+            return nicoVideoDownload(r, apiData, c, se, ip, retry + 1)
+        else:
+            print(f"{rej['meta']['status']} {rej['meta']['message']}")
         return -4
     re = re.json()['data']
     resession = re['session']
