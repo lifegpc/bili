@@ -21,6 +21,7 @@ from traceback import format_exc
 from os.path import splitext, exists
 from time import time, sleep
 from file.info import size as fsize
+from file import mkdir
 from autoopenlist import autoopenfilelist
 from nicoHeartBeat import sendNicoHeartBeat
 
@@ -55,12 +56,15 @@ def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dic
     session, lastSendHeartBeat = sendNicoHeartBeat(r, session, sessionurl, logg)
     if session is None:
         return -1, index
+    dirName = splitext(fn)[0]
+    if not exists(f"{dirName}/"):
+        mkdir(dirName)
     startInd = index
     startTime = time()
     lastTime = startTime
     for link in li:
         ok = False
-        tfn = f"{splitext(fn)[0]}_{index+1}.ts"
+        tfn = f"{dirName}/{index+1}.ts"
         if exists(tfn):
             if logg:
                 logg.write(f"Segement {index} already exist, skip. link: {link}", currentframe(), "M3U Downloader Skip")
@@ -106,7 +110,8 @@ def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dic
             sleep(1)
             now = time()
         lastTime = now
+        percent = round(index + 1 / le * 100, 2)
         speedn = totalSize / (now - startTime)
-        print(f"\r{index+1}/{le} {fsize(totalSize)}({totalSize}B) {(now-startTime):.2}s {fsize(speedn)}/s({round(speedn)}B/s)", end="")
+        print(f"\r{percent}%({index+1}/{le})\t{fsize(totalSize)}({totalSize}B)\t{round(now-startTime, 2)}s\t{fsize(speedn)}/s({round(speedn)}B/s)", end="")
         index += 1
     return 0, index
