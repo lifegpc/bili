@@ -6860,6 +6860,13 @@ def findNicoStream(li: list, id: str) -> dict:
     return None
 
 
+def genNicoConcatFile(fn: str, tfn: str, count: int):
+    dirName = os.path.splitext(fn)[0]
+    with open(tfn, 'wt', encoding='utf8') as f:
+        for i in range(count):
+            f.write(f"file '{os.path.abspath(dirName + '/' + str(i + 1) + '.ts')}'\n")
+
+
 def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: dict, retry: int = 0):
     '''下载NicoNico视频
     data 数据字典
@@ -7071,6 +7078,11 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
             logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Internal M3U Downloader Return")
         if read[0] == -1 or read[0] == -2:
             return -5
+        if not ff:
+            return 0
+        tsCount = read[1]
+        tempf2 = f"Temp/SM{smid}_{int(time.time())}_concat.txt"
+        genNicoConcatFile(filen, tempf2, tsCount)
     tempf = f"Temp/SM{smid}_{int(time.time())}_metadata.txt"
     tags = bstr.gettags(data['tag']['items'], lambda d: d['name'])
     nss = ""
@@ -7095,7 +7107,10 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
             te.write(f"aq={bstr.g(ainfo['id'])}\n")
             te.write(f"purl=https://www.nicovideo.jp/watch/sm{bstr.g(smid)}\n")
             te.write(f"tags={bstr.g(tags)}\n")
-        ml = f"""ffmpeg -i "{link}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+        if useInternalDownloader:
+            ml = f"""ffmpeg -f concat -safe 0 -i "{tempf2}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
+        else:
+            ml = f"""ffmpeg -i "{link}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
     else:
         if imgs == 0:
             pass
@@ -7110,8 +7125,14 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
             te.write(f"{bstr.g(tags)}\\\n")
             te.write(f"https://www.nicovideo.jp/watch/sm{bstr.g(smid)}\n")
             te.write(f"genre={bstr.g(tags)}\n")
-        ml = f"""ffmpeg -i "{link}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
+        if useInternalDownloader:
+            ml = f"""ffmpeg -f concat -safe 0 -i "{tempf2}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
+        else:
+            ml = f"""ffmpeg -i "{link}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{filen}"{nss}"""
     if logg:
+        if useInternalDownloader:
+            with open(tempf2, 'r', encoding='utf8') as te:
+                logg.write(f"FFCONCATFILE '{tempf}'\n{te.read()}", currentframe(), "NicoNico Normal Video Video Download Concat File")
         with open(tempf, 'r', encoding='utf8') as te:
             logg.write(f"METADATAFILE '{tempf}'\n{te.read()}", currentframe(), "NicoNico Normal Video Video Download Metadata")
         logg.write(f"ml = {ml}", currentframe(), "NicoNico Normal Video Download FFmpeg Command Line")
@@ -7124,6 +7145,20 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
             oll.add(filen)
         if imgs == 0:
             pass
+        if useInternalDownloader:
+            dirName = os.path.splitext(filen)[0]
+            k = 0
+            while k < 4 and os.path.exists(dirName):
+                try:
+                    for i in range(tsCount):
+                        os.remove(os.path.abspath(f"{dirName}/{i+1}.ts"))
+                    os.removedirs(dirName)
+                except:
+                    if logg:
+                        logg.write(format_exc(), currentframe(), "NicoNico Video Download Remove Download Ts File Failed")
+                k += 1
+    if useInternalDownloader:
+        os.remove(tempf2)
     os.remove(tempf)
     return 0
 
