@@ -237,19 +237,43 @@ def main(ip={}, menuInfo=None):
         if re is None:
             re = search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?', inp, I)
             if re is None:
-                re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?(bangumi/aa(\d+)(_36188_(\d+))?)?', inp)
+                re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?(bangumi/aa(\d+)(_36188_(\d+))?)?', inp, I)
                 if re is None:
-                    re = search(r"[^:]+://", inp)
+                    re = search(r'([^:]+://)?(www\.)?(sp\.)?nicovideo\.jp/(watch/sm([0-9]+))?', inp, I)
                     if re is None:
-                        inp = "https://" + inp
-                    re = requests.head(inp)
-                    if 'Location' in re.headers:
-                        ip['i'] = re.headers['Location']
-                        ip['uc'] = False
-                        return main(ip)
+                        re = search(r"[^:]+://", inp)
+                        if re is None:
+                            inp = "https://" + inp
+                        re = requests.head(inp)
+                        if 'Location' in re.headers:
+                            ip['i'] = re.headers['Location']
+                            ip['uc'] = False
+                            return main(ip)
+                        else:
+                            print(f'{lan["ERROR2"]}')  # 输入有误
+                            return -1
                     else:
-                        print(f'{lan["ERROR2"]}')  # 输入有误
-                        return -1
+                        re = re.groups()
+                        if log:
+                            logg.write(f"re = {re}", currentframe(), "Input Regex 4")
+                        if re[3]:
+                            nico = True
+                            nicovideo = True
+                            smid = int(re[4])
+                            if log and not logg.hasf():
+                                logg.openf(f"log/SM{smid}_{round(time())}.log")
+                        else:
+                            re = search(r"[^:]+://", inp)
+                            if re is None:
+                                inp = "https://" + inp
+                            re = requests.head(inp)
+                            if 'Location' in re.headers:
+                                ip['i'] = re.headers['Location']
+                                ip['uc'] = False
+                                return main(ip)
+                            else:
+                                print(f'{lan["ERROR2"]}')  # 输入有误
+                                return -1
                 else:
                     re = re.groups()
                     if log:
