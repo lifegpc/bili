@@ -110,7 +110,7 @@ def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dic
             sleep(1)
             now = time()
         lastTime = now
-        percent = round(index + 1 / le * 100, 2)
+        percent = round((index + 1) / le * 100, 2)
         speedn = totalSize / (now - startTime)
         print(f"\r{percent}%({index+1}/{le})\t{fsize(totalSize)}({totalSize}B)\t{round(now-startTime, 2)}s\t{fsize(speedn)}/s({round(speedn)}B/s)", end="")
         index += 1
