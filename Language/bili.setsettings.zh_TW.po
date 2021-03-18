@@ -293,3 +293,8 @@ msgid ""
 "page contains 200 entries. 0 means no limit. Default: <value>, Now: "
 "<value2>): "
 msgstr ""
+
+msgctxt "INPUT48"
+msgid ""
+"Do you want to enable internal m3u media playlist downloader for Niconico?"
+msgstr ""

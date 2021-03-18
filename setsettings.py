@@ -364,4 +364,8 @@ if __name__ == '__main__':
             inp = input(la['INPUT14'].replace('<min>', '0'))
     if mxd != 40:
         ne['mxd'] = mxd
+    print(f"{la['INPUT48']}{la['NTY']}")
+    r = gk(se, 'imn')
+    print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
+    sk(ne, 'imn', se)
     saveset(ne)

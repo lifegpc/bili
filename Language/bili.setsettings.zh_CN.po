@@ -4,14 +4,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# 1 q <g1710431395@gmail.com>, 2021
+# lifegpc <g1710431395@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-11 08:17:00+0000\n"
 "PO-Revision-Date: 2020-07-11 08:38+0000\n"
-"Last-Translator: 1 q <g1710431395@gmail.com>, 2021\n"
+"Last-Translator: lifegpc <g1710431395@gmail.com>, 2021\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -300,3 +300,8 @@ msgid ""
 "page contains 200 entries. 0 means no limit. Default: <value>, Now: "
 "<value2>): "
 msgstr "从Acfun下载弹幕时的最大下载页数（1页包含200条。0表示无限制。默认值：<value>，当前值：<value2>）："
+
+msgctxt "INPUT48"
+msgid ""
+"Do you want to enable internal m3u media playlist downloader for Niconico?"
+msgstr "是否为Niconico启用内置M3U媒体播放列表下载器？"

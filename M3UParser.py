@@ -1,4 +1,4 @@
-# (C) 2019-2020 lifegpc
+# (C) 2019-2021 lifegpc
 # This file is part of bili.
 #
 # This program is free software: you can redistribute it and/or modify
@@ -23,6 +23,8 @@ def parseSimpleMasterM3U(data: str, base: str) -> List[str]:
     for s in li:
         s = s.strip()
         if s.startswith('#'):
+            continue
+        if len(s) == 0:
             continue
         r.append(urljoin(base, s))
     return r

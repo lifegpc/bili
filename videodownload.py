@@ -42,6 +42,7 @@ from autoopenlist import autoopenfilelist
 from HTMLParser import AcfunBangumiParser, NicoVideoInfoParser
 from nicoPara import genNicoVideoPara
 from M3UParser import parseSimpleMasterM3U
+from M3UDownloader import downloadNicoM3U
 # https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 # https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 # result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -6869,7 +6870,8 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     -1 创建文件夹失败
     -2 读取cookies出现错误
     -3 命令行参数错误
-    -4 解析失败'''
+    -4 解析失败
+    -5 下载失败'''
     logg: Logger = ip['logg'] if 'logg' in ip else None
     oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
     ns = False if 's' in ip else True
@@ -6880,8 +6882,9 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
     vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
     sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
+    useInternalDownloader = ip['imn'] if 'imn' in ip else False if JSONParser.getset(se, 'imn') is False else True
     if logg:
-        logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\nF = {F}\nfin = {fin}\nvf = {vf}\nsv = {sv}", currentframe(), "NicoNico Normal Video Download Var")
+        logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\nF = {F}\nfin = {fin}\nvf = {vf}\nsv = {sv}\nimn = {useInternalDownloader}", currentframe(), "NicoNico Normal Video Download Var")
     try:
         if not os.path.exists(o):
             mkdir(o)
@@ -6924,6 +6927,7 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
         elif uri['isSsl'] and not url['isSsl']:
             url = uri
             break
+    sessionurl = url['url']
     url: str = url['url'] + "?_format=json"
     para = genNicoVideoPara(data)
     if logg:
@@ -7028,7 +7032,7 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     ff = os.system(f'ffmpeg -h{getnul()}') == 0
     if logg:
         logg.write(f"ff = {ff}\nfilen = '{filen}'", currentframe(), "NicoNico Normal Video Download Var3")
-    if not ff:
+    if not ff and not useInternalDownloader:
         print(lan['FFMPEG'])
         return 0
     if os.path.exists(filen):
@@ -7061,6 +7065,12 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
                 return 0
         else:
             return 0
+    if useInternalDownloader:
+        read = downloadNicoM3U(r2, link, 0, filen, se, ip, resession, sessionurl)
+        if logg:
+            logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Internal M3U Downloader Return")
+        if read[0] == -1 or read[0] == -2:
+            return -5
     tempf = f"Temp/SM{smid}_{int(time.time())}_metadata.txt"
     tags = bstr.gettags(data['tag']['items'], lambda d: d['name'])
     nss = ""

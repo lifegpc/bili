@@ -558,3 +558,11 @@ msgid ""
 "The maximum number of download pages when downloading barrage from acfun. (1"
 " page contains 200 entries. 0 means no limit.)"
 msgstr ""
+
+msgctxt "O103"
+msgid "Enable internal m3u media playlist downloader for Niconico."
+msgstr ""
+
+msgctxt "O104"
+msgid "Disable internal m3u media playlist downloader for Niconico."
+msgstr ""
