@@ -106,12 +106,14 @@ def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dic
             session, lastSendHeartBeat = sendNicoHeartBeat(r, session, sessionurl, logg)
             if session is None:
                 return -1, index
-        while index > startInd + 6 and now < lastTime + (6 / speed):
-            sleep(1)
-            now = time()
-        lastTime = now
         percent = round((index + 1) / le * 100, 2)
         speedn = totalSize / (now - startTime)
         print(f"\r{percent}%({index+1}/{le})\t{fsize(totalSize)}({totalSize}B)\t{round(now-startTime, 2)}s\t{fsize(speedn)}/s({round(speedn)}B/s)", end="")
+        if index > startInd + 6 and now < lastTime + (6 / speed):
+            sleepTime = lastTime + (6 / speed) - now()
+            if sleepTime > 0.1:
+                sleep(sleepTime)
+            now = time()
+        lastTime = now
         index += 1
     return 0, index
