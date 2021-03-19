@@ -43,6 +43,7 @@ from HTMLParser import AcfunBangumiParser, NicoVideoInfoParser
 from nicoPara import genNicoVideoPara
 from M3UParser import parseSimpleMasterM3U
 from M3UDownloader import downloadNicoM3U
+from nicoHeartBeat import nicoNormalVideoHeartBeatThread
 # https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 # https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 # result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -6974,6 +6975,9 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     re = re.json()['data']
     resession = re['session']
     contentList = resession['content_src_id_sets'][0]['content_src_ids']
+    if not F:
+        hbThread = nicoNormalVideoHeartBeatThread(str(smid), r2, resession, sessionurl, logg)
+        hbThread.start()
     if not c or F:
         i = 0
         for inf in contentList:
@@ -7073,9 +7077,10 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
         else:
             return 0
     if useInternalDownloader:
-        read = downloadNicoM3U(r2, link, 0, filen, se, ip, resession, sessionurl)
+        read = downloadNicoM3U(r2, link, 0, filen, se, ip)
         if logg:
             logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Internal M3U Downloader Return")
+        hbThread.kill()
         if read[0] == -1 or read[0] == -2:
             return -5
         if not ff:
@@ -7139,6 +7144,8 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     re = os.system(ml)
     if logg:
         logg.write(f"re = {re}", currentframe(), "NicoNico Normal Video Download FFmpeg Return")
+    if not useInternalDownloader:
+        hbThread.kill()
     if re == 0:
         print(lan['OUTPUT14'])  # 合并完成！
         if oll:

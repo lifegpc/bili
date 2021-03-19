@@ -23,18 +23,15 @@ from time import time, sleep
 from file.info import size as fsize
 from file import mkdir
 from autoopenlist import autoopenfilelist
-from nicoHeartBeat import sendNicoHeartBeat
 
 
-def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dict, session: dict, sessionurl: str):
-    '''下载M3U媒体播放列表（NMD要心跳包）
+def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dict):
+    '''下载M3U媒体播放列表
     - url m3u地址
     - index 从几个segment开始
     - fn 文件名
     - se 设置字典
     - ip 名里字典
-    - session Session字典
-    - sessionurl Session地址
     -1 请求错误
     -2 写入文件错误'''
     logg: Logger = ip['logg'] if 'logg' in ip else None
@@ -53,9 +50,6 @@ def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dic
     li = li[index:]
     totalSize = 0
     le = len(li)
-    session, lastSendHeartBeat = sendNicoHeartBeat(r, session, sessionurl, logg)
-    if session is None:
-        return -1, index
     dirName = splitext(fn)[0]
     if not exists(f"{dirName}/"):
         mkdir(dirName)
@@ -102,10 +96,6 @@ def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dic
         if not ok:
             return -1, index
         now = time()
-        if now > lastSendHeartBeat + 90:
-            session, lastSendHeartBeat = sendNicoHeartBeat(r, session, sessionurl, logg)
-            if session is None:
-                return -1, index
         percent = round((index + 1) / le * 100, 2)
         speedn = totalSize / (now - startTime)
         print(f"\r{percent}%({index+1}/{le})\t{fsize(totalSize)}({totalSize}B)\t{round(now-startTime, 2)}s\t{fsize(speedn)}/s({round(speedn)}B/s)", end="")

@@ -14,10 +14,11 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from requests import Session
-from time import time
+from time import time, sleep
 from Logger import Logger
 from json import dumps
 from inspect import currentframe
+from threading import Thread
 
 
 def sendNicoHeartBeat(r: Session, session: dict, url: str, logg: Logger) -> (dict, int):
@@ -37,3 +38,34 @@ def sendNicoHeartBeat(r: Session, session: dict, url: str, logg: Logger) -> (dic
     if re.status_code >= 400:
         return None, None
     return re.json()['data']['session'], t / 1000
+
+
+class nicoNormalVideoHeartBeatThread(Thread):
+    def __init__(self, threadName: str, r: Session, session: dict, url: str, logg: Logger):
+        Thread.__init__(self, name=f"HeartBeat:{threadName}")
+        self._r = r
+        self._session = session
+        self._url = url
+        self._logg = logg
+        self._stop = False
+
+    def kill(self):
+        self._stop = True
+        if self._logg:
+            self._logg.write(f"{self.name}: Get Kill Signial", currentframe(), "NicoNico Normal Video Heart Beat Thread Get Kill")
+
+    def run(self):
+        self._session, lastSendHeartBeat = sendNicoHeartBeat(self._r, self._session, self._url, self._logg)
+        if self._session is None:
+            return
+        while True:
+            if self._stop:
+                break
+            if time() < lastSendHeartBeat + 90:
+                sleep(1)
+            else:
+                self._session, lastSendHeartBeat = sendNicoHeartBeat(self._r, self._session, self._url, self._logg)
+                if self._session is None:
+                    return
+        if self._logg:
+            self._logg.write(f"{self.name}: Exited", currentframe(), "NicoNico Normal Video Heart Beat Thread Killed")
