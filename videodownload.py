@@ -6868,12 +6868,13 @@ def genNicoConcatFile(fn: str, tfn: str, count: int):
             f.write(f"file '{os.path.abspath(dirName + '/' + str(i + 1) + '.ts')}'\n")
 
 
-def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: dict, retry: int = 0):
+def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: dict, threadMap: dict, retry: int = 0):
     '''下载NicoNico视频
     data 数据字典
     c 自动选择最高画质
     se 设置字典
     ip 命令行字典
+    threadMap 多线程字典
     retry 第几次重试，默认为0
     -1 创建文件夹失败
     -2 读取cookies出现错误
@@ -6960,15 +6961,15 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
             if logg:
                 logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Video Download Webpage Result")
             if re.status_code >= 400:
-                return nicoVideoDownload(r, data, c, se, ip, retry + 1)
+                return nicoVideoDownload(r, data, c, se, ip, threadMap, retry + 1)
             p = NicoVideoInfoParser()
             p.feed(re.text)
             if logg:
                 logg.write(f"parser.apiData = {p.apiData}", currentframe(), "Niconico Video Webpage Parser Result")
             if p.apiData == '':
-                return nicoVideoDownload(r, data, c, se, ip, retry + 1)
+                return nicoVideoDownload(r, data, c, se, ip, threadMap, retry + 1)
             apiData = json.loads(p.apiData, strict=False)
-            return nicoVideoDownload(r, apiData, c, se, ip, retry + 1)
+            return nicoVideoDownload(r, apiData, c, se, ip, threadMap, retry + 1)
         else:
             print(f"{rej['meta']['status']} {rej['meta']['message']}")
         return -4
@@ -6976,8 +6977,9 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     resession = re['session']
     contentList = resession['content_src_id_sets'][0]['content_src_ids']
     if not F:
-        hbThread = nicoNormalVideoHeartBeatThread(str(smid), r2, resession, sessionurl, logg)
+        hbThread = nicoNormalVideoHeartBeatThread(f"sm{smid}", r2, resession, sessionurl, logg)
         hbThread.start()
+        threadMap[f'sm{smid}_{round(time.time())}'] = hbThread
     if not c or F:
         i = 0
         for inf in contentList:

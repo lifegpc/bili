@@ -52,6 +52,7 @@ from inspect import currentframe
 from autoopenlist import autoopenfilelist
 from urllib.parse import parse_qs, urljoin
 from bstr import hasPar
+from multithread import makeSureSendKill
 
 # 远程调试用代码
 # import ptvsd
@@ -66,6 +67,7 @@ se = JSONParser.loadset()
 if se == -1 or se == -2:
     se = {}
 ip = {}
+threadMap = {}
 
 
 def main(ip={}, menuInfo=None):
@@ -2206,7 +2208,8 @@ def main(ip={}, menuInfo=None):
                         bs = False
             if log:
                 logg.write(f"cho3 = {cho3}", currentframe(), "NicoNico Normal Video Download Video Para")
-            read = videodownload.nicoVideoDownload(section, apiData, cho3, se, ip)
+            read = videodownload.nicoVideoDownload(section, apiData, cho3, se, ip, threadMap)
+            makeSureSendKill(threadMap)
             if log:
                 logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Video Return")
         return 0
@@ -2816,6 +2819,7 @@ if __name__ == "__main__":
             logg.closef()
     if 'oll' in ip:
         ip['oll'].open()
+    makeSureSendKill(threadMap)
     sys.exit(res)
 else:
     print(lan['OUTPUT11'])  # 请运行start.py
