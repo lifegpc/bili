@@ -40,7 +40,7 @@ from nfofile import NFOFile, NFOActor
 from Logger import Logger
 from autoopenlist import autoopenfilelist
 from HTMLParser import AcfunBangumiParser, NicoVideoInfoParser
-from nicoPara import genNicoVideoPara
+from nicoPara import genNicoVideoPara, nicoChooseBestCoverUrl
 from M3UParser import parseSimpleMasterM3U
 from M3UDownloader import downloadNicoM3U
 from nicoHeartBeat import nicoNormalVideoHeartBeatThread
@@ -7096,11 +7096,17 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     if not ns:
         nss = getnul()
     imgs = -1
+    imgUrl = nicoChooseBestCoverUrl(data)
+    if imgUrl is not None:
+        imgf = os.path.splitext(filen)[0] + "." + file.geturlfe(imgUrl, 'jpg')
+        imgs = nicoCoverImgDownload(r2, data, se, ip, imgf)
+        if logg:
+            logg.write(f"imgf = {imgf}\nimgs = {imgs}", currentframe(), "NicoNico Normal Video Download Var3")
     imga = ""
     imga2 = ""
     if vf == "mkv":
         if imgs == 0:
-            pass
+            imga = f' -attach "{imgf}" -metadata:s:t mimetype=image/jpeg'
         with open(tempf, 'w', encoding='utf8', newline='\n') as te:
             te.write(';FFMETADATA1\n')
             te.write(f"title={bstr.g(bstr.unescapeHTML(data['video']['title']))}\n")
@@ -7120,7 +7126,8 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
             ml = f"""ffmpeg -i "{link}" -i "{tempf}"{imga} -map 0 -map_metadata 1 -c copy "{filen}"{nss}"""
     else:
         if imgs == 0:
-            pass
+            imga = f' -i "{imgf}"'
+            imga2 = ' -map 2 -c:v:1 mjpeg -disposition:v:1 attached_pic'
         with open(tempf, 'w', encoding='utf8', newline='\n') as te:
             te.write(';FFMETADATA1\n')
             te.write(f"title={bstr.g(bstr.unescapeHTML(data['video']['title']))}\n")
@@ -7152,9 +7159,31 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
         print(lan['OUTPUT14'])  # 合并完成！
         if oll:
             oll.add(filen)
+        de = False
+        bs = True if ns else False
+        if JSONParser.getset(se, 'ad') is True:
+            de = True
+            bs = False
+        elif JSONParser.getset(se, 'ad') is False:
+            bs = False
+        if 'ad' in ip:
+            de = ip['ad']
+            bs = False
+        if bp and not useInternalDownloader:
+            de = False
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT4']}(y/n)")  # 是否删除中间文件？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    bs = False
+                    de = True
+                elif inp[0].lower() == 'n':
+                    bs = False
         if imgs == 0:
-            pass
-        if useInternalDownloader:
+            if de and not bp:
+                os.remove(imgf)
+        if useInternalDownloader and de:
             dirName = os.path.splitext(filen)[0]
             k = 0
             while k < 4 and os.path.exists(dirName):
@@ -7170,6 +7199,90 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
         os.remove(tempf2)
     os.remove(tempf)
     return 0
+
+
+def nicoCoverImgDownload(r: requests.Session, data: dict, se: dict, ip: dict, fn: str = None) -> int:
+    '''下载NicoNico封面
+    - data 数据字典
+    - se 设置字典
+    - ip 命令行参数字典
+    - fn 可选文件名
+    -1 创建文件夹失败
+    -2 下载失败'''
+    link = nicoChooseBestCoverUrl(data)
+    if link is None:
+        return 0
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    if logg:
+        logg.write(f"link = {link}\nns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "NicoNico Video Download Pic Para")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "NicoNico Bangumi Video Download Pic Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败。
+        return -1
+    smid = data['video']['id'][2:]
+    if fn is None:
+        hzm = file.geturlfe(link, "jpg")
+        if fin:
+            filen = o + file.filtern(f"{bstr.unescapeHTML(data['video']['title'])}.{hzm}")
+        else:
+            filen = o + file.filtern(f"{bstr.unescapeHTML(data['video']['title'])}(SM{smid}).{hzm}")
+    else:
+        filen = fn
+    if logg:
+        logg.write(f"filen = {filen}", currentframe(), "NicoNico Video Download Pic Var")
+    if os.path.exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            fg = True
+            bs = False
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)")  # "%s"文件已存在，是否覆盖？
+            if len(inp) > 0:
+                if inp[0].lower() == 'y':
+                    fg = True
+                    bs = False
+                elif inp[0].lower() == 'n':
+                    bs = False
+        if fg:
+            try:
+                os.remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "NicoNico Video Download Pic Remove File Failed")
+                print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
+                return 0
+    if logg:
+        logg.write(f"GET {link}", currentframe(), "NicoNico Video Download Pic Request")
+    re = r.get(link)
+    if logg:
+        logg.write(f"status = {re.status_code}", currentframe(), "NicoNico Video Download Pic Request Result")
+    if re.status_code == 200:
+        f = open(filen, 'wb')
+        f.write(re.content)
+        f.close()
+        if oll:
+            oll.add(filen)
+        if ns:
+            print(lan['OUTPUT23'].replace('<filename>', filen))  # 封面图片下载完成。
+        return 0
+    else:
+        print(f"{lan['OUTPUT24']}HTTP {re.status_code}")  # 下载封面图片时发生错误：
+        return -2
 
 
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):

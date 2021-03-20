@@ -168,3 +168,20 @@ def genNicoVideoPara(data: dict) -> dict:
     r['client_info'] = {"player_id": token["player_id"]}
     r['priority'] = round(token['priority'], 1)
     return {"session": r}
+
+
+def nicoChooseBestCoverUrl(d: dict) -> str:
+    '选择最好画质的封面URL。如无返回None'
+    if 'video' in d and 'thumbnail' in d['video']:
+        t = d['video']['thumbnail']
+        if 'ogp' in t:
+            return t['ogp']
+        if 'player' in t:
+            return t['player']
+        if 'largeUrl' in t:
+            return t['largeUrl']
+        if 'middleUrl' in t:
+            return t['middleUrl']
+        if 'url' in t:
+            return t['url']
+    return None

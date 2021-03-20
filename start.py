@@ -2212,6 +2212,12 @@ def main(ip={}, menuInfo=None):
             makeSureSendKill(threadMap)
             if log:
                 logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Video Return")
+            if read == -3:
+                return -1
+        elif cho2 == 3:
+            read = videodownload.nicoCoverImgDownload(section, apiData, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Pic Return")
         return 0
     if not che:
         if log:
