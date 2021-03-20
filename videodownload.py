@@ -44,6 +44,7 @@ from nicoPara import genNicoVideoPara, nicoChooseBestCoverUrl
 from M3UParser import parseSimpleMasterM3U
 from M3UDownloader import downloadNicoM3U
 from nicoHeartBeat import nicoNormalVideoHeartBeatThread
+from nicolive import downloadLiveVideo
 # https://api.bilibili.com/x/player/playurl?cid=<cid>&qn=<图质大小>&otype=json&avid=<avid>&fnver=0&fnval=16 番剧也可，但不支持4K
 # https://api.bilibili.com/pgc/player/web/playurl?avid=<avid>&cid=<cid>&bvid=&qn=<图质大小>&type=&otype=json&ep_id=<epid>&fourk=1&fnver=0&fnval=16&session= 貌似仅番剧
 # result -> dash -> video/audio -> [0-?](list) -> baseUrl/base_url
@@ -7283,6 +7284,52 @@ def nicoCoverImgDownload(r: requests.Session, data: dict, se: dict, ip: dict, fn
     else:
         print(f"{lan['OUTPUT24']}HTTP {re.status_code}")  # 下载封面图片时发生错误：
         return -2
+
+
+def nicoLiveVideoDownload(r: requests.Session, data: dict, se: dict, ip: dict, threadMap: dict):
+    '''下载NicoNico直播视频
+    - data 数据字典
+    - se 设置字典
+    - ip 命令行字典
+    - threadMap 线程字典
+    -1 创建新文件夹失败
+    -2 读取cookies出错'''
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    # oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = False if 's' in ip else True
+    bp = ip['bp'] if 'bp' in ip else True if JSONParser.getset(se, 'bp') is True else False
+    nte = not ip['te'] if 'te' in ip else True if JSONParser.getset(se, 'te') is False else False
+    o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
+    F = True if 'F' in ip else False
+    fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
+    vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
+    sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
+    useInternalDownloader = ip['imn'] if 'imn' in ip else True if JSONParser.getset(se, 'imn') is True else False
+    if logg:
+        logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\nF = {F}\nfin = {fin}\nvf = {vf}\nsv = {sv}\nimn = {useInternalDownloader}", currentframe(), "NicoNico Live Video Download Var")
+    try:
+        if not os.path.exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "NicoNico Normal Video Download Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败
+        return -1
+    if not os.path.exists('Temp/'):
+        mkdir('Temp/')
+    r2 = requests.Session()
+    r2.headers = copydict(r.headers)
+    if nte:
+        r2.trust_env = False
+    r2.proxies = r.proxies
+    read = JSONParser.loadcookie(r2, logg, "nico_cookies.json")
+    r2.headers.update({"Referer": "https://www.nicovideo.jp/"})
+    if read != 0:
+        print(lan["ERROR2"])  # 读取cookies.json出现错误
+        return -2
+    read = downloadLiveVideo(r2, data, threadMap, se, ip)
+    print(read)
+    return 0
 
 
 def downloadstream(nte, ip, uri, r, re, fn, size, d2, i=1, n=1, d=False, durz=-1, pre=-1):

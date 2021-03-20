@@ -132,6 +132,7 @@ def main(ip={}, menuInfo=None):
     acbangumi = False  # Acfun Bangumi
     nico = False  # NicoNico
     nicovideo = False  # NicoNico Video
+    nicolive = False  # NicoNoco Live
     av = False
     ss = False
     ep = False
@@ -229,6 +230,12 @@ def main(ip={}, menuInfo=None):
         smid = int(inp[2:])
         if log and not logg.hasf():
             logg.openf(f"log/SM{smid}_{round(time())}.log")
+    elif inp[:2].lower() == "lv" and inp[2:].isnumeric():
+        nico = True
+        nicolive = True
+        nicolvid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.write(f"log/LV{nicolvid}_{round(time())}.log")
     elif inp.isnumeric():
         s = "https://www.bilibili.com/video/av" + inp
         av = True
@@ -241,7 +248,7 @@ def main(ip={}, menuInfo=None):
             if re is None:
                 re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?(bangumi/aa(\d+)(_36188_(\d+))?)?', inp, I)
                 if re is None:
-                    re = search(r'([^:]+://)?(www\.)?(sp\.)?nicovideo\.jp/(watch/sm([0-9]+))?', inp, I)
+                    re = search(r'([^:]+://)?(www\.)?(sp\.)?(live\.)?nicovideo\.jp/(watch/sm([0-9]+))?((watch|gate)/lv([0-9]+))?', inp, I)
                     if re is None:
                         re = search(r"[^:]+://", inp)
                         if re is None:
@@ -258,12 +265,18 @@ def main(ip={}, menuInfo=None):
                         re = re.groups()
                         if log:
                             logg.write(f"re = {re}", currentframe(), "Input Regex 4")
-                        if re[3]:
+                        if re[4]:
                             nico = True
                             nicovideo = True
-                            smid = int(re[4])
+                            smid = int(re[5])
                             if log and not logg.hasf():
                                 logg.openf(f"log/SM{smid}_{round(time())}.log")
+                        elif re[6]:
+                            nico = True
+                            nicolive = True
+                            nicolvid = int(re[8])
+                            if log and not logg.hasf():
+                                logg.openf(f"log/LV{nicolvid}_{round(time())}.log")
                         else:
                             re = search(r"[^:]+://", inp)
                             if re is None:
@@ -2218,6 +2231,29 @@ def main(ip={}, menuInfo=None):
             read = videodownload.nicoCoverImgDownload(section, apiData, se, ip)
             if log:
                 logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Pic Return")
+        return 0
+    if nicolive:
+        url = f"https://live.nicovideo.jp/watch/lv{nicolvid}"
+        if log:
+            logg.write(f"GET {url}", currentframe(), "Get Niconico Video Webpage")
+        re = section.get(url)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Niconico Video Webpage Result")
+        if re.status_code == 404:
+            print("404")
+            return NOT_FOUND
+        elif re.status_code > 400:
+            return -1
+        parser = HTMLParser.NicoLiveInfoParser()
+        parser.feed(re.text)
+        if log:
+            logg.write(f"parser.data = {parser.data}", currentframe(), "Niconico Video Webpage Parser Result")
+        if parser.data == '':
+            return 0
+        liveData = json.loads(parser.data, strict=False)
+        if ns:
+            PrintInfo.printNicoLiveInfo(liveData)
+        videodownload.nicoLiveVideoDownload(section, liveData, se, ip, threadMap)
         return 0
     if not che:
         if log:

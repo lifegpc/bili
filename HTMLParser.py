@@ -154,13 +154,63 @@ class NicoVideoInfoParser(HTMLParser):
 
 class NicoDescriptionParser(HTMLParser):
     data = ''
+    style = False
+    deepdata = []
+    deepLevel = 0
 
     def handle_data(self, data: str):
-        self.data += data
+        if not self.style and self.deepLevel == 0:
+            self.data += data
+        elif self.deepLevel > 0:
+            self.deepdata[-1]["content"] += self.data
 
     def handle_starttag(self, tag: str, attrs: HTMLAttrs):
         if tag == "br":
             self.data += "\n"
+        if tag == 'style':
+            self.style = True
+        if tag == 'a':
+            self.deepLevel += 1
+            t = {"type": "link", "href": "", "content": ""}
+            for a in attrs:
+                if a[0] == 'href':
+                    t['href'] = a[1]
+            self.deepdata.append(t)
+
+    def handle_endtag(self, tag: str):
+        if tag == 'style':
+            self.style = False
+        if tag == 'a':
+            t = self.deepdata.pop()
+            c = t['href'] if t["href"] == t["content"] or t["content"] == "" else f"{t['content']}({t['href']})"
+            if self.deepLevel == 1:
+                self.data += c
+            elif self.deepLevel > 1:
+                self.deepdata[-1]["content"] += c
+            self.deepLevel -= 1
 
     def handle_startendtag(self, tag: str, attrs: HTMLAttrs):
+        if tag == 'style':
+            return
+        self.handle_starttag(tag, attrs)
+        if tag == 'href':
+            self.handle_endtag('href')
+
+
+class NicoLiveInfoParser(HTMLParser):
+    data = ''
+
+    def handle_starttag(self, tag, attrs: HTMLAttrs):
+        if tag == 'script':
+            eid = ''
+            for t in attrs:
+                if t[0] == 'id':
+                    eid = t[1]
+                    break
+            if eid == 'embedded-data':
+                for t in attrs:
+                    if t[0] == 'data-props':
+                        self.data = t[1]
+
+    def handle_startendtag(self, tag, attrs):
         self.handle_starttag(tag, attrs)

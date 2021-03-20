@@ -344,6 +344,21 @@ def printNicoVideoInfo(d: dict):
     print(f"{lan['O9']}{d['owner']['nickname']}")  # 作者
 
 
+def printNicoLiveInfo(d: dict):
+    p = d['program']
+    print(f"ID: {p['nicoliveProgramId']}")
+    print(f"{lan['O4']}{unescapeHTML(p['title'])}")  # 标题
+    print(f"{lan['O5']}{tostr2(p['openTime'])}")  # 发布时间
+    print(f"{lan['O7']}{unescapeHTML(p['description'])}")  # 简介
+    if 'additionalDescription' in p and p['additionalDescription'] != '':
+        print(unescapeHTML(p['additionalDescription']))
+    print(f"{lan['O33']}{gettags(p['tag']['list'], lambda d: d['text'])}")  # 标签
+    s = d['socialGroup']
+    if s['type'] == 'channel':
+        print(f"{lan['O26']}{s['id']}")  # 频道ID
+        print(f"{lan['O9']}{s['name']}")  # 名字
+
+
 def printplitid(d: list):
     for i in d:
         print(f"{lan['O52']}{i['tid']}")
