@@ -7300,13 +7300,10 @@ def nicoLiveVideoDownload(r: requests.Session, data: dict, se: dict, ip: dict, t
     bp = ip['bp'] if 'bp' in ip else True if JSONParser.getset(se, 'bp') is True else False
     nte = not ip['te'] if 'te' in ip else True if JSONParser.getset(se, 'te') is False else False
     o = ip['o'] if 'o' in ip else JSONParser.getset(se, 'o') if JSONParser.getset(se, 'o') is not None else 'Download/'
-    F = True if 'F' in ip else False
     fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
     vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
-    sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
-    useInternalDownloader = ip['imn'] if 'imn' in ip else True if JSONParser.getset(se, 'imn') is True else False
     if logg:
-        logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\nF = {F}\nfin = {fin}\nvf = {vf}\nsv = {sv}\nimn = {useInternalDownloader}", currentframe(), "NicoNico Live Video Download Var")
+        logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\nfin = {fin}\nvf = {vf}", currentframe(), "NicoNico Live Video Download Var")
     try:
         if not os.path.exists(o):
             mkdir(o)
@@ -7327,7 +7324,20 @@ def nicoLiveVideoDownload(r: requests.Session, data: dict, se: dict, ip: dict, t
     if read != 0:
         print(lan["ERROR2"])  # 读取cookies.json出现错误
         return -2
-    read = downloadLiveVideo(r2, data, threadMap, se, ip)
+    if not fin:
+        filen = o + file.filtern(f"{bstr.unescapeHTML(data['program']['title'])}.{vf}")  # 标题
+    else:
+        filen = o + file.filtern(f"{bstr.unescapeHTML(data['program']['title'])}(LV{data['program']['nicoliveProgramId'][2:]}).{vf}")
+    dirName = os.path.splitext(filen)[0]
+    try:
+        if not os.path.exists(dirName):
+            mkdir(dirName)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "NicoNico Normal Video Download Mkdir Failed")
+        print(lan['ERROR1'].replace('<dirname>', o))  # 创建文件夹"<dirname>"失败
+        return -1
+    read = downloadLiveVideo(r2, data, threadMap, se, ip, dirName)
     print(read)
     return 0
 

@@ -28,7 +28,7 @@ from file.info import getinfo, getinfox, printinfo, spfn, spfln
 from file.dir import getinfod, printinfod, listd
 from file.filter import listf, listfd, listff, filtern, filterd
 from file.get import getfilen
-from file.info import geturlfe, getEtag, getlanEtag
+from file.info import geturlfe, getEtag, getlanEtag, urlsplitfn
 from file.str import cml
 from file.md import mkdir
 # 对后缀名过滤

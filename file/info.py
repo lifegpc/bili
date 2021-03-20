@@ -13,7 +13,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from os.path import getatime, getmtime, getctime, getsize, exists, isfile, isdir, splitext
+from os.path import getatime, getmtime, getctime, getsize, exists, isfile, isdir, splitext, split as splitfn
 from file.time import ttos
 from file.str import width, size, ftts
 from re import split
@@ -93,6 +93,12 @@ def geturlfe(uri: str, default: str = '') -> str:
         r = default
     else:
         r = r[1:]
+    return r
+
+
+def urlsplitfn(uri: str) -> str:
+    uri = str(uri)
+    r = splitfn(urlsplit(uri).path)[1]
     return r
 
 

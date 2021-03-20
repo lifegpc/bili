@@ -18,7 +18,6 @@ from requests import Session
 from Logger import Logger
 from inspect import currentframe
 from traceback import format_exc
-from base64 import b64encode
 from json import loads, dumps
 from typing import Union
 from threading import Lock, Thread
@@ -26,6 +25,8 @@ from time import time, sleep
 from os import environ
 from re import search, I
 from JSONParser import getset
+from M3UDownloader import DownloadProcess, NicoLiveDownloaderThread
+from websocket._exceptions import WebSocketTimeoutException, WebSocketConnectionClosedException
 
 
 STREAM_QUALITY = {0: "BroadcasterHigh", 1: "BroadcasterLow", 2: "Abr", 3: "UltraHigh", 4: "SuperHigh", 5: "High", 6: "Normal", 7: "Low", 8: "SuperLow", 9: "AudioHigh", "BroadcasterHigh": 0, "BroadcasterLow": 1, "Abr": 2, "UltraHigh": 3, "SuperHigh": 4, "High": 5, "Normal": 6, "Low": 7, "SuperLow": 8, "AudioHigh": 9}
@@ -103,12 +104,13 @@ def getProxyDict(pro: str) -> dict:
     return r
 
 
-def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dict):
+def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dict, dirName: str):
     """下载视频
     - data 数据字典
     - threadMap 线程Map
     - se 设置字典
     - ip 命令行字典
+    - dirName 下载的目录
     -1 建立WebSocket失败
     -2 发送startWatch失败"""
     logg: Logger = ip['logg'] if 'logg' in ip else None
@@ -122,7 +124,8 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
         if 'httpsproxy' in ip:
             pro = ip['httpsproxy']
         op = getProxyDict(pro)
-        websocket.connect(data['site']['relive']['webSocketUrl'], **op)
+        headers = {"origin": "https://live.nicovideo.jp", "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36", "Accept-Language": "ja-JP"}
+        websocket.connect(data['site']['relive']['webSocketUrl'], header=headers, **op)
     except:
         if logg:
             logg.write(format_exc(), currentframe(), "NicoNico Live Video Create WebSocket Failed")
@@ -132,16 +135,21 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
         return -2
     Ok = False
     keepThread: KeepSeatThread = None
+    dp: DownloadProcess = None
+    dpc = 0
     lvid = data['program']['nicoliveProgramId'][2:]
+    websocket.settimeout(5)
     while not Ok:
         try:
-            message = websocket.recv()
+            try:
+                message = websocket.recv()
+            except WebSocketTimeoutException:
+                message = ''
+            except WebSocketConnectionClosedException:
+                break
             if logg:
-                m = f"String msg:\n{message}" if isinstance(message, str) else f"Bytes msg:\nBase64:{b64encode(message).decode()}"
-                logg.write(m, currentframe(), "NicoNico Live Video WebSocket Get Message")
-            if message == '':
-                continue
-            if isinstance(message, str):
+                logg.write(f"String msg:\n{message}", currentframe(), "NicoNico Live Video WebSocket Get Message")
+            if message != '':
                 msg = loads(message, strict=False)
                 if msg["type"] == "ping":
                     sendMsg(websocket, lock, {"type": "pong"}, logg)
@@ -154,6 +162,12 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                         keepThread._keepIntervalSec = msg["data"]["keepIntervalSec"]
                 elif msg["type"] == "statistics":
                     pass
+                elif msg["type"] == "stream":
+                    if dp is None:
+                        dp = DownloadProcess()
+                    dt = NicoLiveDownloaderThread(f"lv{lvid},{dpc}", data, msg["data"], dp, logg, r, dirName)
+                    threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt
+                    dt.start()
                 else:
                     print(msg)
         except KeyboardInterrupt:
