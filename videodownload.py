@@ -6891,7 +6891,7 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     fin = ip['in'] if 'in' in ip else False if JSONParser.getset(se, 'in') is False else True
     vf = ip['vf'] if 'vf' in ip else se['vf'] if 'vf' in se else 'mkv'
     sv = ip['sv'] if 'sv' in ip else False if JSONParser.getset(se, 'sv') is False else True
-    useInternalDownloader = ip['imn'] if 'imn' in ip else False if JSONParser.getset(se, 'imn') is False else True
+    useInternalDownloader = ip['imn'] if 'imn' in ip else True if JSONParser.getset(se, 'imn') is True else False
     if logg:
         logg.write(f"ns = {ns}\nbp = {bp}\nnte = {nte}\no = '{o}'\nF = {F}\nfin = {fin}\nvf = {vf}\nsv = {sv}\nimn = {useInternalDownloader}", currentframe(), "NicoNico Normal Video Download Var")
     try:
