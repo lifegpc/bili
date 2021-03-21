@@ -254,9 +254,9 @@ def getLiveMetaFile(name: str, data: dict, vf: str, vq: str) -> str:
                 f.write(f"companyName={fstr(sg['companyName'])}\n")
         if vf == "mp4":
             f.write(f"comment={fstr(des)}\n")
-        f.write(f"{'comment' if vf == 'mkv' else 'description'}={fstr(vq)}\\\n")
-        f.write(f"{fstr(tag)}\\\n")
-        f.write(f"https://live.nicovideo.jp/watch/lv{fstr(lvid)}\n")
+            f.write(f"description={fstr(vq)}\\\n")
+            f.write(f"{fstr(tag)}\\\n")
+            f.write(f"https://live.nicovideo.jp/watch/lv{fstr(lvid)}\n")
         if vf == 'mkv':
             f.write(f"description={fstr(des)}\n")
             f.write(f"lvid={fstr(lvid)}\n")
