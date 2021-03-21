@@ -126,7 +126,8 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
     - imgf 图片名称
     -1 建立WebSocket失败
     -2 发送startWatch失败
-    -3 找不到ffmpeg"""
+    -3 找不到ffmpeg
+    -4 下载出现问题"""
     logg: Logger = ip['logg'] if 'logg' in ip else None
     oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
     nte = not ip['te'] if 'te' in ip else True if getset(se, 'te') is False else False
@@ -193,12 +194,16 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                         dt2 = FfmpegM3UDownloader(f"lv{lvid},{dpc}", fn, data, msg["data"], logg, imgs, imgf, oll)
                         threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt2
                         dt2.start()
+                elif msg["type"] == "disconnect" and msg["data"]["reason"] == "END_PROGRAM":
+                    Ok = True
+                    break
                 else:
                     print(msg)
         except KeyboardInterrupt:
             if logg:
                 logg.write("Get Keyboard Interrupt", currentframe(), "NicoNico Live Video WebSocket Get KILL")
-            Ok = False
+            Ok = True
         except:
             if logg:
                 logg.write(format_exc(), currentframe(), "NicoNico Live Video WebSocket Error")
+    return 0 if Ok else -4
