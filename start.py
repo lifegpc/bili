@@ -2846,11 +2846,15 @@ class mains(Thread):
 if __name__ == "__main__":
     PrintInfo.pr()
     res = -1
-    if not log or __debug__:
+    if __debug__:
+        res = main(ip)
+    elif not log:
         try:
             res = main(ip)
-        except:
+        except KeyboardInterrupt:
             pass
+        except:
+            print(traceback.format_exc())
     else:
         try:
             res = main(ip)
