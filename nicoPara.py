@@ -224,7 +224,7 @@ def getLiveMetaFile(name: str, data: dict, vf: str, vq: str) -> str:
     - vf 视频扩展名
     - vq 视频画质
     返回txt文件名'''
-    fn = "log/" + filtern(f"{name}_{round(time())}.txt")
+    fn = "Temp/" + filtern(f"{name}_{round(time())}.txt")
     p = data['program']
     lvid = p['nicoliveProgramId'][2:]
     with open(fn, 'w', encoding='utf8', newline='\n') as f:
