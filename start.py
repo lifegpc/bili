@@ -2847,18 +2847,23 @@ if __name__ == "__main__":
     PrintInfo.pr()
     res = -1
     if not log or __debug__:
-        res = main(ip)
+        try:
+            res = main(ip)
+        except KeyboardInterrupt:
+            pass
     else:
         try:
             res = main(ip)
+        except KeyboardInterrupt:
+            pass
         except:
             te = traceback.format_exc()
             print(te)
             logg.write(te, currentframe(), "Main Function Except")
-            if not logg.hasf():
-                logg.openf(f'log/{round(time())}.log')
-            logg.flush()
-            logg.closef()
+        if not logg.hasf():
+            logg.openf(f'log/{round(time())}.log')
+        logg.flush()
+        logg.closef()
     if 'oll' in ip:
         ip['oll'].open()
     makeSureSendKill(threadMap)
