@@ -235,7 +235,7 @@ def main(ip={}, menuInfo=None):
         nicolive = True
         nicolvid = int(inp[2:])
         if log and not logg.hasf():
-            logg.write(f"log/LV{nicolvid}_{round(time())}.log")
+            logg.openf(f"log/LV{nicolvid}_{round(time())}.log")
     elif inp.isnumeric():
         s = "https://www.bilibili.com/video/av" + inp
         av = True
@@ -2847,7 +2847,10 @@ if __name__ == "__main__":
     PrintInfo.pr()
     res = -1
     if __debug__:
-        res = main(ip)
+        try:
+            res = main(ip)
+        except KeyboardInterrupt:
+            pass
     elif not log:
         try:
             res = main(ip)

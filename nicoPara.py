@@ -16,6 +16,11 @@
 # 下列常量在 https://nicovideo.cdn.nimg.jp/web/scripts/pages/watch/modern/watch_dll_a111f699de384a78533e.js 中定义
 from math import ceil
 from json import loads as loadjson
+from re import search, I
+from file import filtern
+from time import time
+from bstr import g as fstr, unescapeHTML, gettags
+from biliTime import tostr2, tostr4
 
 DEFAULT_COMMENT_NUM_PER_LEAF = 100
 MAX_COMMENT_NUM = 72000
@@ -185,3 +190,97 @@ def nicoChooseBestCoverUrl(d: dict) -> str:
         if 'url' in t:
             return t['url']
     return None
+
+
+def nicoChooseBestCoverUrlForLive(d: dict) -> str:
+    if 'program' in d and 'thumbnail' in d['program']:
+        t = d['program']['thumbnail']
+        l = [i for i in t['huge']] if 'huge' in t else []  # noqa: E741
+        if len(l) > 0:
+            m = None
+            mp = 0
+            for i in l:
+                r = search(r'(\d+)x(\d+)', i, I)
+                if r is not None:
+                    r = r.groups()
+                    p = int(r[0]) * int(r[1])
+                    if p > mp:
+                        m = i
+                        mp = p
+            if m is None:
+                m = m[0]
+            return t['huge'][m]
+        elif 'large' in t:
+            return t['large']
+        elif 'small' in t:
+            return t['small']
+    return None
+
+
+def getLiveMetaFile(name: str, data: dict, vf: str, vq: str) -> str:
+    '''生成ffmpeg Meta文件
+    - name 名称
+    - data 数据字典
+    - vf 视频扩展名
+    - vq 视频画质
+    返回txt文件名'''
+    fn = "log/" + filtern(f"{name}_{round(time())}.txt")
+    p = data['program']
+    lvid = p['nicoliveProgramId'][2:]
+    with open(fn, 'w', encoding='utf8', newline='\n') as f:
+        des = unescapeHTML(p['description'])
+        tag = gettags(p['tag']['list'], lambda d: d['text'])
+        if 'additionalDescription' in p and p['additionalDescription'] != '':
+            des += '\n' + unescapeHTML(p['additionalDescription'])
+        f.write(';FFMETADATA1\n')
+        f.write(f"title={fstr(unescapeHTML(p['title']))}\n")
+        f.write(f"genre={fstr(tag)}\n")
+        f.write(f"episode_id=LV{fstr(lvid)}\n")
+        if 'beginTime' in p:
+            f.write(f"date={tostr4(p['beginTime'])}\n")
+        elif 'openTime' in p:
+            f.write(f"date={tostr4(p['openTime'])}\n")
+        elif 'vposBaseTime' in p:
+            f.write(f"date={tostr4(p['vposBaseTime'])}\n")
+        if 'socialGroup' in data:
+            sg: dict = data['socialGroup']
+            if 'name' in sg:
+                f.write(f"artist={fstr(sg['name'])}\n")
+                if vf == "mkv":
+                    f.write(f"author={fstr(sg['name'])}\n")
+            if 'description' in sg and vf == "mkv":
+                f.write(f"authorDescription={fstr(sg['description'])}\n")
+            if 'companyName' in sg and vf == "mkv":
+                f.write(f"companyName={fstr(sg['companyName'])}\n")
+        if vf == "mp4":
+            f.write(f"comment={fstr(des)}\n")
+        f.write(f"{'comment' if vf == 'mkv' else 'description'}={fstr(vq)}\\\n")
+        f.write(f"{fstr(tag)}\\\n")
+        f.write(f"https://live.nicovideo.jp/watch/lv{fstr(lvid)}\n")
+        if vf == 'mkv':
+            f.write(f"description={fstr(des)}\n")
+            f.write(f"lvid={fstr(lvid)}\n")
+            if 'reliveProgramId' in p:
+                f.write(f"reliveProgramId={fstr(p['reliveProgramId'])}\n")
+            if 'supplier' in p and 'name' in p['supplier']:
+                f.write(f"supplier={fstr(p['supplier']['name'])}\n")
+            if 'releaseTime' in p:
+                f.write(f"releaseTime={tostr2(p['releaseTime'])}\n")
+            if 'openTime' in p:
+                f.write(f"openTime={tostr2(p['openTime'])}\n")
+            if 'beginTime' in p:
+                f.write(f"beginTime={tostr2(p['beginTime'])}\n")
+            if 'vposBaseTime' in p:
+                f.write(f"vposBaseTime={tostr2(p['vposBaseTime'])}\n")
+            if 'endTime' in p:
+                f.write(f"endTime={tostr2(p['endTime'])}\n")
+            if 'scheduledEndTime' in p:
+                f.write(f"scheduledEndTime={tostr2(p['scheduledEndTime'])}\n")
+            f.write(f"tags={fstr(tag)}\n")
+            if 'twitter' in p and 'hashTags' in p['twitter']:
+                hashTags = gettags(p['twitter']['hashTags'])
+                if hashTags != '':
+                    f.write(f"twitterHashTags={fstr(hashTags)}\n")
+            f.write(f"vq={fstr(vq)}\n")
+            f.write(f"purl=htpps://live.nicovideo.jp/watch/lv{fstr(lvid)}\n")
+    return fn

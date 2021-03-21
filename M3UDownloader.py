@@ -27,6 +27,8 @@ from threading import Thread, Lock
 from typing import List
 from multithread import makeSureAllClosed
 from urllib.parse import urlsplit, urlunsplit, SplitResult
+from nicoPara import getLiveMetaFile
+from os import system, remove
 
 
 def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dict):
@@ -304,3 +306,57 @@ class TSDownloader(Thread):
         except:
             if self._logg:
                 self._logg.write(f"{self.name}:\n{format_exc()}", currentframe(), "TS Downloader Write Failed")
+
+
+class FfmpegM3UDownloader(Thread):
+    def __init__(self, name: str, fileName: str, data: dict, streams: dict, logg: Logger, imgs: int, imgf: str, oll: autoopenfilelist):
+        Thread.__init__(self, name=f"FfmpegDownloader:{name}")
+        self._tname = name
+        self._fileName = fileName
+        self._streams = streams
+        self._logg = logg
+        self._data = data
+        self._tempf = None
+        self._imgs = imgs
+        self._imgf = imgf
+        self._oll = oll
+
+    def run(self):
+        try:
+            self.callffmpeg()
+        except KeyboardInterrupt:
+            pass
+        except:
+            if self._logg:
+                self._logg.write(format_exc(), currentframe(), "NicoNico Live Video Download Ffmpeg Downloader Error")
+        if self._tempf:
+            remove(self._tempf)
+
+    def callffmpeg(self):
+        vf = splitext(self._fileName)[1][1:]
+        imga = ""
+        imga2 = ""
+        nss = ""
+        if self._imgs == 0:
+            if vf == "mkv":
+                imga = f' -attach "{self._imgf}" -metadata:s:t mimetype=image/jpeg'
+            else:
+                imga = f' -i "{self._imgf}"'
+                imga2 = ' -map 2 -c:v:1 mjpeg -disposition:v:1 attached_pic'
+        self._tempf = getLiveMetaFile(self._tname, self._data, vf, self._streams['quality'])
+        if vf == "mkv":
+            ml = f"""ffmpeg -i "{self._streams['uri']}" -i "{self._tempf}"{imga} -map 0 -map_metadata 1 -c copy "{self._fileName}"{nss}"""
+        elif vf == "mp4":
+            ml = f"""ffmpeg -i "{self._streams['uri']}" -i "{self._tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{self._fileName}"{nss}"""
+        if self._logg:
+            with open(self._tempf, 'r', encoding='utf8') as te:
+                self._logg.write(f"{self.name}: METADATAFILE '{self._tempf}'\n{te.read()}", currentframe(), "NicoNico Live Video Download Metadata")
+            self._logg.write(f"{self.name}: ml = {ml}", currentframe(), "NicoNico Live Video Download FFmpeg Command Line")
+        re = system(ml)
+        if self._logg:
+            self._logg.write(f"re = {re}", currentframe(), "NicoNico Live Video Download FFmpeg Return")
+        if re == 0:
+            self._oll.add(self._fileName)
+        tfn = self._tempf
+        self._tempf = None
+        remove(tfn)

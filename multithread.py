@@ -19,8 +19,11 @@ from threading import Thread
 def makeSureSendKill(d: dict):
     """确保已经给线程发送了kill"""
     for key in d:
-        if not d[key]._stop:
-            d[key].kill()
+        t = d[key]
+        if isinstance(t, Thread):
+            if hasattr(t, '_stop') and hasattr(t, 'kill'):
+                if not t._stop:
+                    t.kill()
 
 
 def makeSureAllClosed(d: dict):

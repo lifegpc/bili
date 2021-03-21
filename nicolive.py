@@ -22,11 +22,21 @@ from json import loads, dumps
 from typing import Union
 from threading import Lock, Thread
 from time import time, sleep
-from os import environ
+from os import environ, devnull, system
 from re import search, I
 from JSONParser import getset
-from M3UDownloader import DownloadProcess, NicoLiveDownloaderThread
-from websocket._exceptions import WebSocketTimeoutException, WebSocketConnectionClosedException
+from M3UDownloader import (
+    DownloadProcess,
+    NicoLiveDownloaderThread,
+    FfmpegM3UDownloader
+)
+from websocket._exceptions import (
+    WebSocketTimeoutException,
+    WebSocketConnectionClosedException
+)
+from os.path import splitext
+from file import filtern
+from autoopenlist import autoopenfilelist
 
 
 STREAM_QUALITY = {0: "BroadcasterHigh", 1: "BroadcasterLow", 2: "Abr", 3: "UltraHigh", 4: "SuperHigh", 5: "High", 6: "Normal", 7: "Low", 8: "SuperLow", 9: "AudioHigh", "BroadcasterHigh": 0, "BroadcasterLow": 1, "Abr": 2, "UltraHigh": 3, "SuperHigh": 4, "High": 5, "Normal": 6, "Low": 7, "SuperLow": 8, "AudioHigh": 9}
@@ -104,17 +114,26 @@ def getProxyDict(pro: str) -> dict:
     return r
 
 
-def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dict, dirName: str):
+def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dict, dirName: str, filen: str, imgs: int, imgf: str):
     """下载视频
     - data 数据字典
     - threadMap 线程Map
     - se 设置字典
     - ip 命令行字典
     - dirName 下载的目录
+    - filen 最终视频文件名
+    - imgs 图片下载状态
+    - imgf 图片名称
     -1 建立WebSocket失败
-    -2 发送startWatch失败"""
+    -2 发送startWatch失败
+    -3 找不到ffmpeg"""
     logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
     nte = not ip['te'] if 'te' in ip else True if getset(se, 'te') is False else False
+    useInternalDownloader = ip['imn'] if 'imn' in ip else True if getset(se, 'imn') is True else False
+    ff = system(f"ffmpeg -h > {devnull} 2>&1") == 0
+    if not ff and not useInternalDownloader:
+        return -3
     websocket = WebSocket(enable_multithread=True)
     try:
         pro = None
@@ -163,11 +182,17 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                 elif msg["type"] == "statistics":
                     pass
                 elif msg["type"] == "stream":
-                    if dp is None:
-                        dp = DownloadProcess()
-                    dt = NicoLiveDownloaderThread(f"lv{lvid},{dpc}", data, msg["data"], dp, logg, r, dirName)
-                    threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt
-                    dt.start()
+                    if useInternalDownloader:
+                        if dp is None:
+                            dp = DownloadProcess()
+                        dt = NicoLiveDownloaderThread(f"lv{lvid},{dpc}", data, msg["data"], dp, logg, r, dirName)
+                        threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt
+                        dt.start()
+                    else:
+                        fn = filen if dpc == 0 else filtern(f"{splitext(filen)[0]}_{dpc}{splitext(filen)[1]}")
+                        dt2 = FfmpegM3UDownloader(f"lv{lvid},{dpc}", fn, data, msg["data"], logg, imgs, imgf, oll)
+                        threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt2
+                        dt2.start()
                 else:
                     print(msg)
         except KeyboardInterrupt:
