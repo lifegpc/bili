@@ -2849,7 +2849,7 @@ if __name__ == "__main__":
     if not log or __debug__:
         try:
             res = main(ip)
-        except KeyboardInterrupt:
+        except:
             pass
     else:
         try:
