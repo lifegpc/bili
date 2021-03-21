@@ -182,6 +182,10 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                 elif msg["type"] == "statistics":
                     pass
                 elif msg["type"] == "stream":
+                    if dpc == 0:
+                        startpos = data['program']['beginTime'] - data['program']['vposBaseTime'] if data['program']['status'] == 'ENDED' else None
+                    else:
+                        startpos = None
                     if useInternalDownloader:
                         if dp is None:
                             dp = DownloadProcess()
@@ -193,7 +197,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                         while exists(fn):  # 如果有重复的名字，自动修改名字
                             dpc += 1
                             fn = filen if dpc == 0 else f"{splitext(filen)[0]}_{dpc}{splitext(filen)[1]}"
-                        dt2 = FfmpegM3UDownloader(f"lv{lvid},{dpc}", fn, data, msg["data"], logg, imgs, imgf, oll)
+                        dt2 = FfmpegM3UDownloader(f"lv{lvid},{dpc}", fn, data, msg["data"], logg, imgs, imgf, oll, startpos)
                         threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt2
                         dt2.start()
                 elif msg["type"] == "disconnect" and msg["data"]["reason"] == "END_PROGRAM":

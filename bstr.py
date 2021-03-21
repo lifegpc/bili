@@ -17,7 +17,14 @@ from re import search, I
 from html import unescape
 from regex import search as rsearch
 from typing import Callable
-from urllib.parse import parse_qs
+from urllib.parse import (
+    parse_qs,
+    parse_qsl,
+    urlsplit,
+    urlunsplit,
+    urlencode,
+    SplitResult
+)
 from HTMLParser import NicoDescriptionParser
 
 
@@ -119,3 +126,11 @@ def unescapeHTML(s: str) -> str:
     p = NicoDescriptionParser()
     p.feed(s)
     return p.data
+
+
+def addNewParaToLink(link: str, key: str, value: str) -> str:
+    r = urlsplit(link)
+    l = parse_qsl(r.query)  # noqa: E741
+    l.append((str(key), str(value)))
+    r2 = SplitResult(r.scheme, r.netloc, r.path, urlencode(l), r.fragment)
+    return urlunsplit(r2)

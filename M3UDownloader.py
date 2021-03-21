@@ -29,6 +29,7 @@ from multithread import makeSureAllClosed
 from urllib.parse import urlsplit, urlunsplit, SplitResult
 from nicoPara import getLiveMetaFile
 from os import system, remove
+from bstr import addNewParaToLink
 
 
 def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dict):
@@ -309,7 +310,7 @@ class TSDownloader(Thread):
 
 
 class FfmpegM3UDownloader(Thread):
-    def __init__(self, name: str, fileName: str, data: dict, streams: dict, logg: Logger, imgs: int, imgf: str, oll: autoopenfilelist):
+    def __init__(self, name: str, fileName: str, data: dict, streams: dict, logg: Logger, imgs: int, imgf: str, oll: autoopenfilelist, startpos: int):
         Thread.__init__(self, name=f"FfmpegDownloader:{name}")
         self._tname = name
         self._fileName = fileName
@@ -320,6 +321,7 @@ class FfmpegM3UDownloader(Thread):
         self._imgs = imgs
         self._imgf = imgf
         self._oll = oll
+        self._startpos = startpos
 
     def run(self):
         try:
@@ -344,10 +346,11 @@ class FfmpegM3UDownloader(Thread):
                 imga = f' -i "{self._imgf}"'
                 imga2 = ' -map 2 -c:v:1 mjpeg -disposition:v:1 attached_pic'
         self._tempf = getLiveMetaFile(self._tname, self._data, vf, self._streams['quality'])
+        url = self._streams['uri'] if self._startpos is None else addNewParaToLink(self._streams['uri'], 'start', self._startpos)
         if vf == "mkv":
-            ml = f"""ffmpeg -i "{self._streams['uri']}" -i "{self._tempf}"{imga} -map 0 -map_metadata 1 -c copy "{self._fileName}"{nss}"""
+            ml = f"""ffmpeg -i "{url}" -i "{self._tempf}"{imga} -map 0 -map_metadata 1 -c copy "{self._fileName}"{nss}"""
         elif vf == "mp4":
-            ml = f"""ffmpeg -i "{self._streams['uri']}" -i "{self._tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{self._fileName}"{nss}"""
+            ml = f"""ffmpeg -i "{url}" -i "{self._tempf}"{imga} -map 0 -map_metadata 1 -c copy{imga2} "{self._fileName}"{nss}"""
         if self._logg:
             with open(self._tempf, 'r', encoding='utf8') as te:
                 self._logg.write(f"{self.name}: METADATAFILE '{self._tempf}'\n{te.read()}", currentframe(), "NicoNico Live Video Download Metadata")
