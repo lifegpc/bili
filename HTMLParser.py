@@ -162,7 +162,7 @@ class NicoDescriptionParser(HTMLParser):
         if not self.style and self.deepLevel == 0:
             self.data += data
         elif self.deepLevel > 0:
-            self.deepdata[-1]["content"] += self.data
+            self.deepdata[-1]["content"] += data
 
     def handle_starttag(self, tag: str, attrs: HTMLAttrs):
         if tag == "br":
