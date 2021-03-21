@@ -34,8 +34,7 @@ from websocket._exceptions import (
     WebSocketTimeoutException,
     WebSocketConnectionClosedException
 )
-from os.path import splitext
-from file import filtern
+from os.path import splitext, exists
 from autoopenlist import autoopenfilelist
 
 
@@ -190,7 +189,10 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                         threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt
                         dt.start()
                     else:
-                        fn = filen if dpc == 0 else filtern(f"{splitext(filen)[0]}_{dpc}{splitext(filen)[1]}")
+                        fn = filen if dpc == 0 else f"{splitext(filen)[0]}_{dpc}{splitext(filen)[1]}"
+                        while exists(fn):  # 如果有重复的名字，自动修改名字
+                            dpc += 1
+                            fn = filen if dpc == 0 else f"{splitext(filen)[0]}_{dpc}{splitext(filen)[1]}"
                         dt2 = FfmpegM3UDownloader(f"lv{lvid},{dpc}", fn, data, msg["data"], logg, imgs, imgf, oll)
                         threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt2
                         dt2.start()

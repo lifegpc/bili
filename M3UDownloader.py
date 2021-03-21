@@ -355,7 +355,7 @@ class FfmpegM3UDownloader(Thread):
         re = system(ml)
         if self._logg:
             self._logg.write(f"re = {re}", currentframe(), "NicoNico Live Video Download FFmpeg Return")
-        if re == 0:
+        if re == 0 or re == 255:
             self._oll.add(self._fileName)
         tfn = self._tempf
         self._tempf = None
