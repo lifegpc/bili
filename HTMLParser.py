@@ -155,18 +155,19 @@ class NicoVideoInfoParser(HTMLParser):
 class NicoDescriptionParser(HTMLParser):
     data = ''
     style = False
+    script = False
     deepdata = []
     deepLevel = 0
 
     def handle_data(self, data: str):
-        if not self.style and self.deepLevel == 0:
+        if not self.style and not self.script and self.deepLevel == 0:
             self.data += data
         elif self.deepLevel > 0:
             self.deepdata[-1]["content"] += data
 
     def handle_starttag(self, tag: str, attrs: HTMLAttrs):
         if tag == "br":
-            self.data += "\n"
+            self.handle_data('\n')
         if tag == 'style':
             self.style = True
         if tag == 'a':
@@ -176,6 +177,8 @@ class NicoDescriptionParser(HTMLParser):
                 if a[0] == 'href':
                     t['href'] = a[1]
             self.deepdata.append(t)
+        if tag == 'script':
+            self.script = True
 
     def handle_endtag(self, tag: str):
         if tag == 'style':
@@ -188,13 +191,15 @@ class NicoDescriptionParser(HTMLParser):
             elif self.deepLevel > 1:
                 self.deepdata[-1]["content"] += c
             self.deepLevel -= 1
+        if tag == 'script':
+            self.script = False
 
     def handle_startendtag(self, tag: str, attrs: HTMLAttrs):
-        if tag == 'style':
+        if tag in ['style', 'script']:
             return
         self.handle_starttag(tag, attrs)
-        if tag == 'href':
-            self.handle_endtag('href')
+        if tag == 'a':
+            self.handle_endtag('a')
 
 
 class NicoLiveInfoParser(HTMLParser):
