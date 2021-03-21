@@ -27,7 +27,6 @@ import bstr
 from biliSub import downsub, ffinputstr, downlrc
 from file import mkdir
 from dict import delli, dellk
-import platform
 from command import gopt
 from lang import getlan, getdict
 import sys
@@ -106,13 +105,7 @@ def getfps(s: str) -> str:
 
 def getnul():
     "获取不输出stdout的命令行"
-    s = platform.system()
-    if s == "Windows":
-        return " 2>&0 1>&0"
-    elif s == "Linux":
-        return " > /dev/null 2>&1"
-    else:
-        return " 2>&0 1>&0"
+    return f" > {os.devnull} 2>&1"
 
 
 def geth(h: CaseInsensitiveDict):
