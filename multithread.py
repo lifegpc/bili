@@ -14,6 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from threading import Thread
+from typing import Union
 
 
 def makeSureSendKill(d: dict):
@@ -26,11 +27,17 @@ def makeSureSendKill(d: dict):
                     t.kill()
 
 
-def makeSureAllClosed(d: dict):
+def makeSureAllClosed(d: Union[dict, list]):
     """所有进程是否已经全部退出"""
-    for key in d:
-        t = d[key]
-        if isinstance(t, Thread):
-            if t.isAlive:
-                return False
+    if isinstance(d, dict):
+        for key in d:
+            t = d[key]
+            if isinstance(t, Thread):
+                if t.isAlive():
+                    return False
+    elif isinstance(d, list):
+        for t in d:
+            if isinstance(t, Thread):
+                if t.isAlive():
+                    return False
     return True

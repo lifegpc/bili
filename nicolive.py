@@ -36,6 +36,7 @@ from websocket._exceptions import (
 )
 from os.path import splitext, exists
 from autoopenlist import autoopenfilelist
+from multithread import makeSureAllClosed
 
 
 STREAM_QUALITY = {0: "BroadcasterHigh", 1: "BroadcasterLow", 2: "Abr", 3: "UltraHigh", 4: "SuperHigh", 5: "High", 6: "Normal", 7: "Low", 8: "SuperLow", 9: "AudioHigh", "BroadcasterHigh": 0, "BroadcasterLow": 1, "Abr": 2, "UltraHigh": 3, "SuperHigh": 4, "High": 5, "Normal": 6, "Low": 7, "SuperLow": 8, "AudioHigh": 9}
@@ -154,6 +155,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
         return -2
     Ok = False
     keepThread: KeepSeatThread = None
+    dl = []
     dp: DownloadProcess = None
     dpc = 0
     lvid = data['program']['nicoliveProgramId'][2:]
@@ -164,6 +166,9 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                 message = websocket.recv()
             except WebSocketTimeoutException:
                 message = ''
+                if data['program']['status'] == 'ENDED':
+                    if makeSureAllClosed(dl):
+                        Ok = True
             except WebSocketConnectionClosedException:
                 break
             if logg:
@@ -191,6 +196,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                             dp = DownloadProcess()
                         dt = NicoLiveDownloaderThread(f"lv{lvid},{dpc}", data, msg["data"], dp, logg, r, dirName)
                         threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt
+                        dl.append(dt)
                         dt.start()
                     else:
                         fn = filen if dpc == 0 else f"{splitext(filen)[0]}_{dpc}{splitext(filen)[1]}"
@@ -199,6 +205,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                             fn = filen if dpc == 0 else f"{splitext(filen)[0]}_{dpc}{splitext(filen)[1]}"
                         dt2 = FfmpegM3UDownloader(f"lv{lvid},{dpc}", fn, data, msg["data"], logg, imgs, imgf, oll, startpos)
                         threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt2
+                        dl.append(dt2)
                         dt2.start()
                 elif msg["type"] == "disconnect" and msg["data"]["reason"] == "END_PROGRAM":
                     Ok = True
