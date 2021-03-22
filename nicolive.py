@@ -165,15 +165,15 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
             try:
                 message = websocket.recv()
             except WebSocketTimeoutException:
-                message = ''
+                message = None
                 if data['program']['status'] == 'ENDED':
                     if makeSureAllClosed(dl):
                         Ok = True
             except WebSocketConnectionClosedException:
                 break
-            if logg:
+            if message is not None and logg:
                 logg.write(f"String msg:\n{message}", currentframe(), "NicoNico Live Video WebSocket Get Message")
-            if message != '':
+            if message is not None and message != '':
                 msg = loads(message, strict=False)
                 if msg["type"] == "ping":
                     sendMsg(websocket, lock, {"type": "pong"}, logg)
