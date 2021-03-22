@@ -8,4 +8,4 @@ selenium>=3.141.0
 web.py>=0.62
 qrcode>=6.1
 Js2Py>=0.70
-websocket>=0.2.1
+websocket-client>=0.58.0
