@@ -141,6 +141,7 @@ def ph():
     --imn   {la['O103']}
     --nimn  {la['O104']}
     --nlt <second>  {la['O105']}
+    --nsp <speed>   {la['O106'].replace(onewline, nnewline)}
     {la['O56']}
     {la['O57']}
     {la['O58']}
@@ -149,7 +150,7 @@ def ph():
 
 
 def gopt(args, d: bool = False):
-    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:V:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid', 'ncc', 'ycc', 'nfo', 'nnfo', 'anopro', 'mxd=', 'imn', 'nimn', 'nlt='])
+    re = getopt(args, 'h?i:d:p:m:r:ynFv:a:o:scb:V:', ['help', 'ac=', 'dm=', 'ad=', 'yf', 'nf', 'mc=', 'ar', 'nar', 'ax=', 'as=', 'ak=', 'ab', 'nab', 'fa=', 'sv=', 'ma=', 'ms=', 'da=', 'httpproxy=', 'httpsproxy=', 'jt=', 'jts=', 'af', 'naf', 'afp=', 'slt', 'nslt', 'te', 'nte', 'bd', 'nbd', 'cad', 'ncad', 'lrh', 'nlrh', 'ym', 'nm', 'yac', 'nac', 'ydm', 'ndm', 'yad', 'nad', 'yr', 'nr', 'ysv', 'nsv', 'yma', 'nma', 'yda', 'nda', 'ahttpproxy=', 'ahttpsproxy=', 'lan=', 'bp', 'nbp', 'in', 'nin', 'mt', 'nmt', 'vi=', 'uc', 'nuc', 'ass', 'nass', 'dmp', 'ndmp', 'vf=', 'lmd=', 'ynal', 'nnal', 'log', 'nlog', 'yauf', 'nauf', 'ydwa', 'ndwa', 'yol', 'nol', 'ltid', 'ncc', 'ycc', 'nfo', 'nnfo', 'anopro', 'mxd=', 'imn', 'nimn', 'nlt=', 'nsp='])
     if d:
         print(re)
     rr = re[0]
@@ -417,6 +418,12 @@ def gopt(args, d: bool = False):
             r['imn'] = False
         if i[0] == '--nlt' and search(r'^\+?\d+(\.\d+)?$', i[1]) and 'nlt' not in r:
             r['nlt'] = float(i[1])
+        if i[0] == '--nsp' and search(r'^\+?\d+(\.\d+)?$', i[1]) and 'nsp' not in r:
+            t = float(i[1])
+            t = min(max(round(t * 4), 1), 8) / 4
+            if t in [1, 2]:
+                t = round(t)
+            r['nsp'] = t
         if i[0] == '-b':
             ree = urlsplit(i[1])
             if ree.scheme == "bili":

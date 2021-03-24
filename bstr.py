@@ -26,6 +26,7 @@ from urllib.parse import (
     SplitResult
 )
 from HTMLParser import NicoDescriptionParser
+from os.path import split as splitfn
 
 
 def f(i: str):
@@ -133,4 +134,11 @@ def addNewParaToLink(link: str, key: str, value: str) -> str:
     l = parse_qsl(r.query)  # noqa: E741
     l.append((str(key), str(value)))
     r2 = SplitResult(r.scheme, r.netloc, r.path, urlencode(l), r.fragment)
+    return urlunsplit(r2)
+
+
+def changeFileNameForLink(link: str, name: str) -> str:
+    r = urlsplit(link)
+    t = splitfn(r.path)
+    r2 = SplitResult(r.scheme, r.netloc, f"{t[0]}/{name}", r.query, r.fragment)
     return urlunsplit(r2)

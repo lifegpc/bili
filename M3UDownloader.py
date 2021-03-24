@@ -30,6 +30,7 @@ from urllib.parse import urlsplit, urlunsplit, SplitResult
 from nicoPara import getLiveMetaFile
 from os import system, remove
 from bstr import addNewParaToLink
+from enum import Enum, unique
 
 
 def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dict):
@@ -309,6 +310,15 @@ class TSDownloader(Thread):
                 self._logg.write(f"{self.name}:\n{format_exc()}", currentframe(), "TS Downloader Write Failed")
 
 
+@unique
+class FfmpegM3UDownloaderStatus(Enum):
+    INITIALIZE = 0
+    STARTRUN = 1
+    ENDED = 2
+    STARTFFMPEG = 3
+    ENDFFMPEG = 4
+
+
 class FfmpegM3UDownloader(Thread):
     def __init__(self, name: str, fileName: str, data: dict, streams: dict, logg: Logger, imgs: int, imgf: str, oll: autoopenfilelist, startpos: Union[int, float]):
         Thread.__init__(self, name=f"FfmpegDownloader:{name}")
@@ -322,8 +332,10 @@ class FfmpegM3UDownloader(Thread):
         self._imgf = imgf
         self._oll = oll
         self._startpos = startpos
+        self.status = FfmpegM3UDownloaderStatus.INITIALIZE
 
     def run(self):
+        self.status == FfmpegM3UDownloaderStatus.STARTRUN
         try:
             self.callffmpeg()
         except KeyboardInterrupt:
@@ -333,6 +345,7 @@ class FfmpegM3UDownloader(Thread):
                 self._logg.write(format_exc(), currentframe(), "NicoNico Live Video Download Ffmpeg Downloader Error")
         if self._tempf:
             remove(self._tempf)
+        self.status == FfmpegM3UDownloaderStatus.ENDED
 
     def callffmpeg(self):
         vf = splitext(self._fileName)[1][1:]
@@ -355,9 +368,11 @@ class FfmpegM3UDownloader(Thread):
             with open(self._tempf, 'r', encoding='utf8') as te:
                 self._logg.write(f"{self.name}: METADATAFILE '{self._tempf}'\n{te.read()}", currentframe(), "NicoNico Live Video Download Metadata")
             self._logg.write(f"{self.name}: ml = {ml}", currentframe(), "NicoNico Live Video Download FFmpeg Command Line")
+        self.status = FfmpegM3UDownloaderStatus.STARTFFMPEG
         re = system(ml)
         if self._logg:
             self._logg.write(f"re = {re}", currentframe(), "NicoNico Live Video Download FFmpeg Return")
+        self.status = FfmpegM3UDownloaderStatus.ENDFFMPEG
         if re == 0 or re == 255:
             self._oll.add(self._fileName)
         tfn = self._tempf

@@ -28,7 +28,8 @@ from JSONParser import getset
 from M3UDownloader import (
     DownloadProcess,
     NicoLiveDownloaderThread,
-    FfmpegM3UDownloader
+    FfmpegM3UDownloader,
+    FfmpegM3UDownloaderStatus
 )
 from websocket._exceptions import (
     WebSocketTimeoutException,
@@ -37,6 +38,7 @@ from websocket._exceptions import (
 from os.path import splitext, exists
 from autoopenlist import autoopenfilelist
 from multithread import makeSureAllClosed
+from bstr import addNewParaToLink, changeFileNameForLink
 
 
 STREAM_QUALITY = {0: "BroadcasterHigh", 1: "BroadcasterLow", 2: "Abr", 3: "UltraHigh", 4: "SuperHigh", 5: "High", 6: "Normal", 7: "Low", 8: "SuperLow", 9: "AudioHigh", "BroadcasterHigh": 0, "BroadcasterLow": 1, "Abr": 2, "UltraHigh": 3, "SuperHigh": 4, "High": 5, "Normal": 6, "Low": 7, "SuperLow": 8, "AudioHigh": 9}
@@ -96,6 +98,48 @@ class KeepSeatThread(Thread):
         sendMsg(self._w, self._lock, {"type": "keepSeat"}, self._logg)
 
 
+class SpeedChangeThread(Thread):
+    def __init__(self, name: str, r: Session, baseUrl: str, dl: FfmpegM3UDownloader, speed: Union[int, float], logg: Logger):
+        Thread.__init__(self, name=f"SpeedChangeThread:{name}")
+        if isinstance(speed, float):
+            if round(speed) == speed:
+                speed = round(speed)
+        self._speed = speed
+        self._logg = logg
+        self._dl = dl
+        self._r = r
+        self._baseUrl = baseUrl
+
+    def run(self):
+        if self._dl is None:
+            return
+        while True:
+            if not self._dl.is_alive():
+                if self._logg:
+                    self._logg.write(f"{self.name}: The DL Thread({self._dl.name}) is already dead.", currentframe(), "Speed Change Thread Var1")
+                break
+            if self._dl.status == FfmpegM3UDownloaderStatus.STARTFFMPEG:
+                if self._logg:
+                    self._logg.write(f"{self.name}: Detect DL Thread({self._dl.name}) is already stated the ffmpeg.", currentframe(), "Speed Change Thread Var2")
+                sleep(5)
+                self._send()
+                break
+            elif self._dl.status in [FfmpegM3UDownloaderStatus.ENDFFMPEG, FfmpegM3UDownloaderStatus.ENDED]:
+                if self._logg:
+                    self._logg.write(f"{self.name}: Detect DL Thread({self._dl.name}) is finishing running ffmpeg.", currentframe(), "Speed Change Thread Var3")
+                break
+
+    def _send(self):
+        '''发送消息'''
+        link = addNewParaToLink(changeFileNameForLink(self._baseUrl, "play_control.json"), "play_speed", str(self._speed))
+        if self._logg:
+            self._logg.write(f"{self.name}: GET {link}", currentframe(), "Speed Change Thread Send Request")
+        re = self._r.get(link)
+        if self._logg:
+            self._logg.write(f"{self.name}: status = {re.status_code}\n{re.text}", currentframe(), "Speed Change Thread Request Result")
+        # TODO: Do check
+
+
 def getProxyDict(pro: str) -> dict:
     r = {}
     if pro is None:
@@ -133,6 +177,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
     nte = not ip['te'] if 'te' in ip else True if getset(se, 'te') is False else False
     useInternalDownloader = ip['imn'] if 'imn' in ip else True if getset(se, 'imn') is True else False
     ff = system(f"ffmpeg -h > {devnull} 2>&1") == 0
+    speed = ip['nsp'] if 'nsp' in ip else 1
     if not ff and not useInternalDownloader:
         return -3
     websocket = WebSocket(enable_multithread=True)
@@ -207,6 +252,9 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                         threadMap[f"lv{lvid},{dpc}_{round(time())}"] = dt2
                         dl.append(dt2)
                         dt2.start()
+                        if speed != 1:
+                            sct = SpeedChangeThread(f"lv{lvid},{dpc}", r, msg["data"]["syncUri"], dt2, speed, logg)
+                            sct.start()
                 elif msg["type"] == "disconnect" and msg["data"]["reason"] == "END_PROGRAM":
                     Ok = True
                     break
