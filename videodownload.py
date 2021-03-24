@@ -7410,6 +7410,7 @@ def nicoLiveCoverImgDownload(r: requests.Session, data: dict, se: dict, ip: dict
                     logg.write(format_exc(), currentframe(), "NicoNico Live Video Download Pic Remove File Failed")
                 print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                 return 0
+        return 0
     if logg:
         logg.write(f"GET {link}", currentframe(), "NicoNico Live Video Download Pic Request")
     re = r.get(link)
