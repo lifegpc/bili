@@ -188,7 +188,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                     pass
                 elif msg["type"] == "stream":
                     if dpc == 0:
-                        startpos = max(data['program']['beginTime'] - data['program']['vposBaseTime'] - 5, 0) if data['program']['status'] == 'ENDED' else None
+                        startpos = max(ip['nlt'], 0) if 'nlt' in ip else max(data['program']['beginTime'] - data['program']['vposBaseTime'] - 5, 0) if data['program']['status'] == 'ENDED' else None
                     else:
                         startpos = None
                     if useInternalDownloader:

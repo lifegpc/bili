@@ -566,3 +566,7 @@ msgstr "为Niconico启用内置M3U媒体播放列表下载器。"
 msgctxt "O104"
 msgid "Disable internal m3u media playlist downloader for Niconico."
 msgstr "为Niconico禁用内置M3U媒体播放列表下载器。"
+
+msgctxt "O105"
+msgid "Start from which seconds when downloading niconico's live video."
+msgstr "当下载NicoNico直播时，从哪一秒开始下载。"

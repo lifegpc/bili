@@ -566,3 +566,7 @@ msgstr ""
 msgctxt "O104"
 msgid "Disable internal m3u media playlist downloader for Niconico."
 msgstr ""
+
+msgctxt "O105"
+msgid "Start from which seconds when downloading niconico's live video."
+msgstr ""

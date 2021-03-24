@@ -24,7 +24,7 @@ from file.info import size as fsize
 from file import mkdir, urlsplitfn
 from autoopenlist import autoopenfilelist
 from threading import Thread, Lock
-from typing import List
+from typing import List, Union
 from multithread import makeSureAllClosed
 from urllib.parse import urlsplit, urlunsplit, SplitResult
 from nicoPara import getLiveMetaFile
@@ -310,7 +310,7 @@ class TSDownloader(Thread):
 
 
 class FfmpegM3UDownloader(Thread):
-    def __init__(self, name: str, fileName: str, data: dict, streams: dict, logg: Logger, imgs: int, imgf: str, oll: autoopenfilelist, startpos: int):
+    def __init__(self, name: str, fileName: str, data: dict, streams: dict, logg: Logger, imgs: int, imgf: str, oll: autoopenfilelist, startpos: Union[int, float]):
         Thread.__init__(self, name=f"FfmpegDownloader:{name}")
         self._tname = name
         self._fileName = fileName
