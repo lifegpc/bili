@@ -115,7 +115,7 @@ def getnul():
 def geth(h: CaseInsensitiveDict):
     s = ''
     for i in h.keys():
-        s = s + ' --header "' + i + ': ' + h[i] + '"'
+        s = s + ' --header "' + i + ': ' + h[i].replace('"', '\"') + '"'
     return s
 
 
