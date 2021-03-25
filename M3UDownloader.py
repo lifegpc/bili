@@ -357,7 +357,7 @@ class FfmpegM3UDownloader(Thread):
                 imga = f' -attach "{self._imgf}" -metadata:s:t mimetype=image/jpeg'
             else:
                 imga = f' -i "{self._imgf}"'
-                imga2 = ' -map 2 -c:v:1 mjpeg -disposition:v:1 attached_pic'
+                imga2 = ' -map 2 -disposition:v:1 attached_pic'
         self._tempf = getLiveMetaFile(self._tname, self._data, vf, self._streams['quality'])
         url = self._streams['uri'] if self._startpos is None else addNewParaToLink(self._streams['uri'], 'start', self._startpos)
         if vf == "mkv":

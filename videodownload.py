@@ -7125,7 +7125,7 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     else:
         if imgs == 0:
             imga = f' -i "{imgf}"'
-            imga2 = ' -map 2 -c:v:1 mjpeg -disposition:v:1 attached_pic'
+            imga2 = ' -map 2 -disposition:v:1 attached_pic'
         with open(tempf, 'w', encoding='utf8', newline='\n') as te:
             te.write(';FFMETADATA1\n')
             te.write(f"title={bstr.g(bstr.unescapeHTML(data['video']['title']))}\n")
