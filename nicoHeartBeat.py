@@ -47,10 +47,10 @@ class nicoNormalVideoHeartBeatThread(Thread):
         self._session = session
         self._url = url
         self._logg = logg
-        self._stop = False
+        self._mystop = False
 
     def kill(self):
-        self._stop = True
+        self._mystop = True
         if self._logg:
             self._logg.write(f"{self.name}: Get Kill Signial", currentframe(), "NicoNico Normal Video Heart Beat Thread Get Kill")
 
@@ -59,7 +59,7 @@ class nicoNormalVideoHeartBeatThread(Thread):
         if self._session is None:
             return
         while True:
-            if self._stop:
+            if self._mystop:
                 break
             if time() < lastSendHeartBeat + 90:
                 sleep(1)

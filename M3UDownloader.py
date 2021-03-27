@@ -158,10 +158,10 @@ class NicoLiveDownloaderThread(Thread):
         self._dirName = dirName
         self._tc = 0
         self._threadMap = {}
-        self._stop = False
+        self._mystop = False
 
     def kill(self):
-        self._stop = True
+        self._mystop = True
         if self._logg:
             self._logg.write(f"{self.name}: Get Kill Signial", currentframe(), "NicoNico Live Video Download Thread Get Kill")
 
@@ -172,7 +172,7 @@ class NicoLiveDownloaderThread(Thread):
         if lastUpdated is None:
             return -1
         while True:
-            if self._stop:
+            if self._mystop:
                 break
             if time() < lastUpdated + 0.2:
                 st = lastUpdated + 0.2 - time()

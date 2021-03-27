@@ -37,8 +37,9 @@ from websocket._exceptions import (
 )
 from os.path import splitext, exists
 from autoopenlist import autoopenfilelist
-from multithread import makeSureAllClosed
+from multithread import makeSureAllClosed, makeSureSendKill
 from bstr import addNewParaToLink, changeFileNameForLink
+from nicoDanmu import NicoLiveDanmuThread, NicoDanmuFile
 
 
 STREAM_QUALITY = {0: "BroadcasterHigh", 1: "BroadcasterLow", 2: "Abr", 3: "UltraHigh", 4: "SuperHigh", 5: "High", 6: "Normal", 7: "Low", 8: "SuperLow", 9: "AudioHigh", "BroadcasterHigh": 0, "BroadcasterLow": 1, "Abr": 2, "UltraHigh": 3, "SuperHigh": 4, "High": 5, "Normal": 6, "Low": 7, "SuperLow": 8, "AudioHigh": 9}
@@ -75,18 +76,18 @@ class KeepSeatThread(Thread):
         self._keepIntervalSec = keepIntervalSec
         self._w = w
         self._lock = lock
-        self._stop = False
+        self._mystop = False
         self._logg = logg
         self._lastSend = 0
 
     def kill(self):
-        self._stop = True
+        self._mystop = True
         if self._logg:
             self._logg.write(f"{self.name}: Get Kill Signial", currentframe(), "NicoNico Live Video Keep Seat Thread Get Kill")
 
     def run(self):
         while True:
-            if self._stop:
+            if self._mystop:
                 break
             if time() < self._lastSend + self._keepIntervalSec:
                 sleep(1)
@@ -201,8 +202,11 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
     Ok = False
     keepThread: KeepSeatThread = None
     dl = []
+    dmf = None
+    dmdl = []
     dp: DownloadProcess = None
     dpc = 0
+    dmc = 0
     lvid = data['program']['nicoliveProgramId'][2:]
     websocket.settimeout(5)
     while not Ok:
@@ -258,6 +262,22 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                 elif msg["type"] == "disconnect" and msg["data"]["reason"] == "END_PROGRAM":
                     Ok = True
                     break
+                elif msg["type"] == "room":
+                    if dmc == 0:
+                        startpos = max(ip['nlt'], 0) if 'nlt' in ip else max(data['program']['beginTime'] - data['program']['vposBaseTime'] - 5, 0) if data['program']['status'] == 'ENDED' else None
+                    else:
+                        startpos = None
+                    filen2 = f"{splitext(filen)[0]}.xml"
+                    fn = filen2 if dmc == 0 else f"{splitext(filen2)[0]}_{dpc}{splitext(filen2)[1]}"
+                    while exists(fn):  # 如果有重复的名字，自动修改名字
+                        dmc += 1
+                        fn = filen if dmc == 0 else f"{splitext(filen2)[0]}_{dpc}{splitext(filen2)[1]}"
+                    if dmf is None:
+                        dmf = NicoDanmuFile(fn, data, msg["data"], logg)
+                    dmdt = NicoLiveDanmuThread(f"lv{lvid},dm{dmc}", dmf, data, msg["data"], logg, speed, headers, op, startpos)
+                    threadMap[f"lv{lvid},dm{dmc}_{round(time())}"] = dmdt
+                    dmdl.append(dmdt)
+                    dmdt.start()
                 else:
                     print(msg)
         except KeyboardInterrupt:
@@ -267,4 +287,12 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
         except:
             if logg:
                 logg.write(format_exc(), currentframe(), "NicoNico Live Video WebSocket Error")
+    if data['program']['status'] != 'ENDED':
+        makeSureSendKill(dmdl)
+    while not makeSureAllClosed(dmdl):
+        sleep(1)
+    if dmf is not None:
+        dmf.close()
+    if keepThread is not None:
+        keepThread.kill()
     return 0 if Ok else -4

@@ -17,14 +17,21 @@ from threading import Thread
 from typing import Union
 
 
-def makeSureSendKill(d: dict):
+def makeSureSendKill(d: Union[dict, list]):
     """确保已经给线程发送了kill"""
-    for key in d:
-        t = d[key]
-        if isinstance(t, Thread):
-            if hasattr(t, '_stop') and hasattr(t, 'kill'):
-                if not t._stop:
-                    t.kill()
+    if isinstance(d, dict):
+        for key in d:
+            t = d[key]
+            if isinstance(t, Thread):
+                if hasattr(t, '_mystop') and hasattr(t, 'kill'):
+                    if not t._mystop:
+                        t.kill()
+    elif isinstance(d, list):
+        for t in d:
+            if isinstance(t, Thread):
+                if hasattr(t, '_mystop') and hasattr(t, 'kill'):
+                    if not t._mystop:
+                        t.kill()
 
 
 def makeSureAllClosed(d: Union[dict, list]):
