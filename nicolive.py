@@ -209,6 +209,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
     dmc = 0
     lvid = data['program']['nicoliveProgramId'][2:]
     websocket.settimeout(5)
+    keyboardInt = False
     while not Ok:
         try:
             try:
@@ -268,10 +269,10 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
                     else:
                         startpos = None
                     filen2 = f"{splitext(filen)[0]}.xml"
-                    fn = filen2 if dmc == 0 else f"{splitext(filen2)[0]}_{dpc}{splitext(filen2)[1]}"
+                    fn = filen2 if dmc == 0 else f"{splitext(filen2)[0]}_{dmc}{splitext(filen2)[1]}"
                     while exists(fn):  # 如果有重复的名字，自动修改名字
                         dmc += 1
-                        fn = filen if dmc == 0 else f"{splitext(filen2)[0]}_{dpc}{splitext(filen2)[1]}"
+                        fn = filen if dmc == 0 else f"{splitext(filen2)[0]}_{dmc}{splitext(filen2)[1]}"
                     if dmf is None:
                         dmf = NicoDanmuFile(fn, data, msg["data"], logg)
                     dmdt = NicoLiveDanmuThread(f"lv{lvid},dm{dmc}", dmf, data, msg["data"], logg, speed, headers, op, startpos)
@@ -283,11 +284,12 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
         except KeyboardInterrupt:
             if logg:
                 logg.write("Get Keyboard Interrupt", currentframe(), "NicoNico Live Video WebSocket Get KILL")
+            keyboardInt = True
             Ok = True
         except:
             if logg:
                 logg.write(format_exc(), currentframe(), "NicoNico Live Video WebSocket Error")
-    if data['program']['status'] != 'ENDED':
+    if data['program']['status'] != 'ENDED' or keyboardInt:
         makeSureSendKill(dmdl)
     while not makeSureAllClosed(dmdl):
         sleep(1)
