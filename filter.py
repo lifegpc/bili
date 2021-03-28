@@ -28,7 +28,7 @@ from PrintInfo import pr
 from JSONParser import loadset, getset
 import sys
 from lang import getdict, getlan
-from biliext import XMLFILE
+from biliext import XMLFILE, ALLFILE
 lan = None
 se = loadset()
 if se == -1 or se == -2:
@@ -53,7 +53,9 @@ else:
         o = read
     bs = True
     try:
-        fl = win32.getOpenFileName(defaultPath=abspath(o), extFilterList=[XMLFILE], allowMultiSelect=True)
+        fl = win32.getOpenFileName(defaultPath=abspath(o), extFilterList=[XMLFILE, ALLFILE], allowMultiSelect=True)
+        if fl is None:
+            fl = []
     except:
         while bs:
             inp = input(lan['INPUT1'])  # 请输入要过滤的文件数量：
@@ -71,8 +73,8 @@ else:
                 continue
             r = read
             try:
-                fn = win32.getSaveFileName(defaultPath=splitfn(i['a'])[0], defaultExt="xml", extFilterList=[XMLFILE])
-                if fn == '':
+                fn = win32.getSaveFileName(defaultPath=splitfn(i['a'])[0], defaultExt="xml", extFilterList=[XMLFILE, ALLFILE])
+                if fn == '' or fn is None:
                     continue
             except:
                 input(lan['INPUT3'])  # 按Enter开始选择输出文件。

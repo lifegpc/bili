@@ -15,6 +15,13 @@ source_file = bili.biliDanmu.pot
 source_lang = en
 type = PO
 
+[bili.bilibiliextpot]
+file_filter = bili.biliext.<lang>.po
+minimum_perc = 0
+source_file = bili.biliext.pot
+source_lang = en
+type = PO
+
 [bili.bilibililoginpot]
 file_filter = bili.biliLogin.<lang>.po
 minimum_perc = 0

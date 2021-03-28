@@ -13,4 +13,20 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-XMLFILE = ("XML文件", "*.xml")
+from JSONParser import loadset
+import sys
+from command import gopt
+from lang import getdict, getlan
+
+
+lan = None
+se = loadset()
+if se == -1 or se == -2:
+    se = {}
+ip = {}
+if len(sys.argv) > 1:
+    ip = gopt(sys.argv[1:])
+lan = getdict('biliext', getlan(se, ip))
+
+XMLFILE = (lan['XML'], "*.xml")
+ALLFILE = (lan['ALL'], "*")
