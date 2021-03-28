@@ -13,11 +13,13 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-from ctypes.wintypes import HWND, DWORD, HINSTANCE, WORD, LPARAM, WPARAM, LPVOID
-from ctypes import Structure, windll, c_wchar_p, c_int, c_uint, WINFUNCTYPE, sizeof, byref, create_unicode_buffer, cast
+from ctypes.wintypes import HWND, DWORD, HINSTANCE, WORD, LPARAM, WPARAM, LPVOID, USHORT, BYTE, ULONG, UINT
+from ctypes import Structure, windll, c_wchar_p, c_int, c_uint, WINFUNCTYPE, sizeof, byref, create_unicode_buffer, cast, HRESULT, POINTER
 from typing import List, Tuple
-from os.path import split as splitfn
-LPCTSTR = LPTSTR = c_wchar_p
+from os.path import split as splitfn, abspath
+LPCWSTR = LPCTSTR = LPTSTR = c_wchar_p
+SFGAOF = ULONG
+SFGAO_FILESYSTEM = 0x40000000
 LPOFNHOOKPROC = WINFUNCTYPE(c_int, HWND, c_uint, WPARAM, LPARAM)
 OFN_ENABLESIZING = 0x00800000
 OFN_PATHMUSTEXIST = 0x00000800
@@ -31,6 +33,24 @@ ExtFilterList = List[Tuple[str]]
 
 class OPENFILENAMEW(Structure):
     _fields_ = [("lStructSize", DWORD), ("hwndOwner", HWND), ("hInstance", HINSTANCE), ("lpstrFilter", LPCTSTR), ("lpstrCustomFilter", LPTSTR), ("nMaxCustFilter", DWORD), ("nFilterIndex", DWORD), ("lpstrFile", LPTSTR), ("nMaxFile", DWORD), ("lpstrFileTitle", LPTSTR), ("nMaxFileTitle", DWORD), ("lpstrInitialDir", LPCTSTR), ("lpstrTitle", LPCTSTR), ("Flags", DWORD), ("nFileOffset", WORD), ("nFileExtension", WORD), ("lpstrDefExt", LPCTSTR), ("lCustData", LPARAM), ("lpfnHook", LPOFNHOOKPROC), ("lpTemplateName", LPCTSTR), ("pvReserved", LPVOID), ("dwReserved", DWORD), ("FlagsEx", DWORD)]
+
+
+class SHITEMID(Structure):
+    _fields_ = [("cb", USHORT), ("abID", BYTE)]
+
+
+class ITEMIDLIST(Structure):
+    _fields_ = [("mkid", SHITEMID)]
+
+
+PIDLIST = POINTER(ITEMIDLIST)
+
+windll.ole32.CoInitializeEx.restype = HRESULT
+windll.ole32.CoInitializeEx(None, 0)
+windll.shell32.SHParseDisplayName.restype = HRESULT
+windll.shell32.SHParseDisplayName.argtypes = [LPCWSTR, POINTER(c_int), POINTER(PIDLIST), SFGAOF, POINTER(SFGAOF)]
+windll.shell32.SHOpenFolderAndSelectItems.restype = HRESULT
+windll.shell32.SHOpenFolderAndSelectItems.argtypes = [PIDLIST, UINT, POINTER(c_int), DWORD]
 
 
 def extFilterListToStr(extFilterList: ExtFilterList):
@@ -121,3 +141,10 @@ def getSaveFileName(defaultPath: str = None, defaultName: str = None, defaultExt
             return {"a": w.lpstrFile, "f": splitfn(w.lpstrFile)[1]}
     except:
         return None
+
+
+def openFileInExplorer(f: str):
+    i = PIDLIST()
+    z = SFGAOF()
+    windll.shell32.SHParseDisplayName(abspath(f), None, byref(i), SFGAO_FILESYSTEM, byref(z))
+    windll.shell32.SHOpenFolderAndSelectItems(i, 0, None, 0)
