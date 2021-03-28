@@ -1668,6 +1668,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                 act.actorThumb = staff['face']
                 nfof.metadata.actors.append(act)
         nfof.save(filen)
+    return 0
 
 
 def avsubdownload(i, url, data, r, se, ip, ud):

@@ -79,7 +79,7 @@ def getOpenFileName(defaultPath: str = None, defaultExt: str = None, extFilterLi
         if defaultExt is not None:
             w.lpstrDefExt = defaultExt
         if defaultPath is not None:
-            tifn = create_unicode_buffer(defaultPath, MAXPATH)
+            tifn = create_unicode_buffer(defaultPath.replace('/', '\\'), MAXPATH)
             w.lpstrInitialDir = cast(tifn, LPCTSTR)
         if not windll.comdlg32.GetOpenFileNameW(byref(w)):
             return None
@@ -123,7 +123,7 @@ def getSaveFileName(defaultPath: str = None, defaultName: str = None, defaultExt
         w.nMaxFile = MAXPATH
         w.nMaxFileTitle = MAXPATH
         w.Flags = OFN_ENABLESIZING | OFN_PATHMUSTEXIST | OFN_NOCHANGEDIR | OFN_OVERWRITEPROMPT
-        ofn = '' if defaultName is None else defaultName
+        ofn = '' if defaultName is None else defaultName.replace('/', '\\')
         fn = create_unicode_buffer(ofn, MAXPATH)
         if extFilterList is not None:
             efs = extFilterListToStr(extFilterList)
@@ -133,7 +133,7 @@ def getSaveFileName(defaultPath: str = None, defaultName: str = None, defaultExt
         if defaultExt is not None:
             w.lpstrDefExt = defaultExt
         if defaultPath is not None:
-            tifn = create_unicode_buffer(defaultPath, MAXPATH)
+            tifn = create_unicode_buffer(defaultPath.replace('/', '\\'), MAXPATH)
             w.lpstrInitialDir = cast(tifn, LPCTSTR)
         if not windll.comdlg32.GetSaveFileNameW(byref(w)):
             return None
@@ -144,7 +144,8 @@ def getSaveFileName(defaultPath: str = None, defaultName: str = None, defaultExt
 
 
 def openFileInExplorer(f: str):
+    t = abspath(f).replace('/', '\\')
     i = PIDLIST()
     z = SFGAOF()
-    windll.shell32.SHParseDisplayName(abspath(f), None, byref(i), SFGAO_FILESYSTEM, byref(z))
+    windll.shell32.SHParseDisplayName(t, None, byref(i), SFGAO_FILESYSTEM, byref(z))
     windll.shell32.SHOpenFolderAndSelectItems(i, 0, None, 0)
