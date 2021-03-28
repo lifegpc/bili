@@ -69,16 +69,16 @@ msgstr "Enterキーを押してもう一度試してみてください。"
 
 msgctxt "OUTPUT3"
 msgid "The QR Code image is saved at \"<path>\"."
-msgstr ""
+msgstr "QRコードの画像は \"<path>\" で保存されます。"
 
 msgctxt "OUTPUT4"
 msgid "The QR Code is expired. Press any key to generate a new one."
-msgstr ""
+msgstr "QRコードの有効期限が切れています。いずれかのキーを押して、新しいQRコードを生成してください。"
 
 msgctxt "WARN1"
 msgid "This login method now have bugs, some contents may not available."
-msgstr ""
+msgstr "このログイン方法にはバグがあり、一部のコンテンツが利用できない場合があります。"
 
 msgctxt "QRCODE"
 msgid "(If you don't input anything, the program will use QR code to login.)"
-msgstr ""
+msgstr "(何も入力しないと、プログラムはQRコードを使ってログインします)"
