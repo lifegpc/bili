@@ -251,7 +251,6 @@ This program supports following input format (Take AM29931432 for example.):
 [web.py](https://webpy.org/)  
 [regex](https://pypi.org/project/regex/)  
 [iso-639](https://pypi.org/project/iso-639/)  
-[pywin32](https://pypi.org/project/pywin32/)  
 [qrcode](https://github.com/lincolnloop/python-qrcode)  
 [Js2Py](https://github.com/PiotrDabkowski/Js2Py)  
 The login part refers to the login part of [Bilibili-Toolkit](https://github.com/Hsury/Bilibili-Toolkit).
