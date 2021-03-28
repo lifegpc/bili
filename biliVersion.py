@@ -155,6 +155,7 @@ def getversion():
     f = popen('git --version 2>&1', 'r', 10)
     o = f.read()
     f.close()
+    git = False
     if o.startswith('git version'):
         git = True
     if exists('.git/') and git:  # 优先从git仓库获取当前版本
