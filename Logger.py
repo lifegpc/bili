@@ -72,7 +72,7 @@ class Logger:
             self.__f = None
         rfd, rfn = spfln(fn)
         rfd = filterd(rfd)
-        rfn = filtern(rfn)
+        rfn = filtern(rfn, 100)
         if not exists(rfd):
             mkdir(rfd)
         self.__f = open(f"{rfd}{rfn}", 'w', encoding='utf8')

@@ -577,3 +577,7 @@ msgid ""
 "Available playback speed (some settings may need NicoNico Premium): 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0.\n"
 "A higher playback speed can speed up the download speed."
 msgstr ""
+
+msgctxt "O108"
+msgid "The length limit for file name. 0 means no any limit."
+msgstr ""

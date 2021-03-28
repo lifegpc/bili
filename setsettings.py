@@ -368,4 +368,23 @@ if __name__ == '__main__':
     r = gk(se, 'imn')
     print2(f'%s1.{la["YES"]}\t%s2.{la["NO"]}\t%s3.{la["NOTSET"]}{la["DE"]}', r)
     sk(ne, 'imn', se)
+    fnl = 80
+    if 'fnl' in se:
+        if se['fnl'] >= 0:
+            fnl = se['fnl']
+    print(la['INPUT49'].replace('<value>', '80').replace('<value2>', str(fnl)))
+    inp = input(la['INPUT14'].replace('<min>', '0'))
+    bs = True
+    while bs:
+        if len(inp) == 0:
+            bs = False
+        elif inp.isnumeric():
+            tem = int(inp)
+            if tem >= 0:
+                fnl = tem
+                bs = False
+        else:
+            inp = input(la['INPUT14'].replace('<min>', '0'))
+    if fnl != 80:
+        ne['fnl'] = fnl
     saveset(ne)

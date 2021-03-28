@@ -580,3 +580,7 @@ msgstr ""
 "下载NicoNico直播时的播放速度。\n"
 "可用的播放速度（一些可能需要NicoNico会员）：0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0\n"
 "更高的播放速度可以加快下载速度。"
+
+msgctxt "O108"
+msgid "The length limit for file name. 0 means no any limit."
+msgstr "文件名的长度限制。0表示无任何限制。"
