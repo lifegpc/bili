@@ -133,6 +133,13 @@ class NicoDanmu:
         elif self.size == "big":
             return 40
 
+    def isInternalFiltered(self):
+        if self.content.startswith("/"):
+            return True
+        if self.content.startswith("<a>") and self.content.endswith("</a>"):
+            return True
+        return False
+
     def toBiliVer(self):
         return {"t": self.content, "mod": self.getDanmuType(), "fs": self.getSize(), "fc": self.getColor(), "ut": self.date, "ti": round(self.vpos / 100 - self.vposOffset, 5), "si": crc32(self.userId), "ri": f"{self.no:#04}" if self.onlyno else f"{self.thread}{self.no:#04}", "dp": 0}
 
@@ -186,7 +193,7 @@ class NicoDanmuFile:
     def write(self, data: dict, vposOffset: Union[int, float] = 0, no: int = 0):
         try:
             n = NicoDanmu(data, vposOffset, no)
-            if n.content.startswith("/nicoad"):
+            if n.isInternalFiltered():
                 return False
             d = n.toBiliVer()
         except:
