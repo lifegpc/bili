@@ -50,8 +50,8 @@ for key in QUALITY_LABEL:
     QUALITY_LABEL2[QUALITY_LABEL[key]] = key
 
 
-def genStartWatching(quality: int = DEFAULT_STREAM_QUALITY):
-    return {"type": "startWatching", "data": {"reconnect": False, "room": {"commentable": True, "protocol": "webSocket"}, "stream": {"chasePlay": False, "latency": "low", "protocol": "hls", "quality": quality}}}
+def genStartWatching(quality: int = DEFAULT_STREAM_QUALITY, low_latency: bool = False, chase_play: bool = False):
+    return {"type": "startWatching", "data": {"reconnect": False, "room": {"commentable": True, "protocol": "webSocket"}, "stream": {"chasePlay": bool(chase_play), "latency": "low" if low_latency else "high", "protocol": "hls", "quality": quality}}}
 
 
 def sendMsg(w: WebSocket, lock: Lock, msg: Union[str, dict], logg: Logger):
@@ -197,7 +197,8 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
             logg.write(format_exc(), currentframe(), "NicoNico Live Video Create WebSocket Failed")
         return -1
     lock = Lock()
-    if not sendMsg(websocket, lock, genStartWatching(data['program']['stream']['maxQuality']), logg):
+    chasePlay = True if 'nlt' in ip and data['program']['status'] == 'ON_AIR' else False
+    if not sendMsg(websocket, lock, genStartWatching(data['program']['stream']['maxQuality'], chase_play=chasePlay), logg):
         return -2
     Ok = False
     keepThread: KeepSeatThread = None
