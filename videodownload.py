@@ -7607,6 +7607,8 @@ def streamgetlength(r: requests.Session, uri, logg=None):
                 if logg is not None:
                     logg.write(f"headers = {re.headers}\nsize = {a}", currentframe(), "STREAMLENGTH")
                 return a
+            except KeyboardInterrupt as e:
+                raise e
             except Exception as e:
                 if logg is not None:
                     logg.write(format_exc(), currentframe(), "RETRY GET STREAM LENGTH")
@@ -7617,6 +7619,8 @@ def streamgetlength(r: requests.Session, uri, logg=None):
                     bs = True
                 else:
                     raise e
+        except KeyboardInterrupt as e:
+            raise e
         except Exception as e:
             if logg is not None:
                 logg.write(format_exc(), currentframe(), "RETRY GET STREAM LENGTH 2")
