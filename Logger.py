@@ -35,7 +35,7 @@ class Logger:
     __fsize = None
     __tsize = None
     limit_size = 20 * 2 ** 20
-    temp_limit = 2 ** 10
+    temp_limit = 0
 
     def __init__(self, s: str = None, fn: str = None):
         if fn is not None:
