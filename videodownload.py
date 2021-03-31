@@ -73,6 +73,11 @@ def getqualitytrans(t: str) -> str:
     return t
 
 
+def getQualityTransWithoutWarning(t: str) -> str:
+    "返回画质的翻译（无警告）"
+    return lan[t] if t in lan else t
+
+
 def getaudesc(data: dict, id: int):
     "获取AU号更好的描述"
     if 'qualities' not in data or data['qualities'] is None or type(data['qualities']) != list:
@@ -6942,7 +6947,9 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
     re = r2.get(url, data={"t": trackingId})
     if logg:
         logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Normal Video Watch Track Result")
-    if re.status_code != 200:
+    if re.status_code >= 400:
+        re = re.json()
+        print(f"{re['meta']['status']} {re['meta']['errorCode']}")
         return -4
     url = None
     for uri in data["media"]["delivery"]["movie"]["session"]['urls']:
@@ -7004,6 +7011,7 @@ def nicoVideoDownload(r: requests.Session, data: dict, c: bool, se: dict, ip: di
             if ns or (not ns and F):
                 q = findNicoStream(movie["videos"], inf['video_src_ids'][0])
                 m = q['metadata']
+                m['label'] = getQualityTransWithoutWarning(m['label'])
                 print(f"{i+1}.{lan['OUTPUT9']}{m['label']}({q['id']},{m['resolution']['width']}x{m['resolution']['height']})")  # 图质
                 essize = calFileSize(dur * 1000, m['bitrate'] / 1000)
                 print(f"{lan['OUTPUT10']}{file.info.size(essize)}({essize}B,{m['bitrate'] / 1000}kbps)")  # 大小

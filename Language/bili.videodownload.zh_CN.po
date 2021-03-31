@@ -352,3 +352,7 @@ msgstr "你需要购买此视频才能访问它。"
 msgctxt "TIMEOUT"
 msgid "The token was expired. Try to fetch new webpage to get new token……"
 msgstr "令牌已过期。尝试抓取新的网页以获取新的令牌……"
+
+msgctxt "低画質"
+msgid "Low video quality"
+msgstr "低画质"

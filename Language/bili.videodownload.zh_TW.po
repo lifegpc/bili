@@ -345,3 +345,7 @@ msgstr ""
 msgctxt "TIMEOUT"
 msgid "The token was expired. Try to fetch new webpage to get new token……"
 msgstr ""
+
+msgctxt "低画質"
+msgid "Low video quality"
+msgstr ""
