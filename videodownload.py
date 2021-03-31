@@ -7591,6 +7591,7 @@ def getfn2(i, i2, f, vqs, hzm, fin, fnl: int):
 
 def streamgetlength(r: requests.Session, uri, logg=None):
     bs = True
+    retry = 0
     while bs:
         bs = False
         try:
@@ -7606,17 +7607,25 @@ def streamgetlength(r: requests.Session, uri, logg=None):
                 if logg is not None:
                     logg.write(f"headers = {re.headers}\nsize = {a}", currentframe(), "STREAMLENGTH")
                 return a
-            except:
+            except Exception as e:
                 if logg is not None:
                     logg.write(format_exc(), currentframe(), "RETRY GET STREAM LENGTH")
                 re.close()
-                print(lan['OUTPUT21'])  # 获取文件大小失败。尝试重新获取……
-                bs = True
-        except:
+                retry += 1
+                if retry <= 3:
+                    print(lan['OUTPUT21'])  # 获取文件大小失败。尝试重新获取……
+                    bs = True
+                else:
+                    raise e
+        except Exception as e:
             if logg is not None:
                 logg.write(format_exc(), currentframe(), "RETRY GET STREAM LENGTH 2")
-            print(lan['OUTPUT21'])  # 获取文件大小失败。尝试重新获取……
-            bs = True
+            retry += 1
+            if retry <= 3:
+                print(lan['OUTPUT21'])  # 获取文件大小失败。尝试重新获取……
+                bs = True
+            else:
+                raise e
 
 
 if __name__ == "__main__":
