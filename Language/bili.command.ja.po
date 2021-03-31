@@ -606,3 +606,11 @@ msgstr ""
 msgctxt "O108"
 msgid "The length limit for file name. 0 means no any limit."
 msgstr "ファイル名の長さ制限。0は制限なし。"
+
+msgctxt "O109"
+msgid "Enable low latency mode for niconico live."
+msgstr ""
+
+msgctxt "O110"
+msgid "Disable low latency mode for niconico live."
+msgstr ""

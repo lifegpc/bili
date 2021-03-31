@@ -177,6 +177,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
     oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
     nte = not ip['te'] if 'te' in ip else True if getset(se, 'te') is False else False
     useInternalDownloader = ip['imn'] if 'imn' in ip else True if getset(se, 'imn') is True else False
+    low_latency = ip['lp'] if 'lp' in ip else False
     ff = system(f"ffmpeg -h > {devnull} 2>&1") == 0
     speed = ip['nsp'] if 'nsp' in ip else 1
     if not ff and not useInternalDownloader:
@@ -198,7 +199,7 @@ def downloadLiveVideo(r: Session, data: dict, threadMap: dict, se: dict, ip: dic
         return -1
     lock = Lock()
     chasePlay = True if 'nlt' in ip and data['program']['status'] == 'ON_AIR' else False
-    if not sendMsg(websocket, lock, genStartWatching(data['program']['stream']['maxQuality'], chase_play=chasePlay), logg):
+    if not sendMsg(websocket, lock, genStartWatching(data['program']['stream']['maxQuality'], low_latency=low_latency, chase_play=chasePlay), logg):
         return -2
     Ok = False
     keepThread: KeepSeatThread = None
