@@ -143,8 +143,8 @@ def ph():
     --nlt <second>  {la['O105']}
     --nsp <speed>   {la['O107'].replace(onewline, nnewline)}
     --fnl <length>  {la['O108']}
-    --lp    {la['109']}
-    --nlp   {la['110']}
+    --lp    {la['O109']}
+    --nlp   {la['O110']}
     {la['O56']}
     {la['O57']}
     {la['O58']}
