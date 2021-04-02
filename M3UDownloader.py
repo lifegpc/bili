@@ -44,7 +44,7 @@ def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dic
     -2 写入文件错误'''
     logg: Logger = ip['logg'] if 'logg' in ip else None
     oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
-    speed = 1
+    speed = 0
     if logg:
         logg.write(f"GET {url}", currentframe(), "M3U Downloader Get M3U File")
     re = r.get(url)
@@ -107,7 +107,7 @@ def downloadNicoM3U(r: Session, url: str, index: int, fn: str, se: dict, ip: dic
         percent = round((index + 1) / le * 100, 2)
         speedn = totalSize / (now - startTime)
         print(f"\r{percent}%({index+1}/{le})\t{fsize(totalSize)}({totalSize}B)\t{round(now-startTime, 2)}s\t{fsize(speedn)}/s({round(speedn)}B/s)", end="")
-        if index > startInd + 6 and now < lastTime + (6 / speed):
+        if speed > 0 and index > startInd + 6 and now < lastTime + (6 / speed):
             sleepTime = lastTime + (6 / speed) - time()
             if sleepTime > 0.1:
                 sleep(sleepTime)
