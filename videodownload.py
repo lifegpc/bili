@@ -1876,6 +1876,8 @@ def avpicdownload(data, r: requests.Session, ip, se, fn: str = None) -> int:
                     logg.write(format_exc(), currentframe(), "Normal Video Download Pic Remove File Failed")
                 print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                 return -3
+        else:
+            return 0
     if log:
         logg.write(f"GET {data['pic']}", currentframe(), "Normal Video Download Pic Request")
     re = r.get(data['pic'])
@@ -3795,6 +3797,8 @@ def eppicdownload(i, data, r: requests.Session, ip, se, fn: str = None) -> int:
                     logg.write(format_exc(), currentframe(), "Bangumi Video Cover Download Remove File Failed")
                 print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                 return -3
+        else:
+            return 0
     if log:
         logg.write(f"GET {cf}", currentframe(), "Bangumi Video Cover Download Request2")
     re = r.get(cf)
@@ -5926,6 +5930,8 @@ def aupicdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
                     logg.write(format_exc(), currentframe(), "Normal Aideo Download Pic Remove File Failed")
                 print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                 return -3
+        else:
+            return 0
     if log:
         logg.write(f"GET {data['cover']}", currentframe(), "Normal Audio Download Pic Request")
     re = r.get(data['cover'])
@@ -6066,6 +6072,8 @@ def aulrcdownload(data: dict, r: requests.Session, se: dict, ip: dict, fn: str =
                         logg.write(format_exc(), currentframe(), "Normal Aideo Download Lrc Remove File Failed")
                     print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                     return -3
+            else:
+                return 0
         if log:
             logg.write(f"GET {data['lyric']}", currentframe(), "Normal Audio Download Lrc Request")
         re = r.get(data['lyric'])
@@ -6478,6 +6486,8 @@ def acCoverImgDownload(r: requests.Session, data: dict, ip: dict, se: dict, fn: 
                     logg.write(format_exc(), currentframe(), "Acfun Normal Video Download Pic Remove File Failed")
                 print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                 return 0
+        else:
+            return 0
     if logg:
         logg.write(f"GET {data['coverUrl']}", currentframe(), "Acfun Normal Video Download Pic Request")
     re = r.get(data['coverUrl'])
@@ -6856,6 +6866,8 @@ def acfunBangumiCoverImgDownload(r: requests.Session, index: int, data: dict, li
                     logg.write(format_exc(), currentframe(), "Acfun Bangumi Video Download Pic Remove File Failed")
                 print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                 return 0
+        else:
+            return 0
     if logg:
         logg.write(f"GET {tarData['image']}", currentframe(), "Acfun Bangumi Video Download Pic Request")
     re = r.get(tarData['image'])
@@ -7292,6 +7304,8 @@ def nicoCoverImgDownload(r: requests.Session, data: dict, se: dict, ip: dict, fn
                     logg.write(format_exc(), currentframe(), "NicoNico Video Download Pic Remove File Failed")
                 print(lan['OUTPUT7'])  # 删除原有文件失败，跳过下载
                 return 0
+        else:
+            return 0
     if logg:
         logg.write(f"GET {link}", currentframe(), "NicoNico Video Download Pic Request")
     re = r.get(link)
