@@ -1547,7 +1547,8 @@ def acBangumiDownloadDanmu(r: Session, data: dict, list: dict, index: int, se: d
 def nicoDownloadDanmu(r: Session, data: dict, se: dict, ip: dict, xml: int, xmlc: dict):
     """下载Niconico弹幕
     -1 创建文件夹失败
-    -2 解析失败"""
+    -2 解析失败
+    -3 无弹幕"""
     fnl = ip['fnl'] if 'fnl' in ip else se["fnl"] if "fnl" in se else 80
     logg: Logger = ip['logg'] if 'logg' in ip else None
     oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
@@ -1627,7 +1628,7 @@ def nicoDownloadDanmu(r: Session, data: dict, se: dict, ip: dict, xml: int, xmlc
     if logg:
         logg.write(f"dml = {dml}", currentframe(), "NicoNico Barrage Barrage List")
     if len(dml) == 0:
-        return 0
+        return -3
     if ns:
         print(f"{lan['OUTPUT1']}{len(dml)}")  # 总计：
         if xml == 1:
