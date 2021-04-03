@@ -2197,6 +2197,9 @@ def main(ip={}, menuInfo=None):
             read = biliDanmu.nicoDownloadDanmu(section, apiData, se, ip, xml, xmlc)
             if log:
                 logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Result")
+            if read == 0:
+                if ns:
+                    print(lan['BARDOWC'])  # 弹幕下载成功
         if cho2 == 2 or cho2 == 4:
             bs = True
             cho3 = False

@@ -285,3 +285,7 @@ msgid ""
 "3.download cover image only\n"
 "4.download barrage and video"
 msgstr ""
+
+msgctxt "BARDOWC"
+msgid "The barrage is downloaded successfully."
+msgstr ""

@@ -328,3 +328,7 @@ msgstr ""
 "2.ビデオをダウンロード\n"
 "3.カバー画像のみダウンロード\n"
 "4.弾幕とビデオをダウンロード"
+
+msgctxt "BARDOWC"
+msgid "The barrage is downloaded successfully."
+msgstr ""
