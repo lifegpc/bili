@@ -75,6 +75,7 @@ class HDVideoParser:
                 if read == -1:
                     return -1
         self.d['page'] = self.page_list
+        self.d['videos'] = len(self.d['page'])  # TODO: 检查为啥videos数量会更大
         return 0
 
     def addninfo(self, re: dict):
