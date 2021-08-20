@@ -1,0 +1,101 @@
+# bili - webui/bililogin Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-09-206 11:03:00+0000\n"
+"PO-Revision-Date: 2020-09-06 13:43+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "NEEDLOGIN"
+msgid ""
+"You need to login in to your bilibili account if you want to continue using "
+"this program."
+msgstr "您需要登入bilibili帳號才能繼續使用此程式。"
+
+msgctxt "USERNAME"
+msgid "User name:"
+msgstr "使用者名稱："
+
+msgctxt "CAPTCHA"
+msgid "Captcha:"
+msgstr "驗證碼："
+
+msgctxt "NEEDCAP"
+msgid "Captcha is required to login in."
+msgstr "需要驗證碼才能登入。"
+
+msgctxt "SERISBUS"
+msgid "Service is busy."
+msgstr "服務繁忙。"
+
+msgctxt "INCOUSPA"
+msgid "Incorrect user name or password."
+msgstr "不正確的使用者名稱或密碼。"
+
+msgctxt "HTTPWARN"
+msgid ""
+"Although the program has encrypted the user name and password, it is still "
+"subject to man-in-the-middle(MITM) attacks. If you use this in the public "
+"network, please enable HTTPS."
+msgstr "雖然程式已經對使用者名稱和密碼進行了加密處理，但是依舊可能遭到中間人(MITM)攻擊。如果在公網中使用，請啟用HTTPS。"
+
+msgctxt "QRSCAN"
+msgid "Use APP to scan QR Code to login in"
+msgstr "使用APP掃碼登入"
+
+msgctxt "USEANDPA"
+msgid "Use user name and password to login in"
+msgstr "使用使用者名稱和密碼登入"
+
+msgctxt "QRCEXPR"
+msgid "The QR code has expired, click here to reload."
+msgstr "二維碼已過期，單擊這裡重新載入。"
+
+msgctxt "USEPHONE"
+msgid "Login in with SMS"
+msgstr "使用手機簡訊登入"
+
+msgctxt "PHONEN"
+msgid "Phone number:"
+msgstr "電話號碼："
+
+msgctxt "SENDSMS"
+msgid "Send captcha code by SMS"
+msgstr "使用簡訊發送驗證碼"
+
+msgctxt "INVALIDCPN"
+msgid "This is an invalid China phone number."
+msgstr "這不是一個有效的中國大陸手機號碼。"
+
+msgctxt "MUSTCAPT"
+msgid "You must complete the captcha to continue."
+msgstr "你必須完成驗證才能繼續。"
+
+msgctxt "CAPERROR"
+msgid "An error occured:"
+msgstr "一個錯誤產生了："
+
+msgctxt "SMSSEND"
+msgid "SMS is already send."
+msgstr "手機簡訊已發送。"
+
+msgctxt "USEANDPAW"
+msgid "Use user name and password to login in (Web API)"
+msgstr "使用使用者名稱和密碼登入（網頁API）"
+
+msgctxt "BUGWARN"
+msgid "This login method now have bugs, some contents may not available."
+msgstr "這種登入方式目前有BUG，部分內容可能不可用。"

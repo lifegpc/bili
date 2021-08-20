@@ -1,0 +1,358 @@
+# bili - videodownload.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 12:54:00+0000\n"
+"PO-Revision-Date: 2020-07-11 13:31+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "OUTPUT1"
+msgid "Start downloading file <i> of <count> files."
+msgstr "正在開始下載第<i>個文件，共<count>個文件。"
+
+msgctxt "OUTPUT2"
+msgid "Start downloading."
+msgstr "正在開始下載。"
+
+msgctxt "OUTPUT3"
+msgid ""
+"The maximum number of connections for a file: <value1>, The maximum number "
+"of connections to one server: <value2>, The minimum split file size: "
+"<value3>M, The file allocation method: <value4><maxspeed>"
+msgstr ""
+"單文件最大<value1>個連接，單個伺服器最大<value2>個連接，文件分片大小<value3>M，預分配方式為<value4><maxspeed>"
+
+msgctxt "OUTPUT4"
+msgid ", The maximum overall download speed in bytes/s: <value>"
+msgstr "，限速為<value>"
+
+msgctxt "OUTPUT5"
+msgid "(Because the aria2 file is found, it is recommended to overwrite.)"
+msgstr "（發現aria2文件，建議覆蓋）"
+
+msgctxt "OUTPUT6"
+msgid "The aria2 file is not found, skip download."
+msgstr "未找到aria2文件，跳過下載。"
+
+msgctxt "INPUT1"
+msgid "The file \"<filename>\" already exists, do you want to overwrite it?"
+msgstr "文件\"<filename>\"已存在，是否覆蓋？"
+
+msgctxt "OUTPUT7"
+msgid "Failed to delete the original file, skip download."
+msgstr "刪除原有文件失敗，跳過下載。"
+
+msgctxt "ERROR1"
+msgid "Unable to create folder \"<dirname>\"."
+msgstr "建立資料夾\"<dirname>\"失敗。"
+
+msgctxt "ERROR2"
+msgid "An error occurred when reading the file: \"cookies.json\"."
+msgstr "讀取cookies.json出現錯誤"
+
+msgctxt "OUTPUT8"
+msgid "Part <number> :"
+msgstr "第<number>P："
+
+msgctxt "OUTPUT9"
+msgid "Video quality:"
+msgstr "畫質："
+
+msgctxt "OUTPUT10"
+msgid "File size:"
+msgstr "檔案大小："
+
+msgctxt "INPUT2"
+msgid "Please select video quality :"
+msgstr "請選擇畫質："
+
+msgctxt "ERROR3"
+msgid "Please use \"-v <id>\" to select the video quality."
+msgstr "請使用\"-v <id>\"選擇畫質。"
+
+msgctxt "OUTPUT11"
+msgid "You have selected the video quality: <videoquality>"
+msgstr "已選擇<videoquality>畫質。"
+
+msgctxt "OUTPUT12"
+msgid "<number> files in total."
+msgstr "共有<number>個文件。"
+
+msgctxt "ERROR4"
+msgid ""
+"Bad/unrecognized option was given or unexpected option argument was given "
+"when calling aria2c."
+msgstr "呼叫aria2c時的命令列出現錯誤。"
+
+msgctxt "ERROR5"
+msgid ""
+"Please create an issue on <https://github.com/lifegpc/bili/issues> to "
+"describe the problem.(Please use English or Chinese.)"
+msgstr ""
+"請在<https://github.com/lifegpc/bili/issues>上建立一個issue描述您碰到的問題。（請使用英語或中文）"
+
+msgctxt "INPUT3"
+msgid "Failed to download the file. Do you want to download again?"
+msgstr "文件下載失敗，是否重新下載？"
+
+msgctxt "OUTPUT13"
+msgid "Use ffmpeg to merge files."
+msgstr "使用ffmpeg合併文件。"
+
+msgctxt "OUTPUT14"
+msgid "Merge complete."
+msgstr "合併完成！"
+
+msgctxt "INPUT4"
+msgid "Do you want to delete useless files?"
+msgstr "是否刪除無用文件？"
+
+msgctxt "OUTPUT15"
+msgid "Video track:"
+msgstr "影片軌："
+
+msgctxt "OUTPUT16"
+msgid "Audio track:"
+msgstr "音訊軌："
+
+msgctxt "INPUT5"
+msgid "Please select audio quality :"
+msgstr "請選擇音質："
+
+msgctxt "ERROR6"
+msgid "Please use \"-a <id>\" to select the audio quality."
+msgstr "請使用 \"-a <id>\" 選擇音質"
+
+msgctxt "OUTPUT17"
+msgid "You have selected the audio quality: <audioquality>"
+msgstr "已選擇<audioquality>音質"
+
+msgctxt "OUTPUT18"
+msgid "There are no subtitles in Part <number>."
+msgstr "第<number>P沒有字幕。"
+
+msgctxt "ERROR7"
+msgid "This video has regional restrictions. Please use proxy."
+msgstr "影片有區域限制，請使用代理。"
+
+msgctxt "ERROR8"
+msgid ""
+"This video has multiple video quality but this program not support it. You "
+"can continue to download with default video quality."
+msgstr "該直播重播有多種畫質但程式不支援選擇。你可以繼續下載預設畫質。"
+
+msgctxt "INPUT6"
+msgid "Please press \"Enter\" to continue downloading."
+msgstr "請按確認鍵繼續下載。"
+
+msgctxt "OUTPUT19"
+msgid ""
+"(Because the file size is not equal to the estimated size, it is recommended"
+" to overwrite.)"
+msgstr "（檔案大小不一致，建議覆蓋）"
+
+msgctxt "OUTPUT20"
+msgid "The file size is equal to the estimated size, skip download."
+msgstr "檔案大小一致，跳過下載。"
+
+msgctxt "ERROR9"
+msgid "The file size is not equal to the estimated size."
+msgstr "檔案大小不一致。"
+
+msgctxt "OUTPUT21"
+msgid "Unable to get file size. Try to get again ..."
+msgstr "獲取檔案大小失敗。嘗試重新獲取……"
+
+msgctxt "OUTPUT22"
+msgid "Please use \"start.py\"."
+msgstr "請使用start.py"
+
+msgctxt "OUTPUT23"
+msgid "Cover image \"<filename>\" was downloaded complete."
+msgstr "封面圖片\"<filename>\"下載完成。"
+
+msgctxt "OUTPUT24"
+msgid "An error occurred when downloading cover image:"
+msgstr "下載封面圖片時發生錯誤："
+
+msgctxt "NOT_GET_QUA"
+msgid "Unable to get play URL for quality <quality>."
+msgstr "無法獲取畫質為<quality>的播放地址。"
+
+msgctxt "ALL_URL_COUNT"
+msgid "(<number> URLs are available.)"
+msgstr "（<number>個URL可用。）"
+
+msgctxt "URL_SELECTED"
+msgid "You have selected the URL<index>."
+msgstr "您選擇了URL <index>。"
+
+msgctxt "INDEX_OUT_OF_RANGE"
+msgid ""
+"The index you specified is out of range. The index should be between 0 and "
+"<max>."
+msgstr "您指定的索引超出範圍。索引應該在0到<max>之間。"
+
+msgctxt "NO_QUA_TRANS"
+msgid "There is no translated text for \"<value>\"."
+msgstr "沒有\"<value>\"的翻譯。"
+
+msgctxt "超清 4K"
+msgid "UHD 4K"
+msgstr "超清 4K"
+
+msgctxt "高清 1080P60"
+msgid "HD 1080P60"
+msgstr "高畫質 1080P60"
+
+msgctxt "高清 720P60"
+msgid "HD 720P60"
+msgstr "高畫質 720P60"
+
+msgctxt "高清 1080P"
+msgid "HD 1080P"
+msgstr "高畫質 1080P"
+
+msgctxt "高清 720P"
+msgid "HD 720P"
+msgstr "高畫質 720P"
+
+msgctxt "清晰 480P"
+msgid "SD 480P"
+msgstr "清晰 480P"
+
+msgctxt "流畅 360P"
+msgid "SD 360P"
+msgstr "流暢 360P"
+
+msgctxt "高清 1080P+"
+msgid "HD 1080P+"
+msgstr "高畫質 1080P+"
+
+msgctxt "原画"
+msgid "Origin Quality"
+msgstr "原畫"
+
+msgctxt "蓝光"
+msgid "Blu-ray"
+msgstr "藍光"
+
+msgctxt "超清"
+msgid "UHD"
+msgstr "超清"
+
+msgctxt "高清"
+msgid "HD"
+msgstr "高畫質"
+
+msgctxt "流畅"
+msgid "SD"
+msgstr "流暢"
+
+msgctxt "NOT_SUP_DURL"
+msgid "Do not support to download audio only for durl streams."
+msgstr "durl流不支援僅下載音訊。"
+
+msgctxt "NO_AUDIO"
+msgid "There is no audio in this video."
+msgstr "該影片沒有音訊。"
+
+msgctxt "CONV_M4S_TO_M4A"
+msgid "Use ffmpeg to convert the m4s file to the m4a file."
+msgstr "使用ffmpeg將m4s文件轉換為m4a文件。"
+
+msgctxt "COM_CONV"
+msgid "Convert completed."
+msgstr "轉換完成！"
+
+msgctxt "真彩 HDR"
+msgid "HDR"
+msgstr "真彩 HDR"
+
+msgctxt "AUDOMULQ"
+msgid ""
+"This audio has multiple audio qualities but this program not support it. You"
+" can continue to download with default audio quality."
+msgstr "該音訊有多種音質但程式不支援選擇。你可以繼續下載預設音質。"
+
+msgctxt "USEFROMV"
+msgid "Found associated video, try to get audio play url from video page."
+msgstr "找到相關聯的影片，嘗試從影片頁面解析音訊地址。"
+
+msgctxt "ADDMETA"
+msgid "Use ffmpeg to add metadata to the m4a file."
+msgstr "正在使用ffmpeg將中繼資料添加到m4a文件。"
+
+msgctxt "ADDMECOM"
+msgid "Add completed."
+msgstr "添加完成。"
+
+msgctxt "LRCCOM"
+msgid "Lyric \"<filename>\" download completed."
+msgstr "歌詞\"<filename>\"下載完成。"
+
+msgctxt "LRCERR"
+msgid "An error occurred when downloading lyric: "
+msgstr "下載歌詞時產生了一個錯誤："
+
+msgctxt "USEFROMV2"
+msgid "Found associated video, try to get lyrics(subtitles) from video page."
+msgstr "找到相關聯的影片，嘗試從影片頁面獲取歌詞（字幕）。"
+
+msgctxt "FILLRC"
+msgid ""
+"Standardized <count> entries. If LRC file don't work, disable standardize "
+"lyrics in settings and submit a bug report on "
+"<https://github.com/lifegpc/bili/issues>. (Please use Chinese or English to "
+"describe the bug.)"
+msgstr ""
+"標準化了<count>條。如果LRC文件無法使用，請在設定裡禁用標準化歌詞並且去<https://github.com/lifegpc/bili/issues>提交BUG。（請使用中文或英文描述BUG。）"
+
+msgctxt "ALBTAGS"
+msgid "Album tags: "
+msgstr "專輯標籤："
+
+msgctxt "AU流畅"
+msgid "Smooth quality"
+msgstr "流暢"
+
+msgctxt "AU标准"
+msgid "Standard quality"
+msgstr "標準"
+
+msgctxt "AU高品质"
+msgid "High quality"
+msgstr "高品質"
+
+msgctxt "AU无损音质"
+msgid "Lossless quality"
+msgstr "無損音質"
+
+msgctxt "FFMPEG"
+msgid "Can not find ffmpeg. ffmpeg is required to download this video."
+msgstr "找不到ffmpeg。下載此影片需要ffmpeg。"
+
+msgctxt "NEEDPAY"
+msgid "You need to purchase this video to access it."
+msgstr "你需要購買此影片才能訪問它。"
+
+msgctxt "TIMEOUT"
+msgid "The token was expired. Try to fetch new webpage to get new token……"
+msgstr "令牌已過期。嘗試抓取新的網頁以獲取新的令牌……"
+
+msgctxt "低画質"
+msgid "Low video quality"
+msgstr "低畫質"

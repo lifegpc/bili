@@ -1,0 +1,46 @@
+# bili - biliVersion.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-08-08 03:19:00+0000\n"
+"PO-Revision-Date: 2020-08-08 04:18+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "UNKNOWN_VER_STR"
+msgid "Unknown version string:"
+msgstr "未知的版本字串："
+
+msgctxt "CUR_VER"
+msgid "Current version:"
+msgstr "目前版本："
+
+msgctxt "LATEST_STABLE_VER"
+msgid "Latest stable version:"
+msgstr "最新穩定版本："
+
+msgctxt "NETWORK_ERROR"
+msgid "Network Error: Can not get latest stable version."
+msgstr "網路錯誤：無法獲取最新穩定版本字串。"
+
+msgctxt "HTTP_STATUS_ERROR"
+msgid "An unexpected HTTP status return from the server:"
+msgstr "一個預料之外的HTTP狀態碼從伺服器返回："
+
+msgctxt "GET_NEW_VER"
+msgid ""
+"You can get the latest stable version on "
+"<https://github.com/lifegpc/bili/releases>."
+msgstr "你可以在<https://github.com/lifegpc/bili/releases>上獲取最新穩定版本。"

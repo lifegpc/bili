@@ -1,0 +1,112 @@
+# bili - file packages Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-13 10:30:00+0000\n"
+"PO-Revision-Date: 2020-07-13 11:08+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "OUTPUT1"
+msgid "NO.\tFile name\t"
+msgstr "序號\t檔案名\t"
+
+msgctxt "OUTPUT2"
+msgid "Type\tLast access time\tCreate time\t\tLast modify time\tFile size"
+msgstr "類型\t上次訪問時間\t\t建立時間\t\t上次修改時間\t檔案大小"
+
+msgctxt "DIR"
+msgid "DIR"
+msgstr "目錄"
+
+msgctxt "FILE"
+msgid "FILE"
+msgstr "文件"
+
+msgctxt "OUTPUT3"
+msgid "Page <num> of <count>"
+msgstr "第<num>頁，共<count>頁"
+
+msgctxt "O1"
+msgid "Previous page"
+msgstr "上一頁"
+
+msgctxt "O2"
+msgid "Next page"
+msgstr "下一頁"
+
+msgctxt "O3"
+msgid "Parent folder"
+msgstr "上一資料夾"
+
+msgctxt "O4"
+msgid "Do not display files with no file extensions"
+msgstr "不顯示無副檔名文件"
+
+msgctxt "O5"
+msgid "Display files with no file extensions"
+msgstr "顯示無副檔名文件"
+
+msgctxt "O6"
+msgid "Display all files"
+msgstr "顯示所有文件"
+
+msgctxt "O7"
+msgid "Display files which pass the filter"
+msgstr "顯示過濾後文件"
+
+msgctxt "O8"
+msgid "Enter folder name"
+msgstr "輸入資料夾名稱"
+
+msgctxt "O9"
+msgid "Enter file name"
+msgstr "輸入檔案名"
+
+msgctxt "OUTPUT4"
+msgid ""
+"Please enter the number before file/directory name to select/enter the "
+"file/directory or the letter to do that operation:"
+msgstr "請輸入檔案名之前的序號選中文件，或輸入資料夾名之前的序號進入資料夾，或輸入操作之前的字母進行該操作："
+
+msgctxt "ERROR1"
+msgid "There is no parent folder."
+msgstr "上一層資料夾不存在。"
+
+msgctxt "INPUT1"
+msgid ""
+"Please enter the location of folder (Support absolute and relative "
+"location):"
+msgstr "請輸入資料夾位置（支援絕對和相對位置）："
+
+msgctxt "ERROR2"
+msgid "This folder does not exist."
+msgstr "該資料夾不存在。"
+
+msgctxt "INPUT2"
+msgid "Please enter the file name:"
+msgstr "請輸入檔案名稱："
+
+msgctxt "ERROR3"
+msgid "This file has been selected before."
+msgstr "之前已選擇此文件。"
+
+msgctxt "INPUT3"
+msgid "This file already exists, do you want to overwrite it?"
+msgstr "該文件已存在，是否覆蓋？"
+
+msgctxt "INPUT4"
+msgid "Do you want to select the file \"<filename>\"?"
+msgstr "是否選取文件\"<filename>\"？"
