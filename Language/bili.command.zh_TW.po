@@ -1,0 +1,593 @@
+# bili - command.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-12 10:37:00+0000\n"
+"PO-Revision-Date: 2020-07-12 11:00+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "O1"
+msgid "Command line help:"
+msgstr "命令列幫助："
+
+msgctxt "O2"
+msgid "Display command line help information."
+msgstr "顯示命令列說明資訊"
+
+msgctxt "O3"
+msgid "Display LICENSE."
+msgstr "顯示授權條款"
+
+msgctxt "O4"
+msgid ""
+"AV/SS/EP/MD/BV number or link (You can use \",\" to separate multiple "
+"numbers or links.)"
+msgstr "AV/SS/EP/MD/BV號或者連結（可以使用「,」來分隔多個輸入）"
+
+msgctxt "O5"
+msgid ""
+"Download method: 1.barrage 2.all barrage from historical records 3.video "
+"4.barrage and video 5.all barrage from historical records and video "
+"6.subtitles only 7.cover image only 8.audio only"
+msgstr "下載方式：1.目前彈幕 2.全彈幕 3.影片 4.目前彈幕+影片 5.全彈幕+影片 6.僅字幕 7.僅封面圖片 8.僅音訊"
+
+msgctxt "O6"
+msgid "Live record download method: 1.video 2.barrage 3.video and barrage"
+msgstr "直播重播下載方式：1.影片 2.彈幕 3.影片+彈幕"
+
+msgctxt "O7"
+msgid ""
+"The number of videos/parts you want to download. (You can use \",\" to "
+"separate each two numbers. Use \"-\" to separate each two numbers to select "
+"a range.(e.g. 1-25) Use \"a\" to select all videos/parts. Use \"b\" to "
+"select video which match the EP number you entered. Use \"l\" to select the "
+"last viewed EP video.)"
+msgstr ""
+"要下載的P數（兩個P數可用,連接，可以使用「-」分開兩個數字以選擇一個範圍（例如：1-25），使用a全選，輸入為ep號時可用b選擇該ep號，下載上次觀看的影片可輸入l）"
+
+msgctxt "O8"
+msgid "Enable/Disable download with maximum quality."
+msgstr "是否預設下載最高畫質"
+
+msgctxt "AL"
+msgid "Alias of <value>."
+msgstr "相當於<value>"
+
+msgctxt "O9"
+msgid "Enable/Disable \"Continue Download\" function."
+msgstr "是否開啟繼續下載功能"
+
+msgctxt "O10"
+msgid "Enable/Disable filter barrage."
+msgstr "是否啟用彈幕過濾"
+
+msgctxt "O11"
+msgid "Enable/Disable delete useless files after merge is complete."
+msgstr "是否在合併完成後刪除無用文件"
+
+msgctxt "O12"
+msgid "Enable/Disable download again automatically after the download failed."
+msgstr "是否在下載失敗後重新下載"
+
+msgctxt "O13"
+msgid "Overwrite existing files."
+msgstr "覆蓋所有重複文件"
+
+msgctxt "O14"
+msgid "Do not overwrite existing files."
+msgstr "不覆蓋重複文件"
+
+msgctxt "O15"
+msgid "Use ffmpeg."
+msgstr "使用ffmpeg"
+
+msgctxt "O16"
+msgid "Do not use ffmpeg."
+msgstr "不使用ffmpeg"
+
+msgctxt "O17"
+msgid "The preferred video coding when downloading with maximum quality."
+msgstr "預設下載最高畫質時偏好的影片編碼"
+
+msgctxt "O18"
+msgid "Download with aria2c."
+msgstr "使用aria2c下載"
+
+msgctxt "O19"
+msgid "Download without aria2c."
+msgstr "不使用aria2c下載"
+
+msgctxt "O20"
+msgid ""
+"The maximum number of connections to one server for each download while "
+"using aria2c. Possible Values: <value>."
+msgstr "使用aria2c時單個伺服器最大連接數。有效值：<value>"
+
+msgctxt "O21"
+msgid ""
+"The maximum number of connections while downloading a file with aria2c. "
+"Possible Values: <value>."
+msgstr "使用aria2c時單個文件最大連接數。有效值：<value>"
+
+msgctxt "O22"
+msgid ""
+"The minimum split file size while using aria2c. Unit: <value1>, Possible "
+"Values: <value2>"
+msgstr "使用aria2c時文件分片大小。單位：<value1>，有效值：<value2>"
+
+msgctxt "O23"
+msgid "Use the backup download links when using aria2c."
+msgstr "在使用aria2c下載時使用備用網址"
+
+msgctxt "O24"
+msgid "Do not use the backup download links when using aria2c."
+msgstr "在使用aria2c下載時不使用備用網址"
+
+msgctxt "O25"
+msgid "The file allocation method while using aria2c."
+msgstr "使用aria2c下載時文件預分配方式"
+
+msgctxt "O26"
+msgid "Put or not put video/audio quality information in the file name."
+msgstr "是否在檔案名中輸出影片畫質訊息"
+
+msgctxt "O27"
+msgid ""
+"Add or not add video information to file forcibly. (This will transcode the "
+"video and transcoding will not affect the video/audio quality.)"
+msgstr "是否強制增加影片中繼資料（這會使影片被轉檔，轉檔不會影響畫質）"
+
+msgctxt "O28"
+msgid ""
+"The maximum overall download speed in bytes/s when using aria2c. (0 means "
+"unrestricted. You can append K or M (1K = 1024, 1M = 1024K)"
+msgstr "在使用aria2c時最大總體速度(B/s)（0代表無限制，可以使用K和M為單位（1K=1024，1M=1024K））"
+
+msgctxt "O29"
+msgid ""
+"Enable/Disable \"download all parts of each video automatically\" when you "
+"input Favorites, Channels, Uploaded Video page link."
+msgstr "當輸入收藏夾/頻道/投稿連結時是否自動下載每一個影片的所有分P"
+
+msgctxt "O30"
+msgid "Use http proxy."
+msgstr "使用HTTP代理"
+
+msgctxt "O31"
+msgid "(This setting will not affect aria2c.)"
+msgstr "（該設定不會影響aria2c）"
+
+msgctxt "O32"
+msgid "Use https proxy."
+msgstr "使用HTTPS代理"
+
+msgctxt "O33"
+msgid ""
+"The number of days between crawls when downloading all barrage (Possible "
+"Values: <value>). You can use \"a\" to enable automatic mode (Recommend). "
+"Use \"b\" to modify crawl start date (This will be effective when "
+"downloading SS/EP video)."
+msgstr "下載全彈幕時兩次抓取之間的天數，有效值為<value>，a會啟用自動模式（推薦），番劇模式下b修改抓取起始日期"
+
+msgctxt "O34"
+msgid ""
+"The default crawl start date when downloading all barrage. (This will be "
+"effective when downloading SS/EP video. The default value is upload time. "
+"The format is Year-Month-Day, for example 1989-02-25.)"
+msgstr "下載全彈幕時且影片為番劇時抓取起始日期的預設值（預設值為番劇上傳時間，格式為年-月-日，例如1989-02-25）"
+
+msgctxt "O35"
+msgid ""
+"Only display video/audio quality and exit when downloading videos. (This is "
+"not affected by silent mode.)"
+msgstr "影片下載時僅顯示畫質但不下載（不受靜默模式影響）"
+
+msgctxt "O36"
+msgid "Choose video quality while downloading videos."
+msgstr "影片下載時選擇畫質"
+
+msgctxt "O37"
+msgid "Choose audio quality while downloading videos."
+msgstr "影片下載時選擇音質"
+
+msgctxt "O38"
+msgid "Set the download folder location."
+msgstr "設定下載資料夾位置"
+
+msgctxt "O39"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, the default "
+"Favorite ID will be used."
+msgstr "解析收藏夾時若未指定收藏夾ID，自動解析為預設收藏夾"
+
+msgctxt "O40"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, return to the "
+"list of Favorites to select an ID."
+msgstr "解析收藏夾時若未指定收藏夾ID，返回收藏夾列表以選擇一個ID"
+
+msgctxt "O41"
+msgid ""
+"If the Favorites page link does not specify the Favorite ID, specify the "
+"Favorite ID by selecting an number from list of Favorites. (You can use "
+"\",\" to separate each two numbers. Use \"a\" to select all Favorites.)"
+msgstr "解析收藏夾時若未指定收藏夾ID，解析列表中指定序號的收藏夾。（選擇多個時中間用,隔開，可使用a全選）"
+
+msgctxt "O42"
+msgid ""
+"Enable Silent Mode. Only display Copyright notice, error messages and "
+"progress information (Contains output from downloader.). If you don't "
+"specify, this will overwrite existing files by default."
+msgstr "啟用靜默模式，僅顯示版權聲明和錯誤訊息和進度訊息（即下載器輸出的訊息）。在不手動設定的情況下預設覆蓋重複文件。"
+
+msgctxt "O43"
+msgid ""
+"Disable the 20-character limit of description in file name while downloading"
+" Small Video."
+msgstr "下載小影片時，放入檔案名中的描述長度可以超過20字"
+
+msgctxt "O44"
+msgid ""
+"Enable the 20-character limit of description in file name while downloading "
+"Small Video. The excess will be discarded."
+msgstr "下載小影片時，放入檔案名中的描述長度無法超過20字，超出部分將被丟棄"
+
+msgctxt "O45"
+msgid "Trust environment variables when using \"requests\" package."
+msgstr "requests使用環境變數中的代理設定"
+
+msgctxt "O46"
+msgid "Do not trust environment variables when using \"requests\" package."
+msgstr "requests不使用環境變數中的代理設定"
+
+msgctxt "O47"
+msgid "Keep subtitle files when deleting useless files after merging."
+msgstr "合併完成後刪除無用文件時保留字幕文件"
+
+msgctxt "O48"
+msgid "Delete subtitle files when deleting useless files after merging."
+msgstr "合併完成後刪除無用文件時刪除字幕文件"
+
+msgctxt "O49"
+msgid ""
+"Disable asynchronous DNS when using aria2c. (Disabling it can solve the "
+"\"Timeout while contacting DNS servers\" problem on Windows system.)"
+msgstr ""
+"使用aria2c時關閉非同步DNS（關閉後在Windows系統下可以解決Timeout while contacting DNS servers問題）"
+
+msgctxt "O50"
+msgid "Enable asynchronous DNS when using aria2c."
+msgstr "使用aria2c時啟用非同步DNS"
+
+msgctxt "O51"
+msgid ""
+"Convert HTML to normal text while writing description of live record into "
+"file metadata."
+msgstr "直播重播簡介寫入中繼資料時將HTML轉換為普通文字"
+
+msgctxt "O52"
+msgid ""
+"Do not convert HTML to normal text while writing description of live record "
+"into file metadata."
+msgstr "直播重播簡介寫入中繼資料時不將HTML轉換為普通文字"
+
+msgctxt "O53"
+msgid "Use a proxy server for HTTP when calling aria2c."
+msgstr "指定aria2c使用的http代理"
+
+msgctxt "O54"
+msgid "Use a proxy server for HTTPS when calling aria2c."
+msgstr "指定aria2c使用的https代理"
+
+msgctxt "O55"
+msgid "Set the program language."
+msgstr "設定程式語言"
+
+msgctxt "O56"
+msgid "PS1. If the same option appears, only the first one will take effect."
+msgstr "注1：如出現相同的選項，只有第一個會生效"
+
+msgctxt "O57"
+msgid ""
+"PS2. Command line parameter will override the settings in \"settings.json\"."
+msgstr "注2：命令列參數會覆蓋\"settings.json\"裡的設定"
+
+msgctxt "O58"
+msgid ""
+"PS3. You need download ffmpeg and aria2c. Make sure they are placed in the "
+"current folder or in the directory specified by the environment variable "
+"\"PATH\"."
+msgstr "注3：ffmpeg和aria2c需要下載並確保放入目前資料夾或者放入環境變數PATH指定的目錄中"
+
+msgctxt "O59"
+msgid ""
+"PS4. When you input Favorites, Channels, Uploaded Video links, in addition "
+"to the \"-i <input>\" and \"-p <number>\" parameters, other parameters will "
+"be used while downloading video."
+msgstr "注4：當輸入收藏夾/頻道/投稿連結時，除了\"-i <input>\"和\"-p <number>\"參數外，其他參數會在下載影片時使用"
+
+msgctxt "O60"
+msgid "Keep cover images when deleting useless files after merging."
+msgstr "合併完成後刪除無用文件時保留封面圖片"
+
+msgctxt "O61"
+msgid "Do not keep cover images when deleting useless files after merging."
+msgstr "合併完成後刪除無用文件時刪除封面圖片"
+
+msgctxt "O62"
+msgid "Add av/bv number etc. to the file name."
+msgstr "將AV/BV號等放入檔案名"
+
+msgctxt "O63"
+msgid "Do not add av/bv number etc. to the file name."
+msgstr "不將AV/BV號等放入檔案名"
+
+msgctxt "O64"
+msgid ""
+"Enable multiple threadings when entering multiple numbers or links (This "
+"will make the output become a mess.)."
+msgstr "在有多個輸入的時候啟用多執行緒（這會是輸出變得一團糟）"
+
+msgctxt "O65"
+msgid "Disable multiple threadings when entering multiple numbers or links."
+msgstr "在有多個輸入的時候禁用多執行緒"
+
+msgctxt "O66"
+msgid ""
+"The index of URL when downloading the live video. (The index starts with 0.)"
+msgstr "當下載直播影片時的URL的索引。（索引從0開始。）"
+
+msgctxt "O67"
+msgid "Enable checking for new versions."
+msgstr "啟用檢查新版本。"
+
+msgctxt "O68"
+msgid "Disable checking for new versions."
+msgstr "禁用檢查新版本。"
+
+msgctxt "O69"
+msgid "Save the subtitles file as an ASS(Advanced SubStation Alpha) file."
+msgstr "將字幕文件儲存為ASS(Advanced SubStation Alpha)文件。"
+
+msgctxt "O70"
+msgid ""
+"Do not save the subtitles file as an ASS(Advanced SubStation Alpha) file."
+msgstr "不要將字幕文件儲存為ASS(Advanced SubStation Alpha)文件。"
+
+msgctxt "O71"
+msgid "Create a separate directory for videos with multiply parts."
+msgstr "為多P影片建立單獨的資料夾。"
+
+msgctxt "O72"
+msgid "Do not create a separate directory for videos with multiply parts."
+msgstr "不要為多P影片建立單獨的資料夾。"
+
+msgctxt "O73"
+msgid "Update all components."
+msgstr "更新所有元件。"
+
+msgctxt "O74"
+msgid ""
+"The list of javascript file in webuihtml/js(origin) you want to compiler. If"
+" no list is provided,, it will update all javascript file."
+msgstr ""
+"您想要編譯的在webuihtml/js(origin)中的javascript文件列表。如果不提供該列表，將會更新所有javascript文件"
+
+msgctxt "O75"
+msgid "Only compile javascript file."
+msgstr "僅編譯javascript文件。"
+
+msgctxt "O76"
+msgid "The path of java binary."
+msgstr "java可執行文件的路徑。"
+
+msgctxt "O77"
+msgid "The video format output from ffmpeg. Possible Values: <value>"
+msgstr "從ffmpeg輸出的影片格式。預設值：<value>"
+
+msgctxt "O78"
+msgid ""
+"The time latter line of multiple lines which have same timestamps should be "
+"delayed when converting subtitles to LRC file. Possible Values: <value>, "
+"Unit: <value2>"
+msgstr "當把字幕轉換為LRC文件時，具有相同時間的多行的後一行應延遲的時間。有效值：<value>，單位：<value2>"
+
+msgctxt "O79"
+msgid ""
+"Remove language code from LRC file name.(Only works when there is only one "
+"subtitle available.)"
+msgstr "移除LRC檔案名中的語言代碼。（只在僅有一個字幕可用時生效。）"
+
+msgctxt "O80"
+msgid "Add language code to LRC file name."
+msgstr "添加語言代碼至LRC檔案名。"
+
+msgctxt "O81"
+msgid "Enable logging to file."
+msgstr "啟用將日誌寫入檔案。"
+
+msgctxt "O82"
+msgid "Disable logging to file."
+msgstr "禁用將日誌寫入檔案。"
+
+msgctxt "O83"
+msgid "Enable standardize lyrics when downloading AU number's lyrics."
+msgstr "在下載AU號音訊歌詞時啟用標準化歌詞。"
+
+msgctxt "O84"
+msgid "Disable standardize lyrics when downloading AU number's lyrics."
+msgstr "在下載AU號音訊歌詞時禁用標準化歌詞。"
+
+msgctxt "O85"
+msgid ""
+"When downloading all barrages, ignore warning that current barrage's count "
+"is much less than the limitation."
+msgstr "當下載所有彈幕時，忽略目前彈幕數量遠遠少於限制的警告。"
+
+msgctxt "O86"
+msgid ""
+"When downloading all barrages, do not ignore warning that current barrage's "
+"count is much less than the limitation."
+msgstr "當下載所有彈幕時，不要忽略目前彈幕數量遠遠少於限制的警告。"
+
+msgctxt "O87"
+msgid "Open the last download file's location in windows explorer."
+msgstr "在windows資源管理器中打開最後一個下載文件的所在位置。"
+
+msgctxt "O88"
+msgid "Do not open the last download file's location in windows explorer."
+msgstr "不要在windows資源管理器中打開最後一個下載文件的所在位置。"
+
+msgctxt "O89"
+msgid "List all available type id(tid) for Favorites or Uploader's videos."
+msgstr "為收藏夾或UP主的投稿影片列出所有可用的類型ID（tid）。"
+
+msgctxt "O90"
+msgid "Change working directory to script directory."
+msgstr "將目前工作目錄切換為腳本所在目錄。"
+
+msgctxt "O91"
+msgid "Get input from bili scheme URI."
+msgstr "從bili協議URI獲得輸入。"
+
+msgctxt "O92"
+msgid ""
+"Do not check certificate for HTTPS connection when downloading with aria2c."
+msgstr "使用arai2c下載時不檢查HTTPS連接的證書。"
+
+msgctxt "O93"
+msgid "Check certificate for HTTPS connection when downloading with aria2c."
+msgstr "使用arai2c下載時檢查HTTPS連接的證書。"
+
+msgctxt "O94"
+msgid ""
+"Generate NFO file. (NFO file store video information that can be used in "
+"Plex.)"
+msgstr "生成NFO文件。（NFO文件儲存了可被Plex使用的影片訊息。）"
+
+msgctxt "O95"
+msgid "Don't generate NFO file."
+msgstr "不生成NFO文件。"
+
+msgctxt "O96"
+msgid "Choose video quality by format id."
+msgstr "透過格式ID選擇影片畫質。"
+
+msgctxt "O97"
+msgid ""
+"Available format id (bilibili):\n"
+"125: HDR\n"
+"120: UHD 4K\n"
+"116: HD 1080P60\n"
+"112: HD 1080P+\n"
+"80: HD 1080P\n"
+"74: HD 720P60\n"
+"64: HD 720P/HD 720P60\n"
+"32: SD 480P\n"
+"16: SD 360P"
+msgstr ""
+"可用的格式ID（format id）（bilibili）：\n"
+"125：真彩 HDR\n"
+"120：超高畫質 4K\n"
+"116：高畫質 1080P60\n"
+"112：高畫質 1080P+\n"
+"80：高畫質 1080P\n"
+"74：高畫質 720P60\n"
+"64：高畫質 720P/高畫質720P60\n"
+"32：清晰 480P\n"
+"16：流暢 360P"
+
+msgctxt "O98"
+msgid "Available coding format: <codecs>"
+msgstr "可用的編碼（coding format）：<codecs>"
+
+msgctxt "O99"
+msgid ""
+"If coding format is not specified or cannot be found, the program will use "
+"the first one which has same format id."
+msgstr "如果編碼未指定或者找不到該編碼，程式會自動使用第一個具有相同格式ID的影片軌。"
+
+msgctxt "O100"
+msgid "Disable all proxy for aria2c."
+msgstr "為aria2c禁用所有代理。"
+
+msgctxt "O101"
+msgid ""
+"Available format id (acfun):\n"
+"11: 2160P120\n"
+"10: 2160P60\n"
+"9: 2160P\n"
+"8: 1080P60\n"
+"7: 1080P+\n"
+"6: 1080P\n"
+"5: 720P60\n"
+"4: 720P\n"
+"3: 540P\n"
+"2: 480P\n"
+"1: 360P"
+msgstr ""
+"可用的格式ID（format id）（acfun）：\n"
+"11: 2160P120\n"
+"10: 2160P60\n"
+"9: 2160P\n"
+"8: 1080P60\n"
+"7: 1080P+\n"
+"6: 1080P\n"
+"5: 720P60\n"
+"4: 720P\n"
+"3: 540P\n"
+"2: 480P\n"
+"1: 360P"
+
+msgctxt "O102"
+msgid ""
+"The maximum number of download pages when downloading barrage from acfun. (1"
+" page contains 200 entries. 0 means no limit.)"
+msgstr "從Acfun下載彈幕時的最大下載頁數。（1頁包含200條。0表示無限制。）"
+
+msgctxt "O103"
+msgid "Enable internal m3u media playlist downloader for Niconico."
+msgstr "為Niconico啟用內建M3U媒體播放列表下載器。"
+
+msgctxt "O104"
+msgid "Disable internal m3u media playlist downloader for Niconico."
+msgstr "為Niconico禁用內建M3U媒體播放列表下載器。"
+
+msgctxt "O105"
+msgid "Start from which seconds when downloading niconico's live video."
+msgstr "當下載NicoNico直播時，從哪一秒開始下載。"
+
+msgctxt "O107"
+msgid ""
+"The playback speed when downloading niconico's live video.\n"
+"Available playback speed (some settings may need NicoNico Premium): 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0.\n"
+"A higher playback speed can speed up the download speed."
+msgstr ""
+"下載NicoNico直播時的播放速度。\n"
+"可用的播放速度（一些可能需要NicoNico會員）：0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0\n"
+"更高的播放速度可以加快下載速度。"
+
+msgctxt "O108"
+msgid "The length limit for file name. 0 means no any limit."
+msgstr "檔案名的長度限制。0表示無任何限制。"
+
+msgctxt "O109"
+msgid "Enable low latency mode for niconico live."
+msgstr "為niconico直播啟用低延遲模式。"
+
+msgctxt "O110"
+msgid "Disable low latency mode for niconico live."
+msgstr "為niconico直播禁用低延遲模式。"

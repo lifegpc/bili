@@ -1,0 +1,64 @@
+# bili - webui/command.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-08-24 05:17:00+0000\n"
+"PO-Revision-Date: 2020-08-24 10:08+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "O1"
+msgid "Command line help:"
+msgstr "命令列幫助："
+
+msgctxt "O2"
+msgid "Display command line help information."
+msgstr "顯示命令列說明資訊"
+
+msgctxt "O3"
+msgid "Set the program language."
+msgstr "設定程式語言"
+
+msgctxt "O4"
+msgid "The IP address you want to bind."
+msgstr "你想關聯的IP位址。"
+
+msgctxt "O5"
+msgid "The port of IP address you want to bind."
+msgstr "你想關聯的IP位址的埠。"
+
+msgctxt "O6"
+msgid "The path to SSL certificate."
+msgstr "SSL證書路徑。"
+
+msgctxt "O7"
+msgid "The path to SSL private key."
+msgstr "SSL私鑰路徑。"
+
+msgctxt "O8"
+msgid "You need to give both the SSL certificate and the SSL private key."
+msgstr "你需要同時給出SSL證書和SSL私鑰。"
+
+msgctxt "O9"
+msgid "The path to SSL certificate chain."
+msgstr "SSL證書鏈路徑。"
+
+msgctxt "O10"
+msgid "Enable password verification and set the password."
+msgstr "啟用密碼驗證並設定密碼。"
+
+msgctxt "O11"
+msgid "The length of the password needs to be between <min> and <max>."
+msgstr "密碼的長度必須在<min>-<max>之間。"

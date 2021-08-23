@@ -1,0 +1,84 @@
+# bili - biliLogin.py Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-07-11 06:34:00+0000\n"
+"PO-Revision-Date: 2020-07-11 06:57+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "ERROR1"
+msgid ""
+"An error occurred while logging in with ChromeDriver, try to log in with "
+"username and password."
+msgstr "使用 ChromeDriver 登入發生錯誤，嘗試採用使用者名稱、密碼登入。"
+
+msgctxt "ERROR2"
+msgid "Login failed!"
+msgstr "登入失敗！"
+
+msgctxt "OUTPUT1"
+msgid "Login successfully!"
+msgstr "登入成功！"
+
+msgctxt "ERROR3"
+msgid "Network Error!"
+msgstr "網路錯誤！"
+
+msgctxt "ERROR4"
+msgid "Login failed:"
+msgstr "登入失敗："
+
+msgctxt "INPUT1"
+msgid "Please enter user name:"
+msgstr "請輸入使用者名稱："
+
+msgctxt "INPUT2"
+msgid "Please enter password:"
+msgstr "請輸入密碼："
+
+msgctxt "OUTPUT2"
+msgid "Login verification code recognition result: \"<result>\"."
+msgstr "登入驗證碼識別結果：<result>"
+
+msgctxt "ERROR5"
+msgid ""
+"Login verification code recognition service is temporarily unavailable, "
+"please try again later."
+msgstr "登入驗證碼識別服務暫時不可用，請稍後再試。"
+
+msgctxt "ERROR6"
+msgid "Service is busy, try to log in using V3 interface."
+msgstr "服務繁忙，嘗試使用V3介面登入。"
+
+msgctxt "ERROR7"
+msgid "Please press Enter to retry."
+msgstr "請按確認鍵重試。"
+
+msgctxt "OUTPUT3"
+msgid "The QR Code image is saved at \"<path>\"."
+msgstr "二維碼圖片已儲存至\"<path>\"。"
+
+msgctxt "OUTPUT4"
+msgid "The QR Code is expired. Press any key to generate a new one."
+msgstr "二維碼已過期。請按任意鍵重新生成。"
+
+msgctxt "WARN1"
+msgid "This login method now have bugs, some contents may not available."
+msgstr "這種登入方式目前有BUG，部分內容可能不可用。"
+
+msgctxt "QRCODE"
+msgid "(If you don't input anything, the program will use QR code to login.)"
+msgstr "（如果不輸入內容，程式會使用二維碼登入。）"

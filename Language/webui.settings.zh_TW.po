@@ -1,0 +1,178 @@
+# bili - webui/settings Strings
+# (C) 2019-2020 lifegpc
+# This file is distributed under the same license as the bili package.
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: bili\n"
+"POT-Creation-Date: 2020-08-24 12:07:00+0000\n"
+"PO-Revision-Date: 2020-08-24 15:02+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
+"Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: zh_TW\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgctxt "WEBUISET"
+msgid "WEB User Interface Settings"
+msgstr "WEB使用者介面設定"
+
+msgctxt "WEBUILAN"
+msgid "WEB User Interface language:"
+msgstr "WEB使用者介面語言："
+
+msgctxt "IPADDR"
+msgid "The IP address:"
+msgstr "IP位址："
+
+msgctxt "IPPORT"
+msgid "The port of IP address:"
+msgstr "IP位址埠："
+
+msgctxt "SSLCPATH"
+msgid "The path to the SSL certificate:"
+msgstr "SSL證書路徑："
+
+msgctxt "SSLPPATH"
+msgid "The path to the SSL private key:"
+msgstr "SSL私鑰路徑："
+
+msgctxt "SSLCCPATH"
+msgid "The path to the SSL certificate chain:"
+msgstr "SSL證書鏈路徑："
+
+msgctxt "SUBMIT"
+msgid "Submit"
+msgstr "提交"
+
+msgctxt "SUBOK"
+msgid "Save successfully."
+msgstr "儲存成功。"
+
+msgctxt "SUBFA"
+msgid "Failed to save settings."
+msgstr "儲存設定失敗。"
+
+msgctxt "INVALIP"
+msgid "\"<value>\" is not an invalid IP address."
+msgstr "\"<value>\"不是一個有效的IP位址。"
+
+msgctxt "ENPASS"
+msgid "Enable password verification"
+msgstr "啟用密碼驗證"
+
+msgctxt "PASS"
+msgid "Password:"
+msgstr "密碼："
+
+msgctxt "UIFONT"
+msgid "User interface font name:"
+msgstr "使用者介面字體名稱："
+
+msgctxt "MAIN"
+msgid "Main Program Settings"
+msgstr "主程式設定"
+
+msgctxt "MAINPS"
+msgid ""
+"PS. If the settings on this page are successfully saved, the origin file "
+"\"settings.json\" will be overwriten."
+msgstr "註：這裡的設定儲存後將覆蓋原有的settings.json。"
+
+msgctxt "MAINLAN"
+msgid "Program language:"
+msgstr "程式語言："
+
+msgctxt "MAINFB"
+msgid "Filter barrage by default:"
+msgstr "預設過濾彈幕："
+
+msgctxt "MAINMP"
+msgid ""
+"Download with maximum quality (Enable this will not ask for specific "
+"quality):"
+msgstr "預設下載最高畫質（這樣將不會詢問具體畫質）："
+
+msgctxt "NOTSET"
+msgid "Not set"
+msgstr "不設定"
+
+msgctxt "ENABLE"
+msgid "Enable"
+msgstr "啟用"
+
+msgctxt "DISABLE"
+msgid "Disable"
+msgstr "禁用"
+
+msgctxt "MAINAD"
+msgid "Delete useless files after merge is complete:"
+msgstr "合併完成後刪除無用文件："
+
+msgctxt "MAINCD"
+msgid "Enable \"Continue Download\" function by default:"
+msgstr "預設啟用繼續下載功能："
+
+msgctxt "MAINRD"
+msgid "Download again automatically after the download failed:"
+msgstr "下載失敗後自動重新下載："
+
+msgctxt "MAINSV"
+msgid "Put video/audio quality information in the file name."
+msgstr "在檔案名中輸出影片畫質資訊。"
+
+msgctxt "MAINMA"
+msgid ""
+"Add video information to file forcibly. (This will transcode the video and "
+"transcoding will not affect the video/audio quality.)"
+msgstr "強制增加影片中繼資料。（這會使影片被轉檔，轉檔不會影響畫質。）"
+
+msgctxt "MAINDA"
+msgid ""
+"\"Download all parts of each video automatically\" when you input Favorites,"
+" Channels, Uploaded Video page link:"
+msgstr "當輸入收藏夾/頻道/投稿連結時是否自動下載每一個影片的所有分P："
+
+msgctxt "MAINJT"
+msgid ""
+"Set the number of days between crawls to automatic by default when "
+"downloading all barrage."
+msgstr "下載全彈幕時兩次抓取之間的天數預設設定為自動。"
+
+msgctxt "MAINO"
+msgid "Download folder location:"
+msgstr "下載資料夾位置："
+
+msgctxt "FONTPATH"
+msgid ""
+"The path to the font file (The font format should be one of "
+"TTF/OTF/WOFF/WOFF2.):"
+msgstr "字體檔案路徑（字體格式需要是TTF/OTF/WOFF/WOFF2之一）："
+
+msgctxt "LENPASS"
+msgid "Enable password verification for pages beginning with \"<part>\"."
+msgstr "對\"<part>\"開頭的頁面進行密碼驗證。"
+
+msgctxt "OWFIBD"
+msgid "Overwrite existing files by default:"
+msgstr "預設覆蓋已存在文件："
+
+msgctxt "SUBINFO"
+msgid "PS. You may need to restart the web server to apply the new settings."
+msgstr "註：你可能需要重啟網頁伺服器來套用新的設定。"
+
+msgctxt "VIDEOFMT"
+msgid "The video format output from ffmpeg (Default:<value>):"
+msgstr "從ffmpeg輸出的影片格式（預設：<value>）："
+
+msgctxt "TIMELMD"
+msgid ""
+"The time latter line of multiple lines which have same timestamps should be "
+"delayed when converting subtitles to LRC file (Default:<value>):"
+msgstr "當把字幕轉換為LRC文件時，具有相同時間的多行的後一行應延遲的時間（預設：<value>）："
