@@ -1028,19 +1028,16 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                         bs = True  # 防止非大会员进入无限死循环
                     elif ud['vip'] > 0:
                         bs = True  # 大会员一旦强制获取所有
-                    r2.cookies.set('CURRENT_QUALITY', str(j), domain='.bilibili.com', path='/')
+                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i-1]['cid']}&qn={j}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976"
                     if log:
-                        logg.write(f"Current request quality: {j}\nGET {url}", currentframe(), "Get Normal Video Webpage3")
-                    re = r2.get(url)
+                        logg.write(f"GET {uri}", currentframe(), "Get Normal Video Playurl3")
+                    re = r2.get(uri)
                     re.encoding = 'utf8'
                     if log:
-                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Webpage3 Result")
-                    rs = search('__playinfo__=([^<]+)', re.text)
-                    if rs is not None:
-                        re = json.loads(rs.groups()[0])
-                        if log:
-                            logg.write(f"re = {re}", currentframe(), "Get Normal Video Webpage3 Regex")
-                    else:
+                        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Playurl3 Result")
+                    re = re.json()
+                    if re["code"] != 0:
+                        print(f"{re['code']} {re['message']}")
                         return -2
                     if "data" in re and "dash" in re['data']:
                         for j in re['data']['dash']['video']:
