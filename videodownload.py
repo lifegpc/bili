@@ -404,24 +404,8 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
     if i > 1:
         url = "%s?p=%s" % (url, i)
     r2.headers.update({'referer': url})
-    r2.cookies.set('CURRENT_QUALITY', '125', domain='.bilibili.com', path='/')
-    r2.cookies.set('CURRENT_FNVAL', '80', domain='.bilibili.com', path='/')
-    r2.cookies.set('laboratory', '1-1', domain='.bilibili.com', path='/')
-    r2.cookies.set('stardustvideo', '1', domain='.bilibili.com', path='/')
-    if log:
-        logg.write(f"GET {url}", currentframe(), "Get Normal Video Webpage")
-    re = r2.get(url)
-    re.encoding = 'utf8'
-    if log:
-        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Get Normal Video Webpage Result")
-    rs = search('__playinfo__=([^<]+)', re.text)
-    napi = True  # 新api
-    if rs is not None:
-        re = json.loads(rs.groups()[0])
-        if log:
-            logg.write(f"re = {re}", currentframe(), "Get Normal Video Webpage Regex")
-    elif data['videos'] >= 1:
-        uri = "https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=80&session=" % (data['page'][i - 1]['cid'], 125, data['bvid'])
+    if data['videos'] >= 1:
+        uri = "https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=976&session=" % (data['page'][i - 1]['cid'], 125, data['bvid'])
         if log:
             logg.write(f"GET {uri}", currentframe(), "Get Normal Video Playurl")
         re = r2.get(uri)
@@ -485,7 +469,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                     else:
                         return -2
                 else:
-                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i-1]['cid']}&qn={targetVq}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
+                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i-1]['cid']}&qn={targetVq}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976"
                     if log:
                         logg.write(f"GET {uri}", currentframe(), "Get Normal Video Playurl3")
                     re = r2.get(uri)
@@ -526,7 +510,7 @@ def avvideodownload(i, url, data, r, c, c3, se, ip, ud):
                         else:
                             return -2
                     else:
-                        uri = "https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=80" % (data['page'][i - 1]['cid'], l, data['bvid'])
+                        uri = "https://api.bilibili.com/x/player/playurl?cid=%s&qn=%s&otype=json&bvid=%s&fnver=0&fnval=976" % (data['page'][i - 1]['cid'], l, data['bvid'])
                         if log:
                             logg.write(f"GET {uri}", currentframe(), "Get Normal Video Playurl2")
                         re = r2.get(uri)
@@ -1997,7 +1981,7 @@ def avaudiodownload(data: dict, r: requests.session, i: int, ip: dict, se: dict,
         if log:
             logg.write(f"re = {re}", currentframe(), "Audio Download Webpage Regex")
     elif data['videos'] >= 1:
-        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i - 1]['cid']}&qn=125&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
+        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['page'][i - 1]['cid']}&qn=125&otype=json&bvid={data['bvid']}&fnver=0&fnval=976"
         if log:
             logg.write(f"GET {uri}", currentframe(), "Audio Download Get Playurl")
         re = r2.get(uri)
@@ -2411,7 +2395,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
             paok = True
         else:
             napi = False
-            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
             if log:
                 logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl")
             re = r2.get(uri)
@@ -2436,7 +2420,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
         elif not paok:
             return -2
     else:
-        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
         if log:
             logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl2")
         re = r2.get(uri)
@@ -2486,7 +2470,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                                     logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage2 Regex")
                             else:
                                 napi = False
-                                uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                                uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                                 if log:
                                     logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl3")
                                 re = r2.get(uri)
@@ -2498,7 +2482,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                                     return -2
                                 re['data'] = re['result']
                         else:
-                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                             if log:
                                 logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl4")
                             re = r2.get(uri)
@@ -2510,7 +2494,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                                 return -2
                             re['data'] = re['result']
                     else:
-                        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                         if log:
                             logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl5")
                         re = r2.get(uri)
@@ -3067,7 +3051,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                                 logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage4 Regex")
                         else:
                             napi = False
-                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                             if log:
                                 logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl8")
                             re = r2.get(uri)
@@ -3079,7 +3063,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                                 return -2
                             re['data'] = re['result']
                     else:
-                        uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                        uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                         if log:
                             logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl9")
                         re = r2.get(uri)
@@ -3091,7 +3075,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                             return -2
                         re['data'] = re['result']
                 else:
-                    uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                    uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={targetVq}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                     if log:
                         logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download  Get Playurl10")
                     re = r2.get(uri)
@@ -3129,7 +3113,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                                     logg.write(f"re = {re}", currentframe(), "Bangumi Video Download Webpage3 Regex")
                             else:
                                 napi = False
-                                uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={l}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                                uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={l}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                                 if log:
                                     logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl7")
                                 re = r2.get(uri)
@@ -3141,7 +3125,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                                     return -2
                                 re['data'] = re['result']
                         else:
-                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={l}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn={l}&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                             if log:
                                 logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download Get Playurl8")
                             re = r2.get(uri)
@@ -3153,7 +3137,7 @@ def epvideodownload(i, url, data, r, c, c3, se, ip, ud):
                                 return -2
                             re['data'] = re['result']
                     else:
-                        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+                        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn={j}&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
                         if log:
                             logg.write(f"GET {uri}", currentframe(), "Bangumi Video Download  Get Playurl6")
                         re = r2.get(uri)
@@ -3930,7 +3914,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
             if log:
                 logg.write(f"re = {re}", currentframe(), "Bangumi Download Audio Only Webpage Regex")
         else:
-            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+            uri = f"https://api.bilibili.com/pgc/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&bvid={i['bvid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
             if log:
                 logg.write(f"GET {uri}", currentframe(), "Bangumi Download Audio Only Get Playurl")
             re = r2.get(uri)
@@ -3954,7 +3938,7 @@ def epaudiodownload(i: dict, url: str, data: dict, r: requests.Session, c: bool,
         elif not paok:
             return -2
     else:
-        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=80&session="
+        uri = f"https://api.bilibili.com/pugv/player/web/playurl?cid={i['cid']}&qn=125&type=&otype=json&fourk=1&avid={i['aid']}&ep_id={i['id']}&fnver=0&fnval=976&session="
         if log:
             logg.write(f"GET {uri}", currentframe(), "Purchased Courses' Download Audio Only Get Playurl")
         re = r2.get(uri)
@@ -5458,7 +5442,7 @@ def audownload(data: dict, r: requests.Session, se: dict, ip: dict, m: bool, a: 
         if log:
             logg.write(f"read = {read}", currentframe(), "Normal Audio CID Check")
         if read:
-            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn=125&otype=json&bvid={data['bvid']}&fnver=0&fnval=80"
+            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn=125&otype=json&bvid={data['bvid']}&fnver=0&fnval=976"
             if log:
                 logg.write(f"GET {uri}", currentframe(), "Normal Audio Video Get Playurl")
             re = r3.get(uri)
