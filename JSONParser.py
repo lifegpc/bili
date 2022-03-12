@@ -22,14 +22,13 @@ from biliTime import tostr2
 from traceback import format_exc
 from inspect import currentframe
 
-
 def Myparser(s):
     "解析普通AV视频信息"
     obj = loads(s)
     if 'ssList' in obj:
         return -1
     data = {}
-    if 'activityKey' in obj and obj['activityKey'] == '2021bnj':
+    if 'activityKey' in obj and obj['activityKey'] != '':
         vinfo = obj['videoInfo']
         data['aid'] = vinfo['aid']
         data['bvid'] = vinfo['bvid']
