@@ -29,7 +29,7 @@ def Myparser(s):
     if 'ssList' in obj:
         return -1
     data = {}
-    if 'activityKey' in obj and obj['activityKey'] == '2021bnj':
+    if 'activityKey' in obj and obj['activityKey'] != '':
         vinfo = obj['videoInfo']
         data['aid'] = vinfo['aid']
         data['bvid'] = vinfo['bvid']
