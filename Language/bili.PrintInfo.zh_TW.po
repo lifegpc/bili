@@ -3,11 +3,15 @@
 # This file is distributed under the same license as the bili package.
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# Translators:
+# david082321 <david082321@gmail.com>, 2021
+# 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-12 04:24:00+0000\n"
 "PO-Revision-Date: 2020-07-12 05:16+0000\n"
+"Last-Translator: david082321 <david082321@gmail.com>, 2021\n"
 "Language-Team: Chinese (Taiwan) (https://www.transifex.com/lifegpc/teams/111556/zh_TW/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -17,265 +21,265 @@ msgstr ""
 
 msgctxt "O1"
 msgid "AV number :"
-msgstr ""
+msgstr "AV號："
 
 msgctxt "O2"
 msgid "BV number :"
-msgstr ""
+msgstr "BV號："
 
 msgctxt "O3"
 msgid "Total parts :"
-msgstr ""
+msgstr "分P數："
 
 msgctxt "O4"
 msgid "Title :"
-msgstr ""
+msgstr "標題："
 
 msgctxt "O5"
 msgid "Publish time :"
-msgstr ""
+msgstr "發布時間："
 
 msgctxt "O6"
 msgid "Create time:"
-msgstr ""
+msgstr "建立時間："
 
 msgctxt "O7"
 msgid "Description :"
-msgstr ""
+msgstr "描述："
 
 msgctxt "O8"
 msgid "Uploader's info :"
-msgstr ""
+msgstr "UP主資訊："
 
 msgctxt "O9"
 msgid "Name :"
-msgstr ""
+msgstr "名字："
 
 msgctxt "O10"
 msgid "Information of each part :"
-msgstr ""
+msgstr "分P資訊："
 
 msgctxt "O11"
 msgid "Part <number> :"
-msgstr ""
+msgstr "第<number>P："
 
 msgctxt "O12"
 msgid "Part name :"
-msgstr ""
+msgstr "分P名："
 
 msgctxt "O13"
 msgid "Japanese name :"
-msgstr ""
+msgstr "日語名字："
 
 msgctxt "O14"
 msgid "Series name :"
-msgstr ""
+msgstr "系列名字："
 
 msgctxt "O15"
 msgid "Alias :"
-msgstr ""
+msgstr "別名："
 
 msgctxt "O16"
 msgid "Type name :"
-msgstr ""
+msgstr "類型："
 
 msgctxt "O17"
 msgid "Content :"
-msgstr ""
+msgstr "內容："
 
 msgctxt "O18"
 msgid "Favorites ID:"
-msgstr ""
+msgstr "收藏夾ID："
 
 msgctxt "O19"
 msgid "Favorites title :"
-msgstr ""
+msgstr "收藏夾標題："
 
 msgctxt "O20"
 msgid "Creator's name :"
-msgstr ""
+msgstr "建立者名字："
 
 msgctxt "O21"
 msgid "Create time :"
-msgstr ""
+msgstr "建立時間："
 
 msgctxt "O22"
 msgid "Video count :"
-msgstr ""
+msgstr "影片數量："
 
 msgctxt "O23"
 msgid "Video <number> :"
-msgstr ""
+msgstr "影片<number>："
 
 msgctxt "O24"
 msgid "Uploader's name :"
-msgstr ""
+msgstr "UP主名稱："
 
 msgctxt "O25"
 msgid "Favorites time :"
-msgstr ""
+msgstr "收藏時間："
 
 msgctxt "O26"
 msgid "Channel ID :"
-msgstr ""
+msgstr "頻道ID："
 
 msgctxt "O27"
 msgid "Uploader's gender :"
-msgstr ""
+msgstr "UP主性別："
 
 msgctxt "O28"
 msgid "Uploader's level :"
-msgstr ""
+msgstr "UP主等級："
 
 msgctxt "O29"
 msgid "Personalized signature :"
-msgstr ""
+msgstr "個性簽名："
 
 msgctxt "O30"
 msgid "Birthday :"
-msgstr ""
+msgstr "生日："
 
 msgctxt "O31"
 msgid "Favorites <number> :"
-msgstr ""
+msgstr "收藏夾<number>："
 
 msgctxt "O32"
 msgid "Small Video ID :"
-msgstr ""
+msgstr "小影片ID："
 
 msgctxt "O33"
 msgid "Tags :"
-msgstr ""
+msgstr "標籤："
 
 msgctxt "O34"
 msgid "Upload time :"
-msgstr ""
+msgstr "上傳時間："
 
 msgctxt "O35"
 msgid "You selected :"
-msgstr ""
+msgstr "你選取了："
 
 msgctxt "O36"
 msgid "Live Record ID :"
-msgstr ""
+msgstr "直播重播ID："
 
 msgctxt "O37"
 msgid "Room ID :"
-msgstr ""
+msgstr "房間ID："
 
 msgctxt "O38"
 msgid "Start time :"
-msgstr ""
+msgstr "開始時間："
 
 msgctxt "O39"
 msgid "End time :"
-msgstr ""
+msgstr "結束時間："
 
 msgctxt "O40"
 msgid "Area name :"
-msgstr ""
+msgstr "區域："
 
 msgctxt "O41"
 msgid "Room hot words :"
-msgstr ""
+msgstr "房間熱詞："
 
 msgctxt "O42"
 msgid "You can find the source code on <https://github.com/lifegpc/bili>."
-msgstr ""
+msgstr "你可以在<https://github.com/lifegpc/bili>上找到原始碼。"
 
 msgctxt "O43"
 msgid ""
 "Can't find GNU GPL3 LICENSE file, please see <http://www.gnu.org/licenses/>."
-msgstr ""
+msgstr "找不到GNU GPL3 LICENSE文件，請看<http://www.gnu.org/licenses/>。"
 
 msgctxt "O44"
 msgid "AU number: "
-msgstr ""
+msgstr "AU號："
 
 msgctxt "O45"
 msgid "Duration: "
-msgstr ""
+msgstr "時長："
 
 msgctxt "O46"
 msgid "Author: "
-msgstr ""
+msgstr "作者："
 
 msgctxt "O47"
 msgid "Statistics :"
-msgstr ""
+msgstr "統計資料："
 
 msgctxt "O48"
 msgid "Played times: "
-msgstr ""
+msgstr "播放次數："
 
 msgctxt "O49"
 msgid "Comment count: "
-msgstr ""
+msgstr "評論數量："
 
 msgctxt "O50"
 msgid "Shared times: "
-msgstr ""
+msgstr "分享次數："
 
 msgctxt "O51"
 msgid "Favorited count: "
-msgstr ""
+msgstr "收藏次數："
 
 msgctxt "O52"
 msgid "Type ID (tid): "
-msgstr ""
+msgstr "種類ID（tid）："
 
 msgctxt "O53"
 msgid "Album info: "
-msgstr ""
+msgstr "專輯資訊："
 
 msgctxt "O54"
 msgid "Album artist: "
-msgstr ""
+msgstr "專輯藝術家："
 
 msgctxt "O55"
 msgid "Album title: "
-msgstr ""
+msgstr "專輯名："
 
 msgctxt "O56"
 msgid "Album publisher: "
-msgstr ""
+msgstr "專輯發布者："
 
 msgctxt "O57"
 msgid "Album publish time: "
-msgstr ""
+msgstr "專輯發布時間："
 
 msgctxt "O58"
 msgid "Album tags: "
-msgstr ""
+msgstr "專輯標籤："
 
 msgctxt "O59"
 msgid "Album played times: "
-msgstr ""
+msgstr "專輯播放次數："
 
 msgctxt "O60"
 msgid "Album favorited times: "
-msgstr ""
+msgstr "專輯收藏次數："
 
 msgctxt "O61"
 msgid "AM number: "
-msgstr ""
+msgstr "AM號："
 
 msgctxt "O62"
 msgid "Collection ID: "
-msgstr ""
+msgstr "收藏夾ID："
 
 msgctxt "O63"
 msgid "Song list: "
-msgstr ""
+msgstr "歌曲列表："
 
 msgctxt "O64"
 msgid "AC number: "
-msgstr ""
+msgstr "AC號："
 
 msgctxt "O65"
 msgid "AA number (Bangumi ID): "
-msgstr ""
+msgstr "AA號（番劇ID）："
 
 msgctxt "O66"
 msgid "Episode ID: "
-msgstr ""
+msgstr "劇集ID："

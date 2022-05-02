@@ -22,7 +22,7 @@ from typing import Dict
 
 LanDict = Dict[str, str]
 dll = None
-lan = {'en': 'English', 'ja': '日本語', 'zh_CN': '中文（中国）', 'zh_TW': '中文（台灣）'}
+lan = {'en': 'English', 'ja': '日本語', 'zh_CN': '中文（中国）', 'zh_TW': '中文（臺灣）'}
 syslan = None
 
 
