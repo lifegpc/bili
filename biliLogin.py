@@ -53,7 +53,6 @@ def login(r, ud: dict, ip: dict, logg=None):
     '登录至B站'
     global lan
     url = "https://passport.bilibili.com/ajax/miniLogin/minilogin"
-    reurl = "https://passport.bilibili.com/ajax/miniLogin/redirect"
     try:
         option = webdriver.ChromeOptions()
         option.add_argument("disable-logging")
@@ -62,11 +61,7 @@ def login(r, ud: dict, ip: dict, logg=None):
         if logg is not None:
             logg.write(f"OEPN {url} in ChromeDriver", currentframe(), "OPEN WEB")
         driver.get(url)
-        aa = True
-        while aa:
-            time.sleep(1)
-            if driver.current_url == reurl:
-                aa = False
+        input('Please login and then press enter in this window...')
         sa = []
         for i in driver.get_cookies():
             r.cookies.set(i['name'], i['value'], domain=i['domain'], path=i['path'])
@@ -82,11 +77,7 @@ def login(r, ud: dict, ip: dict, logg=None):
             if logg is not None:
                 logg.write(f"OEPN {url} in FirefoxDriver", currentframe(), "OPEN WEB")
             driver.get(url)
-            aa = True
-            while aa:
-                time.sleep(1)
-                if driver.current_url == reurl:
-                    aa = False
+            input('Please login and then press enter in this window...')
             sa = []
             for i in driver.get_cookies():
                 r.cookies.set(i['name'], i['value'], domain=i['domain'], path=i['path'])
