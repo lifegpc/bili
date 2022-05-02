@@ -34,6 +34,9 @@ from urllib.parse import quote_plus, parse_qsl, urlsplit
 from qrcode import QRCode, constants as qrconst
 from qrcode.image.svg import SvgImage
 from platform import system
+from Logger import Logger
+from HTMLParser import NicoUserParser
+from JSParser import getNicoUser
 
 
 lan = None
@@ -50,7 +53,6 @@ def login(r, ud: dict, ip: dict, logg=None):
     '登录至B站'
     global lan
     url = "https://passport.bilibili.com/ajax/miniLogin/minilogin"
-    reurl = "https://passport.bilibili.com/ajax/miniLogin/redirect"
     try:
         option = webdriver.ChromeOptions()
         option.add_argument("disable-logging")
@@ -59,11 +61,7 @@ def login(r, ud: dict, ip: dict, logg=None):
         if logg is not None:
             logg.write(f"OEPN {url} in ChromeDriver", currentframe(), "OPEN WEB")
         driver.get(url)
-        aa = True
-        while aa:
-            time.sleep(1)
-            if driver.current_url == reurl:
-                aa = False
+        input('Please login and then press enter in this window...')
         sa = []
         for i in driver.get_cookies():
             r.cookies.set(i['name'], i['value'], domain=i['domain'], path=i['path'])
@@ -79,11 +77,7 @@ def login(r, ud: dict, ip: dict, logg=None):
             if logg is not None:
                 logg.write(f"OEPN {url} in FirefoxDriver", currentframe(), "OPEN WEB")
             driver.get(url)
-            aa = True
-            while aa:
-                time.sleep(1)
-                if driver.current_url == reurl:
-                    aa = False
+            input('Please login and then press enter in this window...')
             sa = []
             for i in driver.get_cookies():
                 r.cookies.set(i['name'], i['value'], domain=i['domain'], path=i['path'])
@@ -465,6 +459,101 @@ def acLogin(r: requests.Session, ud: dict, ip: dict, logg=None):
         if 's' not in ip:
             print(lan['OUTPUT1'])  # 登录成功！
         JSONParser.savecookie(sa, "acfun_cookies.json")
+        return 0
+    elif rr is False:
+        print(lan['ERROR3'])  # 网络错误！
+        return 1
+    else:
+        print(lan['ERROR4'] + str(rr['code']) + "," + str(rr['error_msg']))  # 登录失败：
+        return 2
+
+
+def nicoCheckLogin(r: requests.Session, ud: dict, logg: Logger):
+    try:
+        url = 'https://www.nicovideo.jp'
+        if logg:
+            logg.write(f"Get {url}", currentframe(), "Niconico Get Webpage.")
+        re = r.get(url)
+    except:
+        if logg:
+            logg.write(traceback.format_exc(), currentframe(), "Niconico verify login failed.")
+        return False
+    re.encoding = 'utf8'
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Niconico webpage")
+    try:
+        p = NicoUserParser()
+        p.feed(re.text)
+        d = getNicoUser(p, logg)
+        if d is not None:
+            ud['d'] = d
+            if d['login_status'] == 'login':
+                return True
+            return d
+        return None
+    except:
+        if logg:
+            logg.write(traceback.format_exc(), currentframe(), "Niconico verify login failed2.")
+        return None
+
+
+def nicoLogin(r: requests.Session, ud: dict, ip: dict, logg: Logger = None):
+    '''登录Niconico
+    0 登录成功
+    1 网络错误
+    2 登录失败'''
+    global lan
+    reurl = "https://www.nicovideo.jp/"
+    url = "https://account.nicovideo.jp/login?site=niconico&next_url=%2F"
+    try:
+        option = webdriver.ChromeOptions()
+        option.add_argument("disable-logging")
+        option.add_argument('log-level=3')
+        driver = webdriver.Chrome(options=option)
+        if logg is not None:
+            logg.write(f"OEPN {url} in ChromeDriver", currentframe(), "OPEN WEB")
+        driver.get(url)
+        aa = True
+        while aa:
+            time.sleep(1)
+            if driver.current_url == reurl or driver.current_url == reurl[:-1]:
+                aa = False
+        sa = []
+        for i in driver.get_cookies():
+            r.cookies.set(i['name'], i['value'], domain=i['domain'], path=i['path'])
+            t = {'name': i['name'], 'value': i['value'], 'domain': i['domain'], 'path': i['path']}
+            sa.append(t)
+        driver.close()
+    except:
+        if logg is not None:
+            logg.write(traceback.format_exc(), currentframe(), "CHROME DRIVER FAILED")
+        print(traceback.format_exc())
+        try:
+            driver = webdriver.Firefox()
+            if logg is not None:
+                logg.write(f"OEPN {url} in FirefoxDriver", currentframe(), "OPEN WEB")
+            driver.get(url)
+            aa = True
+            while aa:
+                time.sleep(1)
+                if driver.current_url == reurl:
+                    aa = False
+            sa = []
+            for i in driver.get_cookies():
+                r.cookies.set(i['name'], i['value'], domain=i['domain'], path=i['path'])
+                t = {'name': i['name'], 'value': i['value'], 'domain': i['domain'], 'path': i['path']}
+                sa.append(t)
+            driver.close()
+        except:
+            if logg is not None:
+                logg.write(traceback.format_exc(), currentframe(), "GECKO DRIVER FAILED")
+            print(traceback.format_exc())
+            return 2
+    rr = nicoCheckLogin(r, ud, logg)
+    if rr is True:
+        if 's' not in ip:
+            print(lan['OUTPUT1'])  # 登录成功！
+        JSONParser.savecookie(sa, "nico_cookies.json")
         return 0
     elif rr is False:
         print(lan['ERROR3'])  # 网络错误！

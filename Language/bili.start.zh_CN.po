@@ -4,14 +4,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# 1 q <g1710431395@gmail.com>, 2021
+# lifegpc <g1710431395@gmail.com>, 2021
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-10 23:16:38+0000\n"
 "PO-Revision-Date: 2020-07-10 23:26+0000\n"
-"Last-Translator: 1 q <g1710431395@gmail.com>, 2021\n"
+"Last-Translator: lifegpc <g1710431395@gmail.com>, 2021\n"
 "Language-Team: Chinese (China) (https://www.transifex.com/lifegpc/teams/111556/zh_CN/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -320,3 +320,7 @@ msgstr ""
 "2.视频下载\n"
 "3.仅封面图片下载\n"
 "4.弹幕+视频下载"
+
+msgctxt "BARDOWC"
+msgid "The barrage is downloaded successfully."
+msgstr "下载字幕成功。"

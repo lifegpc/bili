@@ -222,3 +222,7 @@ msgstr ""
 msgctxt "INPUT13"
 msgid "Please input the number before \".\" to choose download method:\n1.download barrage\n2.download video\n3.download cover image only\n4.download barrage and video"
 msgstr ""
+
+msgctxt "BARDOWC"
+msgid "The barrage is downloaded successfully."
+msgstr ""

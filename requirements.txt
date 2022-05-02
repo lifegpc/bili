@@ -1,9 +1,10 @@
 iso-639>=0.4.5
 polib>=1.1.0
-pywin32>=300; platform_system == "Windows"
 regex>=2020.11.13
 requests>=2.25.1
 rsa>=4.6
 selenium>=3.141.0
 web.py>=0.62
 qrcode>=6.1
+Js2Py>=0.70
+websocket-client>=0.58.0

@@ -4,14 +4,14 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 # Translators:
-# Kum4423, 2020
+# Kum4423, 2021
 # 
 msgid ""
 msgstr ""
 "Project-Id-Version: bili\n"
 "POT-Creation-Date: 2020-07-12 04:24:00+0000\n"
 "PO-Revision-Date: 2020-07-12 05:16+0000\n"
-"Last-Translator: Kum4423, 2020\n"
+"Last-Translator: Kum4423, 2021\n"
 "Language-Team: Japanese (https://www.transifex.com/lifegpc/teams/111556/ja/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -274,12 +274,12 @@ msgstr "楽曲リスト: "
 
 msgctxt "O64"
 msgid "AC number: "
-msgstr ""
+msgstr "AC number: "
 
 msgctxt "O65"
 msgid "AA number (Bangumi ID): "
-msgstr ""
+msgstr "AA number (Bangumi ID): "
 
 msgctxt "O66"
 msgid "Episode ID: "
-msgstr ""
+msgstr "エピソード ID: "

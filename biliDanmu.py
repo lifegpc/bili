@@ -36,6 +36,10 @@ from requests import Session
 from acfunDanmu import getDanmuList
 from Logger import Logger
 from autoopenlist import autoopenfilelist
+from nicoPara import genNicoDanmuPara
+from nicoDanmu import getNicoDanmuList
+from urllib.parse import urlsplit
+from bstr import unescapeHTML
 
 
 lan = None
@@ -78,6 +82,7 @@ def downloadh(filen, r, pos, da, logg=None):
 
 def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
     "处理现在的弹幕"
+    fnl = ip['fnl'] if 'fnl' in ip else se["fnl"] if "fnl" in se else 80
     log = False
     logg = None
     if 'logg' in ip:
@@ -109,9 +114,9 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
         dmp = False
     if dmp:
         if not fin:
-            o = f"{o}{file.filtern(data['title'])}/"
+            o = f"{o}{file.filtern(data['title'], fnl)}/"
         else:
-            o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+            o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})", fnl))
     if log:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Normal Video Barrage Para")
     try:
@@ -139,18 +144,18 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
             return -1
         if data['videos'] == 1:
             if fin:
-                filen = o + file.filtern(data['title'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml")
+                filen = o + file.filtern(data['title'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml", fnl)
             else:
-                filen = f"{o}{file.filtern(data['title'])}.xml"
+                filen = o + file.filtern(f"{data['title']}.xml", fnl)
         else:
             if fin and not dmp:
-                filen = o + file.filtern(data['title'] + '-' + f"{c}." + data['page'][c - 1]['part'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml")
+                filen = o + file.filtern(data['title'] + '-' + f"{c}." + data['page'][c - 1]['part'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml", fnl)
             elif not dmp:
-                filen = f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
+                filen = o + file.filtern(f"{data['title']}-{c}.{data['page'][c-1]['part']}.xml", fnl)
             elif fin:
-                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}(P{c},{data['page'][c - 1]['cid']}).xml")
+                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}(P{c},{data['page'][c - 1]['cid']}).xml", fnl)
             else:
-                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}.xml")
+                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}.xml", fnl)
         if log:
             logg.write(f"filen = {filen}", currentframe(), "Normal Video Barrage Var1")
         if exists(filen):
@@ -262,7 +267,7 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
                 logg.write(f"d = {d}", currentframe(), "Bangumi Video Download Barrage Failed")
             print(lan['ERROR1'])  # 网络错误
             return -1
-        pat = o + file.filtern('%s(SS%s)' % (data['mediaInfo']['title'], data['mediaInfo']['ssId']))
+        pat = o + file.filtern('%s(SS%s)' % (data['mediaInfo']['title'], data['mediaInfo']['ssId']), fnl)
         if log:
             logg.write(f"pat = {pat}", currentframe(), "Bangumi Video Barrage Var1")
         try:
@@ -275,14 +280,14 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
             return -3
         if c['s'] == 'e':
             if fin:
-                filen = '%s/%s' % (pat, file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid'])))
+                filen = '%s/%s' % (pat, file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid']), fnl))
             else:
-                filen = '%s/%s' % (pat, file.filtern(f"{c['i']+1}.{c['longTitle']}.xml"))
+                filen = '%s/%s' % (pat, file.filtern(f"{c['i']+1}.{c['longTitle']}.xml", fnl))
         else:
             if fin:
-                filen = '%s/%s' % (pat, file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['title'], c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid'])))
+                filen = '%s/%s' % (pat, file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['title'], c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid']), fnl))
             else:
-                filen = '%s/%s' % (pat, file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
+                filen = '%s/%s' % (pat, file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml", fnl))
         if log:
             logg.write(f"filen = {filen}", currentframe(), "Bangumi Video Barrage Var2")
         if exists(filen):
@@ -391,6 +396,7 @@ def DanmuGetn(c, data, r, t, xml, xmlc, ip: dict, se: dict):
 
 def DanmuGeta(c, data, r, t, xml, xmlc, ip: dict, se: dict, che: bool = False):
     "全弹幕处理"
+    fnl = ip['fnl'] if 'fnl' in ip else se["fnl"] if "fnl" in se else 80
     log = False
     logg = None
     if 'logg' in ip:
@@ -422,9 +428,9 @@ def DanmuGeta(c, data, r, t, xml, xmlc, ip: dict, se: dict, che: bool = False):
         dmp = False
     if dmp:
         if not fin:
-            o = f"{o}{file.filtern(data['title'])}/"
+            o = f"{o}{file.filtern(data['title'], fnl)}/"
         else:
-            o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})"))
+            o = "%s%s/" % (o, file.filtern(f"{data['title']}(AV{data['aid']},{data['bvid']})", fnl))
     dwa = False
     if getset(se, 'dwa') is True:
         dwa = True
@@ -475,18 +481,18 @@ def DanmuGeta(c, data, r, t, xml, xmlc, ip: dict, se: dict, che: bool = False):
                 bs = False
         if data['videos'] == 1:
             if fin:
-                filen = o + file.filtern(data['title'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml")
+                filen = o + file.filtern(data['title'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml", fnl)
             else:
-                filen = f"{o}{file.filtern(data['title'])}.xml"
+                filen = o + file.filtern(f"{data['title']}.xml", fnl)
         else:
             if fin and not dmp:
-                filen = o + file.filtern(data['title'] + '-' + f"{c}." + data['page'][c - 1]['part'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml")
+                filen = o + file.filtern(data['title'] + '-' + f"{c}." + data['page'][c - 1]['part'] + "(AV" + str(data['aid']) + ',' + data['bvid'] + ',P' + str(c) + ',' + str(data['page'][c - 1]['cid']) + ").xml", fnl)
             elif not dmp:
-                filen = f"{o}{file.filtern(data['title'])}-{c}.{file.filtern(data['page'][c-1]['part'])}.xml"
+                filen = o + file.filtern(f"{data['title']}-{c}.{data['page'][c-1]['part']}.xml", fnl)
             elif fin:
-                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}(P{c},{data['page'][c - 1]['cid']}).xml")
+                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}(P{c},{data['page'][c - 1]['cid']}).xml", fnl)
             else:
-                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}.xml")
+                filen = o + file.filtern(f"{c}.{data['page'][c - 1]['part']}.xml", fnl)
         if log:
             logg.write(f"filen = {filen}", currentframe(), "Normal Video All Barrage Var")
         if exists(filen):
@@ -905,7 +911,7 @@ def DanmuGeta(c, data, r, t, xml, xmlc, ip: dict, se: dict, che: bool = False):
                         print(lan['ERROR9'])  # 输入格式有误或者该日期不存在。
         pubt = biliTime.mkt(time.strptime(pubt, '%Y-%m-%d'))
         da = int(pubt)
-        pat = o + file.filtern('%s(SS%s)' % (data['mediaInfo']['title'], data['mediaInfo']['ssId']))
+        pat = o + file.filtern('%s(SS%s)' % (data['mediaInfo']['title'], data['mediaInfo']['ssId']), fnl)
         if log:
             logg.write(f"da = {da}\npat = {pat}", currentframe(), "Bangumi Video All Barrage Var")
         try:
@@ -918,14 +924,14 @@ def DanmuGeta(c, data, r, t, xml, xmlc, ip: dict, se: dict, che: bool = False):
             return -1
         if c['s'] == 'e':
             if fin:
-                filen = '%s/%s' % (pat, file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid'])))
+                filen = '%s/%s' % (pat, file.filtern('%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid']), fnl))
             else:
-                filen = '%s/%s' % (pat, file.filtern(f"{c['i']+1}.{c['longTitle']}.xml"))
+                filen = '%s/%s' % (pat, file.filtern(f"{c['i']+1}.{c['longTitle']}.xml", fnl))
         else:
             if fin:
-                filen = '%s/%s' % (pat, file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['title'], c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid'])))
+                filen = '%s/%s' % (pat, file.filtern('%s%s.%s(%s,AV%s,%s,ID%s,%s).xml' % (c['title'], c['i'] + 1, c['longTitle'], c['titleFormat'], c['aid'], c['bvid'], c['id'], c['cid']), fnl))
             else:
-                filen = '%s/%s' % (pat, file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml"))
+                filen = '%s/%s' % (pat, file.filtern(f"{c['title']}{c['i']+1}.{c['longTitle']}.xml", fnl))
         if log:
             logg.write(f"filen = {filen}", currentframe(), "Bangumi Video All Barrage Var2")
         if exists(filen):
@@ -1311,6 +1317,7 @@ def acDownloadDanmu(r: Session, index: int, data: dict, se: dict, ip: dict, xml:
     -1 创建文件夹失败
     -2 删除原有文件失败
     -3 写入文件失败'''
+    fnl = ip['fnl'] if 'fnl' in ip else se["fnl"] if "fnl" in se else 80
     logg: Logger = ip['logg'] if 'logg' in ip else None
     oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
     ns = True
@@ -1337,9 +1344,9 @@ def acDownloadDanmu(r: Session, index: int, data: dict, se: dict, ip: dict, xml:
         dmp = False
     if dmp:
         if not fin:
-            o += f"{file.filtern(data['title'])}/"
+            o += f"{file.filtern(data['title'], fnl)}/"
         else:
-            o += file.filtern(f"{data['title']}(AC{data['dougaId']})") + "/"
+            o += file.filtern(f"{data['title']}(AC{data['dougaId']})", fnl) + "/"
     if logg:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\ndmp = {dmp}", currentframe(), "Acfun Barrage Para")
     try:
@@ -1352,18 +1359,18 @@ def acDownloadDanmu(r: Session, index: int, data: dict, se: dict, ip: dict, xml:
         return -1
     if videoCount == 1:
         if fin:
-            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).xml")
+            filen = o + file.filtern(f"{data['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).xml", fnl)
         else:
-            filen = o + file.filtern(f"{data['title']}.xml")
+            filen = o + file.filtern(f"{data['title']}.xml", fnl)
     else:
         if fin and not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).xml")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}(AC{data['dougaId']},P{index+1},{data['videoList'][index]['id']}).xml", fnl)
         elif not dmp:
-            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}.xml")
+            filen = o + file.filtern(f"{data['title']}-{index+1}.{data['videoList'][index]['title']}.xml", fnl)
         elif fin:
-            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']}).xml")
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}(P{index+1},{data['videoList'][index]['id']}).xml", fnl)
         else:
-            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}.xml")
+            filen = o + file.filtern(f"{index+1}.{data['videoList'][index]['title']}.xml", fnl)
     if logg:
         logg.write(f"filen = {filen}", currentframe(), "Acfun Barrage Var1")
     if exists(filen):
@@ -1448,15 +1455,16 @@ def acBangumiDownloadDanmu(r: Session, data: dict, list: dict, index: int, se: d
     xmlc 过滤词典
     -1 创建文件夹失败
     -2 写入文件失败'''
+    fnl = ip['fnl'] if 'fnl' in ip else se["fnl"] if "fnl" in se else 80
     logg: Logger = ip['logg'] if 'logg' in ip else None
     oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
     ns = False if 's' in ip else True
     o = ip['o'] if 'o' in ip else getset(se, 'o') if getset(se, 'o') is not None else 'Download/'
     fin = ip['in'] if 'in' in ip else False if getset(se, 'in') is False else True
     if not fin:
-        o += file.filtern(f"{data['bangumiTitle']}") + "/"
+        o += file.filtern(f"{data['bangumiTitle']}", fnl) + "/"
     else:
-        o += file.filtern(f"{data['bangumiTitle']}(AA{data['bangumiId']})") + "/"
+        o += file.filtern(f"{data['bangumiTitle']}(AA{data['bangumiId']})", fnl) + "/"
     if logg:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "Acfun Bangumi Barrage Para")
     try:
@@ -1468,9 +1476,9 @@ def acBangumiDownloadDanmu(r: Session, data: dict, list: dict, index: int, se: d
         print(lan['ERROR3'].replace('<dirname>', o))  # 创建文件夹<dirname>失败。
         return -1
     if fin:
-        filen = o + file.filtern(f"{index+1}.{list['items'][index]['title']}({list['items'][index]['episodeName']},EP{list['items'][index]['itemId']},{list['items'][index]['videoId']}).xml")
+        filen = o + file.filtern(f"{index+1}.{list['items'][index]['title']}({list['items'][index]['episodeName']},EP{list['items'][index]['itemId']},{list['items'][index]['videoId']}).xml", fnl)
     else:
-        filen = o + file.filtern(f"{index+1}.{list['items'][index]['title']}.xml")
+        filen = o + file.filtern(f"{index+1}.{list['items'][index]['title']}.xml", fnl)
     if logg:
         logg.write(f"filen = {filen}", currentframe(), "Acfun Bangumi Barrage Var1")
     if exists(filen):
@@ -1529,6 +1537,122 @@ def acBangumiDownloadDanmu(r: Session, data: dict, list: dict, index: int, se: d
     except:
         if logg:
             logg.write(format_exc(), currentframe(), "Acfun Bangumi Barrage Error")
+        print(lan['ERROR5'].replace('<filename>', filen))  # 打开文件"<filename>"失败
+        return -2
+    if oll:
+        oll.add(filen)
+    return 0
+
+
+def nicoDownloadDanmu(r: Session, data: dict, se: dict, ip: dict, xml: int, xmlc: dict):
+    """下载Niconico弹幕
+    -1 创建文件夹失败
+    -2 解析失败
+    -3 无弹幕"""
+    fnl = ip['fnl'] if 'fnl' in ip else se["fnl"] if "fnl" in se else 80
+    logg: Logger = ip['logg'] if 'logg' in ip else None
+    oll: autoopenfilelist = ip['oll'] if 'oll' in ip else None
+    ns = True
+    if 's' in ip:
+        ns = False
+    o = "Download/"
+    read = getset(se, 'o')
+    if read is not None:
+        o = read
+    if 'o' in ip:
+        o = ip['o']
+    fin = True
+    if getset(se, 'in') is False:
+        fin = False
+    if 'in' in ip:
+        fin = ip['in']
+    if logg:
+        logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}", currentframe(), "NicoNico Barrage Para")
+    try:
+        if not exists(o):
+            mkdir(o)
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "NicoNico Barrage Mkdir Error")
+        print(lan['ERROR3'].replace('<dirname>', o))  # 创建文件夹<dirname>失败。
+        return -1
+    smid = int(data['video']['id'][2:])
+    if fin:
+        filen = o + file.filtern(f"{unescapeHTML(data['video']['title'])}(SM{smid}).xml", fnl)
+    else:
+        filen = o + file.filtern(f"{unescapeHTML(data['video']['title'])}.xml", fnl)
+    if logg:
+        logg.write(f"filen = {filen}", currentframe(), "NicoNico Barrage Var1")
+    if exists(filen):
+        fg = False
+        bs = True
+        if not ns:
+            bs = False
+            fg = True
+        if 'y' in se:
+            fg = se['y']
+            bs = False
+        if 'y' in ip:
+            fg = ip['y']
+            bs = False
+        while bs:
+            inp = input(f"{lan['INPUT1'].replace('<filename>',filen)}(y/n)？")  # 文件"<filename>"已存在，是否覆盖？
+            if inp[0].lower() == 'y':
+                bs = False
+                fg = True
+            elif inp[0].lower() == 'n':
+                bs = False
+        if fg:
+            try:
+                remove(filen)
+            except:
+                if logg:
+                    logg.write(format_exc(), currentframe(), "NicoNico Barrage Remove File Failed")
+                print(lan['ERROR4'])  # 删除原有文件失败，跳过下载
+                return 0
+        else:
+            return 0
+    para = genNicoDanmuPara(data)
+    url: str = data['comment']['server']['url']
+    if url.endswith("api/"):
+        url = url[:-4] + "api.json/"
+    if logg:
+        logg.write(f"POST {url}\nPOST DATA:{json.dumps(para)}", currentframe(), "NicoNico Barrage Get Danmu Request")
+    re = r.post(url, json=para)
+    if logg:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "NicoNico Barrage Get Danmu Result")
+    if re.status_code != 200:
+        return -2
+    re = re.json()
+    dml = getNicoDanmuList(re)
+    if logg:
+        logg.write(f"dml = {dml}", currentframe(), "NicoNico Barrage Barrage List")
+    if len(dml) == 0:
+        return -3
+    if ns:
+        print(f"{lan['OUTPUT1']}{len(dml)}")  # 总计：
+        if xml == 1:
+            print(lan['OUTPUT2'])  # 正在过滤……
+    if xml == 1:
+        sdml = dml
+        dml = []
+        filterNum = 0
+        for i in sdml:
+            read = biliDanmuXmlFilter.Filter(i, xmlc)
+            if read:
+                filterNum += 1
+            else:
+                dml.append(i)
+    try:
+        with open(filen, mode='w', encoding='utf8') as f:
+            f.write('<?xml version="1.0" encoding="UTF-8"?>')
+            f.write(f"<i><chatserver>{urlsplit(url).hostname}</chatserver><chatid>{smid}</chatid><mission>{0}</mission><maxlimit>{len(dml)}</maxlimit><state>0</state><real_name>0</real_name><source>k-v</source>")
+            for i in dml:
+                f.write(biliDanmuCreate.objtoxml(i))
+            f.write('</i>')
+    except:
+        if logg:
+            logg.write(format_exc(), currentframe(), "NicoNico Bangumi Barrage Error")
         print(lan['ERROR5'].replace('<filename>', filen))  # 打开文件"<filename>"失败
         return -2
     if oll:

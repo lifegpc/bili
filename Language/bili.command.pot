@@ -426,3 +426,31 @@ msgstr ""
 msgctxt "O102"
 msgid "The maximum number of download pages when downloading barrage from acfun. (1 page contains 200 entries. 0 means no limit.)"
 msgstr ""
+
+msgctxt "O103"
+msgid "Enable internal m3u media playlist downloader for Niconico."
+msgstr ""
+
+msgctxt "O104"
+msgid "Disable internal m3u media playlist downloader for Niconico."
+msgstr ""
+
+msgctxt "O105"
+msgid "Start from which seconds when downloading niconico's live video."
+msgstr ""
+
+msgctxt "O107"
+msgid "The playback speed when downloading niconico's live video.\nAvailable playback speed (some settings may need NicoNico Premium): 0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0.\nA higher playback speed can speed up the download speed."
+msgstr ""
+
+msgctxt "O108"
+msgid "The length limit for file name. 0 means no any limit."
+msgstr ""
+
+msgctxt "O109"
+msgid "Enable low latency mode for niconico live."
+msgstr ""
+
+msgctxt "O110"
+msgid "Disable low latency mode for niconico live."
+msgstr ""

@@ -52,6 +52,7 @@ from inspect import currentframe
 from autoopenlist import autoopenfilelist
 from urllib.parse import parse_qs, urljoin
 from bstr import hasPar
+from multithread import makeSureSendKill
 
 # 远程调试用代码
 # import ptvsd
@@ -66,6 +67,7 @@ se = JSONParser.loadset()
 if se == -1 or se == -2:
     se = {}
 ip = {}
+threadMap = {}
 
 
 def main(ip={}, menuInfo=None):
@@ -128,6 +130,9 @@ def main(ip={}, menuInfo=None):
     acfun = False  # Acfun网站
     acvideo = False  # Acfun Video acxxxxx
     acbangumi = False  # Acfun Bangumi
+    nico = False  # NicoNico
+    nicovideo = False  # NicoNico Video
+    nicolive = False  # NicoNoco Live
     av = False
     ss = False
     ep = False
@@ -161,6 +166,7 @@ def main(ip={}, menuInfo=None):
     acvideoid = -1  # Acfun AC号
     acbangumiid = -1  # Acfun AA号
     acepisodeid = -1  # Acfun 剧集号（EP号
+    smid = -1  # niconico sm号
     if inp[0:2].lower() == 'ss' and inp[2:].isnumeric():
         s = "https://www.bilibili.com/bangumi/play/ss" + inp[2:]
         ss = True
@@ -218,6 +224,18 @@ def main(ip={}, menuInfo=None):
         acepisodeid = int(rs[1])
         if log and not logg.hasf():
             logg.openf(f"log/AA{acbangumiid}_{round(time())}.log")
+    elif inp[:2].lower() == "sm" and inp[2:].isnumeric():
+        nico = True
+        nicovideo = True
+        smid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/SM{smid}_{round(time())}.log")
+    elif inp[:2].lower() == "lv" and inp[2:].isnumeric():
+        nico = True
+        nicolive = True
+        nicolvid = int(inp[2:])
+        if log and not logg.hasf():
+            logg.openf(f"log/LV{nicolvid}_{round(time())}.log")
     elif inp.isnumeric():
         s = "https://www.bilibili.com/video/av" + inp
         av = True
@@ -228,19 +246,49 @@ def main(ip={}, menuInfo=None):
         if re is None:
             re = search(r'([^:]+://)?(www\.)?b23\.tv/(av([0-9]+))?(bv[0-9A-Z]+)?(ss[0-9]+)?(ep[0-9]+)?(au([0-9]+))?', inp, I)
             if re is None:
-                re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?(bangumi/aa(\d+)(_36188_(\d+))?)?', inp)
+                re = search(r'([^:]+://)?(www\.)?acfun\.cn/(v/ac([0-9]+))?(bangumi/aa(\d+)(_36188_(\d+))?)?', inp, I)
                 if re is None:
-                    re = search(r"[^:]+://", inp)
+                    re = search(r'([^:]+://)?(www\.)?(sp\.)?(live\.)?nicovideo\.jp/(watch/sm([0-9]+))?((watch|gate)/lv([0-9]+))?', inp, I)
                     if re is None:
-                        inp = "https://" + inp
-                    re = requests.head(inp)
-                    if 'Location' in re.headers:
-                        ip['i'] = re.headers['Location']
-                        ip['uc'] = False
-                        return main(ip)
+                        re = search(r"[^:]+://", inp)
+                        if re is None:
+                            inp = "https://" + inp
+                        re = requests.head(inp)
+                        if 'Location' in re.headers:
+                            ip['i'] = re.headers['Location']
+                            ip['uc'] = False
+                            return main(ip)
+                        else:
+                            print(f'{lan["ERROR2"]}')  # 输入有误
+                            return -1
                     else:
-                        print(f'{lan["ERROR2"]}')  # 输入有误
-                        return -1
+                        re = re.groups()
+                        if log:
+                            logg.write(f"re = {re}", currentframe(), "Input Regex 4")
+                        if re[4]:
+                            nico = True
+                            nicovideo = True
+                            smid = int(re[5])
+                            if log and not logg.hasf():
+                                logg.openf(f"log/SM{smid}_{round(time())}.log")
+                        elif re[6]:
+                            nico = True
+                            nicolive = True
+                            nicolvid = int(re[8])
+                            if log and not logg.hasf():
+                                logg.openf(f"log/LV{nicolvid}_{round(time())}.log")
+                        else:
+                            re = search(r"[^:]+://", inp)
+                            if re is None:
+                                inp = "https://" + inp
+                            re = requests.head(inp)
+                            if 'Location' in re.headers:
+                                ip['i'] = re.headers['Location']
+                                ip['uc'] = False
+                                return main(ip)
+                            else:
+                                print(f'{lan["ERROR2"]}')  # 输入有误
+                                return -1
                 else:
                     re = re.groups()
                     if log:
@@ -488,7 +536,9 @@ def main(ip={}, menuInfo=None):
                 print(f'{lan["ERROR2"]}')
                 return -1
     section = requests.session()
-    section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36", "Connection": "keep-alive", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8", "Accept-Language": "zh-CN,zh;q=0.8"})
+    section.headers.update({"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36", "Connection": "keep-alive", "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8", "Accept-Language": "zh-CN,zh;q=0.8"})
+    if nico:
+        section.headers.update({"Accept-Language": "ja-JP"})
     if 'httpproxy' in ip or 'httpsproxy' in ip:
         pr = {}
         if 'httpproxy' in ip:
@@ -498,13 +548,15 @@ def main(ip={}, menuInfo=None):
         section.proxies = pr
     if nte:
         section.trust_env = False
-    ckfn = "acfun_cookies.json" if acfun else "cookies.json"
+    ckfn = "acfun_cookies.json" if acfun else "nico_cookies.json" if nico else "cookies.json"
     read = JSONParser.loadcookie(section, logg, ckfn)
     ud = {}
     login = 0
     if read == 0:
         if acfun:
             read = biliLogin.acCheckLogin(section, ud, logg)
+        elif nico:
+            read = biliLogin.nicoCheckLogin(section, ud, logg)
         else:
             read = biliLogin.tryok(section, ud, logg)
         if read is True:
@@ -527,6 +579,8 @@ def main(ip={}, menuInfo=None):
             os.remove(ckfn)
         if acfun:
             read = biliLogin.acLogin(section, ud, ip, logg)
+        elif nico:
+            read = biliLogin.nicoLogin(section, ud, ip, logg)
         else:
             read = biliLogin.login(section, ud, ip, logg)
         if read == 0:
@@ -537,7 +591,7 @@ def main(ip={}, menuInfo=None):
             return -1
     if 'd' not in ud:
         return -1
-    if not acfun:
+    if not acfun and not nico:
         ud['vip'] = ud['d']['vipStatus']
     if log:
         logg.write(f"read = {read}\nlogin = {login}\nud = {ud}", currentframe(), "VERIFY LOGIN 2")
@@ -2064,7 +2118,7 @@ def main(ip={}, menuInfo=None):
                 bs = False
         if cho2 == 1 or cho2 == 4:
             for i in cho:
-                biliDanmu.acBangumiDownloadDanmu(section, bangumiData, bangumiList, i - 1, se, ip, xml, xmlc)
+                read = biliDanmu.acBangumiDownloadDanmu(section, bangumiData, bangumiList, i - 1, se, ip, xml, xmlc)
                 if log:
                     logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Barrage Return")
                 if read == 0:
@@ -2104,6 +2158,105 @@ def main(ip={}, menuInfo=None):
                 read = videodownload.acfunBangumiCoverImgDownload(section, i - 1, bangumiData, bangumiList, se, ip)
                 if log:
                     logg.write(f"read = {read}", currentframe(), "Acfun Bangumi Video Download Pic Return")
+        return 0
+    if nicovideo:
+        url = f"https://www.nicovideo.jp/watch/sm{smid}"
+        if log:
+            logg.write(f"GET {url}", currentframe(), "Get Niconico Video Webpage")
+        re = section.get(url)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Niconico Video Webpage Result")
+        if re.status_code == 404:
+            print("404")
+            return NOT_FOUND
+        elif re.status_code > 400:
+            return -1
+        parser = HTMLParser.NicoVideoInfoParser()
+        parser.feed(re.text)
+        if log:
+            logg.write(f"parser.apiData = {parser.apiData}", currentframe(), "Niconico Video Webpage Parser Result")
+        if parser.apiData == '':
+            return 0
+        apiData = json.loads(parser.apiData, strict=False)
+        if ns:
+            PrintInfo.printNicoVideoInfo(apiData)
+        cho2 = 0
+        bs = True
+        if 'd' in ip and ip['d'] > 0 and ip['d'] < 5:
+            bs = False
+            cho2 = ip['d']
+        while bs:
+            if not ns:
+                print(lan['ERROR11'])  # 请使用-d <method>选择下载方式
+                return -1
+            inp = input(lan['INPUT13'])  # 选择下载方式
+            if inp[0].isnumeric() and int(inp[0]) > 0 and int(inp[0]) < 5:
+                cho2 = int(inp[0])
+                bs = False
+        if cho2 == 1 or cho2 == 4:
+            read = biliDanmu.nicoDownloadDanmu(section, apiData, se, ip, xml, xmlc)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Result")
+            if read == 0:
+                if ns:
+                    print(lan['BARDOWC'])  # 弹幕下载成功
+        if cho2 == 2 or cho2 == 4:
+            bs = True
+            cho3 = False
+            if not ns:
+                bs = False
+            read = JSONParser.getset(se, 'mp')
+            if read is True:
+                bs = False
+                cho3 = True
+            elif read is False:
+                bs = False
+            if 'm' in ip:
+                cho3 = ip['m']
+                bs = False
+            while bs:
+                inp = input(f'{lan["INPUT8"]}(y/n)')  # 是否要默认下载最高画质（这样将不会询问具体画质）？
+                if len(inp) > 0:
+                    if inp[0].lower() == 'y':
+                        cho3 = True
+                        bs = False
+                    elif inp[0].lower() == 'n':
+                        bs = False
+            if log:
+                logg.write(f"cho3 = {cho3}", currentframe(), "NicoNico Normal Video Download Video Para")
+            read = videodownload.nicoVideoDownload(section, apiData, cho3, se, ip, threadMap)
+            makeSureSendKill(threadMap)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Video Return")
+            if read == -3:
+                return -1
+        elif cho2 == 3:
+            read = videodownload.nicoCoverImgDownload(section, apiData, se, ip)
+            if log:
+                logg.write(f"read = {read}", currentframe(), "NicoNico Normal Video Download Pic Return")
+        return 0
+    if nicolive:
+        url = f"https://live.nicovideo.jp/watch/lv{nicolvid}"
+        if log:
+            logg.write(f"GET {url}", currentframe(), "Get Niconico Video Webpage")
+        re = section.get(url)
+        if log:
+            logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "Niconico Video Webpage Result")
+        if re.status_code == 404:
+            print("404")
+            return NOT_FOUND
+        elif re.status_code > 400:
+            return -1
+        parser = HTMLParser.NicoLiveInfoParser()
+        parser.feed(re.text)
+        if log:
+            logg.write(f"parser.data = {parser.data}", currentframe(), "Niconico Video Webpage Parser Result")
+        if parser.data == '':
+            return 0
+        liveData = json.loads(parser.data, strict=False)
+        if ns:
+            PrintInfo.printNicoLiveInfo(liveData)
+        videodownload.nicoLiveVideoDownload(section, liveData, se, ip, threadMap)
         return 0
     if not che:
         if log:
@@ -2696,21 +2849,29 @@ class mains(Thread):
 if __name__ == "__main__":
     PrintInfo.pr()
     res = -1
-    if not log or __debug__:
-        res = main(ip)
+    if not log:
+        try:
+            res = main(ip)
+        except KeyboardInterrupt:
+            pass
+        except:
+            print(traceback.format_exc())
     else:
         try:
             res = main(ip)
+        except KeyboardInterrupt:
+            pass
         except:
             te = traceback.format_exc()
             print(te)
             logg.write(te, currentframe(), "Main Function Except")
-            if not logg.hasf():
-                logg.openf(f'log/{round(time())}.log')
-            logg.flush()
-            logg.closef()
+        if not logg.hasf():
+            logg.openf(f'log/{round(time())}.log')
+        logg.flush()
+        logg.closef()
     if 'oll' in ip:
         ip['oll'].open()
+    makeSureSendKill(threadMap)
     sys.exit(res)
 else:
     print(lan['OUTPUT11'])  # 请运行start.py

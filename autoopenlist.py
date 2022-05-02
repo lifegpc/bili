@@ -16,8 +16,11 @@
 from os.path import abspath, exists, isfile
 from platform import system
 from inspect import currentframe
-if system() == "Windows":
-    from win32com.shell import shell  # pylint: disable=import-error no-name-in-module
+from traceback import format_exc
+try:
+    from file.win32 import openFileInExplorer
+except:
+    pass
 
 
 class autoopenfilelist:
@@ -49,5 +52,8 @@ class autoopenfilelist:
                 if self.__logg is not None:
                     self.__logg.write(
                         f"Try open '{r}'.", currentframe(), "Auto Open File List Open")
-                d = shell.SHParseDisplayName(r, 0)
-                shell.SHOpenFolderAndSelectItems(d[0], [], 0)
+                try:
+                    openFileInExplorer(r)
+                except:
+                    if self.__logg:
+                        self.__logg.write(format_exc(), currentframe(), "Auto Open File List Open error")

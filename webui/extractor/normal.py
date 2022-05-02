@@ -51,7 +51,7 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
     if rs is not None:
         re = loads(rs.groups()[0])
     else:
-        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={vq}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
+        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={vq}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976&session="
         re = r.get(uri)
         re.encoding = 'utf8'
         re = re.json()
@@ -101,14 +101,14 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                             re = loads(rs.groups()[0])
                         else:
                             napi = False
-                            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
+                            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976&session="
                             re = r.get(uri)
                             re.encoding = 'utf8'
                             re = re.json()
                             if re['code'] != 0:
                                 return -1, {'code': -2, 're': re}
                     else:
-                        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
+                        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976&session="
                         re = r.get(uri)
                         re.encoding = 'utf8'
                         re = re.json()
@@ -195,14 +195,14 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                                 re = loads(rs.groups()[0])
                             else:
                                 napi = False
-                                uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
+                                uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976&session="
                                 re = r.get(uri)
                                 re.encoding = 'utf8'
                                 re = re.json()
                                 if re['code'] != 0:
                                     return -1, {'code': -2, 're': re}
                         else:
-                            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
+                            uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976&session="
                             re = r.get(uri)
                             re.encoding = 'utf8'
                             re = re.json()
@@ -273,14 +273,14 @@ def normalurle(r: Session, url: str, data: dict, all: bool = True, vurl: bool = 
                         re = loads(rs.groups()[0])
                     else:
                         napi = False
-                        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
+                        uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976&session="
                         re = r.get(uri)
                         re.encoding = 'utf8'
                         re = re.json()
                         if re['code'] != 0:
                             return -1, {'code': -2, 're': re}
                 else:
-                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=80&session="
+                    uri = f"https://api.bilibili.com/x/player/playurl?cid={data['cid']}&qn={i}&otype=json&bvid={data['bvid']}&fnver=0&fnval=976&session="
                     re = r.get(uri)
                     re.encoding = 'utf8'
                     re = re.json()

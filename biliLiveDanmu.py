@@ -42,6 +42,7 @@ def lrdownload(data: dict, r: Session, ip: dict, se: dict, xml, xmlc: list):
     -1 文件夹创建失败
     -2 API解析失败
     -3 打开文件失败"""
+    fnl = ip['fnl'] if 'fnl' in ip else se["fnl"] if "fnl" in se else 80
     log = False
     logg = None
     if 'logg' in ip:
@@ -73,9 +74,9 @@ def lrdownload(data: dict, r: Session, ip: dict, se: dict, xml, xmlc: list):
     if 'in' in ip:
         fin = ip['in']
     if fin:
-        filen = '%s%s.xml' % (o, file.filtern('%s(%s,%s)' % (data['title'], data['rid'], data['roomid'])))
+        filen = '%s%s' % (o, file.filtern('%s(%s,%s).xml' % (data['title'], data['rid'], data['roomid']), fnl))
     else:
-        filen = f"{o}{file.filtern(data['title'])}.xml"
+        filen = o + file.filtern(f"{data['title']}.xml", fnl)
     if log:
         logg.write(f"ns = {ns}\no = '{o}'\nfin = {fin}\nfilen = {filen}\n", currentframe(), "LIVE RECORD BARRAGE PARA")
     if os.path.exists(filen):

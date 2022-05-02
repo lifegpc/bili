@@ -14,8 +14,12 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 import file
+try:
+    from file import win32
+except:
+    pass
 import biliPlayerXmlParser
-from os.path import exists
+from os.path import exists, abspath, split as splitfn
 import biliDanmuXmlParser
 from os import remove
 import biliDanmuXmlFilter
@@ -24,6 +28,7 @@ from PrintInfo import pr
 from JSONParser import loadset, getset
 import sys
 from lang import getdict, getlan
+from biliext import XMLFILE, ALLFILE
 lan = None
 se = loadset()
 if se == -1 or se == -2:
@@ -47,13 +52,18 @@ else:
     if read is not None:
         o = read
     bs = True
-    while bs:
-        inp = input(lan['INPUT1'])  # 请输入要过滤的文件数量：
-        if len(inp) > 0:
-            if inp.isnumeric():
-                g = int(inp)
-                bs = False
-    fl = file.getfilen(l=o, g=g)
+    try:
+        fl = win32.getOpenFileName(defaultPath=abspath(o), extFilterList=[XMLFILE, ALLFILE], allowMultiSelect=True)
+        if fl is None:
+            fl = []
+    except:
+        while bs:
+            inp = input(lan['INPUT1'])  # 请输入要过滤的文件数量：
+            if len(inp) > 0:
+                if inp.isnumeric():
+                    g = int(inp)
+                    bs = False
+        fl = file.getfilen(l=o, g=g)
     for i in fl:
         if exists(i['a']):
             try:
@@ -62,11 +72,16 @@ else:
                 print(lan['INPUT2'])  # 此文件不是弹幕文件。
                 continue
             r = read
-            input(lan['INPUT3'])  # 按Enter开始选择输出文件。
-            read = file.getfilen(l=o, save=True)
-            if read == -1:
-                read = file.getfilen('.', save=True)
-            fn = read[0]
+            try:
+                fn = win32.getSaveFileName(defaultPath=splitfn(i['a'])[0], defaultExt="xml", extFilterList=[XMLFILE, ALLFILE])
+                if fn == '' or fn is None:
+                    continue
+            except:
+                input(lan['INPUT3'])  # 按Enter开始选择输出文件。
+                read = file.getfilen(l=o, save=True)
+                if read == -1:
+                    read = file.getfilen('.', save=True)
+                fn = read[0]
             if exists(fn['a']):
                 remove(fn['a'])
             try:

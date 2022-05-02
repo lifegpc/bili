@@ -24,6 +24,7 @@ try:
     import winreg
 except ModuleNotFoundError:
     pass
+from threading import Lock
 
 
 class Logger:
@@ -34,7 +35,7 @@ class Logger:
     __fsize = None
     __tsize = None
     limit_size = 20 * 2 ** 20
-    temp_limit = 2 ** 10
+    temp_limit = 0
 
     def __init__(self, s: str = None, fn: str = None):
         if fn is not None:
@@ -44,8 +45,9 @@ class Logger:
         self.__index = 1
         if s is not None:
             pass
+        self.__lock = Lock()
 
-    def write(self, s: str, c=None, c2: str = None):
+    def __write(self, s: str, c=None, c2: str = None):
         if c is not None:
             z = '' if c2 is None else f" ({c2})"
             t = getframeinfo(c)
@@ -60,13 +62,17 @@ class Logger:
         if self.__f and self.__tsize > self.temp_limit:
             self.flush()
 
+    def write(self, s: str, c=None, c2: str = None):
+        with self.__lock:
+            self.__write(s, c, c2)
+
     def openf(self, fn: str):
         if self.__f is not None:
             self.__f.close()
             self.__f = None
         rfd, rfn = spfln(fn)
         rfd = filterd(rfd)
-        rfn = filtern(rfn)
+        rfn = filtern(rfn, 100)
         if not exists(rfd):
             mkdir(rfd)
         self.__f = open(f"{rfd}{rfn}", 'w', encoding='utf8')

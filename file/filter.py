@@ -14,7 +14,7 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 from re import search
-from os.path import isdir, isfile
+from os.path import isdir, isfile, splitext
 import platform
 import regex
 
@@ -61,7 +61,7 @@ def listff(filelist):
     return r
 
 
-def filtern(filen: str):
+def filtern(filen: str, lengthLimit: int):
     "对文件名进行去除不应该字符"
     filen = str(filen)
     re = regex.search(r'[^[:print:]]', filen)
@@ -70,16 +70,31 @@ def filtern(filen: str):
         re = regex.search(r'[^[:print:]]', filen)
     filen = filen.replace('/', '_')
     filen = filen.replace('\\', '_')
-    filen = filen.replace(':', '_')
-    filen = filen.replace('*', '_')
-    filen = filen.replace('?', '_')
-    filen = filen.replace('"', '_')
-    filen = filen.replace('<', '_')
-    filen = filen.replace('>', '_')
-    filen = filen.replace('|', '_')
+    if platform.system() == "Windows":
+        filen = filen.replace(':', '_')
+        filen = filen.replace('*', '_')
+        filen = filen.replace('?', '_')
+        filen = filen.replace('"', '_')
+        filen = filen.replace('<', '_')
+        filen = filen.replace('>', '_')
+        filen = filen.replace('|', '_')
+    elif platform.system() == "Linux":
+        filen = filen.replace('!', '_')
+        filen = filen.replace('$', '_')
+        filen = filen.replace('"', '_')
     filen = filen.replace('\t', '_')
     while len(filen) > 0 and filen[0] == ' ':
         filen = filen[1:]
+    if lengthLimit > 0 and len(filen) > lengthLimit:
+        n, ext = splitext(filen)
+        if len(ext) > 5:
+            n = filen
+            ext = ''
+        if n.endswith(")"):
+            r = n.rfind("(")
+            if len(n) - r + len(ext) <= lengthLimit:
+                return n[:lengthLimit - len(n) + r - len(ext)] + n[r:] + ext
+        return n[:lengthLimit - len(ext)] + ext
     return filen
 
 
@@ -102,13 +117,18 @@ def filterd(dir: str) -> str:
     while re is not None:
         dir = dir.replace(re.group(), '_')
         re = regex.search(r'[^[:print:]]', dir)
-    dir = dir.replace(':', '_')
-    dir = dir.replace('*', '_')
-    dir = dir.replace('?', '_')
-    dir = dir.replace('"', '_')
-    dir = dir.replace('<', '_')
-    dir = dir.replace('>', '_')
-    dir = dir.replace('|', '_')
+    if p == "Windows":
+        dir = dir.replace(':', '_')
+        dir = dir.replace('*', '_')
+        dir = dir.replace('?', '_')
+        dir = dir.replace('"', '_')
+        dir = dir.replace('<', '_')
+        dir = dir.replace('>', '_')
+        dir = dir.replace('|', '_')
+    elif p == "Linux":
+        dir = dir.replace('!', '_')
+        dir = dir.replace('$', '_')
+        dir = dir.replace('"', '_')
     if p == 'Windows':
         dir = f + dir
     return dir

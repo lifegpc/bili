@@ -17,7 +17,16 @@ from re import search, I
 from html import unescape
 from regex import search as rsearch
 from typing import Callable
-from urllib.parse import parse_qs
+from urllib.parse import (
+    parse_qs,
+    parse_qsl,
+    urlsplit,
+    urlunsplit,
+    urlencode,
+    SplitResult
+)
+from HTMLParser import NicoDescriptionParser
+from os.path import split as splitfn
 
 
 def f(i: str):
@@ -112,3 +121,24 @@ def hasPar(s: str, k: str, r: str = None, flags: int = 0):
                 if rsearch(r, v, flags) is not None:
                     return True
         return False
+
+
+def unescapeHTML(s: str) -> str:
+    p = NicoDescriptionParser()
+    p.feed(s)
+    return p.data
+
+
+def addNewParaToLink(link: str, key: str, value: str) -> str:
+    r = urlsplit(link)
+    l = parse_qsl(r.query)  # noqa: E741
+    l.append((str(key), str(value)))
+    r2 = SplitResult(r.scheme, r.netloc, r.path, urlencode(l), r.fragment)
+    return urlunsplit(r2)
+
+
+def changeFileNameForLink(link: str, name: str) -> str:
+    r = urlsplit(link)
+    t = splitfn(r.path)
+    r2 = SplitResult(r.scheme, r.netloc, f"{t[0]}/{name}", r.query, r.fragment)
+    return urlunsplit(r2)
