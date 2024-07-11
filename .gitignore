@@ -42,3 +42,4 @@ compiler.jar
 *.otf
 *.woff
 *.woff2
+.idea

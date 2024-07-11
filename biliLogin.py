@@ -93,7 +93,7 @@ def login(r, ud: dict, ip: dict, logg=None):
             if read in [-1, -2]:
                 if read == -1:
                     print(lan['ERROR2'])  # 登录失败！
-                read = loginwithqrcode(r, logg)
+                read = loginwithqrcode_new(r, logg)
                 if read == -1:
                     print(lan['ERROR2'])  # 登录失败！
                     return 2
@@ -289,6 +289,68 @@ def prepareSession(r: requests.Session):
                 r.cookies.set("buvid_fp_plain", re['data']['buvid_fp_plain'], path="/", domain=".bilibili.com", expires=round(time.time() + year), discard=False)
     except:
         pass
+
+def loginwithqrcode_new(r: requests.Session, logg=None):
+    print(lan['WARN1'])
+    prepareSession(r)
+    year = 365 * 24 * 3600
+    while 1:
+        url = "https://passport.bilibili.com/x/passport-login/web/qrcode/generate"
+        if logg:
+            logg.write(f"GET {url}", currentframe(), "getloginurl")
+        re = r.get(url)
+        re = re.json()
+        if re["code"] != 0:
+            print(f"{re['code']}")
+            if logg:
+                logg.write(f"content: {re}", currentframe(), "unknownerror")
+            return -1
+        qrcode_url = re["data"]["url"]
+        qrcode_key = re["data"]["qrcode_key"]
+
+        print("请在手机上扫描二维码登录，确认登录后关闭二维码界面。")
+        import qrcode
+        from PIL import Image, ImageTk
+        import tkinter as tk
+        import os
+        data=qrcode_url
+        qr = qrcode.QRCode(version=1, error_correction=qrcode.constants.ERROR_CORRECT_L, box_size=10, border=4)
+        qr.add_data(data)
+        qr.make(fit=True)
+        qr.make_image(fill_color="black", back_color="white").save("Temp/qrcode.png")
+        root=tk.Tk()
+        root.title("扫码登录")
+        img=Image.open("Temp/qrcode.png")
+        photo=ImageTk.PhotoImage(img)
+        imglabel=tk.Label(root,image=photo)
+        imglabel.pack()
+        root.mainloop()
+
+        sa = []
+        suc = False
+        while not suc:
+            re=r.get("https://passport.bilibili.com/x/passport-login/web/qrcode/poll",params={"qrcode_key":qrcode_key})
+            cookies=re.cookies
+            re=re.json()
+            #print(re)
+            if re["code"]!=0:
+                print(f"{re['code']} {re['message']}")
+                return -1
+            if re["data"]["code"]!=0:
+                print("Login failed.")
+                print(f"Message: {re['data']['message']}")
+                time.sleep(1)
+                continue
+            suc=True
+            sa = []
+            for domain in r.cookies._cookies.keys():
+                for path in r.cookies._cookies[domain].keys():
+                    for cookiename in r.cookies._cookies[domain][path]:
+                        cookie = r.cookies._cookies[domain][path][cookiename]
+                        if not cookie.discard:
+                            sa.append({"name": cookie.name, "value": cookie.value, 'domain': cookie.domain, 'path': cookie.path})
+            return sa
+        raise Exception("You should not see this.")
 
 
 def loginwithqrcode(r: requests.Session, logg=None):

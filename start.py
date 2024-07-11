@@ -183,7 +183,7 @@ def main(ip={}, menuInfo=None):
         if log and not logg.hasf():
             logg.openf(f"log/AV{inp[2:]}_{round(time())}.log")
     elif inp[0:2].lower() == 'bv':
-        inp = str(biliBv.debv(inp))
+        inp = str(biliBv.bv2av(inp))
         s = "https://www.bilibili.com/video/av" + inp
         av = True
         if log and not logg.hasf():
