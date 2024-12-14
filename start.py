@@ -77,7 +77,7 @@ def main(ip={}, menuInfo=None):
     log = logg is not None
     global se
     global lan
-    uc = True  # 是否检测更新
+    uc = False  # 是否检测更新
     if JSONParser.getset(se, 'uc') is True:
         uc = False
     if 'uc' in ip:
@@ -137,6 +137,7 @@ def main(ip={}, menuInfo=None):
     ss = False
     ep = False
     pl = False  # 收藏夹
+    plex = True # 订阅夹(与收藏夹不同ctype,不然会fid冲突)
     hd = False  # 互动视频
     ch = False  # 频道
     uv = False  # 投稿
@@ -149,7 +150,7 @@ def main(ip={}, menuInfo=None):
     au = False  # 音频区音乐
     ac = False  # 音频区收藏夹/专辑/歌单
     uid = -1  # 收藏夹/频道主人id
-    fid = -1  # 收藏夹id
+    fid = -1  # 收藏夹id/订阅夹id
     cid = -1  # 频道id
     uvd = {}  # 投稿查询信息
     pld = {}  # 收藏夹扩展信息
@@ -183,7 +184,7 @@ def main(ip={}, menuInfo=None):
         if log and not logg.hasf():
             logg.openf(f"log/AV{inp[2:]}_{round(time())}.log")
     elif inp[0:2].lower() == 'bv':
-        inp = str(biliBv.debv(inp))
+        inp = str(biliBv.bv2av(inp))
         s = "https://www.bilibili.com/video/av" + inp
         av = True
         if log and not logg.hasf():
@@ -394,6 +395,12 @@ def main(ip={}, menuInfo=None):
                         for s in sl['fid']:
                             if s.isnumeric():
                                 fid = int(s)
+                                break
+                    if 'ctype' in sl:
+                        for s in sl['ctype']:
+                            if s.isnumeric():
+                                if int(s)==21:
+                                    plex=True # 订阅夹
                                 break
                     if 'keyword' in sl:
                         pld['k'] = sl['keyword'][0]
@@ -782,31 +789,66 @@ def main(ip={}, menuInfo=None):
             else:
                 print(lan['PLITIDNUL'])
             return 0
-        i = 1
-        re = JSONParser2.getpli(section, fid, i, pld, logg)
-        if re == -1:
-            return -1
-        pli = JSONParser2.getplinfo(re)
-        if log:
-            logg.write(f"pli = {pli}", currentframe(), "PL INFO RESULT")
-        if ns:
-            PrintInfo.printInfo3(pli)
-        n = ceil(pli['count'] / 20)
+        
         plv = []
-        JSONParser2.getpliv(plv, re)
-        while i < n:
-            i = i + 1
+        if plex:
+            #使用订阅链接,而非收藏夹链接
+            if log:
+                logg.write(f"GET https://api.bilibili.com/x/space/fav/season/list?season_id={fid}", currentframe(), "PLEX PARAMETERS & GET LIST")
+            i = 0
+            page = 1
+            re = JSONParser2.getplex(section, fid, page, pld, logg)
+            if re == -1:
+                return -1
+            pli = JSONParser2.getplexinfo(re)
+            if log:
+                logg.write(f"plexi = {pli}", currentframe(), "PLEX INFO RESULT")
+            if ns:
+                PrintInfo.printInfo3_plex(pli)
+            n = pli['count']
+            JSONParser2.getplexiv(plv, re)
+            i += len(re['data']['medias'])
+            while i < n:
+                page += 1
+                re = JSONParser2.getplex(section, fid, page, pld, logg)
+                if re == -1:
+                    return -1
+                i += len(re['data']['medias'])
+                JSONParser2.getplexiv(plv, re)
+            if log:
+                logg.write(f"plv = {plv}", currentframe(), "PL VIDEO LIST RESULT")
+            if len(plv) != pli['count']:
+                print(lan['ERROR8'])  # 视频数量与预计数量不符，貌似BUG了。
+                return -1
+            if ns:
+                PrintInfo.printInfo4_plex(plv)
+
+        else:
+            i = 1
             re = JSONParser2.getpli(section, fid, i, pld, logg)
             if re == -1:
                 return -1
+            pli = JSONParser2.getplinfo(re)
+            if log:
+                logg.write(f"pli = {pli}", currentframe(), "PL INFO RESULT")
+            if ns:
+                PrintInfo.printInfo3(pli)
+            n = ceil(pli['count'] / 20)
             JSONParser2.getpliv(plv, re)
-        if log:
-            logg.write(f"plv = {plv}", currentframe(), "PL VIDEO LIST RESULT")
-        if len(plv) != pli['count']:
-            print(lan['ERROR8'])  # 视频数量与预计数量不符，貌似BUG了。
-            return -1
-        if ns:
-            PrintInfo.printInfo4(plv)
+            while i < n:
+                i = i + 1
+                re = JSONParser2.getpli(section, fid, i, pld, logg)
+                if re == -1:
+                    return -1
+                JSONParser2.getpliv(plv, re)
+            if log:
+                logg.write(f"plv = {plv}", currentframe(), "PL VIDEO LIST RESULT")
+            if len(plv) != pli['count']:
+                print(lan['ERROR8'])  # 视频数量与预计数量不符，貌似BUG了。
+                return -1
+            if ns:
+                PrintInfo.printInfo4(plv)
+
         bs = True
         f = True
         while bs:

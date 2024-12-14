@@ -34,6 +34,67 @@ if len(sys.argv) > 1:
 lan = getdict('JSONParser2', getlan(se, ip))
 
 
+###########################
+##          NEW          ##
+###########################
+
+def getplexinfo(d: dict):
+    t = d['data']['info']
+    r = {}
+    r['id'] = t['id']
+    r['uid'] = t['upper']['mid']
+    r['author'] = t['upper']['name']
+    r['title'] = t['title']
+    r['count'] = t['media_count']
+    return r
+
+
+def getplex(r, f, i, d: dict, logg=None):
+    "获取订阅夹第i页的视频信息, 一般会一次性获取全部视频信息"
+    uri = f"https://api.bilibili.com/x/space/fav/season/list?season_id={f}&pn={i}&ps=20"
+    if logg is not None:
+        logg.write(f"GET {uri}", currentframe(), "GET PLIEX INFO")
+    bs = True
+    while bs:
+        try:
+            re = r.get(uri)
+            bs = False
+        except:
+            if logg is not None:
+                logg.write(format_exc(), currentframe(), "GET PLIEX INFO ERROR")
+            print(lan['OUTPUT1'].replace('<number>', str(i)))  # 获取订阅夹第%s页失败，正在重试……
+    re.encoding = 'utf8'
+    if logg is not None:
+        logg.write(f"status = {re.status_code}\n{re.text}", currentframe(), "GET PLI INFO RESULT")
+    re = re.json()
+    if re['code'] != 0:
+        print('%s %s' % (re['code'], re['message']))
+        return -1
+    return re
+
+
+def getplexiv(i: list, d: dict):
+    for t in d['data']['medias']:
+        r = {}
+        r['id'] = t['id']
+        r['title'] = t['title']
+        r['duration'] = t['duration']
+        r['uid'] = t['upper']['mid']
+        r['author'] = t['upper']['name']
+        r['collect'] = t['cnt_info']['collect']
+        r['danmuku'] = t['cnt_info']['danmaku']
+        r['play'] = t['cnt_info']['play']
+        r['bvid'] = t['bvid']
+        r['pubtime'] = t['pubtime']
+        i.append(r)
+
+
+###########################
+##        END NEW        ##
+###########################
+
+
+
 def getplinfo(d: dict):
     t = d['data']['info']
     r = {}
@@ -46,6 +107,7 @@ def getplinfo(d: dict):
     r['mtime'] = t['mtime']
     r['count'] = t['media_count']
     return r
+
 
 
 def getpli(r, f, i, d: dict, logg=None):

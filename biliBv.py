@@ -13,27 +13,33 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-table = 'fZodR9XQDSUm21yCkr6zBqiveYah8bt4xsWpHnJE7jL5VG3guMTKNPAwcF'
-tr = {}
-for i in range(58):
-    tr[table[i]] = i
-s = [11, 10, 3, 8, 4, 6]
-xor = 177451812
-add = 8728348608
+# 
+# This code can Convert bvid into avid CORRECTLY! QwQ    -- edited by Evira.
 
+XOR_CODE = 23442827791579
+MASK_CODE = 2251799813685247
+MAX_AID = 1 << 51
+ALPHABET = "FcwAPNKTMug3GV5Lj7EJnHpWsx4tb8haYeviqBz6rkCy12mUSDQX9RdoZf"
+ENCODE_MAP = 8, 7, 0, 5, 1, 3, 2, 4, 6
+DECODE_MAP = tuple(reversed(ENCODE_MAP))
 
-def debv(x):
-    if len(x) == 11:
-        x = "BV1" + x[2:]
-    r = 0
-    for i in range(6):
-        r += tr[x[s[i]]] * 58**i
-    return (r - add) ^ xor
+BASE = len(ALPHABET)
+PREFIX = "BV1"
+PREFIX_LEN = len(PREFIX)
+CODE_LEN = len(ENCODE_MAP)
+def debv(x: str) -> int:
+    assert x[:3] == PREFIX
+    x = x[3:]
+    tmp = 0
+    for i in range(CODE_LEN):
+        idx = ALPHABET.index(x[DECODE_MAP[i]])
+        tmp = tmp * BASE + idx
+    return (tmp & MASK_CODE) ^ XOR_CODE
 
-
-def enbv(x):
-    x = (x ^ xor) + add
-    r = list('BV1  4 1 7  ')
-    for i in range(6):
-        r[s[i]] = table[x // 58**i % 58]
-    return ''.join(r)
+def enbv(x: int) -> str:
+    bvid = [""] * 9
+    tmp = (MAX_AID | x) ^ XOR_CODE
+    for i in range(CODE_LEN):
+        bvid[ENCODE_MAP[i]] = ALPHABET[tmp % BASE]
+        tmp //= BASE
+    return PREFIX + "".join(bvid)

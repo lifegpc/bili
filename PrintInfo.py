@@ -100,6 +100,14 @@ def printInfo3(d: dict):
     print(f"{lan['O22']}{d['count']}")  # 视频数量：
 
 
+def printInfo3_plex(d: dict):
+    print(f"{lan['O18']}{d['id']}")  # 收藏夹ID：
+    print(f"{lan['O19']}{d['title']}")  # 收藏夹标题：
+    print(f"{lan['O20']}{d['author']}")  # 创建者名字：
+    print('UID：%s' % (d['uid']))
+    print(f"{lan['O22']}{d['count']}")  # 视频数量：
+
+
 def printInfo4(l: list):  # noqa: E741
     ii = 1
     for i in l:
@@ -109,6 +117,17 @@ def printInfo4(l: list):  # noqa: E741
         print(f"{lan['O4']}{i['title']}")  # 标题：
         print(f"{lan['O24']}{i['author']}")  # UP主名称：
         print(f"{lan['O25']}{tostr2(i['ftime'])}")  # 收藏时间：
+        ii = ii + 1
+
+
+def printInfo4_plex(l: list):  # noqa: E741
+    ii = 1
+    for i in l:
+        print(lan['O23'].replace('<number>', str(ii)))  # 视频<number>：
+        print(f"{lan['O1']}{i['id']}")  # AV号：
+        print(f"{lan['O2']}{i['bvid']}")  # BV号：
+        print(f"{lan['O4']}{i['title']}")  # 标题：
+        print(f"{lan['O24']}{i['author']}")  # UP主名称：
         ii = ii + 1
 
 
